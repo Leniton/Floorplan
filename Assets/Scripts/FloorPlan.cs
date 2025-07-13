@@ -2,17 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FloorPlan : MonoBehaviour
+[CreateAssetMenu(fileName = "new Floorplan", menuName = "Floorplan")]
+public class FloorPlan : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public string Name;
+    public string Description;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Color Color = Color.white;
+
+    public FloorType Type;
+    public int Entrances => Mathf.Abs((int)Type);
+}
+public enum FloorType
+{
+    DeadEnd = 1,
+    Straw = 2,
+    Ankle = -2,
+    TPiece = 3,
+    Crossroad = 4,
 }
