@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,8 @@ public class GridManager : MonoBehaviour
 
     private Coroutine moveCoroutine;
     private bool moving => moveCoroutine != null;
+
+    public event Action<Vector2Int> OnMove;
 
     private void Awake()
     {
@@ -45,11 +48,14 @@ public class GridManager : MonoBehaviour
         //print($"coordinate: {coordinate}");
         if (animate ^ moving) 
             moveCoroutine = StartCoroutine(MoveToPosition());
-        else 
+        else
+        {
             rectTransform.anchoredPosition = GetCoordinatePosition(coordinate);
+            OnMove?.Invoke(coordinate);
+        }
     }
 
-    private Vector2 GetCoordinatePosition(Vector2Int coordinate)
+    public Vector2 GetCoordinatePosition(Vector2Int coordinate)
     {
         Vector2 position;
         position.x = (grid.cellSize.x + grid.spacing.x) * ((xSize / 2) - coordinate.x);
@@ -77,5 +83,6 @@ public class GridManager : MonoBehaviour
             rectTransform.anchoredPosition = targetPosition;
         }
         moveCoroutine = null;
+        OnMove?.Invoke(coordinate);
     }
 }

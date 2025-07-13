@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
     private Vector2? startingSpot;
     private Vector2? direction;
 
+    public event Action<Vector2Int> OnMove;
+
     public bool canMove { get; set; }
 
     private void Update()
@@ -23,10 +25,10 @@ public class Player : MonoBehaviour
 
 #if UNITY_EDITOR
         directionMultiplier = 1;
-        if (Keyboard.current.aKey.wasPressedThisFrame) gridManager.ShiftSelection(Vector2Int.left);
-        if (Keyboard.current.dKey.wasPressedThisFrame) gridManager.ShiftSelection(Vector2Int.right);
-        if (Keyboard.current.wKey.wasPressedThisFrame) gridManager.ShiftSelection(Vector2Int.up);
-        if (Keyboard.current.sKey.wasPressedThisFrame) gridManager.ShiftSelection(Vector2Int.down);
+        if (Keyboard.current.aKey.wasPressedThisFrame) Shift(Vector2Int.left);
+        if (Keyboard.current.dKey.wasPressedThisFrame) Shift(Vector2Int.right);
+        if (Keyboard.current.wKey.wasPressedThisFrame) Shift(Vector2Int.up);
+        if (Keyboard.current.sKey.wasPressedThisFrame) Shift(Vector2Int.down);
 #endif
     }
 
@@ -39,7 +41,7 @@ public class Player : MonoBehaviour
             {
                 Vector2 dir = direction.Value;
                 if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y)) gridManager.ShiftSelection(new((int)Mathf.Sign(dir.x * directionMultiplier), 0));
-                else gridManager.ShiftSelection(new(0, (int)Mathf.Sign(dir.y * directionMultiplier)));
+                else Shift(new(0, (int)Mathf.Sign(dir.y * directionMultiplier)));
             }
             direction = null;
             startingSpot = null;
@@ -64,5 +66,10 @@ public class Player : MonoBehaviour
             return;
         }
         direction = delta;
+    }
+
+    private void Shift(Vector2Int direction)
+    {
+        OnMove?.Invoke(direction);
     }
 }
