@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new Floorplan", menuName = "Floorplan")]
-public class FloorPlan : ScriptableObject
+public class Floorplan : ScriptableObject
 {
     public string Name;
     public string Description;

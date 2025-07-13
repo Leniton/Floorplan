@@ -1,18 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class FloorPlanDetails : MonoBehaviour
+public class FloorplanDetails : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private FloorplanUI floorplanUI;
+    [SerializeField] private TMP_Text description;
 
-    // Update is called once per frame
-    void Update()
+    public void Setup(Floorplan floorplan)
     {
-        
+        floorplanUI.Setup(floorplan);
+        description.text = floorplan.Description;
     }
 }
