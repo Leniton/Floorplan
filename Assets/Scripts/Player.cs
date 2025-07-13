@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,8 @@ public class Player : MonoBehaviour
     private Pointer pointer => Pointer.current;
     private Vector2? startingSpot;
     private Vector2? direction;
+
+    public bool canMove { get; set; }
 
     private void Update()
     {
@@ -43,6 +46,7 @@ public class Player : MonoBehaviour
             return;
         }
 
+        if (!canMove) return;
         //read position
         Vector2 pointerPosition = pointer.position.ReadValue();
         if (!startingSpot.HasValue)
