@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PointsManager : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class PointsManager : MonoBehaviour
     [SerializeField] private GridManager gridManager;
     [SerializeField] private Player player;
     [SerializeField] private FloorplanUI floorplanPrefab;
+    [SerializeField] private Floorplan entrance;
 
     Dictionary<Vector2Int, Floorplan> floorplanDict;
 
@@ -18,6 +20,14 @@ public class PointsManager : MonoBehaviour
         floorplanDict = new();
         player.OnMove += OnMoveSlot;
         draftManager.OnDraftFloorplan += PlaceFloorplan;
+
+        instance = entrance.CreateInstance(Vector2Int.up);
+    }
+
+    Floorplan instance;
+    private void Update()
+    {
+        if (Keyboard.current.spaceKey.wasPressedThisFrame) instance.Rotate();
     }
 
     private void OnMoveSlot(Vector2Int direction)

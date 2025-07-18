@@ -621,6 +621,7 @@ MonoBehaviour:
   player: {fileID: 33131203}
   floorplanPrefab: {fileID: 8788587895450744957, guid: f67aa09c66a04ff4587bc0ea14d0a0dd,
     type: 3}
+  entrance: {fileID: 11400000, guid: 9191c02a1f5a87841873789826152b0b, type: 2}
 --- !u!4 &467979806
 Transform:
   m_ObjectHideFlags: 0
