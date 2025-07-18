@@ -30,6 +30,21 @@ public class Player : MonoBehaviour
         if (Keyboard.current.wKey.wasPressedThisFrame) Shift(Vector2Int.up);
         if (Keyboard.current.sKey.wasPressedThisFrame) Shift(Vector2Int.down);
 #endif
+        if (Keyboard.current.numpadPlusKey.wasPressedThisFrame) Test(1);
+        if (Keyboard.current.numpadMinusKey.wasPressedThisFrame) Test(-1);
+    }
+
+    int testValue = -1;
+    private void Test(int delta)
+    {
+        testValue = ((testValue + delta + 4) % 4);
+        int t = testValue + 1;
+        Vector2Int test = Vector2Int.zero;
+        test.x = (t % 2) - (t / 2);
+
+        int x = (t) / 1;
+
+        print($"{testValue} => {test} | ");
     }
 
     private void HandleDragMovement()

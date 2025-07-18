@@ -17,6 +17,8 @@ public class GridManager : MonoBehaviour
     private RectTransform rectTransform;
 
     private Coroutine moveCoroutine;
+
+    public Vector2Int currentPosition => coordinate;
     private bool moving => moveCoroutine != null;
 
     public event Action<Vector2Int> OnMove;
@@ -37,10 +39,15 @@ public class GridManager : MonoBehaviour
     {
         //print($"direction {direction}");
         Vector2Int newCoordinate = coordinate + direction;
-        if (newCoordinate.x < 0 || newCoordinate.x >= xSize ||
-            newCoordinate.y < 0 || newCoordinate.y >= ySize) return;
+        if (!ValidCoordinate(newCoordinate)) return;
         coordinate = newCoordinate;
         UpdatePosition();
+    }
+
+    public bool ValidCoordinate(Vector2Int coordinate)
+    {
+        return !(coordinate.x < 0 || coordinate.x >= xSize ||
+            coordinate.y < 0 || coordinate.y >= ySize);
     }
 
     private void UpdatePosition(bool animate = true)
@@ -61,6 +68,11 @@ public class GridManager : MonoBehaviour
         position.x = (grid.cellSize.x + grid.spacing.x) * ((xSize / 2) - coordinate.x);
         position.y = (grid.cellSize.y + grid.spacing.y) * -coordinate.y;
         return position;
+    }
+
+    public RectTransform GetSlot(Vector2Int coordinate)
+    {
+        return (RectTransform)slots[coordinate.x + (xSize * coordinate.y)].transform;
     }
 
     private IEnumerator MoveToPosition()
