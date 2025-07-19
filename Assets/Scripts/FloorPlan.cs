@@ -12,10 +12,10 @@ public class Floorplan : ScriptableObject
     public Color Color = Color.white;
 
     public FloorType Type;
-    public int Entrances => Mathf.Abs((int)Type);
+    public int DoorCount => Mathf.Abs((int)Type);
 
     public int currentEntrance = 0;
-    public bool[] openEntrances;
+    public bool[] connection;
 
     public Floorplan CreateInstance(Vector2Int entranceDirection)
     {
@@ -24,7 +24,7 @@ public class Floorplan : ScriptableObject
         floorplan.Description = Description;
         floorplan.Color = Color;
         floorplan.Type = Type;
-        floorplan.openEntrances = new bool[] 
+        floorplan.connection = new bool[] 
         {
             true,
             Type != FloorType.DeadEnd && Type != FloorType.Straw,
@@ -33,8 +33,8 @@ public class Floorplan : ScriptableObject
         };
 
         StringBuilder sb = new();
-        for (int i = 0; i < floorplan.openEntrances.Length; i++)
-            sb.Append($"{floorplan.openEntrances[i]} | ");
+        for (int i = 0; i < floorplan.connection.Length; i++)
+            sb.Append($"{floorplan.connection[i]} | ");
         Debug.Log(sb);
 
         floorplan.currentEntrance = DirectionToID(entranceDirection);
@@ -50,25 +50,25 @@ public class Floorplan : ScriptableObject
 
     public void Rotate()
     {
-        bool lastConnection = openEntrances[(currentEntrance + 3) % 4];
-        for (int i = 1; i < 4; i++)
+        bool entranceValue = connection[currentEntrance];
+        for (int i = 0; i < 3; i++)
         {
             int connection = (currentEntrance + i) % 4;
-            Debug.Log($"{connection} -> {openEntrances[connection]}");
-            openEntrances[(connection + 3) % 4] = openEntrances[connection];
+            //Debug.Log($"{connection} -> {openEntrances[connection]}");
+            this.connection[connection] = this.connection[(connection + 1) % 4];
         }
-        openEntrances[currentEntrance] = lastConnection;
-        Debug.Log($"{currentEntrance} => {openEntrances[currentEntrance]}");
+        connection[(currentEntrance + 3) % 4] = entranceValue;
+        //Debug.Log($"{currentEntrance} => {openEntrances[currentEntrance]}");
         //keep rotating if entrance is closed
-        //if (!openEntrances[currentEntrance])
-        //{
-        //    Rotate();
-        //    return;
-        //}
+        if (!connection[currentEntrance])
+        {
+            Rotate();
+            return;
+        }
 
         StringBuilder sb = new();
-        for (int i = 0; i < openEntrances.Length; i++)
-            sb.Append($"{openEntrances[i]} | ");
+        for (int i = 0; i < connection.Length; i++)
+            sb.Append($"{connection[i]} | ");
         Debug.Log(sb);
     }
 
