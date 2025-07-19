@@ -1,7 +1,6 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PointsManager : MonoBehaviour
 {
@@ -14,6 +13,8 @@ public class PointsManager : MonoBehaviour
     Dictionary<Vector2Int, Floorplan> floorplanDict;
 
     private Vector2Int currentDraftPosition;
+
+    public static event Action<Vector2Int, Floorplan> onDraftedFloorplan;
 
     private void Start()
     {
@@ -74,5 +75,6 @@ public class PointsManager : MonoBehaviour
         floorplanRect.sizeDelta = Vector2.zero;
 
         floorplanDict[currentDraftPosition] = floorplan;
+        onDraftedFloorplan?.Invoke(currentDraftPosition, floorplan);
     }
 }
