@@ -8,6 +8,11 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private GridManager gridManager;
     [SerializeField, Range(0, 1)] private float distanceTreshold;
+    [SerializeField] GameObject bg;
+    [SerializeField] Transform verticalArrow;
+    [SerializeField] Transform horizontalArrow;
+
+    public Vector2 currentDirection;
 
     private int directionMultiplier = -1;
 
@@ -22,7 +27,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         HandleDragMovement();
-
+        DisplayDirection();
 #if UNITY_EDITOR
         directionMultiplier = 1;
         if (Keyboard.current.aKey.wasPressedThisFrame) Shift(Vector2Int.left);
@@ -39,6 +44,7 @@ public class Player : MonoBehaviour
         {
             if (direction.HasValue)
             {
+                bg.SetActive(false);
                 Vector2 dir = direction.Value;
                 if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y)) Shift(new((int)Mathf.Sign(dir.x * directionMultiplier), 0));
                 else Shift(new(0, (int)Mathf.Sign(dir.y * directionMultiplier)));
@@ -71,5 +77,20 @@ public class Player : MonoBehaviour
     private void Shift(Vector2Int direction)
     {
         OnMove?.Invoke(direction);
+    }
+
+    private void DisplayDirection()
+    {
+        bg.SetActive(startingSpot.HasValue);
+        if (direction.HasValue)
+        {
+            Vector2 dir = direction.Value;
+            if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y)) currentDirection = (new((int)Mathf.Sign(dir.x * directionMultiplier), 0));
+            else currentDirection = (new(0, (int)Mathf.Sign(dir.y * directionMultiplier)));
+        }
+        else currentDirection = Vector2.zero;
+
+        verticalArrow.localScale = Vector2.one * currentDirection.y;
+        horizontalArrow.localScale = Vector2.one * currentDirection.x;
     }
 }
