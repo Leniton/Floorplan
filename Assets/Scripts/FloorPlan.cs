@@ -35,11 +35,11 @@ public class Floorplan : ScriptableObject
         StringBuilder sb = new();
         for (int i = 0; i < floorplan.connection.Length; i++)
             sb.Append($"{floorplan.connection[i]} | ");
-        Debug.Log(sb);
+        //Debug.Log(sb);
 
         floorplan.currentEntrance = DirectionToID(entranceDirection);
         int entrance = floorplan.currentEntrance;
-        int randomRotation = Random.Range(0, 3);
+        int randomRotation = Random.Range(1, 3);
         for (int i = 0; i < randomRotation; i++)
         {
             floorplan.Rotate();
@@ -69,7 +69,7 @@ public class Floorplan : ScriptableObject
         StringBuilder sb = new();
         for (int i = 0; i < connection.Length; i++)
             sb.Append($"{connection[i]} | ");
-        Debug.Log(sb);
+        //Debug.Log(sb);
     }
 
     private int DirectionToID(Vector2Int direction)

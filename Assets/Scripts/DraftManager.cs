@@ -23,7 +23,9 @@ public class DraftManager : MonoBehaviour
         draftList = new(amountDrafted);
         for (int i = 0; i < amountDrafted; i++)
         {
-            draftList.Add(Instantiate(floorplanUI, draftScreen.transform));
+            FloorplanDetails instance = Instantiate(floorplanUI, draftScreen.transform);
+            instance.onPickedFloorplan += PickFloorplan;
+            draftList.Add(instance);
         }
     }
 
@@ -46,14 +48,14 @@ public class DraftManager : MonoBehaviour
         StringBuilder sb = new();
         for (int i = 0; i < possibleTypes.Count; i++)
             sb.Append($"{possibleTypes[i]} | ");
-        Debug.Log(sb.ToString());
+        //Debug.Log(sb.ToString());
 
         //pick possible ones
         List<Floorplan> possibleFloors = new();
         for (int i = 0;i < draftPool.Count; i++)
         {
             if (!possibleTypes.Contains(draftPool[i].Type)) continue;
-            possibleFloors.Add(draftPool[i]);
+            possibleFloors.Add(draftPool[i].CreateInstance(-direction));
         }
 
         for (int i = 0; i < amountDrafted; i++)
@@ -65,14 +67,6 @@ public class DraftManager : MonoBehaviour
 
             FloorplanDetails instance = draftList[i];
             instance.Setup(floorplan);
-            Button button = instance.GetComponent<Button>();
-            button.onClick.AddListener(FloorplanPick);
-
-            void FloorplanPick()
-            {
-                PickFloorplan(floorplan);
-                button.onClick.RemoveListener(FloorplanPick);
-            }
         }
 
         background.SetActive(true);

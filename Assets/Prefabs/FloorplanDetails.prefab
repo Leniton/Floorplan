@@ -227,6 +227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floorplanUI: {fileID: 6994250821184456274}
   description: {fileID: 6819596321513224120}
+  button: {fileID: 6828376226800927317}
 --- !u!114 &6828376226800927317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,6 +284,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FloorplanUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 6648354383176840974, guid: f67aa09c66a04ff4587bc0ea14d0a0dd,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 66
       objectReference: {fileID: 0}
     - target: {fileID: 8415763752761676625, guid: f67aa09c66a04ff4587bc0ea14d0a0dd,
         type: 3}
