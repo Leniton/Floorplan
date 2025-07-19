@@ -17,6 +17,6 @@ public class FloorplanUI : MonoBehaviour
         text.text = floorplan.Name;
 
         for (int i = 0; i < entrances.Length; i++)
-            entrances[i].SetActive(floorplan.connection[i]);
+            entrances[i].SetActive(floorplan.connections[i]);
     }
 }

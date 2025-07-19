@@ -14,8 +14,8 @@ public class Floorplan : ScriptableObject
     public FloorType Type;
     public int DoorCount => Mathf.Abs((int)Type);
 
-    public int currentEntrance = 0;
-    public bool[] connection;
+    public int entranceId = 0;
+    public bool[] connections;
 
     public Floorplan CreateInstance(Vector2Int entranceDirection)
     {
@@ -24,7 +24,7 @@ public class Floorplan : ScriptableObject
         floorplan.Description = Description;
         floorplan.Color = Color;
         floorplan.Type = Type;
-        floorplan.connection = new bool[] 
+        floorplan.connections = new bool[] 
         {
             true,
             Type != FloorType.DeadEnd && Type != FloorType.Straw,
@@ -33,12 +33,12 @@ public class Floorplan : ScriptableObject
         };
 
         StringBuilder sb = new();
-        for (int i = 0; i < floorplan.connection.Length; i++)
-            sb.Append($"{floorplan.connection[i]} | ");
+        for (int i = 0; i < floorplan.connections.Length; i++)
+            sb.Append($"{floorplan.connections[i]} | ");
         //Debug.Log(sb);
 
-        floorplan.currentEntrance = DirectionToID(entranceDirection);
-        int entrance = floorplan.currentEntrance;
+        floorplan.entranceId = DirectionToID(entranceDirection);
+        int entrance = floorplan.entranceId;
         int randomRotation = Random.Range(1, 3);
         for (int i = 0; i < randomRotation; i++)
         {
@@ -50,29 +50,31 @@ public class Floorplan : ScriptableObject
 
     public void Rotate()
     {
-        bool entranceValue = connection[currentEntrance];
+        if (Type != FloorType.TPiece && Type != FloorType.Ankle) return;
+
+        bool entranceValue = connections[entranceId];
         for (int i = 0; i < 3; i++)
         {
-            int connection = (currentEntrance + i) % 4;
+            int connection = (entranceId + i) % 4;
             //Debug.Log($"{connection} -> {openEntrances[connection]}");
-            this.connection[connection] = this.connection[(connection + 1) % 4];
+            this.connections[connection] = this.connections[(connection + 1) % 4];
         }
-        connection[(currentEntrance + 3) % 4] = entranceValue;
+        connections[(entranceId + 3) % 4] = entranceValue;
         //Debug.Log($"{currentEntrance} => {openEntrances[currentEntrance]}");
         //keep rotating if entrance is closed
-        if (!connection[currentEntrance])
+        if (!connections[entranceId])
         {
             Rotate();
             return;
         }
 
         StringBuilder sb = new();
-        for (int i = 0; i < connection.Length; i++)
-            sb.Append($"{connection[i]} | ");
+        for (int i = 0; i < connections.Length; i++)
+            sb.Append($"{connections[i]} | ");
         //Debug.Log(sb);
     }
 
-    private int DirectionToID(Vector2Int direction)
+    public int DirectionToID(Vector2Int direction)
     {
         if(direction == Vector2Int.up)
             return 0;
@@ -86,7 +88,7 @@ public class Floorplan : ScriptableObject
         return -1;
     }
 
-    private Vector2Int IDToDirection(int id)
+    public Vector2Int IDToDirection(int id)
     {
         switch (id)
         {

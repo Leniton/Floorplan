@@ -55,7 +55,22 @@ public class DraftManager : MonoBehaviour
         for (int i = 0;i < draftPool.Count; i++)
         {
             if (!possibleTypes.Contains(draftPool[i].Type)) continue;
-            possibleFloors.Add(draftPool[i].CreateInstance(-direction));
+            Floorplan floorplan = draftPool[i].CreateInstance(-direction);
+            bool invalidConnection = false;
+            do
+            {
+                invalidConnection = false;
+                for (int j = 0; j < floorplan.connections.Length; j++)
+                {
+                    if (!floorplan.connections[j]) continue;
+                    if (possibleSlots.Contains(floorplan.IDToDirection(j))) continue;
+                    invalidConnection = true;
+                    break;
+                }
+                if (invalidConnection) floorplan.Rotate();
+            } while (invalidConnection);
+
+            possibleFloors.Add(floorplan);
         }
 
         for (int i = 0; i < amountDrafted; i++)
