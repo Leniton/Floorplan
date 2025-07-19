@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
             if (direction.HasValue)
             {
                 Vector2 dir = direction.Value;
-                if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y)) gridManager.ShiftSelection(new((int)Mathf.Sign(dir.x * directionMultiplier), 0));
+                if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y)) Shift(new((int)Mathf.Sign(dir.x * directionMultiplier), 0));
                 else Shift(new(0, (int)Mathf.Sign(dir.y * directionMultiplier)));
             }
             direction = null;
