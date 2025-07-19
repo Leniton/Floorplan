@@ -36,10 +36,12 @@ public class PointsManager : MonoBehaviour
         Vector2Int targetedSlot = gridManager.currentPosition + direction;
         if (floorplanDict.TryGetValue(targetedSlot, out var targetFloorplan))
         {
+            if (Player.steps <= 0) return;
             //check if floorplan is connected to this one
             if (!targetFloorplan.connections[Floorplan.DirectionToID(-direction)]) return;
             //slot enter event
             gridManager.ShiftSelection(direction);
+            Player.ChangeSteps(-1);
         }
         else
         {

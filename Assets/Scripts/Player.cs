@@ -24,6 +24,19 @@ public class Player : MonoBehaviour
 
     public bool canMove { get; set; }
 
+    private static Player player;
+
+    #region Resources
+    public static int steps = 20;
+    public static int crayons = 2;
+    public static int coins = 0;
+    #endregion
+
+    private void Awake()
+    {
+        player = this;
+    }
+
     private void Update()
     {
         HandleDragMovement();
@@ -92,5 +105,10 @@ public class Player : MonoBehaviour
 
         verticalArrow.localScale = Vector2.one * currentDirection.y;
         horizontalArrow.localScale = Vector2.one * currentDirection.x;
+    }
+
+    public static void ChangeSteps(int delta)
+    {
+        steps += delta;
     }
 }

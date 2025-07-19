@@ -32,7 +32,7 @@ public class MinimapManager : MonoBehaviour
         floorplanRect.anchorMax = Vector2.one;
         floorplanRect.sizeDelta = Vector2.zero;
 
-        slotButton.onClick.AddListener(() => FloorplanDetailsPopup.ShowDetails(floorplan));
+        slotButton.onClick.AddListener(() => UIManager.ShowDetails(floorplan));
     }
 
     public void OpenMinimap()
