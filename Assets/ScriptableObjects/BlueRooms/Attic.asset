@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c2ec7ddf6ecb914e8686ca425ec3201, type: 3}
-  m_Name: EntranceHall
+  m_Name: Attic
   m_EditorClassIdentifier: 
-  Name: Entrance Hall
-  Description: Where everything starts
-  Color: {r: 0.77254903, g: 0, b: 0.5001854, a: 1}
-  Type: 3
+  Name: Attic
+  Description: 4 items
+  Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
+  Type: 1
   entranceId: 0
   connections: 

@@ -15,6 +15,7 @@ public class FloorplanUI : MonoBehaviour
     {
         image.color = floorplan.Color;
         text.text = floorplan.Name;
+        text.color = ColorExtension.ContrastGray(floorplan.Color);
 
         for (int i = 0; i < entrances.Length; i++)
             entrances[i].SetActive(floorplan.connections[i]);

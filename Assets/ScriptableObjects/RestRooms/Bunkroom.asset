@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c2ec7ddf6ecb914e8686ca425ec3201, type: 3}
-  m_Name: EntranceHall
+  m_Name: Bunkroom
   m_EditorClassIdentifier: 
-  Name: Entrance Hall
-  Description: Where everything starts
-  Color: {r: 0.77254903, g: 0, b: 0.5001854, a: 1}
-  Type: 3
+  Name: Bunk Room
+  Description: Count as 2 <b>Rest Rooms
+  Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
+  Type: 1
   entranceId: 0
   connections: 

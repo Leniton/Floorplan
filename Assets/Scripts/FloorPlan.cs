@@ -7,7 +7,7 @@ using UnityEngine;
 public class Floorplan : ScriptableObject
 {
     public string Name;
-    public string Description;
+    [TextArea] public string Description;
 
     public Color Color = Color.white;
 
@@ -20,6 +20,7 @@ public class Floorplan : ScriptableObject
     public Floorplan CreateInstance(Vector2Int entranceDirection)
     {
         Floorplan floorplan = CreateInstance<Floorplan>();
+        floorplan.name = name;
         floorplan.Name = Name;
         floorplan.Description = Description;
         floorplan.Color = Color;
