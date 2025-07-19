@@ -14,8 +14,8 @@ public class Floorplan : ScriptableObject
     public FloorType Type;
     public int DoorCount => Mathf.Abs((int)Type);
 
-    public int entranceId = 0;
-    public bool[] connections;
+    [HideInInspector] public int entranceId = 0;
+    [HideInInspector] public bool[] connections;
 
     public Floorplan CreateInstance(Vector2Int entranceDirection)
     {
@@ -38,20 +38,18 @@ public class Floorplan : ScriptableObject
         //Debug.Log(sb);
 
         floorplan.entranceId = DirectionToID(entranceDirection);
-        int entrance = floorplan.entranceId;
-        int randomRotation = Random.Range(1, 3);
-        for (int i = 0; i < randomRotation; i++)
-        {
-            floorplan.Rotate();
-        }
+        while (!floorplan.connections[floorplan.entranceId])
+            floorplan.InternalRotation();
+        //int entrance = floorplan.entranceId;
+        //int randomRotation = Random.Range(1, 3);
+        //for (int i = 0; i < randomRotation; i++)
+        //    floorplan.InternalRotation();
 
         return floorplan;
     }
 
-    public void Rotate()
+    private void InternalRotation()
     {
-        if (Type != FloorType.TPiece && Type != FloorType.Ankle) return;
-
         bool entranceValue = connections[entranceId];
         for (int i = 0; i < 3; i++)
         {
@@ -74,7 +72,13 @@ public class Floorplan : ScriptableObject
         //Debug.Log(sb);
     }
 
-    public int DirectionToID(Vector2Int direction)
+    public void Rotate()
+    {
+        if (Type != FloorType.TPiece && Type != FloorType.Ankle) return;
+        InternalRotation();
+    }
+
+    public static int DirectionToID(Vector2Int direction)
     {
         if(direction == Vector2Int.up)
             return 0;
@@ -88,7 +92,7 @@ public class Floorplan : ScriptableObject
         return -1;
     }
 
-    public Vector2Int IDToDirection(int id)
+    public static Vector2Int IDToDirection(int id)
     {
         switch (id)
         {

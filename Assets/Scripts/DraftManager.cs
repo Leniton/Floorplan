@@ -56,20 +56,9 @@ public class DraftManager : MonoBehaviour
         {
             if (!possibleTypes.Contains(draftPool[i].Type)) continue;
             Floorplan floorplan = draftPool[i].CreateInstance(-direction);
-            bool invalidConnection = false;
-            do
-            {
-                invalidConnection = false;
-                for (int j = 0; j < floorplan.connections.Length; j++)
-                {
-                    if (!floorplan.connections[j]) continue;
-                    if (possibleSlots.Contains(floorplan.IDToDirection(j))) continue;
-                    invalidConnection = true;
-                    break;
-                }
-                if (invalidConnection) floorplan.Rotate();
-            } while (invalidConnection);
-
+            int randomRotation = Random.Range(1, 3);
+            for (int j = 0; j < randomRotation; j++) floorplan.Rotate();
+            CorrectFloorplanRotation(floorplan, possibleSlots);
             possibleFloors.Add(floorplan);
         }
 
@@ -88,10 +77,38 @@ public class DraftManager : MonoBehaviour
         draftScreen.SetActive(true);
     }
 
+    public void CorrectFloorplanRotation(Floorplan floorplan, List<Vector2Int> possibleSlots)
+    {
+        if (floorplan.Type == FloorType.DeadEnd || floorplan.Type == FloorType.Straw) return;
+
+        bool invalidConnection = false;
+        do
+        {
+            invalidConnection = false;
+            for (int i = 0; i < floorplan.connections.Length; i++)
+            {
+                if (!floorplan.connections[i]) continue;
+                if (possibleSlots.Contains(Floorplan.IDToDirection(i))) continue;
+                invalidConnection = true;
+                break;
+            }
+            if (invalidConnection) floorplan.Rotate();
+        } while (invalidConnection);
+    }
+
     public void PickFloorplan(Floorplan floorplan)
     {
         background.SetActive(false);
         draftScreen.SetActive(false);
         OnDraftFloorplan?.Invoke(floorplan);
+    }
+
+    public void RotateFloorplans()
+    {
+        for (int i = 0; i < draftList.Count; i++)
+        {
+            draftList[i].floorplan.Rotate();
+            draftList[i].Setup(draftList[i].floorplan);
+        }
     }
 }

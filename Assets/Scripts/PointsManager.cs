@@ -21,20 +21,22 @@ public class PointsManager : MonoBehaviour
         player.OnMove += OnMoveSlot;
         draftManager.OnDraftFloorplan += PlaceFloorplan;
 
-        instance = entrance.CreateInstance(Vector2Int.up);
-    }
-
-    Floorplan instance;
-    private void Update()
-    {
-        if (Keyboard.current.spaceKey.wasPressedThisFrame) instance.Rotate();
+        //add entrance hall
+        currentDraftPosition = gridManager.currentPosition;
+        Floorplan floorplan = entrance.CreateInstance(Vector2Int.up);
+        draftManager.CorrectFloorplanRotation(floorplan, new() { Vector2Int.up, Vector2Int.left, Vector2Int.right });
+        PlaceFloorplan(floorplan);
     }
 
     private void OnMoveSlot(Vector2Int direction)
     {
+        Floorplan current = floorplanDict[gridManager.currentPosition];
+        if (!current.connections[Floorplan.DirectionToID(direction)]) return;
         Vector2Int targetedSlot = gridManager.currentPosition + direction;
-        if (floorplanDict.ContainsKey(targetedSlot))
+        if (floorplanDict.TryGetValue(targetedSlot, out var targetFloorplan))
         {
+            //check if floorplan is connected to this one
+            if (!targetFloorplan.connections[Floorplan.DirectionToID(-direction)]) return;
             //slot enter event
             gridManager.ShiftSelection(direction);
         }
