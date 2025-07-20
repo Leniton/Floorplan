@@ -16,5 +16,6 @@ MonoBehaviour:
   Description: Counts as every type of room
   Color: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
   Type: 3
+  Rarity: 1
   entranceId: 0
   connections: 

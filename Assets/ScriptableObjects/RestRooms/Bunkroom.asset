@@ -16,5 +16,6 @@ MonoBehaviour:
   Description: Count as 2 <b>Rest Rooms
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Type: 1
+  Rarity: 1
   entranceId: 0
   connections: 

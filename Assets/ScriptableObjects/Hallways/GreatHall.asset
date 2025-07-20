@@ -17,5 +17,6 @@ MonoBehaviour:
     room
   Color: {r: 0.7735849, g: 0.44513544, b: 0, a: 1}
   Type: 4
+  Rarity: 3
   entranceId: 0
   connections: 

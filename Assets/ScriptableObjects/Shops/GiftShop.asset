@@ -16,5 +16,6 @@ MonoBehaviour:
   Description: Spend money to buy points
   Color: {r: 0.98101246, g: 1, b: 0, a: 1}
   Type: -2
+  Rarity: 1
   entranceId: 0
   connections: 

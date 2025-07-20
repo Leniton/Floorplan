@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: GuestBedroom
   m_EditorClassIdentifier: 
   Name: Guest Bedroom
-  Description: Extra points if connected to a <b>Rest Room
+  Description: +2 steps. +4 extra steps if connected to a <b>Rest Room
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Type: -2
+  Rarity: 0
   entranceId: 0
   connections: 

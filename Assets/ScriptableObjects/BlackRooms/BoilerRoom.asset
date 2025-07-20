@@ -16,5 +16,6 @@ MonoBehaviour:
   Description: <b>Power</b> connected rooms
   Color: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
   Type: 3
+  Rarity: 2
   entranceId: 0
   connections: 

@@ -16,5 +16,6 @@ MonoBehaviour:
   Description: Contains coins for each room in the house
   Color: {r: 0.98101246, g: 1, b: 0, a: 1}
   Type: -2
+  Rarity: 2
   entranceId: 0
   connections: 

@@ -12,6 +12,7 @@ public class Floorplan : ScriptableObject
     public Color Color = Color.white;
 
     public FloorType Type;
+    public Rarity Rarity;
     public int DoorCount => Mathf.Abs((int)Type);
 
     [HideInInspector] public int entranceId = 0;

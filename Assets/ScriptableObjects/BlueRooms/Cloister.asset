@@ -16,3 +16,6 @@ MonoBehaviour:
   Description: Contains a common item
   Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
   Type: 4
+  Rarity: 2
+  entranceId: 0
+  connections: 

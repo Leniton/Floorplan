@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Boudoir
   m_EditorClassIdentifier: 
   Name: Boudoir
-  Description: Rooms drafted from here gains extra points
+  Description: Bigger chance to draft <b>Rest Rooms</b> from this room
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Type: -2
+  Rarity: 0
   entranceId: 0
   connections: 

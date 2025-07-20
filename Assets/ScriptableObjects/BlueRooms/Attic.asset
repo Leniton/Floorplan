@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Attic
   m_EditorClassIdentifier: 
   Name: Attic
-  Description: 4 items
+  Description: 3 items
   Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
   Type: 1
+  Rarity: 1
   entranceId: 0
   connections: 
