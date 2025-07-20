@@ -16,5 +16,7 @@ MonoBehaviour:
   Description: Where everything starts
   Color: {r: 0.77254903, g: 0, b: 0.5001854, a: 1}
   Type: 3
+  Rarity: 0
+  basePoints: 0
   entranceId: 0
   connections: 

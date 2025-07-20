@@ -12,11 +12,11 @@ public class DraftManager : MonoBehaviour
     [SerializeField] private GameObject background;
     [SerializeField] private GameObject draftScreen;
     [SerializeField] private FloorplanDetails floorplanUI;
-    [SerializeField] private List<Floorplan> draftPool;
+    [SerializeField] private List<Floorplan> allFloorplans;
 
     private int amountDrafted = 3;
     private List<FloorplanDetails> draftList;
-    private List<Floorplan> runtimePool;
+    private List<Floorplan> draftPool;
 
     public event Action<Floorplan> OnDraftFloorplan;
 
@@ -30,11 +30,11 @@ public class DraftManager : MonoBehaviour
             draftList.Add(instance);
         }
 
-        runtimePool = new(draftPool.Count);
-        for (int i = 0; i < draftPool.Count; i++)
-            runtimePool.Add(draftPool[i].CreateInstance(Vector2Int.up));
+        draftPool = new(allFloorplans.Count);
+        for (int i = 0; i < allFloorplans.Count; i++)
+            draftPool.Add(allFloorplans[i].CreateInstance(Vector2Int.up));
 
-        Debug.Log($"{draftPool.Count(f => f.Name == "Comissary")}");
+        Debug.Log($"{allFloorplans.Count(f => f.Name == "Comissary")}");
     }
 
     public void DraftFloorplan(Vector2Int direction, List<Vector2Int> possibleSlots)
@@ -60,10 +60,10 @@ public class DraftManager : MonoBehaviour
 
         //pick possible ones
         RarityPicker<Floorplan> possibleFloors = new();
-        for (int i = 0;i < runtimePool.Count; i++)
+        for (int i = 0;i < draftPool.Count; i++)
         {
-            if (!possibleTypes.Contains(runtimePool[i].Type)) continue;
-            Floorplan floorplan = runtimePool[i];
+            if (!possibleTypes.Contains(draftPool[i].Type)) continue;
+            Floorplan floorplan = draftPool[i];
             possibleFloors.AddToPool(floorplan, floorplan.Rarity);
         }
 
@@ -110,7 +110,7 @@ public class DraftManager : MonoBehaviour
     {
         background.SetActive(false);
         draftScreen.SetActive(false);
-        runtimePool.Remove(floorplan.original);
+        draftPool.Remove(floorplan.original);
         OnDraftFloorplan?.Invoke(floorplan);
     }
 

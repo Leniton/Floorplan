@@ -12,7 +12,8 @@ public class PointsManager : MonoBehaviour
     [SerializeField] private Floorplan entrance;
     [SerializeField] private Image currentImage;
 
-    Dictionary<Vector2Int, Floorplan> floorplanDict;
+    private float currentAlpha;
+    private Dictionary<Vector2Int, Floorplan> floorplanDict;
 
     private Vector2Int currentDraftPosition;
 
@@ -24,6 +25,7 @@ public class PointsManager : MonoBehaviour
         player.OnMove += OnMoveSlot;
         draftManager.OnDraftFloorplan += PlaceFloorplan;
 
+        currentAlpha = currentImage.color.a;
         //add entrance hall
         currentDraftPosition = gridManager.currentPosition;
         Floorplan floorplan = entrance.CreateInstance(Vector2Int.up);

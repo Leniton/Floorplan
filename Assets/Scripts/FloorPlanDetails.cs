@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +6,7 @@ using UnityEngine.UI;
 public class FloorplanDetails : MonoBehaviour
 {
     [SerializeField] private FloorplanUI floorplanUI;
+    [SerializeField] private TMP_Text points;
     [SerializeField] private TMP_Text description;
     [SerializeField] private Button button;
 
@@ -29,6 +28,7 @@ public class FloorplanDetails : MonoBehaviour
     {
         this.floorplan = floorplan;
         floorplanUI.Setup(floorplan);
+        points.text = floorplan.basePoints != 0 ? $"+{floorplan.basePoints}" : string.Empty;
         description.text = floorplan.Description;
     }
 }
