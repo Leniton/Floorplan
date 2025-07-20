@@ -19,14 +19,19 @@ public class Floorplan : ScriptableObject
     [HideInInspector] public int entranceId = 0;
     [HideInInspector] public bool[] connections;
 
+    public Floorplan original { get; private set; }
+
     public Floorplan CreateInstance(Vector2Int entranceDirection)
     {
         Floorplan floorplan = CreateInstance<Floorplan>();
+        floorplan.original = this;
         floorplan.name = name;
         floorplan.Name = Name;
         floorplan.Description = Description;
         floorplan.Color = Color;
         floorplan.Type = Type;
+        floorplan.Rarity = Rarity;
+        floorplan.basePoints = basePoints;
         floorplan.connections = new bool[] 
         {
             true,
@@ -40,7 +45,7 @@ public class Floorplan : ScriptableObject
             sb.Append($"{floorplan.connections[i]} | ");
         //Debug.Log(sb);
 
-        floorplan.entranceId = DirectionToID(entranceDirection);
+        floorplan.ChangeEntrance(entranceDirection);
         while (!floorplan.connections[floorplan.entranceId])
             floorplan.InternalRotation();
         //int entrance = floorplan.entranceId;
@@ -50,6 +55,8 @@ public class Floorplan : ScriptableObject
 
         return floorplan;
     }
+
+    public void ChangeEntrance(Vector2Int entranceDirection) => entranceId = DirectionToID(entranceDirection);
 
     private void InternalRotation()
     {

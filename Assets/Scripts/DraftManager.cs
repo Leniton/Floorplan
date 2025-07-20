@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +16,7 @@ public class DraftManager : MonoBehaviour
 
     private int amountDrafted = 3;
     private List<FloorplanDetails> draftList;
+    private List<Floorplan> runtimePool;
 
     public event Action<Floorplan> OnDraftFloorplan;
 
@@ -27,6 +29,12 @@ public class DraftManager : MonoBehaviour
             instance.onPickedFloorplan += PickFloorplan;
             draftList.Add(instance);
         }
+
+        runtimePool = new(draftPool.Count);
+        for (int i = 0; i < draftPool.Count; i++)
+            runtimePool.Add(draftPool[i].CreateInstance(Vector2Int.up));
+
+        Debug.Log($"{draftPool.Count(f => f.Name == "Comissary")}");
     }
 
     public void DraftFloorplan(Vector2Int direction, List<Vector2Int> possibleSlots)
@@ -51,25 +59,27 @@ public class DraftManager : MonoBehaviour
         //Debug.Log(sb.ToString());
 
         //pick possible ones
-        List<Floorplan> possibleFloors = new();
-        for (int i = 0;i < draftPool.Count; i++)
+        RarityPicker<Floorplan> possibleFloors = new();
+        for (int i = 0;i < runtimePool.Count; i++)
         {
-            if (!possibleTypes.Contains(draftPool[i].Type)) continue;
-            Floorplan floorplan = draftPool[i].CreateInstance(-direction);
-            int randomRotation = Random.Range(1, 3);
-            for (int j = 0; j < randomRotation; j++) floorplan.Rotate();
-            CorrectFloorplanRotation(floorplan, possibleSlots);
-            possibleFloors.Add(floorplan);
+            if (!possibleTypes.Contains(runtimePool[i].Type)) continue;
+            Floorplan floorplan = runtimePool[i];
+            possibleFloors.AddToPool(floorplan, floorplan.Rarity);
         }
 
-        for (int i = 0; i < amountDrafted; i++)
-        {
-            if (possibleFloors.Count <= 0) break;
-            int id = Random.Range(0, possibleFloors.Count);
-            Floorplan floorplan = possibleFloors[id];
-            possibleFloors.RemoveAt(id);
+        for (int i = 0; i < amountDrafted - 1; i++) AddToDraftList(i);
+        //last one is rarer
+        AddToDraftList(amountDrafted - 1, possibleFloors.commonRate);
 
-            FloorplanDetails instance = draftList[i];
+        void AddToDraftList(int id, float rarityOffset = 0)
+        {
+            Floorplan refFloorplan = possibleFloors.PickRandom(rarityOffset, true);
+            Floorplan floorplan = refFloorplan.CreateInstance(-direction);
+            int randomRotation = Random.Range(0, 3);
+            for (int j = 0; j < randomRotation; j++) floorplan.Rotate();
+            CorrectFloorplanRotation(floorplan, possibleSlots);
+
+            FloorplanDetails instance = draftList[id];
             instance.Setup(floorplan);
         }
 
@@ -79,7 +89,7 @@ public class DraftManager : MonoBehaviour
 
     public void CorrectFloorplanRotation(Floorplan floorplan, List<Vector2Int> possibleSlots)
     {
-        if (floorplan.Type == FloorType.DeadEnd || floorplan.Type == FloorType.Straw) return;
+        if (floorplan.Type != FloorType.Ankle && floorplan.Type != FloorType.TPiece) return;
 
         bool invalidConnection = false;
         do
@@ -100,6 +110,7 @@ public class DraftManager : MonoBehaviour
     {
         background.SetActive(false);
         draftScreen.SetActive(false);
+        runtimePool.Remove(floorplan.original);
         OnDraftFloorplan?.Invoke(floorplan);
     }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PointsManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class PointsManager : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private FloorplanUI floorplanPrefab;
     [SerializeField] private Floorplan entrance;
+    [SerializeField] private Image currentImage;
 
     Dictionary<Vector2Int, Floorplan> floorplanDict;
 

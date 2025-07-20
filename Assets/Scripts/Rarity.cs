@@ -41,6 +41,7 @@ public class RarityPicker<T>
     public T PickRandom(float minRandomValue = 0, bool removeFromPool = false)
     {
         float totalRarity = commonRate + uncommonRate + rareRate + legendRate;
+        minRandomValue = Mathf.Min(minRandomValue, totalRarity - legendRate);//at most you guarantee a legend
         List<float> rarities = new() { commonRate, uncommonRate, rareRate, legendRate };
         rarities.Sort();
         float r = Random.Range(minRandomValue, totalRarity);
@@ -53,6 +54,7 @@ public class RarityPicker<T>
                 List<T> pickedRarity = pool[i];
 
                 //treat the case where there's not any element of that rarity (get a rarer one, if possible)
+                if (pickedRarity.Count <= 0) pickedRarity = pool[NextClosestRarity(i)];
 
                 int elementId = Random.Range(0, pickedRarity.Count);
                 T element = pickedRarity[elementId];
@@ -63,6 +65,27 @@ public class RarityPicker<T>
         }
 
         return default;
+    }
+
+    private int NextClosestRarity(int current)
+    {
+        int modifier = 1;
+        int id = current;
+        while (id < pool.Length)
+        {
+            id += modifier;
+            if (id >= pool.Length)
+            {
+                modifier = -1;
+                id = current + modifier;
+            }
+            if (id < 0) break;
+
+            if (pool[id].Count == 0) continue;
+            return id;
+        }
+
+        throw new System.Exception("There's no more items on the pool!!");
     }
 }
 
