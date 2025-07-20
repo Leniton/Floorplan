@@ -27,12 +27,6 @@ public class PointsManager : MonoBehaviour
         Floorplan floorplan = entrance.CreateInstance(Vector2Int.up);
         draftManager.CorrectFloorplanRotation(floorplan, new() { Vector2Int.up, Vector2Int.left, Vector2Int.right });
         PlaceFloorplan(floorplan);
-
-        RarityPicker<int> rarityPicker = new();
-        rarityPicker.AddToPool(1, Rarity.Commom);
-        rarityPicker.AddToPool(2, Rarity.Uncommon);
-        rarityPicker.AddToPool(3, Rarity.Rare);
-        rarityPicker.AddToPool(4, Rarity.Legend);
     }
 
     private void OnMoveSlot(Vector2Int direction)

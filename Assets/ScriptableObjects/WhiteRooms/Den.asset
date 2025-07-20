@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c2ec7ddf6ecb914e8686ca425ec3201, type: 3}
-  m_Name: Dormitory
+  m_Name: Den
   m_EditorClassIdentifier: 
-  Name: Dormitory
-  Description: <b>Connected Rest Rooms</b> give extra steps the first time you enter
-    them
-  Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
+  Name: Den
+  Description: '-'
+  Color: {r: 1, g: 1, b: 1, a: 1}
   Type: 3
-  Rarity: 2
+  Rarity: 1
   basePoints: 2
   entranceId: 0
   connections: 
