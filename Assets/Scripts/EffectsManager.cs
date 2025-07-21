@@ -35,20 +35,9 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Bunk Room":
-                GameEvent.OnEnterFloorplan += BunkRoomEnter;
-                GameEvent.OnExitFloorplan += BunkRoomExit;
-                void BunkRoomEnter(Vector2Int currentCoordinates, Floorplan currentFloorplan)
-                {
-                    GameEvent.OnEnterFloorplan -= BunkRoomEnter;
-                    GameEvent.OnEnterFloorplan?.Invoke(currentCoordinates, currentFloorplan);
-                    GameEvent.OnEnterFloorplan += BunkRoomEnter;
-                }
-                void BunkRoomExit(Vector2Int currentCoordinates, Floorplan currentFloorplan)
-                {
-                    GameEvent.OnExitFloorplan -= BunkRoomExit;
-                    GameEvent.OnExitFloorplan?.Invoke(currentCoordinates, currentFloorplan);
-                    GameEvent.OnExitFloorplan += BunkRoomExit;
-                }
+                GameEvent.onDraftedFloorplan -= AddFloorplanEffect;
+                GameEvent.onDraftedFloorplan?.Invoke(coordinates,floorplan);
+                GameEvent.onDraftedFloorplan += AddFloorplanEffect;
                 break;
             case "Dormitory":
 
