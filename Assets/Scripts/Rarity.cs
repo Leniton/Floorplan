@@ -9,6 +9,8 @@ public class RarityPicker<T>
     public float rareRate = .15f;
     public float legendRate = .05f;
 
+    public bool allowEmptyResult = false;
+
     private List<T>[] pool;
 
     public RarityPicker(float common = .5f, float uncommon = .3f, float rare = .15f, float legend = .05f)
@@ -54,10 +56,10 @@ public class RarityPicker<T>
                 List<T> pickedRarity = pool[i];
 
                 //treat the case where there's not any element of that rarity (get a rarer one, if possible)
-                if (pickedRarity.Count <= 0) pickedRarity = pool[NextClosestRarity(i)];
+                if (pickedRarity.Count <= 0 && !allowEmptyResult) pickedRarity = pool[NextClosestRarity(i)];
 
                 int elementId = Random.Range(0, pickedRarity.Count);
-                T element = pickedRarity[elementId];
+                T element = elementId < pickedRarity.Count ? pickedRarity[elementId] : default;
                 if (removeFromPool) pickedRarity.RemoveAt(elementId);
                 return element;
             }
