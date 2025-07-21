@@ -93,8 +93,8 @@ public class GridManager : MonoBehaviour
                 time += Time.deltaTime;
             }
             rectTransform.anchoredPosition = targetPosition;
+            OnMove?.Invoke(coordinate);
         }
         moveCoroutine = null;
-        OnMove?.Invoke(coordinate);
     }
 }

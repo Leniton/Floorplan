@@ -15,6 +15,9 @@ MonoBehaviour:
   Name: Cassino
   Description: When you first enter this room, 50% to double or halve your money
   Color: {r: 0.98101246, g: 1, b: 0, a: 1}
+  Category: 16
   Type: 3
+  Rarity: 0
+  basePoints: 1
   entranceId: 0
   connections: 

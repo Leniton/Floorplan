@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +11,7 @@ public class Floorplan : ScriptableObject
     [TextArea] public string Description;
 
     public Color Color = Color.white;
+    public FloorCategory Category;
 
     public FloorType Type = FloorType.DeadEnd;
     public Rarity Rarity;
@@ -29,6 +31,7 @@ public class Floorplan : ScriptableObject
         floorplan.Name = Name;
         floorplan.Description = Description;
         floorplan.Color = Color;
+        floorplan.Category = Category;
         floorplan.Type = Type;
         floorplan.Rarity = Rarity;
         floorplan.basePoints = basePoints;
@@ -122,4 +125,15 @@ public enum FloorType
     Ankle = -2,
     TPiece = 3,
     Crossroad = 4,
+}
+[Flags]
+public enum FloorCategory
+{
+    RestRoom = 1,
+    Hallway = 2,
+    BlueRoom = 4,
+    WhiteRoom = 8,
+    Shop = 16,
+    BlackRooms = 32,
+    RedRooms = 64
 }

@@ -15,7 +15,9 @@ MonoBehaviour:
   Name: Vestibule
   Description: Rooms <b>Connected</b> to this room are also connected to each other
   Color: {r: 0.7735849, g: 0.44513544, b: 0, a: 1}
+  Category: 2
   Type: 3
   Rarity: 2
+  basePoints: 1
   entranceId: 0
   connections: 

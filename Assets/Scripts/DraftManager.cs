@@ -33,8 +33,6 @@ public class DraftManager : MonoBehaviour
         draftPool = new(allFloorplans.Count);
         for (int i = 0; i < allFloorplans.Count; i++)
             draftPool.Add(allFloorplans[i].CreateInstance(Vector2Int.up));
-
-        Debug.Log($"{allFloorplans.Count(f => f.Name == "Comissary")}");
     }
 
     public void DraftFloorplan(Vector2Int direction, List<Vector2Int> possibleSlots)

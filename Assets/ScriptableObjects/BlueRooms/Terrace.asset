@@ -15,7 +15,9 @@ MonoBehaviour:
   Name: Terrace
   Description: Contains a uncommon item
   Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
+  Category: 4
   Type: -2
   Rarity: 1
+  basePoints: 1
   entranceId: 0
   connections: 

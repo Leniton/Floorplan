@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c2ec7ddf6ecb914e8686ca425ec3201, type: 3}
   m_Name: DiningRoom
   m_EditorClassIdentifier: 
-  Name: DiningRoom
+  Name: Dining Room
   Description: Contains meal. Gain extra points for each step you gained from food.
   Color: {r: 1, g: 1, b: 1, a: 1}
+  Category: 8
   Type: 3
   Rarity: 1
+  basePoints: 1
   entranceId: 0
   connections: 

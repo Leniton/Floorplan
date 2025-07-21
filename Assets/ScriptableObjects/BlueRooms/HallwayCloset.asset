@@ -15,6 +15,9 @@ MonoBehaviour:
   Name: Hallway Closet
   Description: +2 item. +2 extra item if connected to a <b>Hallway<b>
   Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
+  Category: 4
   Type: 1
+  Rarity: 0
+  basePoints: 1
   entranceId: 0
   connections: 

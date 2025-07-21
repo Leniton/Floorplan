@@ -15,7 +15,9 @@ MonoBehaviour:
   Name: Boudoir
   Description: Bigger chance to draft <b>Rest Rooms</b> from this room
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
+  Category: 1
   Type: -2
   Rarity: 0
+  basePoints: 1
   entranceId: 0
   connections: 

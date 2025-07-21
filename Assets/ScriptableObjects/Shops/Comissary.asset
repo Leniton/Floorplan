@@ -15,6 +15,9 @@ MonoBehaviour:
   Name: Comissary
   Description: Spend money to buy items
   Color: {r: 0.98101246, g: 1, b: 0, a: 1}
+  Category: 16
   Type: -2
+  Rarity: 0
+  basePoints: 1
   entranceId: 0
   connections: 

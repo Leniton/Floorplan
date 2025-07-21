@@ -13,7 +13,7 @@ public class MinimapManager : MonoBehaviour
 
     private void Awake()
     {
-        PointsManager.onDraftedFloorplan += PlaceFloorplan;
+        GameEvent.onDraftedFloorplan += PlaceFloorplan;
     }
 
     private void Start()

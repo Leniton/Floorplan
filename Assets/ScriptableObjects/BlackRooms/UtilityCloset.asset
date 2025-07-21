@@ -15,6 +15,9 @@ MonoBehaviour:
   Name: UtilityCloset
   Description: <b>Power</b> black rooms
   Color: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
+  Category: 32
   Type: 1
+  Rarity: 0
+  basePoints: 1
   entranceId: 0
   connections: 

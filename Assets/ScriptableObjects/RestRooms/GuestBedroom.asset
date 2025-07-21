@@ -15,7 +15,9 @@ MonoBehaviour:
   Name: Guest Bedroom
   Description: +2 steps. +4 extra steps if connected to a <b>Rest Room
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
+  Category: 1
   Type: -2
   Rarity: 0
+  basePoints: 1
   entranceId: 0
   connections: 

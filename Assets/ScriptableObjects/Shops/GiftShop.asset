@@ -15,6 +15,7 @@ MonoBehaviour:
   Name: Gift Shop
   Description: Spend money to buy points
   Color: {r: 0.98101246, g: 1, b: 0, a: 1}
+  Category: 16
   Type: 1
   Rarity: 1
   basePoints: 1

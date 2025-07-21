@@ -17,13 +17,12 @@ public class PointsManager : MonoBehaviour
 
     private Vector2Int currentDraftPosition;
 
-    public static event Action<Vector2Int, Floorplan> onDraftedFloorplan;
-
     private void Start()
     {
         floorplanDict = new();
         player.OnMove += OnMoveSlot;
         draftManager.OnDraftFloorplan += PlaceFloorplan;
+        gridManager.OnMove += TriggerFloorplanEvent;
 
         currentAlpha = currentImage.color.a;
         //add entrance hall
@@ -46,6 +45,7 @@ public class PointsManager : MonoBehaviour
             //slot enter event
             gridManager.ShiftSelection(direction);
             Player.ChangeSteps(-1);
+            GameEvent.OnExitFloorplan?.Invoke(targetedSlot, current);
         }
         else
         {
@@ -81,6 +81,11 @@ public class PointsManager : MonoBehaviour
         floorplanRect.sizeDelta = Vector2.zero;
 
         floorplanDict[currentDraftPosition] = floorplan;
-        onDraftedFloorplan?.Invoke(currentDraftPosition, floorplan);
+        GameEvent.onDraftedFloorplan?.Invoke(currentDraftPosition, floorplan);
+    }
+
+    private void TriggerFloorplanEvent(Vector2Int coordinate)
+    {
+        GameEvent.OnEnterFloorplan?.Invoke(coordinate, floorplanDict[coordinate]);
     }
 }

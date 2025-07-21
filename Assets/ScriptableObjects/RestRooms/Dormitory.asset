@@ -16,6 +16,7 @@ MonoBehaviour:
   Description: <b>Connected Rest Rooms</b> give extra steps the first time you enter
     them
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
+  Category: 3
   Type: 3
   Rarity: 2
   basePoints: 2

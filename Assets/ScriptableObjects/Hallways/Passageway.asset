@@ -15,7 +15,9 @@ MonoBehaviour:
   Name: Passageway
   Description: '-'
   Color: {r: 0.7735849, g: 0.44513544, b: 0, a: 1}
+  Category: 2
   Type: 4
   Rarity: 2
+  basePoints: 1
   entranceId: 0
   connections: 
