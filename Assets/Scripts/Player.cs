@@ -111,4 +111,14 @@ public class Player : MonoBehaviour
     {
         steps += delta;
     }
+
+    public static void ChangeCoins(int delta)
+    {
+        coins += delta;
+    }
+
+    public static void ChangeCrayons(int delta)
+    {
+        crayons += delta;
+    }
 }
