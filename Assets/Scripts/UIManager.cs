@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
     private void Update()
     {
         steps.text = Player.steps.ToString();
-        crayons.text = Player.crayons.ToString();
+        crayons.text = Player.keys.ToString();
         coins.text = Player.coins.ToString();
     }
 

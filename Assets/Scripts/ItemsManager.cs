@@ -77,7 +77,7 @@ public class Crayon : Item
     public override void Initialize()
     {
         int amount = Random.Range(1, 3);
-        Debug.Log($"found crayons!!\n{Player.crayons} + {amount}");
+        Debug.Log($"found crayons!!\n{Player.keys} + {amount}");
         Player.ChangeCrayons(amount);
     }
 }

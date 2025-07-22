@@ -16,7 +16,7 @@ MonoBehaviour:
   Description: '-'
   Color: {r: 1, g: 1, b: 1, a: 1}
   Category: 8
-  Type: 3
+  Type: -2
   Rarity: 3
   basePoints: 8
   entranceId: 0

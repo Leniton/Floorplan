@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
 
     #region Resources
     public static int steps = 20;
-    public static int crayons = 2;
+    public static int keys = 2;
     public static int coins = 0;
     public static int dices = 0;
     #endregion
@@ -120,6 +120,6 @@ public class Player : MonoBehaviour
 
     public static void ChangeCrayons(int delta)
     {
-        crayons += delta;
+        keys += delta;
     }
 }

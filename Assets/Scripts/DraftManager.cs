@@ -68,12 +68,14 @@ public class DraftManager : MonoBehaviour
         //Debug.Log(sb.ToString());
 
         //pick possible ones
-        RarityPicker<Floorplan> possibleFloors = new();
+        List<Floorplan> possibleFloorplans = new();
+        RarityPicker<Floorplan> floorplanPicker = new();
         for (int i = 0; i < draftPool.Count; i++)
         {
             if (!possibleTypes.Contains(draftPool[i].Type)) continue;
             Floorplan floorplan = draftPool[i];
-            possibleFloors.AddToPool(floorplan, floorplan.Rarity);
+            possibleFloorplans.Add(floorplan);
+            floorplanPicker.AddToPool(floorplan, floorplan.Rarity);
         }
 
         lastDraftDirection = direction;
@@ -83,15 +85,16 @@ public class DraftManager : MonoBehaviour
 
         DrawFloorplanEvent evt = new();
         evt.drawnFloorplans = new Floorplan[3];
+        evt.possibleFloorplans = possibleFloorplans;
 
         for (int i = 0; i < amountDrafted - 1; i++) AddToDraftList(i);
         //last one is rarer
-        AddToDraftList(amountDrafted - 1, possibleFloors.commonRate);
+        AddToDraftList(amountDrafted - 1, floorplanPicker.commonRate);
         GameEvent.onDrawFloorplans?.Invoke(evt);
 
         void AddToDraftList(int id, float rarityOffset = 0)
         {
-            Floorplan refFloorplan = possibleFloors.PickRandom(rarityOffset, true);
+            Floorplan refFloorplan = floorplanPicker.PickRandom(rarityOffset, true);
             Floorplan floorplan = refFloorplan.CreateInstance(-direction);
             int randomRotation = Random.Range(0, 3);
             for (int j = 0; j < randomRotation; j++) floorplan.Rotate();
@@ -156,4 +159,5 @@ public class DraftManager : MonoBehaviour
 public class DrawFloorplanEvent
 {
     public Floorplan[] drawnFloorplans;
+    public List<Floorplan> possibleFloorplans;
 }
