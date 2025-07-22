@@ -23,6 +23,8 @@ public class Floorplan : ScriptableObject
 
     public Floorplan original { get; private set; }
 
+    [HideInInspector] public List<Floorplan> connectedFloorplans;
+
     public Floorplan CreateInstance(Vector2Int entranceDirection)
     {
         Floorplan floorplan = CreateInstance<Floorplan>();
@@ -42,6 +44,7 @@ public class Floorplan : ScriptableObject
             Type != FloorType.DeadEnd && Type != FloorType.Ankle,
             Type == FloorType.Crossroad,
         };
+        floorplan.connectedFloorplans = new(Mathf.Abs((int)floorplan.Type));
 
         StringBuilder sb = new();
         for (int i = 0; i < floorplan.connections.Length; i++)

@@ -82,6 +82,22 @@ public class PointsManager : MonoBehaviour
 
         floorplanDict[currentDraftPosition] = floorplan;
         GameEvent.onDraftedFloorplan?.Invoke(currentDraftPosition, floorplan);
+        
+        //connect floorplan
+        for (int i = 0; i < floorplan.connections.Length; i++)
+        {
+            if(!floorplan.connections[i]) continue;
+            Vector2Int direction = Floorplan.IDToDirection(i);
+            Vector2Int slot = currentDraftPosition + direction;
+            //Debug.Log($"{floorplan.Name} is open at {direction}[{slot}]");
+            if (!floorplanDict.TryGetValue(slot, out var targetFloorplan)) continue;
+            //Debug.Log($"there's a floorplan on {slot}({targetFloorplan.Name})");
+            if (!targetFloorplan.connections[Floorplan.DirectionToID(-direction)]) continue;
+            //Debug.Log($"{floorplan.Name} is connected to {targetFloorplan.Name}");
+            floorplan.connectedFloorplans.Add(targetFloorplan);
+            targetFloorplan.connectedFloorplans.Add(floorplan);
+            GameEvent.onConnectFloorplan?.Invoke(floorplan, targetFloorplan);
+        }
     }
 
     private void TriggerFloorplanEvent(Vector2Int coordinate)
