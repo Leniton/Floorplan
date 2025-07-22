@@ -57,8 +57,10 @@ public class Food : Item
     public override void Initialize()
     {
         int amount = Random.Range(2, 7);
-        Debug.Log($"found food!!\n{Player.steps} + {amount}");
-        Player.ChangeSteps(amount);
+        //Debug.Log($"found food!!\n{Player.steps} + {amount}");
+        UIManager.ShowMessage($"found food!!\n+{amount} steps",
+            () => Player.ChangeSteps(amount));
+        //Player.ChangeSteps(amount);
     }
 }
 
@@ -67,8 +69,9 @@ public class Coin : Item
     public override void Initialize()
     {
         int amount = Random.Range(1, 4);
-        Debug.Log($"found coins!!\n{Player.coins} + {amount}");
-        Player.ChangeCoins(amount);
+        //Debug.Log($"found coins!!\n{Player.coins} + {amount}");
+        UIManager.ShowMessage($"found coins!!\n+{amount} coins",
+            () => Player.ChangeCoins(amount));
     }
 }
 
@@ -77,8 +80,10 @@ public class Key : Item
     public override void Initialize()
     {
         int amount = Random.Range(1, 3);
-        Debug.Log($"found keys!!\n{Player.keys} + {amount}");
-        Player.ChangeCrayons(amount);
+        //Debug.Log($"found keys!!\n{Player.keys} + {amount}");
+        UIManager.ShowMessage($"found keys!!\n+{amount} keys",
+            () => Player.ChangeCrayons(amount));
+        //Player.ChangeCrayons(amount);
     }
 }
 
@@ -88,6 +93,8 @@ public class Dice : Item
     {
         int amount = Random.Range(1, 3);
         Debug.Log($"found dice!!\n{Player.dices} + {amount}");
-        Player.dices += amount;
+        UIManager.ShowMessage($"found dice!!\n+{amount} dices",
+            () => Player.dices += amount);
+        //Player.dices += amount;
     }
 }
