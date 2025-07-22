@@ -40,10 +40,20 @@ public class EffectsManager : MonoBehaviour
                 GameEvent.onDraftedFloorplan += AddFloorplanEffect;
                 break;
             case "Dormitory":
-
-                void DormitoryEffect(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                GameEvent.onConnectFloorplan += DormitoryEffect;
+                void DormitoryEffect(Floorplan firstFloorplan, Floorplan secondFloorplan)
                 {
-                    
+                    if(firstFloorplan != floorplan && secondFloorplan != floorplan) return;
+                    Floorplan other = firstFloorplan == floorplan ? secondFloorplan : firstFloorplan;
+                    if(!NumberUtil.ContainsBytes((int)other.Category, (int)FloorCategory.RestRoom)) return;
+                    GameEvent.OnEnterFloorplan += AddStepsEffect;
+                    void AddStepsEffect(Vector2Int coordinates, Floorplan restRoom)
+                    {
+                        if(restRoom != other) return;
+                        Debug.Log("dormitory effect");
+                        Player.ChangeSteps(5);
+                        GameEvent.OnEnterFloorplan -= AddStepsEffect;
+                    }
                 }
                 break;
             case "":
