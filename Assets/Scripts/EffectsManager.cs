@@ -57,14 +57,13 @@ public class EffectsManager : MonoBehaviour
                     if(firstFloorplan != floorplan && secondFloorplan != floorplan) return;
                     Floorplan other = firstFloorplan == floorplan ? secondFloorplan : firstFloorplan;
                     if(!NumberUtil.ContainsBytes((int)other.Category, (int)FloorCategory.RestRoom)) return;
-                    //bonus points equal to connected restrooms points
-                    floorplan.pointBonus.Add(other.CalculatePoints);
+                    //connected bedrooms gain extra points
+                    other.pointBonus.Add(() => 2);
                     //first time entering a connected restroom gain steps
                     GameEvent.OnEnterFloorplan += AddStepsEffect;
                     void AddStepsEffect(Vector2Int coordinates, Floorplan restRoom)
                     {
                         if(restRoom != other) return;
-                        Debug.Log("dormitory effect");
                         Player.ChangeSteps(5);
                         GameEvent.OnEnterFloorplan -= AddStepsEffect;
                     }
@@ -115,6 +114,23 @@ public class EffectsManager : MonoBehaviour
                     evt.drawnFloorplans[id] = modifiedList.PickRandom();
                 }
 
+                break;
+            case "Guest Bedroom":
+                GameEvent.OnEnterFloorplan += GuestBedroomStepsEffect;
+                void GuestBedroomStepsEffect(Vector2Int coordinates, Floorplan restRoom)
+                {
+                    if(restRoom != floorplan) return;
+                    Player.ChangeSteps(2);
+                }
+                GameEvent.onConnectFloorplans += GuestBedroomEffect;
+                void GuestBedroomEffect(Floorplan firstFloorplan, Floorplan secondFloorplan)
+                {
+                    if(firstFloorplan != floorplan && secondFloorplan != floorplan) return;
+                    Floorplan other = firstFloorplan == floorplan ? secondFloorplan : firstFloorplan;
+                    if(!NumberUtil.ContainsBytes((int)other.Category, (int)FloorCategory.RestRoom)) return;
+                    //bonus points equal to connected restrooms points
+                    floorplan.pointBonus.Add(other.CalculatePoints);
+                }
                 break;
             case "":
                 break;

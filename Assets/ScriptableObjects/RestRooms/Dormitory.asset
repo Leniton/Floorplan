@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Dormitory
   Description: <b>Connected Rest Rooms</b> give extra steps the first time you enter
-    them. have the combined points of each connected rest room.
+    them. Connected bedrooms gain extra points
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Category: 3
   Type: 3
