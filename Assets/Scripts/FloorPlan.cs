@@ -24,6 +24,8 @@ public class Floorplan : ScriptableObject
     public Floorplan original { get; private set; }
 
     [HideInInspector] public List<Floorplan> connectedFloorplans;
+    public List<Func<int>> pointBonus = new();
+    public List<Func<int>> pointMult = new();
 
     public Floorplan CreateInstance(Vector2Int entranceDirection)
     {
@@ -45,6 +47,8 @@ public class Floorplan : ScriptableObject
             Type == FloorType.Crossroad,
         };
         floorplan.connectedFloorplans = new(Mathf.Abs((int)floorplan.Type));
+        pointBonus = new();
+        pointMult = new();
 
         StringBuilder sb = new();
         for (int i = 0; i < floorplan.connections.Length; i++)
@@ -119,6 +123,16 @@ public class Floorplan : ScriptableObject
         }
 
         return Vector2Int.zero;
+    }
+
+    public int CalculatePoints()
+    {
+        int finalValue = basePoints;
+        for (int i = 0; i < pointBonus.Count; i++)
+            finalValue += pointBonus[i]?.Invoke() ?? 0;
+        for (int i = 0; i < pointMult.Count; i++)
+            finalValue *= pointMult[i]?.Invoke() ?? 1;
+        return finalValue;
     }
 }
 public enum FloorType

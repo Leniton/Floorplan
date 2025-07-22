@@ -28,7 +28,8 @@ public class FloorplanDetails : MonoBehaviour
     {
         this.floorplan = floorplan;
         floorplanUI.Setup(floorplan);
-        points.text = floorplan.basePoints != 0 ? $"+{floorplan.basePoints}" : string.Empty;
+        int currentPoints = this.floorplan.CalculatePoints();
+        points.text = currentPoints != 0 ? $"+{currentPoints}" : string.Empty;
         description.text = floorplan.Description;
     }
 }

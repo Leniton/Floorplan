@@ -23,6 +23,8 @@ public class GridManager : MonoBehaviour
 
     public event Action<Vector2Int> OnMove;
 
+    public static GridManager instance;
+
     private void Awake()
     {
         grid ??= gameObject.GetComponent<GridLayoutGroup>();
@@ -33,6 +35,7 @@ public class GridManager : MonoBehaviour
 
         coordinate = new((xSize / 2), 0);
         UpdatePosition(false);
+        instance = this;
     }
 
     public void ShiftSelection(Vector2Int direction)

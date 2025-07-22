@@ -13,7 +13,7 @@ public class PointsManager : MonoBehaviour
     [SerializeField] private Image currentImage;
 
     private float currentAlpha;
-    private Dictionary<Vector2Int, Floorplan> floorplanDict;
+    public static Dictionary<Vector2Int, Floorplan> floorplanDict;
 
     private Vector2Int currentDraftPosition;
 
@@ -96,7 +96,7 @@ public class PointsManager : MonoBehaviour
             //Debug.Log($"{floorplan.Name} is connected to {targetFloorplan.Name}");
             floorplan.connectedFloorplans.Add(targetFloorplan);
             targetFloorplan.connectedFloorplans.Add(floorplan);
-            GameEvent.onConnectFloorplan?.Invoke(floorplan, targetFloorplan);
+            GameEvent.onConnectFloorplans?.Invoke(floorplan, targetFloorplan);
         }
     }
 

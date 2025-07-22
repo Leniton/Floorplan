@@ -94,19 +94,18 @@ public class DraftManager : MonoBehaviour
 
         void AddToDraftList(int id, float rarityOffset = 0)
         {
-            Floorplan refFloorplan = floorplanPicker.PickRandom(rarityOffset, true);
-            Floorplan floorplan = refFloorplan.CreateInstance(-direction);
-            int randomRotation = Random.Range(0, 3);
-            for (int j = 0; j < randomRotation; j++) floorplan.Rotate();
-            CorrectFloorplanRotation(floorplan, possibleSlots);
+            Floorplan floorplan = floorplanPicker.PickRandom(rarityOffset, true);
             evt.drawnFloorplans[id] = floorplan;
         }
 
-
         for (int i = 0; i < amountDrafted; i++)
         {
+            Floorplan floorplan = evt.drawnFloorplans[i].CreateInstance(-direction);
+            int randomRotation = Random.Range(0, 3);
+            for (int j = 0; j < randomRotation; j++) floorplan.Rotate();
+            CorrectFloorplanRotation(floorplan, possibleSlots);
             FloorplanDetails instance = draftList[i];
-            instance.Setup(evt.drawnFloorplans[i]);
+            instance.Setup(floorplan);
         }
 
         background.SetActive(true);

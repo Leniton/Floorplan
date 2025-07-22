@@ -31,7 +31,7 @@ public class ItemsManager : MonoBehaviour
             default:
                 possibleItems.AddToPool(new Food(), Rarity.Uncommon);
                 possibleItems.AddToPool(new Coin(), Rarity.Uncommon);
-                possibleItems.AddToPool(new Crayon(), Rarity.Uncommon);
+                possibleItems.AddToPool(new Key(), Rarity.Uncommon);
                 possibleItems.AddToPool(new Dice(), Rarity.Rare);
                 break;
         }
@@ -72,12 +72,12 @@ public class Coin : Item
     }
 }
 
-public class Crayon : Item
+public class Key : Item
 {
     public override void Initialize()
     {
         int amount = Random.Range(1, 3);
-        Debug.Log($"found crayons!!\n{Player.keys} + {amount}");
+        Debug.Log($"found keys!!\n{Player.keys} + {amount}");
         Player.ChangeCrayons(amount);
     }
 }

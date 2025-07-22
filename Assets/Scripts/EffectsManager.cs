@@ -38,14 +38,28 @@ public class EffectsManager : MonoBehaviour
                 GameEvent.onDraftedFloorplan -= AddFloorplanEffect;
                 GameEvent.onDraftedFloorplan?.Invoke(coordinates,floorplan);
                 GameEvent.onDraftedFloorplan += AddFloorplanEffect;
+
+                GameEvent.onConnectFloorplans += DoubleConnection;
+                void DoubleConnection(Floorplan firstFloorplan, Floorplan secondFloorplan)
+                {
+                    if(firstFloorplan != floorplan && secondFloorplan != floorplan) return;
+                    Floorplan other = firstFloorplan == floorplan ? secondFloorplan : firstFloorplan;
+                    other.connectedFloorplans.Add(floorplan);
+                    GameEvent.onConnectFloorplans -= DoubleConnection;
+                    GameEvent.onConnectFloorplans?.Invoke(firstFloorplan, secondFloorplan);
+                    GameEvent.onConnectFloorplans += DoubleConnection;
+                }
                 break;
             case "Dormitory":
-                GameEvent.onConnectFloorplan += DormitoryEffect;
+                GameEvent.onConnectFloorplans += DormitoryEffect;
                 void DormitoryEffect(Floorplan firstFloorplan, Floorplan secondFloorplan)
                 {
                     if(firstFloorplan != floorplan && secondFloorplan != floorplan) return;
                     Floorplan other = firstFloorplan == floorplan ? secondFloorplan : firstFloorplan;
                     if(!NumberUtil.ContainsBytes((int)other.Category, (int)FloorCategory.RestRoom)) return;
+                    //bonus points equal to connected restrooms points
+                    floorplan.pointBonus.Add(other.CalculatePoints);
+                    //first time entering a connected restroom gain steps
                     GameEvent.OnEnterFloorplan += AddStepsEffect;
                     void AddStepsEffect(Vector2Int coordinates, Floorplan restRoom)
                     {
@@ -55,6 +69,52 @@ public class EffectsManager : MonoBehaviour
                         GameEvent.OnEnterFloorplan -= AddStepsEffect;
                     }
                 }
+                break;
+            case "Boudoir":
+                GameEvent.OnEnterFloorplan += OnEnterBoudoir;
+                GameEvent.OnExitFloorplan += OnExitBoudoir;
+                void OnEnterBoudoir(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                {
+                    if (currentFloorplan != floorplan) return;
+                    GameEvent.onDrawFloorplans += IncreaseRestroomChance;
+                }
+                void OnExitBoudoir(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                {
+                    if (currentFloorplan != floorplan) return;
+                    GameEvent.onDrawFloorplans -= IncreaseRestroomChance;
+                }
+
+                void IncreaseRestroomChance(DrawFloorplanEvent evt)
+                {
+                    int restroomCount = 0;
+                    for (int i = 0; i < evt.drawnFloorplans.Length; i++)
+                    {
+                        if (!NumberUtil.ContainsBytes((int)evt.drawnFloorplans[i].Category,
+                                (int)FloorCategory.RestRoom)) continue;
+                        restroomCount++;
+                    }
+
+                    if (restroomCount > 0) return;
+                    List<Floorplan> possibleRestroom = new();
+                    RarityPicker<Floorplan> modifiedList = new();
+                    for (int i = 0; i < evt.possibleFloorplans.Count; i++)
+                    {
+                        Floorplan restRoom = evt.possibleFloorplans[i];
+                        if (!NumberUtil.ContainsBytes((int)restRoom.Category, (int)FloorCategory.RestRoom))
+                            continue;
+                        //check if it is selected already
+                        if (restRoom == evt.drawnFloorplans[0] ||
+                            restRoom == evt.drawnFloorplans[1] ||
+                            restRoom == evt.drawnFloorplans[2]) continue;
+                        modifiedList.AddToPool(restRoom, restRoom.Rarity);
+                        possibleRestroom.Add(restRoom);
+                    }
+
+                    if (possibleRestroom.Count <= 0) return;
+                    int id = Random.Range(0, 2);
+                    evt.drawnFloorplans[id] = modifiedList.PickRandom();
+                }
+
                 break;
             case "":
                 break;
