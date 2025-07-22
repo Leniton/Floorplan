@@ -98,9 +98,18 @@ public class DraftManager : MonoBehaviour
             evt.drawnFloorplans[id] = floorplan;
         }
 
+        int keysRequiredFloorplans = 0;
+        for (int i = 0; i < amountDrafted; i++)
+        {
+            if(evt.drawnFloorplans[i].keyCost <= 0) continue;
+            keysRequiredFloorplans++;
+        }
+
+        bool removeCost = keysRequiredFloorplans >= amountDrafted;
         for (int i = 0; i < amountDrafted; i++)
         {
             Floorplan floorplan = evt.drawnFloorplans[i].CreateInstance(-direction);
+            if (i == 0 && removeCost) floorplan.keyCost = 0;
             int randomRotation = Random.Range(0, 3);
             for (int j = 0; j < randomRotation; j++) floorplan.Rotate();
             CorrectFloorplanRotation(floorplan, possibleSlots);
@@ -133,8 +142,14 @@ public class DraftManager : MonoBehaviour
 
     public void PickFloorplan(Floorplan floorplan)
     {
+        if (Player.keys < floorplan.keyCost)
+        {
+            UIManager.ShowMessage("You don't have enough keys!!");
+            return;
+        }
         background.SetActive(false);
         draftScreen.SetActive(false);
+        Player.ChangeKeys(-floorplan.keyCost);
         draftPool.Remove(floorplan.original);
         OnDraftFloorplan?.Invoke(floorplan);
     }

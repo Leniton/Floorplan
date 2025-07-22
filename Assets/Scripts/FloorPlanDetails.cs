@@ -7,6 +7,7 @@ public class FloorplanDetails : MonoBehaviour
 {
     [SerializeField] private FloorplanUI floorplanUI;
     [SerializeField] private TMP_Text points;
+    [SerializeField] private TMP_Text cost;
     [SerializeField] private TMP_Text description;
     [SerializeField] private Button button;
 
@@ -30,6 +31,8 @@ public class FloorplanDetails : MonoBehaviour
         floorplanUI.Setup(floorplan);
         int currentPoints = this.floorplan.CalculatePoints();
         points.text = currentPoints != 0 ? $"+{currentPoints}" : string.Empty;
+        cost.gameObject.SetActive(this.floorplan.keyCost > 0);
+        cost.text = this.floorplan.keyCost.ToString();
         description.text = floorplan.Description;
     }
 }

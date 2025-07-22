@@ -118,7 +118,7 @@ public class Player : MonoBehaviour
         coins += delta;
     }
 
-    public static void ChangeCrayons(int delta)
+    public static void ChangeKeys(int delta)
     {
         keys += delta;
     }

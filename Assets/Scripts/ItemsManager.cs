@@ -60,7 +60,6 @@ public class Food : Item
         //Debug.Log($"found food!!\n{Player.steps} + {amount}");
         UIManager.ShowMessage($"found food!!\n+{amount} steps",
             () => Player.ChangeSteps(amount));
-        //Player.ChangeSteps(amount);
     }
 }
 
@@ -82,8 +81,7 @@ public class Key : Item
         int amount = Random.Range(1, 3);
         //Debug.Log($"found keys!!\n{Player.keys} + {amount}");
         UIManager.ShowMessage($"found keys!!\n+{amount} keys",
-            () => Player.ChangeCrayons(amount));
-        //Player.ChangeCrayons(amount);
+            () => Player.ChangeKeys(amount));
     }
 }
 
@@ -92,9 +90,8 @@ public class Dice : Item
     public override void Initialize()
     {
         int amount = Random.Range(1, 3);
-        Debug.Log($"found dice!!\n{Player.dices} + {amount}");
+        //Debug.Log($"found dice!!\n{Player.dices} + {amount}");
         UIManager.ShowMessage($"found dice!!\n+{amount} dices",
             () => Player.dices += amount);
-        //Player.dices += amount;
     }
 }

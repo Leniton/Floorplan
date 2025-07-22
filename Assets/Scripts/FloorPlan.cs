@@ -15,6 +15,7 @@ public class Floorplan : ScriptableObject
 
     public FloorType Type = FloorType.DeadEnd;
     public Rarity Rarity;
+    public int keyCost = 0;
     public int basePoints = 1;
     public int DoorCount => Mathf.Abs((int)Type);
 
@@ -38,6 +39,7 @@ public class Floorplan : ScriptableObject
         floorplan.Category = Category;
         floorplan.Type = Type;
         floorplan.Rarity = Rarity;
+        floorplan.keyCost = keyCost;
         floorplan.basePoints = basePoints;
         floorplan.connections = new bool[] 
         {

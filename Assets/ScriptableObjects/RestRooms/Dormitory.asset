@@ -19,6 +19,7 @@ MonoBehaviour:
   Category: 3
   Type: 3
   Rarity: 2
+  keyCost: 1
   basePoints: 2
   entranceId: 0
   connections: 
