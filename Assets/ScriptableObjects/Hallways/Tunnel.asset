@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: Tunnel
   m_EditorClassIdentifier: 
   Name: Tunnel
-  Description: You always draw a tunnel when drafting from this
+  Description: You always draw a tunnel when drafting from this room
   Color: {r: 0.7735849, g: 0.44513544, b: 0, a: 1}
   Category: 2
   Type: 2
   Rarity: 1
+  keyCost: 0
   basePoints: 1
   entranceId: 0
   connections: 
+  connectedFloorplans: []

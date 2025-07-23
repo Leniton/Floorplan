@@ -139,7 +139,6 @@ public class EffectsManager : MonoBehaviour
                 {
                     if(!floorplan.ConnectedToFloorplan(firstFloorplan,secondFloorplan, out var other)) return;
                     connectedCategories |= other.Category;
-                    Debug.Log(NumberUtil.SeparateBits((int)connectedCategories).Length);
                 }
                 break;
             case "Tunnel":
@@ -170,6 +169,23 @@ public class EffectsManager : MonoBehaviour
                     Floorplan tunnel = floorplan.original.CreateInstance(Floorplan.IDToDirection(floorplan.entranceId));
                     int id = Random.Range(0, 2);
                     evt.drawnFloorplans[id] = tunnel;
+                }
+                break;
+            case "Vestibule":
+                GameEvent.onConnectFloorplans += OnConnectVestibule;
+                void OnConnectVestibule(Floorplan firstFloorplan, Floorplan secondFloorplan)
+                {
+                    if (!floorplan.ConnectedToFloorplan(firstFloorplan, secondFloorplan, out var other)) return;
+                    for (int i = 0; i < floorplan.connectedFloorplans.Count; i++)
+                    {
+                        Floorplan currentFloorplan = floorplan.connectedFloorplans[i];
+                        if (currentFloorplan == other) continue;
+                        if (currentFloorplan.connectedFloorplans.Contains(other)) continue;
+                        currentFloorplan.connectedFloorplans.Add(other);
+                        other.connectedFloorplans.Add(currentFloorplan);
+                        //Debug.Log($"{floorplan.Name} connected {currentFloorplan.Name} to {other.Name}");
+                        GameEvent.onConnectFloorplans?.Invoke(currentFloorplan, other);
+                    }
                 }
                 break;
             case "":

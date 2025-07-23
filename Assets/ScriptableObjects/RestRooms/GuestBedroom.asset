@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: GuestBedroom
   m_EditorClassIdentifier: 
   Name: Guest Bedroom
-  Description: When entering +2 steps. This room gains the combined points of each
-    connected rest room.
+  Description: When you enter this room gain +2 steps. This room gains the combined
+    points of each connected rest room.
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Category: 1
   Type: -2
   Rarity: 0
+  keyCost: 0
   basePoints: 0
   entranceId: 0
   connections: 

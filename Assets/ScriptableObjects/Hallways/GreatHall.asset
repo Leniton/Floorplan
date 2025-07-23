@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GreatHall
   m_EditorClassIdentifier: 
   Name: Great Hall
-  Description: Extra points for each room of different color <b>Connected</> to this
-    room
+  Description: Extra points for each room of different color <b>Connected</b> to
+    this room
   Color: {r: 0.7735849, g: 0.44513544, b: 0, a: 1}
   Category: 2
   Type: 4
