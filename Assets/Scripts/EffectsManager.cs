@@ -56,7 +56,7 @@ public class EffectsManager : MonoBehaviour
                 GameEvent.onConnectFloorplans += DormitoryEffect;
                 void DormitoryEffect(Floorplan firstFloorplan, Floorplan secondFloorplan)
                 {
-                    if(!floorplan.ConnectedToFloorplan(firstFloorplan,secondFloorplan, out var other)) return;
+                    if (!floorplan.ConnectedToFloorplan(firstFloorplan, secondFloorplan, out var other)) return;
                     if(!NumberUtil.ContainsBytes((int)other.Category, (int)FloorCategory.RestRoom)) return;
                     //connected bedrooms gain extra points
                     other.pointBonus.Add(() => 2);
@@ -237,6 +237,15 @@ public class EffectsManager : MonoBehaviour
                 {
                     if(!NumberUtil.ContainsBytes((int)currentFloorplan.Category, (int)FloorCategory.BlackRooms)) return;
                     currentFloorplan.pointMult.Add(() => 2);
+                }
+                break;
+            case "Boiler Room":
+                GameEvent.onConnectFloorplans += BoilerRoomEffect;
+                void BoilerRoomEffect(Floorplan firstFloorplan, Floorplan secondFloorplan)
+                {
+                    if (!floorplan.ConnectedToFloorplan(firstFloorplan, secondFloorplan, out var other)) return;
+                    //connected rooms are powered
+                    other.pointMult.Add(() => 2);
                 }
                 break;
             case "":
