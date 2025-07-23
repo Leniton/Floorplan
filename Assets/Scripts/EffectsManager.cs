@@ -12,6 +12,8 @@ public class EffectsManager : MonoBehaviour
 
     private void AddFloorplanEffect(Vector2Int coordinates, Floorplan floorplan)
     {
+        Vector2Int draftedCoordinates = coordinates + Floorplan.IDToDirection(floorplan.entranceId);
+        if(!PointsManager.floorplanDict.TryGetValue(draftedCoordinates, out var draftedFloorplan)) return;
         switch (floorplan.Name)
         {
             case "Bedroom":
@@ -189,10 +191,28 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Attic":
-                RarityPicker<Item> possibleItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
-                int extraItemCount = 6;
-                for (int i = 0; i < extraItemCount; i++)
-                    floorplan.AddItemToFloorplan(possibleItems.PickRandom());
+                RarityPicker<Item> atticItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
+                int atticItemCount = 6;
+                for (int i = 0; i < atticItemCount; i++)
+                    floorplan.AddItemToFloorplan(atticItems.PickRandom());
+                break;
+            case "Walk-In Closet":
+                RarityPicker<Item> walkinClosetItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
+                int walkinClosetItemCount = 4;
+                if (NumberUtil.ContainsBytes((int)draftedFloorplan.Category, (int)FloorCategory.Hallway))
+                    walkinClosetItemCount += 2;
+
+                for (int i = 0; i < walkinClosetItemCount; i++)
+                    floorplan.AddItemToFloorplan(walkinClosetItems.PickRandom());
+                break;
+            case "Hallway Closet":
+                RarityPicker<Item> hallwayClosetItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
+                int hallwayClosetItemCount = 2;
+                if (NumberUtil.ContainsBytes((int)draftedFloorplan.Category, (int)FloorCategory.Hallway))
+                    hallwayClosetItemCount += 1;
+                
+                for (int i = 0; i < hallwayClosetItemCount; i++)
+                    floorplan.AddItemToFloorplan(hallwayClosetItems.PickRandom());
                 break;
             case "":
                 break;
