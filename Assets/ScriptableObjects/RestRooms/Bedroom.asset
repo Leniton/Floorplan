@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: Bedroom
   m_EditorClassIdentifier: 
   Name: Bedroom
-  Description: +5 Steps
+  Description: The first time you enter this room gain +5 Steps
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Category: 1
   Type: 1
   Rarity: 0
+  keyCost: 0
   basePoints: 1
   entranceId: 0
   connections: 
+  connectedFloorplans: []

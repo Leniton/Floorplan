@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: Bathroom
   m_EditorClassIdentifier: 
   Name: Bathroom
-  Description: The first time you enter this room, round up your steps.
+  Description: The first time you enter this room, round up your steps (12 => 20).
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Category: 1
   Type: 1
   Rarity: 1
+  keyCost: 0
   basePoints: 1
   entranceId: 0
   connections: 
+  connectedFloorplans: []
