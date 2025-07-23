@@ -18,9 +18,9 @@ MonoBehaviour:
   Color: {r: 0.7735849, g: 0.44513544, b: 0, a: 1}
   Category: 2
   Type: 4
-  Rarity: 3
+  Rarity: 2
   keyCost: 2
-  basePoints: 1
+  basePoints: 2
   entranceId: 0
   connections: 
   connectedFloorplans: []

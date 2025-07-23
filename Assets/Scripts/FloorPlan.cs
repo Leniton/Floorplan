@@ -41,7 +41,7 @@ public class Floorplan : ScriptableObject
         floorplan.Rarity = Rarity;
         floorplan.keyCost = keyCost;
         floorplan.basePoints = basePoints;
-        floorplan.connections = new bool[] 
+        floorplan.connections = new [] 
         {
             true,
             Type != FloorType.DeadEnd && Type != FloorType.Straw,
@@ -154,5 +154,6 @@ public enum FloorCategory
     WhiteRoom = 8,
     Shop = 16,
     BlackRooms = 32,
-    RedRooms = 64
+    RedRooms = 64,
+    Blank = 128 //added so Aquarium doesn't break Great Hall
 }

@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Aquarium
   Description: Counts as every type of room
   Color: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
-  Category: -1
+  Category: 127
   Type: 3
   Rarity: 1
   keyCost: 1

@@ -54,8 +54,7 @@ public class EffectsManager : MonoBehaviour
                 GameEvent.onConnectFloorplans += DormitoryEffect;
                 void DormitoryEffect(Floorplan firstFloorplan, Floorplan secondFloorplan)
                 {
-                    if(firstFloorplan != floorplan && secondFloorplan != floorplan) return;
-                    Floorplan other = firstFloorplan == floorplan ? secondFloorplan : firstFloorplan;
+                    if(!floorplan.ConnectedToFloorplan(firstFloorplan,secondFloorplan, out var other)) return;
                     if(!NumberUtil.ContainsBytes((int)other.Category, (int)FloorCategory.RestRoom)) return;
                     //connected bedrooms gain extra points
                     other.pointBonus.Add(() => 2);
@@ -82,7 +81,6 @@ public class EffectsManager : MonoBehaviour
                     if (currentFloorplan != floorplan) return;
                     GameEvent.onDrawFloorplans -= IncreaseRestroomChance;
                 }
-
                 void IncreaseRestroomChance(DrawFloorplanEvent evt)
                 {
                     int restroomCount = 0;
@@ -113,7 +111,6 @@ public class EffectsManager : MonoBehaviour
                     int id = Random.Range(0, 2);
                     evt.drawnFloorplans[id] = modifiedList.PickRandom();
                 }
-
                 break;
             case "Guest Bedroom":
                 GameEvent.OnEnterFloorplan += GuestBedroomStepsEffect;
@@ -130,6 +127,19 @@ public class EffectsManager : MonoBehaviour
                     if(!NumberUtil.ContainsBytes((int)other.Category, (int)FloorCategory.RestRoom)) return;
                     //bonus points equal to connected restrooms points
                     floorplan.pointBonus.Add(other.CalculatePoints);
+                }
+                break;
+            case "Great Hall":
+                //extra points for each different type of room connected
+                FloorCategory connectedCategories = 0;
+                floorplan.pointBonus.Add(() => NumberUtil.SeparateBits((int)connectedCategories).Length * 2);
+                
+                GameEvent.onConnectFloorplans += GreatHallEffect;
+                void GreatHallEffect(Floorplan firstFloorplan, Floorplan secondFloorplan)
+                {
+                    if(!floorplan.ConnectedToFloorplan(firstFloorplan,secondFloorplan, out var other)) return;
+                    connectedCategories |= other.Category;
+                    Debug.Log(NumberUtil.SeparateBits((int)connectedCategories).Length);
                 }
                 break;
             case "":
