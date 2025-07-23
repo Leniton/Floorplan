@@ -122,10 +122,10 @@ public class EffectsManager : MonoBehaviour
                 GameEvent.onConnectFloorplans += GuestBedroomEffect;
                 void GuestBedroomEffect(Floorplan firstFloorplan, Floorplan secondFloorplan)
                 {
-                    if(firstFloorplan != floorplan && secondFloorplan != floorplan) return;
-                    Floorplan other = firstFloorplan == floorplan ? secondFloorplan : firstFloorplan;
+                    if (!floorplan.ConnectedToFloorplan(firstFloorplan, secondFloorplan, out var other)) return;
                     if(!NumberUtil.ContainsBytes((int)other.Category, (int)FloorCategory.RestRoom)) return;
                     //bonus points equal to connected restrooms points
+                    //Debug.Log($"{floorplan.Name} connected to {other.Name}");
                     floorplan.pointBonus.Add(other.CalculatePoints);
                 }
                 break;
