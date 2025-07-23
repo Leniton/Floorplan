@@ -188,6 +188,12 @@ public class EffectsManager : MonoBehaviour
                     }
                 }
                 break;
+            case "Attic":
+                RarityPicker<Item> possibleItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
+                int extraItemCount = 6;
+                for (int i = 0; i < extraItemCount; i++)
+                    floorplan.AddItemToFloorplan(possibleItems.PickRandom());
+                break;
             case "":
                 break;
         }

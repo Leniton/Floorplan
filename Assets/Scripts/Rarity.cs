@@ -45,12 +45,12 @@ public class RarityPicker<T>
         float totalRarity = commonRate + uncommonRate + rareRate + legendRate;
         minRandomValue = Mathf.Min(minRandomValue, totalRarity - legendRate);//at most you guarantee a legend
         List<float> rarities = new() { commonRate, uncommonRate, rareRate, legendRate };
-        rarities.Sort();
+        rarities.Sort();//rarity get sorted from least likely to most likely
         float r = Random.Range(minRandomValue, totalRarity);
         float rarityOffset = 0;
         for (int i = 0; i < pool.Length; i++)
         {
-            float rarity = rarities[rarities.Count - (i + 1)];//list is in inverse order
+            float rarity = rarities[^(i + 1)];//list is in inverse order
             if (r - rarityOffset < rarity)
             {
                 List<T> pickedRarity = pool[i];

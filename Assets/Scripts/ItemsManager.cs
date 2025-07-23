@@ -16,34 +16,46 @@ public class ItemsManager : MonoBehaviour
         AddFloorplanItems(floorplan);
     }
 
-    public static void AddFloorplanItems(Floorplan floorplan)
+    public static RarityPicker<Item> GetPossibleFloorplanItems(Floorplan floorplan)
     {
-        //for items, common means you get nothing
-        RarityPicker<Item> possibleItems = new(.6f, .3f, .1f, 0);
-        possibleItems.allowEmptyResult = true;
-        //blue rooms are most likely to contain items
-        if (NumberUtil.ContainsBytes((int)floorplan.Category, (int)FloorCategory.BlueRoom))
-        {
-            float cutRate = possibleItems.commonRate / 2f;
-            float distributeRate = cutRate / 3f;
-            possibleItems.ChangeRarities(
-                possibleItems.commonRate - cutRate,
-                possibleItems.uncommonRate + distributeRate,
-                possibleItems.rareRate + distributeRate,
-                0);
-        }
-
+        RarityPicker<Item> possibleItems = new(.3f, .1f, 0, 0);
         switch (floorplan.Category)
         {
             default:
-                possibleItems.AddToPool(new Food(), Rarity.Uncommon);
-                possibleItems.AddToPool(new Coin(), Rarity.Uncommon);
-                possibleItems.AddToPool(new Key(), Rarity.Uncommon);
-                possibleItems.AddToPool(new Dice(), Rarity.Rare);
+                possibleItems.AddToPool(new Food(), Rarity.Commom);
+                possibleItems.AddToPool(new Coin(), Rarity.Commom);
+                possibleItems.AddToPool(new Key(), Rarity.Commom);
+                possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
                 break;
         }
 
-        floorplan.AddItemToFloorplan(possibleItems.PickRandom());
+        return possibleItems;
+    }
+
+    public static void AddFloorplanItems(Floorplan floorplan)
+    {
+        RarityPicker<Item> possibleItems = GetPossibleFloorplanItems(floorplan);
+        //for items, legend means you get nothing
+        possibleItems.allowEmptyResult = true;
+        float nothingRate = possibleItems.commonRate + possibleItems.uncommonRate + possibleItems.rareRate;
+        nothingRate = 1 - nothingRate;
+        possibleItems.legendRate = nothingRate;
+        
+        //blue rooms are most likely to contain items
+        if (NumberUtil.ContainsBytes((int)floorplan.Category, (int)FloorCategory.BlueRoom))
+        {
+            float cutRate = possibleItems.legendRate / 2f;
+            float distributeRate = cutRate / 2f;//to be 3 when rare items are introduced
+            possibleItems.ChangeRarities(
+                possibleItems.commonRate + distributeRate,
+                possibleItems.uncommonRate + distributeRate,
+                0,//no rare items yet
+                possibleItems.legendRate - cutRate);
+        }
+
+        Item item = possibleItems.PickRandom();
+        if(item == null) return;
+        floorplan.AddItemToFloorplan(item);
     }
 }
 
@@ -59,7 +71,7 @@ public class Food : Item
 
     public override void Initialize()
     {
-        int amount = stepsAmount ?? Random.Range(2, 7);
+        int amount = stepsAmount ?? Random.Range(2, 6);
         //Debug.Log($"found food!!\n{Player.steps} + {amount}");
         UIManager.ShowMessage($"found food!!\n+{amount} steps",
             () => Player.ChangeSteps(amount));
