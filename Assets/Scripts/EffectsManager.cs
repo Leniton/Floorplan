@@ -224,6 +224,21 @@ public class EffectsManager : MonoBehaviour
                 terraceItems.ChangeRarities(0,1,0,0);
                 floorplan.AddItemToFloorplan(terraceItems.PickRandom());
                 break;
+            case "Utility Closet":
+                //power all current black rooms
+                foreach (var room in PointsManager.floorplanDict.Values)
+                {
+                    if(!NumberUtil.ContainsBytes((int)room.Category, (int)FloorCategory.BlackRooms)) continue;
+                    room.pointMult.Add(() => 2);
+                }
+                //power all following black rooms
+                GameEvent.onDraftedFloorplan += UtilityClosetEffect;
+                void UtilityClosetEffect(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                {
+                    if(!NumberUtil.ContainsBytes((int)currentFloorplan.Category, (int)FloorCategory.BlackRooms)) return;
+                    currentFloorplan.pointMult.Add(() => 2);
+                }
+                break;
             case "":
                 break;
         }

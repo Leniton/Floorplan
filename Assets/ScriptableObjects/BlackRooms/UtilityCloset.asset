@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c2ec7ddf6ecb914e8686ca425ec3201, type: 3}
   m_Name: UtilityCloset
   m_EditorClassIdentifier: 
-  Name: UtilityCloset
+  Name: Utility Closet
   Description: <b>Power</b> black rooms
   Color: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
   Category: 32
   Type: 1
   Rarity: 0
+  keyCost: 0
   basePoints: 1
   entranceId: 0
   connections: 
+  connectedFloorplans: []
