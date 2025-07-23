@@ -26,7 +26,7 @@ public class RarityPicker<T>
 
     #region ModifyList
     public void AddToPool(T element, Rarity rarity) => pool[(int)rarity].Add(element);
-    public void SetCommonPool(List<T> values) => pool[(int)Rarity.Commom] = values;
+    public void SetCommonPool(List<T> values) => pool[(int)Rarity.Common] = values;
     public void SetUncommonPool(List<T> values) => pool[(int)Rarity.Uncommon] = values;
     public void SetRarePool(List<T> values) => pool[(int)Rarity.Rare] = values;
     public void SetLegendPool(List<T> values) => pool[(int)Rarity.Legend] = values;
@@ -45,18 +45,21 @@ public class RarityPicker<T>
         float totalRarity = commonRate + uncommonRate + rareRate + legendRate;
         minRandomValue = Mathf.Min(minRandomValue, totalRarity - legendRate);//at most you guarantee a legend
         List<float> rarities = new() { commonRate, uncommonRate, rareRate, legendRate };
-        rarities.Sort();//rarity get sorted from least likely to most likely
+        List<float> sortedRarities = new() { commonRate, uncommonRate, rareRate, legendRate };
+        sortedRarities.Sort();//rarity get sorted from least likely to most likely
         float r = Random.Range(minRandomValue, totalRarity);
         float rarityOffset = 0;
         for (int i = 0; i < pool.Length; i++)
         {
-            float rarity = rarities[^(i + 1)];//list is in inverse order
+            float rarity = sortedRarities[^(i + 1)];
             if (r - rarityOffset < rarity)
             {
-                List<T> pickedRarity = pool[i];
+                int id = rarities.IndexOf(rarity);
+                //Debug.Log($"{(Rarity)id} => {r}({rarity})");
+                List<T> pickedRarity = pool[id];
 
                 //treat the case where there's not any element of that rarity (get a rarer one, if possible)
-                if (pickedRarity.Count <= 0 && !allowEmptyResult) pickedRarity = pool[NextClosestRarity(i)];
+                if (pickedRarity.Count <= 0 && !allowEmptyResult) pickedRarity = pool[NextClosestRarity(id)];
 
                 int elementId = Random.Range(0, pickedRarity.Count);
                 T element = elementId < pickedRarity.Count ? pickedRarity[elementId] : default;
@@ -93,7 +96,7 @@ public class RarityPicker<T>
 
 public enum Rarity
 {
-    Commom,
+    Common,
     Uncommon,
     Rare,
     Legend

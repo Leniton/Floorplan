@@ -22,9 +22,9 @@ public class ItemsManager : MonoBehaviour
         switch (floorplan.Category)
         {
             default:
-                possibleItems.AddToPool(new Food(), Rarity.Commom);
-                possibleItems.AddToPool(new Coin(), Rarity.Commom);
-                possibleItems.AddToPool(new Key(), Rarity.Commom);
+                possibleItems.AddToPool(new Food(), Rarity.Common);
+                possibleItems.AddToPool(new Coin(), Rarity.Common);
+                possibleItems.AddToPool(new Key(), Rarity.Common);
                 possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
                 break;
         }

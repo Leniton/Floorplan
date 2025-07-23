@@ -214,6 +214,16 @@ public class EffectsManager : MonoBehaviour
                 for (int i = 0; i < hallwayClosetItemCount; i++)
                     floorplan.AddItemToFloorplan(hallwayClosetItems.PickRandom());
                 break;
+            case "Cloister":
+                RarityPicker<Item> cloisterItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
+                cloisterItems.ChangeRarities(1,0,0,0);
+                floorplan.AddItemToFloorplan(cloisterItems.PickRandom());
+                break;
+            case "Terrace":
+                RarityPicker<Item> terraceItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
+                terraceItems.ChangeRarities(0,1,0,0);
+                floorplan.AddItemToFloorplan(terraceItems.PickRandom());
+                break;
             case "":
                 break;
         }
