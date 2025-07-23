@@ -24,6 +24,8 @@ public class Floorplan : ScriptableObject
 
     public Floorplan original { get; private set; }
 
+    public Action OnChanged;
+
     [HideInInspector] public List<Floorplan> connectedFloorplans;
     public List<Func<int>> pointBonus = new();
     public List<Func<int>> pointMult = new();

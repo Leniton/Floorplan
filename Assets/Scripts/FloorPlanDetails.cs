@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class FloorplanDetails : MonoBehaviour
@@ -13,7 +14,7 @@ public class FloorplanDetails : MonoBehaviour
 
     public event Action<Floorplan> onPickedFloorplan;
 
-    public Floorplan floorplan;
+    [FormerlySerializedAs("floorplan")] public Floorplan currentFloorplan;
 
     private void Awake()
     {
@@ -22,17 +23,25 @@ public class FloorplanDetails : MonoBehaviour
 
     private void FloorplanPick()
     {
-        onPickedFloorplan?.Invoke(floorplan);
+        onPickedFloorplan?.Invoke(currentFloorplan);
     }
 
     public void Setup(Floorplan floorplan)
     {
-        this.floorplan = floorplan;
-        floorplanUI.Setup(floorplan);
-        int currentPoints = this.floorplan.CalculatePoints();
+        if (currentFloorplan != null)
+            currentFloorplan.OnChanged -= InternalSetup;
+        currentFloorplan = floorplan;
+        currentFloorplan.OnChanged += InternalSetup;
+        InternalSetup();
+    }
+
+    private void InternalSetup()
+    {
+        floorplanUI.Setup(currentFloorplan);
+        int currentPoints = this.currentFloorplan.CalculatePoints();
         points.text = currentPoints != 0 ? $"+{currentPoints}" : string.Empty;
-        cost.gameObject.SetActive(this.floorplan.keyCost > 0);
-        cost.text = this.floorplan.keyCost.ToString();
-        description.text = floorplan.Description;
+        cost.gameObject.SetActive(currentFloorplan.keyCost > 0);
+        cost.text = currentFloorplan.keyCost.ToString();
+        description.text = currentFloorplan.Description;
     }
 }

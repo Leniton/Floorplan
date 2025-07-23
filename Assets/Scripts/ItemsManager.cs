@@ -13,9 +13,15 @@ public class ItemsManager : MonoBehaviour
     private void OnFloorplanDrafted(Vector2Int coordinate, Floorplan floorplan)
     {
         if (floorplan.Name == "Entrance Hall") return;
+        AddFloorplanItems(floorplan);
+    }
+
+    public static void AddFloorplanItems(Floorplan floorplan)
+    {
         //for items, common means you get nothing
         RarityPicker<Item> possibleItems = new(.6f, .3f, .1f, 0);
         possibleItems.allowEmptyResult = true;
+        //blue rooms are most likely to contain items
         if (NumberUtil.ContainsBytes((int)floorplan.Category, (int)FloorCategory.BlueRoom))
         {
             float cutRate = possibleItems.commonRate / 2f;
@@ -26,6 +32,7 @@ public class ItemsManager : MonoBehaviour
                 possibleItems.rareRate + distributeRate,
                 0);
         }
+
         switch (floorplan.Category)
         {
             default:
@@ -36,14 +43,7 @@ public class ItemsManager : MonoBehaviour
                 break;
         }
 
-        GameEvent.OnEnterFloorplan += OnEnterFloorplan;
-        void OnEnterFloorplan(Vector2Int newCoordinate, Floorplan targetFloorplan)
-        {
-            if (targetFloorplan != floorplan) return;
-            Item item = possibleItems.PickRandom();
-            item?.Initialize();
-            GameEvent.OnEnterFloorplan -= OnEnterFloorplan;
-        }
+        floorplan.AddItemToFloorplan(possibleItems.PickRandom());
     }
 }
 
@@ -54,9 +54,12 @@ public abstract class Item
 
 public class Food : Item
 {
+    public int? stepsAmount; //null equals random
+    public Food(int? amountSteps = null) => stepsAmount = amountSteps;
+
     public override void Initialize()
     {
-        int amount = Random.Range(2, 7);
+        int amount = stepsAmount ?? Random.Range(2, 7);
         //Debug.Log($"found food!!\n{Player.steps} + {amount}");
         UIManager.ShowMessage($"found food!!\n+{amount} steps",
             () => Player.ChangeSteps(amount));
@@ -65,9 +68,12 @@ public class Food : Item
 
 public class Coin : Item
 {
+    public int? coinsAmount; //null equals random
+    public Coin(int? amountCoin = null) => coinsAmount = amountCoin;
+
     public override void Initialize()
     {
-        int amount = Random.Range(1, 4);
+        int amount = coinsAmount ?? Random.Range(1, 4);
         //Debug.Log($"found coins!!\n{Player.coins} + {amount}");
         UIManager.ShowMessage($"found coins!!\n+{amount} coins",
             () => Player.ChangeCoins(amount));
@@ -76,9 +82,12 @@ public class Coin : Item
 
 public class Key : Item
 {
+    public int? keyAmount; //null equals random
+    public Key(int? amountKey = null) => keyAmount = amountKey;
+
     public override void Initialize()
     {
-        int amount = Random.Range(1, 3);
+        int amount = keyAmount ?? Random.Range(1, 3);
         //Debug.Log($"found keys!!\n{Player.keys} + {amount}");
         UIManager.ShowMessage($"found keys!!\n+{amount} keys",
             () => Player.ChangeKeys(amount));
@@ -87,9 +96,12 @@ public class Key : Item
 
 public class Dice : Item
 {
+    public int? diceAmount; //null equals random
+    public Dice(int? amountDice = null) => diceAmount = amountDice;
+
     public override void Initialize()
     {
-        int amount = Random.Range(1, 3);
+        int amount = diceAmount ?? Random.Range(1, 3);
         //Debug.Log($"found dice!!\n{Player.dices} + {amount}");
         UIManager.ShowMessage($"found dice!!\n+{amount} dices",
             () => Player.dices += amount);

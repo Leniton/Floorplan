@@ -12,4 +12,15 @@ public static class Helpers
         other = firstFloorplan == targetFloorplan ? secondFloorplan : firstFloorplan;
         return true;
     }
+    
+    public static void AddItemToFloorplan(this Floorplan floorplan, Item item)
+    {
+        GameEvent.OnEnterFloorplan += OnEnterFloorplan;
+        void OnEnterFloorplan(Vector2Int newCoordinate, Floorplan targetFloorplan)
+        {
+            if (targetFloorplan != floorplan) return;
+            item?.Initialize();
+            GameEvent.OnEnterFloorplan -= OnEnterFloorplan;
+        }
+    }
 }

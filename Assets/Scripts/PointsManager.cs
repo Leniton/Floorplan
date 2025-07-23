@@ -37,6 +37,7 @@ public class PointsManager : MonoBehaviour
         Floorplan current = floorplanDict[gridManager.currentPosition];
         if (!current.connections[Floorplan.DirectionToID(direction)]) return;
         Vector2Int targetedSlot = gridManager.currentPosition + direction;
+        if (!gridManager.ValidCoordinate(targetedSlot)) return;
         if (floorplanDict.TryGetValue(targetedSlot, out var targetFloorplan))
         {
             if (Player.steps <= 0) return;

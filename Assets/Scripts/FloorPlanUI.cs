@@ -11,13 +11,24 @@ public class FloorplanUI : MonoBehaviour
 
     [SerializeField] private GameObject[] entrances;
 
+    private Floorplan currentFloorplan;
+
     public void Setup(Floorplan floorplan)
     {
-        image.color = floorplan.Color;
-        text.text = floorplan.Name;
-        text.color = ColorExtension.ContrastGray(floorplan.Color);
+        if (currentFloorplan != null)
+            currentFloorplan.OnChanged -= InternalSetup;
+        currentFloorplan = floorplan;
+        currentFloorplan.OnChanged += InternalSetup;
+        InternalSetup();
+    }
+
+    private void InternalSetup()
+    {
+        image.color = currentFloorplan.Color;
+        text.text = currentFloorplan.Name;
+        text.color = ColorExtension.ContrastGray(currentFloorplan.Color);
 
         for (int i = 0; i < entrances.Length; i++)
-            entrances[i].SetActive(floorplan.connections[i]);
+            entrances[i].SetActive(currentFloorplan.connections[i]);
     }
 }

@@ -142,6 +142,36 @@ public class EffectsManager : MonoBehaviour
                     Debug.Log(NumberUtil.SeparateBits((int)connectedCategories).Length);
                 }
                 break;
+            case "Tunnel":
+                //surprise if reach the edge?
+                int exitId = (floorplan.entranceId + 2) % 4;
+                if (!GridManager.instance.ValidCoordinate
+                    (coordinates + Floorplan.IDToDirection(exitId)))
+                {
+                    floorplan.connections[exitId] = false;
+                    floorplan.AddItemToFloorplan(new Key(5));
+                    floorplan.OnChanged?.Invoke();
+                }
+                //Aways draw a tunnel when drafting from tunnel
+                GameEvent.OnEnterFloorplan += OnEnterTunnel;
+                GameEvent.OnExitFloorplan += OnExitTunnel;
+                void OnEnterTunnel(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                {
+                    if(currentFloorplan != floorplan) return;
+                    GameEvent.onDrawFloorplans += AddTunnelToDrawnFloorplans;
+                }
+                void OnExitTunnel(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                {
+                    if(currentFloorplan != floorplan) return;
+                    GameEvent.onDrawFloorplans -= AddTunnelToDrawnFloorplans;
+                }
+                void AddTunnelToDrawnFloorplans(DrawFloorplanEvent evt)
+                {
+                    Floorplan tunnel = floorplan.original.CreateInstance(Floorplan.IDToDirection(floorplan.entranceId));
+                    int id = Random.Range(0, 2);
+                    evt.drawnFloorplans[id] = tunnel;
+                }
+                break;
             case "":
                 break;
         }

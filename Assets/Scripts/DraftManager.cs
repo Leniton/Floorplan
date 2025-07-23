@@ -158,8 +158,8 @@ public class DraftManager : MonoBehaviour
     {
         for (int i = 0; i < draftList.Count; i++)
         {
-            draftList[i].floorplan.Rotate();
-            draftList[i].Setup(draftList[i].floorplan);
+            draftList[i].currentFloorplan.Rotate();
+            draftList[i].Setup(draftList[i].currentFloorplan);
         }
     }
 
