@@ -252,7 +252,7 @@ public class EffectsManager : MonoBehaviour
                 PurchaseData apple = new()
                 {
                     cost = 2,
-                    amount = 4,
+                    amount = 6,
                     name = "Apple",
                     description = "Gain +2 steps",
                     OnBuy = () => new Food(2).Initialize()
@@ -260,7 +260,7 @@ public class EffectsManager : MonoBehaviour
                 PurchaseData banana = new()
                 {
                     cost = 3,
-                    amount = 3,
+                    amount = 5,
                     name = "Banana",
                     description = "Gain +3 steps",
                     OnBuy = () => new Food(3).Initialize()
@@ -268,7 +268,7 @@ public class EffectsManager : MonoBehaviour
                 PurchaseData orange = new()
                 {
                     cost = 5,
-                    amount = 2,
+                    amount = 3,
                     name = "Orange",
                     description = "Gain +5 steps",
                     OnBuy = () => new Food(5).Initialize()
@@ -335,6 +335,54 @@ public class EffectsManager : MonoBehaviour
                     ShopWindow.OpenShop("Gift Shop", giftList);
                 }
                 void OnExitGiftShop(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                {
+                    if(currentFloorplan != floorplan) return;
+                    ShopWindow.CloseShop();
+                }
+                break;
+            case "Commissary":
+                PurchaseData bananas = new()
+                {
+                    cost = 4,
+                    amount = 3,
+                    name = "Banana",
+                    description = "Gain +3 steps",
+                    OnBuy = () => new Food(3).Initialize()
+                };
+                PurchaseData keys = new()
+                {
+                    cost = 5,
+                    amount = 5,
+                    name = "Key",
+                    description = "Used to draft powerful floorplans",
+                    OnBuy = () => new Key(1).Initialize()
+                };
+                PurchaseData dice = new()
+                {
+                    cost = 8,
+                    amount = 2,
+                    name = "Dice",
+                    description = "Used to reroll drawn floorplans",
+                    OnBuy = () => new Dice(1).Initialize()
+                };
+                PurchaseData keyBundle = new()
+                {
+                    cost = 12,
+                    amount = 1,
+                    name = "Key bundle",
+                    description = "Used to draft powerful floorplans, now in a neat package",
+                    OnBuy = () => new Key(3).Initialize()
+                };
+
+                List<PurchaseData> commissaryList = new() { bananas, keys, dice, keyBundle };
+                GameEvent.OnEnterFloorplan += OnEnterCommissary;
+                GameEvent.OnExitFloorplan += OnExitCommissary;
+                void OnEnterCommissary(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                {
+                    if(currentFloorplan != floorplan) return;
+                    ShopWindow.OpenShop("Commissary", commissaryList);
+                }
+                void OnExitCommissary(Vector2Int currentCoordinates, Floorplan currentFloorplan)
                 {
                     if(currentFloorplan != floorplan) return;
                     ShopWindow.CloseShop();
