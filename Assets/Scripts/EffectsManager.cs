@@ -288,6 +288,58 @@ public class EffectsManager : MonoBehaviour
                     ShopWindow.CloseShop();
                 }
                 break;
+            case "Gift Shop":
+                int bonusPoints = 0;
+                PurchaseData one = new()
+                {
+                    cost = 2,
+                    amount = 9999,
+                    name = "1 point",
+                    description = "Adds 1 point to the Gift Shop",
+                    OnBuy = () => AddPoints(1)
+                };
+                PurchaseData three = new()
+                {
+                    cost = 5,
+                    amount = 9999,
+                    name = "3 point bundle",
+                    description = "Adds 3 points to the Gift Shop",
+                    OnBuy = () => AddPoints(3)
+                };
+                PurchaseData five = new()
+                {
+                    cost = 8,
+                    amount = 9999,
+                    name = "5 point bundle",
+                    description = "Adds 5 points to the Gift Shop",
+                    OnBuy = () => AddPoints(5)
+                };
+                PurchaseData ten = new()
+                {
+                    cost = 14,
+                    amount = 9999,
+                    name = "10 point bundle",
+                    description = "Adds 10 point to the Gift Shop",
+                    OnBuy = () => AddPoints(10)
+                };
+
+                void AddPoints(int amount) => bonusPoints += amount;
+
+                floorplan.pointBonus.Add(() => bonusPoints);
+                List<PurchaseData> giftList = new () { one, three, five, ten };
+                GameEvent.OnEnterFloorplan += OnEnterGiftShop;
+                GameEvent.OnExitFloorplan += OnExitGiftShop;
+                void OnEnterGiftShop(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                {
+                    if(currentFloorplan != floorplan) return;
+                    ShopWindow.OpenShop("Gift Shop", giftList);
+                }
+                void OnExitGiftShop(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                {
+                    if(currentFloorplan != floorplan) return;
+                    ShopWindow.CloseShop();
+                }
+                break;
             case "":
                 break;
         }
