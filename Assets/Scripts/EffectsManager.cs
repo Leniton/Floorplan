@@ -419,6 +419,17 @@ public class EffectsManager : MonoBehaviour
                     new Coin(coinAmount).Initialize();
                 }
                 break;
+            case "Dining Room":
+                int eatenFood = 0;
+                floorplan.AddItemToFloorplan(new Food(10));
+                floorplan.pointBonus.Add(() => eatenFood);
+                GameEvent.OnCollectItem += OnCollectFood;
+                void OnCollectFood(Item item)
+                {
+                    if(item is not Food) return;
+                    eatenFood++;
+                }
+                break;
             case "":
                 break;
         }

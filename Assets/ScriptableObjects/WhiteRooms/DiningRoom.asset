@@ -18,6 +18,8 @@ MonoBehaviour:
   Category: 8
   Type: 3
   Rarity: 1
-  basePoints: 1
+  keyCost: 0
+  basePoints: 0
   entranceId: 0
   connections: 
+  connectedFloorplans: []

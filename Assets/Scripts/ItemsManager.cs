@@ -73,6 +73,7 @@ public class Food : Item
     {
         int amount = stepsAmount ?? Random.Range(2, 6);
         //Debug.Log($"found food!!\n{Player.steps} + {amount}");
+        GameEvent.OnCollectItem?.Invoke(this);
         UIManager.ShowMessage($"found food!!\n+{amount} steps",
             () => Player.ChangeSteps(amount));
     }
@@ -87,6 +88,7 @@ public class Coin : Item
     {
         int amount = coinsAmount ?? Random.Range(1, 4);
         //Debug.Log($"found coins!!\n{Player.coins} + {amount}");
+        GameEvent.OnCollectItem?.Invoke(this);
         UIManager.ShowMessage($"found coins!!\n+{amount} coins",
             () => Player.ChangeCoins(amount));
     }
@@ -101,6 +103,7 @@ public class Key : Item
     {
         int amount = keyAmount ?? Random.Range(1, 3);
         //Debug.Log($"found keys!!\n{Player.keys} + {amount}");
+        GameEvent.OnCollectItem?.Invoke(this);
         UIManager.ShowMessage($"found keys!!\n+{amount} keys",
             () => Player.ChangeKeys(amount));
     }
@@ -115,6 +118,7 @@ public class Dice : Item
     {
         int amount = diceAmount ?? Random.Range(1, 3);
         //Debug.Log($"found dice!!\n{Player.dices} + {amount}");
+        GameEvent.OnCollectItem?.Invoke(this);
         UIManager.ShowMessage($"found dice!!\n+{amount} dices",
             () => Player.dices += amount);
     }
