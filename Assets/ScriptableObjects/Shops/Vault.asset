@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Vault
   m_EditorClassIdentifier: 
   Name: Vault
-  Description: Contains coins for each room in the house
+  Description: Contains 2 coins for each room in the house
   Color: {r: 0.98101246, g: 1, b: 0, a: 1}
   Category: 16
   Type: -2

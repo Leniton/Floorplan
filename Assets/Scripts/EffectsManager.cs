@@ -319,7 +319,7 @@ public class EffectsManager : MonoBehaviour
                     cost = 14,
                     amount = 9999,
                     name = "10 point bundle",
-                    description = "Adds 10 point to the Gift Shop",
+                    description = "Adds 10 points to the Gift Shop",
                     OnBuy = () => AddPoints(10)
                 };
 
@@ -386,6 +386,37 @@ public class EffectsManager : MonoBehaviour
                 {
                     if(currentFloorplan != floorplan) return;
                     ShopWindow.CloseShop();
+                }
+                break;
+            case "Cassino":
+                GameEvent.OnEnterFloorplan += OnEnterCassino;
+                void OnEnterCassino(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                {
+                    if(currentFloorplan != floorplan) return;
+                    int r = Random.Range(0, 100);
+                    if (r < 70) // gotta lie to the player sometimes
+                    {
+                        Player.ChangeCoins(Player.coins * 2);
+                        UIManager.ShowMessage($"Luck is on your side, your coins doubled!!!");
+                    }
+                    else
+                    {
+                        Player.ChangeCoins(-(Player.coins / 2));
+                        UIManager.ShowMessage($"That's too bad, you lost half your coins...");
+                    }
+                    GameEvent.OnEnterFloorplan -= OnEnterCassino;
+                }
+                break;
+            case "Vault":
+                int lastRoomCount = 0;
+                GameEvent.OnEnterFloorplan += OnEnterVault;
+                void OnEnterVault(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                {
+                    if(currentFloorplan != floorplan) return;
+                    int coinAmount = PointsManager.floorplanDict.Count - lastRoomCount;
+                    if (coinAmount <= 0) return;
+                    lastRoomCount = PointsManager.floorplanDict.Count;
+                    new Coin(coinAmount).Initialize();
                 }
                 break;
             case "":
