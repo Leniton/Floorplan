@@ -12,6 +12,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private GameObject slotPrefab;
     [SerializeField] private GridLayoutGroup grid;
 
+    private Vector2Int lastCoordinate;
     private Vector2Int coordinate;
     private GameObject[] slots;
     private RectTransform rectTransform;
@@ -21,6 +22,7 @@ public class GridManager : MonoBehaviour
     public Vector2Int currentPosition => coordinate;
     private bool moving => moveCoroutine != null;
 
+    public event Action<Vector2Int, Vector2Int> OnStartMove;
     public event Action<Vector2Int> OnMove;
 
     public static GridManager instance;
@@ -43,6 +45,7 @@ public class GridManager : MonoBehaviour
         //print($"direction {direction}");
         Vector2Int newCoordinate = coordinate + direction;
         if (!ValidCoordinate(newCoordinate)) return;
+        lastCoordinate = coordinate;
         coordinate = newCoordinate;
         UpdatePosition();
     }
@@ -56,9 +59,9 @@ public class GridManager : MonoBehaviour
     private void UpdatePosition(bool animate = true)
     {
         //print($"coordinate: {coordinate}");
-        if (animate ^ moving) 
+        if (animate ^ moving)
             moveCoroutine = StartCoroutine(MoveToPosition());
-        else
+        else if (!moving)
         {
             rectTransform.anchoredPosition = GetCoordinatePosition(coordinate);
             OnMove?.Invoke(coordinate);
@@ -85,6 +88,7 @@ public class GridManager : MonoBehaviour
         while (targetCoordinate != coordinate)
         {
             targetCoordinate = coordinate;
+            OnStartMove?.Invoke(lastCoordinate, targetCoordinate);
             Vector2 startPosition = rectTransform.anchoredPosition;
             Vector2 targetPosition = GetCoordinatePosition(targetCoordinate);
             float time = 0;
@@ -96,7 +100,8 @@ public class GridManager : MonoBehaviour
                 time += Time.deltaTime;
             }
             rectTransform.anchoredPosition = targetPosition;
-            OnMove?.Invoke(coordinate);
+            OnMove?.Invoke(targetCoordinate);
+            yield return null;
         }
         moveCoroutine = null;
     }

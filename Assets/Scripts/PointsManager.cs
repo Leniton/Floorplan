@@ -22,13 +22,13 @@ public class PointsManager : MonoBehaviour
         floorplanDict = new();
         player.OnMove += OnMoveSlot;
         draftManager.OnDraftFloorplan += PlaceFloorplan;
-        gridManager.OnMove += TriggerFloorplanEvent;
+        gridManager.OnStartMove += TriggerFloorplanExitEvent;
+        gridManager.OnMove += TriggerFloorplanEnterEvent;
 
         currentAlpha = currentImage.color.a;
         //add entrance hall
         currentDraftPosition = gridManager.currentPosition;
-        Floorplan floorplan = entrance.CreateInstance(Vector2Int.up);
-        draftManager.CorrectFloorplanRotation(floorplan, new() { Vector2Int.up, Vector2Int.left, Vector2Int.right });
+        Floorplan floorplan = entrance.CreateInstance(Vector2Int.left);
         PlaceFloorplan(floorplan);
     }
 
@@ -45,8 +45,6 @@ public class PointsManager : MonoBehaviour
             if (!targetFloorplan.connections[Floorplan.DirectionToID(-direction)]) return;
             //slot enter event
             gridManager.ShiftSelection(direction);
-            Player.ChangeSteps(-1);
-            GameEvent.OnExitFloorplan?.Invoke(targetedSlot, current);
         }
         else
         {
@@ -101,8 +99,16 @@ public class PointsManager : MonoBehaviour
         }
     }
 
-    private void TriggerFloorplanEvent(Vector2Int coordinate)
+    private void TriggerFloorplanExitEvent(Vector2Int origin, Vector2Int goal)
     {
+        //Debug.Log($"exit {floorplanDict[origin]}");
+        Player.ChangeSteps(-1);
+        GameEvent.OnExitFloorplan?.Invoke(origin, floorplanDict[origin]);
+    }
+
+    private void TriggerFloorplanEnterEvent(Vector2Int coordinate)
+    {
+        //Debug.Log($"entered {floorplanDict[coordinate]}");
         GameEvent.OnEnterFloorplan?.Invoke(coordinate, floorplanDict[coordinate]);
     }
 }

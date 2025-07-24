@@ -430,6 +430,28 @@ public class EffectsManager : MonoBehaviour
                     eatenFood++;
                 }
                 break;
+            case "Gallery":
+                int visits = 0;
+                floorplan.pointBonus.Add(() => visits);
+                GameEvent.OnEnterFloorplan += OnEnterGallery;
+                void OnEnterGallery(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                {
+                    if(currentFloorplan != floorplan) return;
+                    if(Player.coins <= 0) return;
+                    Player.ChangeCoins(-1);
+                    visits++;
+                }
+                break;
+            case "Pump Room":
+                GameEvent.onConnectFloorplans += PumpRoomEffect;
+                void PumpRoomEffect(Floorplan firstFloorplan, Floorplan secondFloorplan)
+                {
+                    if (!floorplan.ConnectedToFloorplan(firstFloorplan, secondFloorplan, out var other)) return;
+                    //connected bedrooms gain extra points
+                    
+                    other.pointBonus.Add(floorplan.CalculatePoints);
+                }
+                break;
             case "":
                 break;
         }
