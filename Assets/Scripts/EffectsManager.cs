@@ -248,6 +248,46 @@ public class EffectsManager : MonoBehaviour
                     other.pointMult.Add(() => 2);
                 }
                 break;
+            case "Kitchen":
+                PurchaseData apple = new()
+                {
+                    cost = 2,
+                    amount = 4,
+                    name = "Apple",
+                    description = "Gain +2 steps",
+                    OnBuy = () => new Food(2).Initialize()
+                };
+                PurchaseData banana = new()
+                {
+                    cost = 3,
+                    amount = 3,
+                    name = "Banana",
+                    description = "Gain +3 steps",
+                    OnBuy = () => new Food(3).Initialize()
+                };
+                PurchaseData orange = new()
+                {
+                    cost = 5,
+                    amount = 2,
+                    name = "Orange",
+                    description = "Gain +5 steps",
+                    OnBuy = () => new Food(5).Initialize()
+                };
+
+                List<PurchaseData> kitchenList = new () { apple, banana, orange };
+                GameEvent.OnEnterFloorplan += OnEnterKitchen;
+                GameEvent.OnExitFloorplan += OnExitKitchen;
+                void OnEnterKitchen(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                {
+                    if(currentFloorplan != floorplan) return;
+                    ShopWindow.OpenShop("Kitchen", kitchenList);
+                }
+                void OnExitKitchen(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                {
+                    if(currentFloorplan != floorplan) return;
+                    ShopWindow.CloseShop();
+                }
+                break;
             case "":
                 break;
         }
