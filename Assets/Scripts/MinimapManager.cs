@@ -10,6 +10,7 @@ public class MinimapManager : MonoBehaviour
     [SerializeField] private GameObject minimapContainer;
     [SerializeField] private GridManager minimapGrid;
     [SerializeField] private FloorplanUI floorplanPrefab;
+    [SerializeField] private RectTransform playerPosition;
 
     private void Awake()
     {
@@ -38,6 +39,7 @@ public class MinimapManager : MonoBehaviour
     public void OpenMinimap()
     {
         minimapContainer.SetActive(true);
+        playerPosition.SetParent(minimapGrid.GetSlot(gameGrid.currentPosition), false);
     }
 
     public void CloseMinimap()
