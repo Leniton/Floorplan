@@ -30,6 +30,12 @@ public class RarityPicker<T>
     public void SetUncommonPool(List<T> values) => pool[(int)Rarity.Uncommon] = values;
     public void SetRarePool(List<T> values) => pool[(int)Rarity.Rare] = values;
     public void SetLegendPool(List<T> values) => pool[(int)Rarity.Legend] = values;
+
+    public void Clear()
+    {
+        for (int i = 0; i < pool.Length; i++)
+            pool[i].Clear();
+    }
     #endregion
 
     public void ChangeRarities(float common = .5f, float uncommon = .3f, float rare = .15f, float legend = .05f)

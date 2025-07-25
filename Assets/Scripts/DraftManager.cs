@@ -62,9 +62,9 @@ public class DraftManager : MonoBehaviour
         if (possibleSlots.Count < 2) possibleTypes.Remove(FloorType.Ankle);
         if (!possibleSlots.Contains(direction)) possibleTypes.Remove(FloorType.Straw);
 
-        StringBuilder sb = new();
-        for (int i = 0; i < possibleTypes.Count; i++)
-            sb.Append($"{possibleTypes[i]} | ");
+        //StringBuilder sb = new();
+        //for (int i = 0; i < possibleTypes.Count; i++)
+        //    sb.Append($"{possibleTypes[i]} | ");
         //Debug.Log(sb.ToString());
 
         //pick possible ones
@@ -125,7 +125,7 @@ public class DraftManager : MonoBehaviour
     {
         if (floorplan.Type != FloorType.Ankle && floorplan.Type != FloorType.TPiece) return;
 
-        bool invalidConnection = false;
+        bool invalidConnection;
         do
         {
             invalidConnection = false;
