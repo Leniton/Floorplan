@@ -21,9 +21,30 @@ public class ItemsManager : MonoBehaviour
         RarityPicker<Item> possibleItems = new(.3f, .1f, 0, 0);
         switch (floorplan.Category)
         {
-            default:
-                possibleItems.AddToPool(new Food(), Rarity.Common);
+            case FloorCategory.Shop:
                 possibleItems.AddToPool(new Coin(), Rarity.Common);
+                break;
+            case FloorCategory.Hallway:
+                possibleItems.AddToPool(new Coin(), Rarity.Common);
+                possibleItems.AddToPool(new Coin(5), Rarity.Uncommon);
+                break;
+            case FloorCategory.RestRoom:
+                possibleItems.AddToPool(new Food(), Rarity.Common);
+                possibleItems.AddToPool(new Key(), Rarity.Common);
+                possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
+                break;
+            case FloorCategory.BlackRooms:
+                possibleItems.AddToPool(new Key(), Rarity.Common);
+                possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
+                break;
+            case FloorCategory.WhiteRoom:
+                possibleItems.AddToPool(new Food(), Rarity.Common);
+                possibleItems.AddToPool(new Key(), Rarity.Common);
+                possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
+                break;
+            default:
+                possibleItems.AddToPool(new Coin(), Rarity.Common);
+                possibleItems.AddToPool(new Food(), Rarity.Common);
                 possibleItems.AddToPool(new Key(), Rarity.Common);
                 possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
                 break;
