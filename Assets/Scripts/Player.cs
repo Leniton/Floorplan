@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
     #region Resources
     public static int steps = 20;
     public static int keys = 2;
-    public static int coins = 10;
+    public static int coins = 5;
     public static int dices = 0;
     #endregion
 
