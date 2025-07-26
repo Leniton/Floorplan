@@ -13,7 +13,7 @@ public class EffectsManager : MonoBehaviour
     private void AddFloorplanEffect(Vector2Int coordinates, Floorplan floorplan)
     {
         Vector2Int draftedCoordinates = coordinates + Floorplan.IDToDirection(floorplan.entranceId);
-        if(!PointsManager.floorplanDict.TryGetValue(draftedCoordinates, out var draftedFloorplan)) return;
+        if(!GameManager.floorplanDict.TryGetValue(draftedCoordinates, out var draftedFloorplan)) return;
         switch (floorplan.Name)
         {
             case "Bedroom":
@@ -226,7 +226,7 @@ public class EffectsManager : MonoBehaviour
                 break;
             case "Utility Closet":
                 //power all current black rooms
-                foreach (var room in PointsManager.floorplanDict.Values)
+                foreach (var room in GameManager.floorplanDict.Values)
                 {
                     if(!NumberUtil.ContainsBytes((int)room.Category, (int)FloorCategory.BlackRooms)) continue;
                     room.pointMult.Add(() => 2);
@@ -413,9 +413,9 @@ public class EffectsManager : MonoBehaviour
                 void OnEnterVault(Vector2Int currentCoordinates, Floorplan currentFloorplan)
                 {
                     if(currentFloorplan != floorplan) return;
-                    int coinAmount = PointsManager.floorplanDict.Count - lastRoomCount;
+                    int coinAmount = GameManager.floorplanDict.Count - lastRoomCount;
                     if (coinAmount <= 0) return;
-                    lastRoomCount = PointsManager.floorplanDict.Count;
+                    lastRoomCount = GameManager.floorplanDict.Count;
                     new Coin(coinAmount).Initialize();
                 }
                 break;

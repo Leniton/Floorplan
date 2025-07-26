@@ -27,9 +27,9 @@ public class DraftManager : MonoBehaviour
     private List<Vector2Int> lastPossibleSlots;
 
     private const float commonRate = .7f;
-    private const float uncommonRate = .15f;
-    private const float rareRate = .1f;
-    private const float legendRate = .05f;
+    private const float uncommonRate = .27f;
+    private const float rareRate = .02f;
+    private const float legendRate = .01f;
 
     private float commonGrowth;
     private float uncommonGrowth;
@@ -193,6 +193,7 @@ public class DraftManager : MonoBehaviour
             uncommonRate + uncommonGrowth * height,
             rareRate + rareGrowth * height,
             legendRate + legendGrowth * height);
+        //Debug.Log($"floor {height}:\n{rarityPicker.commonRate}\n{rarityPicker.uncommonRate}\n{rarityPicker.rareRate}\n{rarityPicker.legendRate}");
 
         return rarityPicker;
     }

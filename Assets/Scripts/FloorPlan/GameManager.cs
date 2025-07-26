@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PointsManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     [SerializeField] private DraftManager draftManager;
     [SerializeField] private GridManager gridManager;
