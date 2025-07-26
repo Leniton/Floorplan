@@ -5,6 +5,12 @@ using UnityEngine;
 public class PointsManager : MonoBehaviour
 {
     //average: 25/35
+    public static int currentRequirement { get; private set; } = 20;
+
+    public static void ChangeRequirement(int newRequirement)
+    {
+        currentRequirement = newRequirement;
+    }
     
     public static int GetTotalPoints()
     {

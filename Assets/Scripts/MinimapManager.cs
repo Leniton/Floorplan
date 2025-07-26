@@ -14,6 +14,7 @@ public class MinimapManager : MonoBehaviour
     [SerializeField] private RectTransform playerPosition;
     [Header("points")]
     [SerializeField] private TMP_Text totalPoints;
+    [SerializeField] private Slider totalPointsSlider;
 
     private void Awake()
     {
@@ -43,7 +44,10 @@ public class MinimapManager : MonoBehaviour
     {
         minimapContainer.SetActive(true);
         playerPosition.SetParent(minimapGrid.GetSlot(gameGrid.currentPosition), false);
-        totalPoints.text = PointsManager.GetTotalPoints().ToString();
+        int currentPoints = PointsManager.GetTotalPoints();
+        totalPointsSlider.maxValue = PointsManager.currentRequirement;
+        totalPointsSlider.value = currentPoints;
+        totalPoints.text = $"{currentPoints}/{PointsManager.currentRequirement}";
     }
 
     public void CloseMinimap()
