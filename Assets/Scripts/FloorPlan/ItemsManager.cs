@@ -87,12 +87,12 @@ public abstract class Item
 
 public class Food : Item
 {
-    public int? stepsAmount; //null equals random
-    public Food(int? amountSteps = null) => stepsAmount = amountSteps;
+    public int stepsAmount; //null equals random
+    public Food(int? amountSteps = null) => stepsAmount = amountSteps ?? Random.Range(2, 6);
 
     public override void Initialize()
     {
-        int amount = stepsAmount ?? Random.Range(2, 6);
+        int amount = stepsAmount;
         //Debug.Log($"found food!!\n{Player.steps} + {amount}");
         GameEvent.OnCollectItem?.Invoke(this);
         UIManager.ShowMessage($"found food!!\n+{amount} steps",

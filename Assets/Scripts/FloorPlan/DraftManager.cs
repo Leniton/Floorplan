@@ -28,8 +28,8 @@ public class DraftManager : MonoBehaviour
 
     private const float commonRate = .7f;
     private const float uncommonRate = .27f;
-    private const float rareRate = .02f;
-    private const float legendRate = .01f;
+    private const float rareRate = .03f;
+    private const float legendRate = .0f;
 
     private float commonGrowth;
     private float uncommonGrowth;
@@ -57,8 +57,8 @@ public class DraftManager : MonoBehaviour
 
         float finalCommonRate = .4f;
         float finalUncommonRate = .3f;
-        float finalRareRate = .2f;
-        float finalLegendRate = .1f;
+        float finalRareRate = .28f;
+        float finalLegendRate = .02f;
 
         commonGrowth = (finalCommonRate - commonRate) / (GridManager.ySize - 1);
         uncommonGrowth = (finalUncommonRate - uncommonRate) / (GridManager.ySize - 1);
