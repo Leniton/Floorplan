@@ -26,10 +26,15 @@ public class ShopWindow : MonoBehaviour
 
     public static void OpenShop(string title, List<PurchaseData> items)
     {
-        instance.currentItems = items;
-        instance.ShopButton.gameObject.SetActive(true);
-        instance.titleText.text = title;
+        SetupShop(title, items);
         instance.Open();
+    }
+
+    public static void SetupShop(string title, List<PurchaseData> items)
+    {
+        instance.currentItems = items;
+        instance.titleText.text = title;
+        instance.ShopButton.gameObject.SetActive(true);
     }
 
     public static void CloseShop()

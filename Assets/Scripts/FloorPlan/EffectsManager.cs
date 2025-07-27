@@ -275,17 +275,19 @@ public class EffectsManager : MonoBehaviour
                 };
 
                 List<PurchaseData> kitchenList = new () { apple, banana, orange };
+                bool enteredKitchen = false;
                 GameEvent.OnEnterFloorplan += OnEnterKitchen;
-                GameEvent.OnExitFloorplan += OnExitKitchen;
+                GameEvent.OnExitFloorplan += OnExitShop;
                 void OnEnterKitchen(Vector2Int currentCoordinates, Floorplan currentFloorplan)
                 {
                     if(currentFloorplan != floorplan) return;
-                    ShopWindow.OpenShop("Kitchen", kitchenList);
-                }
-                void OnExitKitchen(Vector2Int currentCoordinates, Floorplan currentFloorplan)
-                {
-                    if(currentFloorplan != floorplan) return;
-                    ShopWindow.CloseShop();
+                    if (!enteredKitchen)
+                    {
+                        enteredKitchen = true;
+                        ShopWindow.OpenShop("Kitchen", kitchenList);
+                        return;
+                    }
+                    ShopWindow.SetupShop("Kitchen", kitchenList);
                 }
                 break;
             case "Gift Shop":
@@ -327,17 +329,19 @@ public class EffectsManager : MonoBehaviour
 
                 floorplan.pointBonus.Add(() => bonusPoints);
                 List<PurchaseData> giftList = new () { one, three, five, ten };
+                bool enteredGiftShop = false;
                 GameEvent.OnEnterFloorplan += OnEnterGiftShop;
-                GameEvent.OnExitFloorplan += OnExitGiftShop;
+                GameEvent.OnExitFloorplan += OnExitShop;
                 void OnEnterGiftShop(Vector2Int currentCoordinates, Floorplan currentFloorplan)
                 {
                     if(currentFloorplan != floorplan) return;
-                    ShopWindow.OpenShop("Gift Shop", giftList);
-                }
-                void OnExitGiftShop(Vector2Int currentCoordinates, Floorplan currentFloorplan)
-                {
-                    if(currentFloorplan != floorplan) return;
-                    ShopWindow.CloseShop();
+                    if (!enteredGiftShop)
+                    {
+                        enteredGiftShop = true;
+                        ShopWindow.OpenShop("Gift Shop", giftList);
+                        return;
+                    }
+                    ShopWindow.SetupShop("Gift Shop", giftList);
                 }
                 break;
             case "Commissary":
@@ -375,17 +379,19 @@ public class EffectsManager : MonoBehaviour
                 };
 
                 List<PurchaseData> commissaryList = new() { bananas, keys, dice, keyBundle };
+                bool enteredCommissary = false;
                 GameEvent.OnEnterFloorplan += OnEnterCommissary;
-                GameEvent.OnExitFloorplan += OnExitCommissary;
+                GameEvent.OnExitFloorplan += OnExitShop;
                 void OnEnterCommissary(Vector2Int currentCoordinates, Floorplan currentFloorplan)
                 {
                     if(currentFloorplan != floorplan) return;
-                    ShopWindow.OpenShop("Commissary", commissaryList);
-                }
-                void OnExitCommissary(Vector2Int currentCoordinates, Floorplan currentFloorplan)
-                {
-                    if(currentFloorplan != floorplan) return;
-                    ShopWindow.CloseShop();
+                    if (!enteredCommissary)
+                    {
+                        enteredCommissary = true;
+                        ShopWindow.OpenShop("Commissary", commissaryList);
+                        return;
+                    }
+                    ShopWindow.SetupShop("Commissary", commissaryList);
                 }
                 break;
             case "Cassino":
@@ -454,6 +460,11 @@ public class EffectsManager : MonoBehaviour
                 break;
             case "":
                 break;
+        }
+        void OnExitShop(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+        {
+            if (currentFloorplan != floorplan) return;
+            ShopWindow.CloseShop();
         }
     }
 }
