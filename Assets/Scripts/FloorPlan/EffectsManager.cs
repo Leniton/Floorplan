@@ -402,7 +402,7 @@ public class EffectsManager : MonoBehaviour
                     int r = Random.Range(0, 100);
                     if (r < 70) // gotta lie to the player sometimes
                     {
-                        Player.ChangeCoins(Player.coins * 2);
+                        Player.ChangeCoins(Player.coins);
                         UIManager.ShowMessage($"Luck is on your side, your coins doubled!!!");
                     }
                     else
