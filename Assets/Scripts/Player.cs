@@ -27,15 +27,16 @@ public class Player : MonoBehaviour
     private static Player player;
 
     #region Resources
-    public static int steps = 20;
-    public static int keys = 2;
-    public static int coins = 5;
-    public static int dices = 0;
+    public static int steps;
+    public static int keys;
+    public static int coins;
+    public static int dices;
     #endregion
 
     private void Awake()
     {
         player = this;
+        ResetPlayer();
     }
 
     private void Update()
@@ -121,5 +122,13 @@ public class Player : MonoBehaviour
     public static void ChangeKeys(int delta)
     {
         keys += delta;
+    }
+
+    public static void ResetPlayer()
+    {
+        steps = 20;
+        keys = 2;
+        coins = 5;
+        dices = 0;
     }
 }
