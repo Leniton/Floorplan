@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "new Floorplan", menuName = "Floorplan")]
+[CreateAssetMenu(fileName = "new Floorplan", menuName = "Floorplan/Floorplan")]
 public class Floorplan : ScriptableObject
 {
     public string Name;
@@ -30,6 +31,8 @@ public class Floorplan : ScriptableObject
     public List<Func<int>> pointBonus = new();
     public List<Func<int>> pointMult = new();
 
+    public UnityEvent<Vector2Int> onDrafted;
+
     public Floorplan CreateInstance(Vector2Int entranceDirection)
     {
         Floorplan floorplan = CreateInstance<Floorplan>();
@@ -51,8 +54,7 @@ public class Floorplan : ScriptableObject
             Type == FloorType.Crossroad,
         };
         floorplan.connectedFloorplans = new(Mathf.Abs((int)floorplan.Type));
-        pointBonus = new();
-        pointMult = new();
+        floorplan.onDrafted = onDrafted;
 
         StringBuilder sb = new();
         for (int i = 0; i < floorplan.connections.Length; i++)

@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour
         floorplanRect.sizeDelta = Vector2.zero;
 
         floorplanDict[currentDraftPosition] = floorplan;
+        floorplan.onDrafted.Invoke(currentDraftPosition);
         GameEvent.onDraftedFloorplan?.Invoke(currentDraftPosition, floorplan);
         
         //connect floorplan
