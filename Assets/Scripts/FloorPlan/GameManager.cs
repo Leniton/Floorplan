@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PointsManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     [SerializeField] private DraftManager draftManager;
     [SerializeField] private GridManager gridManager;
@@ -11,8 +12,8 @@ public class PointsManager : MonoBehaviour
     [SerializeField] private FloorplanUI floorplanPrefab;
     [SerializeField] private Floorplan entrance;
     [SerializeField] private Image currentImage;
+    [SerializeField] private Button finishButton;
 
-    private float currentAlpha;
     public static Dictionary<Vector2Int, Floorplan> floorplanDict;
 
     private Vector2Int currentDraftPosition;
@@ -24,12 +25,14 @@ public class PointsManager : MonoBehaviour
         draftManager.OnDraftFloorplan += PlaceFloorplan;
         gridManager.OnStartMove += TriggerFloorplanExitEvent;
         gridManager.OnMove += TriggerFloorplanEnterEvent;
+        finishButton.onClick.AddListener(FinishRun);
 
-        currentAlpha = currentImage.color.a;
         //add entrance hall
         currentDraftPosition = gridManager.currentPosition;
         Floorplan floorplan = entrance.CreateInstance(Vector2Int.left);
         PlaceFloorplan(floorplan);
+
+        UIManager.ShowMessage($"Current objective:\n\n <b>{PointsManager.currentRequirement} points");
     }
 
     private void OnMoveSlot(Vector2Int direction)
@@ -110,5 +113,22 @@ public class PointsManager : MonoBehaviour
     {
         //Debug.Log($"entered {floorplanDict[coordinate]}");
         GameEvent.OnEnterFloorplan?.Invoke(coordinate, floorplanDict[coordinate]);
+    }
+
+    private void FinishRun()
+    {
+        int finalPoints = PointsManager.GetTotalPoints();
+        if (finalPoints >= PointsManager.currentRequirement)
+        {
+            //win, progress
+            PointsManager.Progress();
+        }
+        else
+        {
+            //lose, reset
+            PointsManager.Reset();
+        }
+        GameEvent.ResetListeners();
+        SceneManager.LoadScene(0);
     }
 }

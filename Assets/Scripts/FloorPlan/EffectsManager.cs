@@ -13,7 +13,7 @@ public class EffectsManager : MonoBehaviour
     private void AddFloorplanEffect(Vector2Int coordinates, Floorplan floorplan)
     {
         Vector2Int draftedCoordinates = coordinates + Floorplan.IDToDirection(floorplan.entranceId);
-        if(!PointsManager.floorplanDict.TryGetValue(draftedCoordinates, out var draftedFloorplan)) return;
+        if(!GameManager.floorplanDict.TryGetValue(draftedCoordinates, out var draftedFloorplan)) return;
         switch (floorplan.Name)
         {
             case "Bedroom":
@@ -226,7 +226,7 @@ public class EffectsManager : MonoBehaviour
                 break;
             case "Utility Closet":
                 //power all current black rooms
-                foreach (var room in PointsManager.floorplanDict.Values)
+                foreach (var room in GameManager.floorplanDict.Values)
                 {
                     if(!NumberUtil.ContainsBytes((int)room.Category, (int)FloorCategory.BlackRooms)) continue;
                     room.pointMult.Add(() => 2);
@@ -275,17 +275,19 @@ public class EffectsManager : MonoBehaviour
                 };
 
                 List<PurchaseData> kitchenList = new () { apple, banana, orange };
+                bool enteredKitchen = false;
                 GameEvent.OnEnterFloorplan += OnEnterKitchen;
-                GameEvent.OnExitFloorplan += OnExitKitchen;
+                GameEvent.OnExitFloorplan += OnExitShop;
                 void OnEnterKitchen(Vector2Int currentCoordinates, Floorplan currentFloorplan)
                 {
                     if(currentFloorplan != floorplan) return;
-                    ShopWindow.OpenShop("Kitchen", kitchenList);
-                }
-                void OnExitKitchen(Vector2Int currentCoordinates, Floorplan currentFloorplan)
-                {
-                    if(currentFloorplan != floorplan) return;
-                    ShopWindow.CloseShop();
+                    if (!enteredKitchen)
+                    {
+                        enteredKitchen = true;
+                        ShopWindow.OpenShop("Kitchen", kitchenList);
+                        return;
+                    }
+                    ShopWindow.SetupShop("Kitchen", kitchenList);
                 }
                 break;
             case "Gift Shop":
@@ -327,17 +329,19 @@ public class EffectsManager : MonoBehaviour
 
                 floorplan.pointBonus.Add(() => bonusPoints);
                 List<PurchaseData> giftList = new () { one, three, five, ten };
+                bool enteredGiftShop = false;
                 GameEvent.OnEnterFloorplan += OnEnterGiftShop;
-                GameEvent.OnExitFloorplan += OnExitGiftShop;
+                GameEvent.OnExitFloorplan += OnExitShop;
                 void OnEnterGiftShop(Vector2Int currentCoordinates, Floorplan currentFloorplan)
                 {
                     if(currentFloorplan != floorplan) return;
-                    ShopWindow.OpenShop("Gift Shop", giftList);
-                }
-                void OnExitGiftShop(Vector2Int currentCoordinates, Floorplan currentFloorplan)
-                {
-                    if(currentFloorplan != floorplan) return;
-                    ShopWindow.CloseShop();
+                    if (!enteredGiftShop)
+                    {
+                        enteredGiftShop = true;
+                        ShopWindow.OpenShop("Gift Shop", giftList);
+                        return;
+                    }
+                    ShopWindow.SetupShop("Gift Shop", giftList);
                 }
                 break;
             case "Commissary":
@@ -375,17 +379,19 @@ public class EffectsManager : MonoBehaviour
                 };
 
                 List<PurchaseData> commissaryList = new() { bananas, keys, dice, keyBundle };
+                bool enteredCommissary = false;
                 GameEvent.OnEnterFloorplan += OnEnterCommissary;
-                GameEvent.OnExitFloorplan += OnExitCommissary;
+                GameEvent.OnExitFloorplan += OnExitShop;
                 void OnEnterCommissary(Vector2Int currentCoordinates, Floorplan currentFloorplan)
                 {
                     if(currentFloorplan != floorplan) return;
-                    ShopWindow.OpenShop("Commissary", commissaryList);
-                }
-                void OnExitCommissary(Vector2Int currentCoordinates, Floorplan currentFloorplan)
-                {
-                    if(currentFloorplan != floorplan) return;
-                    ShopWindow.CloseShop();
+                    if (!enteredCommissary)
+                    {
+                        enteredCommissary = true;
+                        ShopWindow.OpenShop("Commissary", commissaryList);
+                        return;
+                    }
+                    ShopWindow.SetupShop("Commissary", commissaryList);
                 }
                 break;
             case "Cassino":
@@ -396,7 +402,7 @@ public class EffectsManager : MonoBehaviour
                     int r = Random.Range(0, 100);
                     if (r < 70) // gotta lie to the player sometimes
                     {
-                        Player.ChangeCoins(Player.coins * 2);
+                        Player.ChangeCoins(Player.coins);
                         UIManager.ShowMessage($"Luck is on your side, your coins doubled!!!");
                     }
                     else
@@ -413,9 +419,9 @@ public class EffectsManager : MonoBehaviour
                 void OnEnterVault(Vector2Int currentCoordinates, Floorplan currentFloorplan)
                 {
                     if(currentFloorplan != floorplan) return;
-                    int coinAmount = PointsManager.floorplanDict.Count - lastRoomCount;
+                    int coinAmount = GameManager.floorplanDict.Count - lastRoomCount;
                     if (coinAmount <= 0) return;
-                    lastRoomCount = PointsManager.floorplanDict.Count;
+                    lastRoomCount = GameManager.floorplanDict.Count;
                     new Coin(coinAmount).Initialize();
                 }
                 break;
@@ -454,6 +460,11 @@ public class EffectsManager : MonoBehaviour
                 break;
             case "":
                 break;
+        }
+        void OnExitShop(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+        {
+            if (currentFloorplan != floorplan) return;
+            ShopWindow.CloseShop();
         }
     }
 }

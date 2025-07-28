@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DiningRoom
   m_EditorClassIdentifier: 
   Name: Dining Room
-  Description: Contains meal. Gain extra points for each step you gained from food.
+  Description: Contains meal. Gain extra points for each food you find.
   Color: {r: 1, g: 1, b: 1, a: 1}
   Category: 8
   Type: 3

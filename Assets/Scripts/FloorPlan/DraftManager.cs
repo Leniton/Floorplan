@@ -26,6 +26,16 @@ public class DraftManager : MonoBehaviour
     private Vector2Int lastDraftDirection;
     private List<Vector2Int> lastPossibleSlots;
 
+    private const float commonRate = .7f;
+    private const float uncommonRate = .27f;
+    private const float rareRate = .03f;
+    private const float legendRate = .0f;
+
+    private float commonGrowth;
+    private float uncommonGrowth;
+    private float rareGrowth;
+    private float legendGrowth;
+
     private void Awake()
     {
         draftList = new(amountDrafted);
@@ -44,6 +54,61 @@ public class DraftManager : MonoBehaviour
         rerollCount = rerollButton.GetComponentInChildren<TMP_Text>();
         background.SetActive(false);
         draftScreen.SetActive(false);
+
+        float finalCommonRate = .4f;
+        float finalUncommonRate = .3f;
+        float finalRareRate = .28f;
+        float finalLegendRate = .02f;
+
+        commonGrowth = (finalCommonRate - commonRate) / (GridManager.ySize - 1);
+        uncommonGrowth = (finalUncommonRate - uncommonRate) / (GridManager.ySize - 1);
+        rareGrowth = (finalRareRate - rareRate) / (GridManager.ySize - 1);
+        legendGrowth = (finalLegendRate - legendRate) / (GridManager.ySize - 1);
+
+        int[] rarityCount = new int[4];
+        int[] costCount = new int[5];
+        Dictionary<FloorType, int> typesCount = new();
+        Dictionary<int, int> pointsCount = new();
+        for (int i = 0; i < draftPool.Count; i++)
+        {
+            int rarity = (int)draftPool[i].Rarity;
+            rarityCount[rarity]++;
+            costCount[draftPool[i].keyCost]++;
+
+            if (!typesCount.ContainsKey(draftPool[i].Type)) typesCount.Add(draftPool[i].Type, 1);
+            else typesCount[draftPool[i].Type]++;
+
+            if (!pointsCount.ContainsKey(draftPool[i].basePoints)) pointsCount.Add(draftPool[i].basePoints, 1);
+            else pointsCount[draftPool[i].basePoints]++;
+        }
+
+        StringBuilder sb = new("Rarities:");
+        for (int i = 0; i < rarityCount.Length; i++)
+        {
+            sb.Append($"\n{(Rarity)i}: {rarityCount[i]}");
+        }
+        Debug.Log(sb.ToString());
+
+        sb = new($"Costs:");
+        for (int i = 0; i < costCount.Length; i++)
+        {
+            sb.Append($"\n{i}: {costCount[i]}");
+        }
+        Debug.Log(sb.ToString());
+
+        sb = new($"Types:");
+        foreach (var type in typesCount)
+        {
+            sb.Append($"\n{type.Key}: {type.Value}");
+        }
+        Debug.Log(sb.ToString());
+
+        sb = new($"Points:");
+        foreach (var point in pointsCount)
+        {
+            sb.Append($"\n{point.Key}: {point.Value}");
+        }
+        Debug.Log(sb.ToString());
     }
 
     public void DraftFloorplan(Vector2Int direction, List<Vector2Int> possibleSlots)
@@ -69,7 +134,7 @@ public class DraftManager : MonoBehaviour
 
         //pick possible ones
         List<Floorplan> possibleFloorplans = new();
-        RarityPicker<Floorplan> floorplanPicker = new();
+        RarityPicker<Floorplan> floorplanPicker = GetRarityPicker((GridManager.instance.currentPosition + direction).y);
         for (int i = 0; i < draftPool.Count; i++)
         {
             if (!possibleTypes.Contains(draftPool[i].Type)) continue;
@@ -119,6 +184,18 @@ public class DraftManager : MonoBehaviour
 
         background.SetActive(true);
         draftScreen.SetActive(true);
+    }
+
+    private RarityPicker<Floorplan> GetRarityPicker(int height)
+    {
+        RarityPicker<Floorplan> rarityPicker = new(
+            commonRate + commonGrowth * height,
+            uncommonRate + uncommonGrowth * height,
+            rareRate + rareGrowth * height,
+            legendRate + legendGrowth * height);
+        //Debug.Log($"floor {height}:\n{rarityPicker.commonRate}\n{rarityPicker.uncommonRate}\n{rarityPicker.rareRate}\n{rarityPicker.legendRate}");
+
+        return rarityPicker;
     }
 
     public void CorrectFloorplanRotation(Floorplan floorplan, List<Vector2Int> possibleSlots)

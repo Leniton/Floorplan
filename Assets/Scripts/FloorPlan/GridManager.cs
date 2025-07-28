@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class GridManager : MonoBehaviour
 {
-    private const int xSize = 5;
-    private const int ySize = 5;
+    public const int xSize = 5;
+    public const int ySize = 5;
 
     [SerializeField] private GameObject slotPrefab;
     [SerializeField] private GridLayoutGroup grid;

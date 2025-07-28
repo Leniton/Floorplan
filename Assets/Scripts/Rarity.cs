@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public class RarityPicker<T>
@@ -96,7 +97,16 @@ public class RarityPicker<T>
             return id;
         }
 
-        throw new System.Exception("There's no more items on the pool!!");
+        int[] rarityCount = new int[4];
+        for (int i = 0; i < pool.Length; i++)
+        {
+            rarityCount[i] = pool[i].Count;
+        }
+
+        StringBuilder sb = new();
+        for (int i = 0; i < rarityCount.Length; i++)
+            sb.Append($"\n{(Rarity)i}: {rarityCount[i]}");
+        throw new System.Exception($"There's no more items on the pool!!\n{sb}");
     }
 }
 

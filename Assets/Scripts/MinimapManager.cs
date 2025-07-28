@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,10 @@ public class MinimapManager : MonoBehaviour
     [SerializeField] private GameObject minimapContainer;
     [SerializeField] private GridManager minimapGrid;
     [SerializeField] private FloorplanUI floorplanPrefab;
+    [SerializeField] private RectTransform playerPosition;
+    [Header("points")]
+    [SerializeField] private TMP_Text totalPoints;
+    [SerializeField] private Slider totalPointsSlider;
 
     private void Awake()
     {
@@ -38,6 +43,11 @@ public class MinimapManager : MonoBehaviour
     public void OpenMinimap()
     {
         minimapContainer.SetActive(true);
+        playerPosition.SetParent(minimapGrid.GetSlot(gameGrid.currentPosition), false);
+        int currentPoints = PointsManager.GetTotalPoints();
+        totalPointsSlider.maxValue = PointsManager.currentRequirement;
+        totalPointsSlider.value = currentPoints;
+        totalPoints.text = $"{currentPoints}/{PointsManager.currentRequirement}";
     }
 
     public void CloseMinimap()

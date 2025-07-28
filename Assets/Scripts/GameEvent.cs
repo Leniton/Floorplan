@@ -11,4 +11,14 @@ public static class GameEvent
     public static Action<Vector2Int, Floorplan> OnExitFloorplan;
     public static Action<Vector2Int, Floorplan> OnEnterFloorplan;
     public static Action<Item> OnCollectItem;
+
+    public static void ResetListeners()
+    {
+        onDrawFloorplans = null;
+        onDraftedFloorplan = null;
+        onConnectFloorplans = null;
+        OnExitFloorplan = null;
+        OnEnterFloorplan = null;
+        OnCollectItem = null;
+    }
 }
