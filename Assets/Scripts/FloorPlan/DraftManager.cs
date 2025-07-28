@@ -202,7 +202,7 @@ public class DraftManager : MonoBehaviour
     {
         if (floorplan.Type != FloorType.Ankle && floorplan.Type != FloorType.TPiece) return;
 
-        bool invalidConnection = false;
+        bool invalidConnection;
         do
         {
             invalidConnection = false;
