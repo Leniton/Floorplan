@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -113,6 +114,15 @@ public class GameManager : MonoBehaviour
     {
         //Debug.Log($"entered {floorplanDict[coordinate]}");
         GameEvent.OnEnterFloorplan?.Invoke(coordinate, floorplanDict[coordinate]);
+        StartCoroutine(CheckSteps());
+    }
+
+    private IEnumerator CheckSteps()
+    {
+        if(Player.steps > 0) yield break;
+
+        yield return null;
+        FinishRun();
     }
 
     private void FinishRun()
