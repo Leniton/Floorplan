@@ -416,6 +416,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Vault":
+                break;
                 int lastRoomCount = 0;
                 GameEvent.OnEnterFloorplan += OnEnterVault;
                 void OnEnterVault(GenericFloorplanEvent subEvt)
@@ -476,6 +477,16 @@ public class EffectsManager : MonoBehaviour
             case "Den":
                 Debug.Log("Den effect");
                 floorplan.TheNext_Times(5).FloorplanIsDrafted().AddItemToFloorplan(new Food(2));
+                break;
+            case "Vault":
+                int lastRoomCount = 0;
+                floorplan.EveryTime().PlayerEnterFloorplan().Do(_ =>
+                {
+                    int coinAmount = GameManager.floorplanDict.Count - lastRoomCount;
+                    if (coinAmount <= 0) return;
+                    new Coin(coinAmount).Initialize();
+                    lastRoomCount = GameManager.floorplanDict.Count;
+                });
                 break;
         }
     }
