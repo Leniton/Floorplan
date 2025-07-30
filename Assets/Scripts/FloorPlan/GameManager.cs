@@ -84,8 +84,8 @@ public class GameManager : MonoBehaviour
         floorplanRect.sizeDelta = Vector2.zero;
 
         floorplanDict[currentDraftPosition] = floorplan;
-        floorplan.onDrafted.Invoke(currentDraftPosition);
-        GameEvent.onDraftedFloorplan?.Invoke(currentDraftPosition, floorplan);
+        floorplan.onDrafted?.Invoke(new(currentDraftPosition));
+        GameEvent.onDraftedFloorplan?.Invoke(new(currentDraftPosition, floorplan));
         
         //connect floorplan
         for (int i = 0; i < floorplan.connections.Length; i++)
@@ -99,8 +99,10 @@ public class GameManager : MonoBehaviour
             if (!targetFloorplan.connections[Floorplan.DirectionToID(-direction)]) continue;
             //Debug.Log($"{floorplan.Name} is connected to {targetFloorplan.Name}");
             floorplan.connectedFloorplans.Add(targetFloorplan);
+            floorplan.onConnectToFloorplan?.Invoke(new(floorplan, targetFloorplan));
             targetFloorplan.connectedFloorplans.Add(floorplan);
-            GameEvent.onConnectFloorplans?.Invoke(floorplan, targetFloorplan);
+            targetFloorplan.onConnectToFloorplan?.Invoke(new(targetFloorplan, floorplan));
+            GameEvent.onConnectFloorplans?.Invoke(new(floorplan, targetFloorplan));
         }
     }
 
@@ -108,13 +110,17 @@ public class GameManager : MonoBehaviour
     {
         //Debug.Log($"exit {floorplanDict[origin]}");
         Player.ChangeSteps(-1);
-        GameEvent.OnExitFloorplan?.Invoke(origin, floorplanDict[origin]);
+        Floorplan floorplan = floorplanDict[origin];
+        floorplan.onExit?.Invoke(new());
+        GameEvent.OnExitFloorplan?.Invoke(new(origin, floorplan));
     }
 
     private void TriggerFloorplanEnterEvent(Vector2Int coordinate)
     {
         //Debug.Log($"entered {floorplanDict[coordinate]}");
-        GameEvent.OnEnterFloorplan?.Invoke(coordinate, floorplanDict[coordinate]);
+        Floorplan floorplan = floorplanDict[coordinate];
+        floorplan.onEnter?.Invoke(new());
+        GameEvent.OnEnterFloorplan?.Invoke(new(coordinate, floorplan));
         StartCoroutine(CheckSteps());
     }
 

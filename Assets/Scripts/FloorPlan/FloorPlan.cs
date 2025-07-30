@@ -31,7 +31,10 @@ public class Floorplan : ScriptableObject
     public List<Func<int>> pointBonus = new();
     public List<Func<int>> pointMult = new();
 
-    public UnityEvent<Vector2Int> onDrafted;
+    public Action<CoordinateEvent> onDrafted = null;
+    public Action<FloorplanConnectedEvent> onConnectToFloorplan = null;
+    public Action<Event> onEnter = null;
+    public Action<Event> onExit = null;
 
     public Floorplan CreateInstance(Vector2Int entranceDirection)
     {
@@ -54,7 +57,6 @@ public class Floorplan : ScriptableObject
             Type == FloorType.Crossroad,
         };
         floorplan.connectedFloorplans = new(Mathf.Abs((int)floorplan.Type));
-        floorplan.onDrafted = onDrafted;
 
         StringBuilder sb = new();
         for (int i = 0; i < floorplan.connections.Length; i++)
@@ -69,6 +71,7 @@ public class Floorplan : ScriptableObject
         //for (int i = 0; i < randomRotation; i++)
         //    floorplan.InternalRotation();
 
+        EffectsManager.AddFloorplanEffect(floorplan);
         return floorplan;
     }
 

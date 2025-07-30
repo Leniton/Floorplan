@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Lenix.NumberUtilities;
+using Random = UnityEngine.Random;
 
 public class EffectsManager : MonoBehaviour
 {
@@ -10,26 +12,27 @@ public class EffectsManager : MonoBehaviour
         GameEvent.onDraftedFloorplan += AddFloorplanEffect;
     }
 
-    private void AddFloorplanEffect(Vector2Int coordinates, Floorplan floorplan)
+    public void AddFloorplanEffect(GenericFloorplanEvent evt)
     {
-        Vector2Int draftedCoordinates = coordinates + Floorplan.IDToDirection(floorplan.entranceId);
+        Vector2Int draftedCoordinates = evt.Coordinates + Floorplan.IDToDirection(evt.Floorplan.entranceId);
+        Floorplan floorplan = evt.Floorplan;
         if(!GameManager.floorplanDict.TryGetValue(draftedCoordinates, out var draftedFloorplan)) return;
-        switch (floorplan.Name)
+        switch (evt.Floorplan.Name)
         {
             case "Bedroom":
                 GameEvent.OnEnterFloorplan += BedroomEffect;
-                void BedroomEffect(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                void BedroomEffect(GenericFloorplanEvent subEvt)
                 {
-                    if (currentFloorplan != floorplan) return;
+                    if (evt.Floorplan != subEvt.Floorplan) return;
                     Player.ChangeSteps(5);
                     GameEvent.OnEnterFloorplan -= BedroomEffect;
                 }
                 break;
             case "Bathroom":
                 GameEvent.OnEnterFloorplan += BathroomEffect;
-                void BathroomEffect(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                void BathroomEffect(GenericFloorplanEvent subEvt)
                 {
-                    if (currentFloorplan != floorplan) return;
+                    if (evt.Floorplan != subEvt.Floorplan) return;
                     int currentSteps = Player.steps;
                     currentSteps = Mathf.CeilToInt(currentSteps / 10f);
                     Player.ChangeSteps((currentSteps * 10) - Player.steps);
@@ -38,33 +41,32 @@ public class EffectsManager : MonoBehaviour
                 break;
             case "Bunk Room":
                 GameEvent.onDraftedFloorplan -= AddFloorplanEffect;
-                GameEvent.onDraftedFloorplan?.Invoke(coordinates,floorplan);
+                GameEvent.onDraftedFloorplan?.Invoke(evt);
                 GameEvent.onDraftedFloorplan += AddFloorplanEffect;
 
                 GameEvent.onConnectFloorplans += DoubleConnection;
-                void DoubleConnection(Floorplan firstFloorplan, Floorplan secondFloorplan)
+                void DoubleConnection(FloorplanConnectedEvent subEvt)
                 {
-                    if(firstFloorplan != floorplan && secondFloorplan != floorplan) return;
-                    Floorplan other = firstFloorplan == floorplan ? secondFloorplan : firstFloorplan;
+                    if(evt.Floorplan.ConnectedToFloorplan(subEvt, out var other)) return;
                     other.connectedFloorplans.Add(floorplan);
                     GameEvent.onConnectFloorplans -= DoubleConnection;
-                    GameEvent.onConnectFloorplans?.Invoke(firstFloorplan, secondFloorplan);
+                    GameEvent.onConnectFloorplans?.Invoke(subEvt);
                     GameEvent.onConnectFloorplans += DoubleConnection;
                 }
                 break;
             case "Dormitory":
                 GameEvent.onConnectFloorplans += DormitoryEffect;
-                void DormitoryEffect(Floorplan firstFloorplan, Floorplan secondFloorplan)
+                void DormitoryEffect(FloorplanConnectedEvent subEvt)
                 {
-                    if (!floorplan.ConnectedToFloorplan(firstFloorplan, secondFloorplan, out var other)) return;
+                    if (!floorplan.ConnectedToFloorplan(subEvt, out var other)) return;
                     if(!NumberUtil.ContainsBytes((int)other.Category, (int)FloorCategory.RestRoom)) return;
                     //connected bedrooms gain extra points
                     other.pointBonus.Add(() => 2);
                     //first time entering a connected restroom gain steps
                     GameEvent.OnEnterFloorplan += AddStepsEffect;
-                    void AddStepsEffect(Vector2Int coordinates, Floorplan restRoom)
+                    void AddStepsEffect(GenericFloorplanEvent addedEvt)
                     {
-                        if(restRoom != other) return;
+                        if(addedEvt.Floorplan != other) return;
                         Player.ChangeSteps(5);
                         GameEvent.OnEnterFloorplan -= AddStepsEffect;
                     }
@@ -73,14 +75,14 @@ public class EffectsManager : MonoBehaviour
             case "Boudoir":
                 GameEvent.OnEnterFloorplan += OnEnterBoudoir;
                 GameEvent.OnExitFloorplan += OnExitBoudoir;
-                void OnEnterBoudoir(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                void OnEnterBoudoir(GenericFloorplanEvent subEvt)
                 {
-                    if (currentFloorplan != floorplan) return;
+                    if (evt.Floorplan != subEvt.Floorplan) return;
                     GameEvent.onDrawFloorplans += IncreaseRestroomChance;
                 }
-                void OnExitBoudoir(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                void OnExitBoudoir(GenericFloorplanEvent subEvt)
                 {
-                    if (currentFloorplan != floorplan) return;
+                    if (evt.Floorplan != subEvt.Floorplan) return;
                     GameEvent.onDrawFloorplans -= IncreaseRestroomChance;
                 }
                 void IncreaseRestroomChance(DrawFloorplanEvent evt)
@@ -116,15 +118,15 @@ public class EffectsManager : MonoBehaviour
                 break;
             case "Guest Bedroom":
                 GameEvent.OnEnterFloorplan += GuestBedroomStepsEffect;
-                void GuestBedroomStepsEffect(Vector2Int coordinates, Floorplan restRoom)
+                void GuestBedroomStepsEffect(GenericFloorplanEvent subEvt)
                 {
-                    if(restRoom != floorplan) return;
+                    if (evt.Floorplan != subEvt.Floorplan) return;
                     Player.ChangeSteps(2);
                 }
                 GameEvent.onConnectFloorplans += GuestBedroomEffect;
-                void GuestBedroomEffect(Floorplan firstFloorplan, Floorplan secondFloorplan)
+                void GuestBedroomEffect(FloorplanConnectedEvent subEvt)
                 {
-                    if (!floorplan.ConnectedToFloorplan(firstFloorplan, secondFloorplan, out var other)) return;
+                    if (!floorplan.ConnectedToFloorplan(subEvt, out var other)) return;
                     if(!NumberUtil.ContainsBytes((int)other.Category, (int)FloorCategory.RestRoom)) return;
                     //bonus points equal to connected restrooms points
                     //Debug.Log($"{floorplan.Name} connected to {other.Name}");
@@ -137,9 +139,9 @@ public class EffectsManager : MonoBehaviour
                 floorplan.pointBonus.Add(() => NumberUtil.SeparateBits((int)connectedCategories).Length * 2);
                 
                 GameEvent.onConnectFloorplans += GreatHallEffect;
-                void GreatHallEffect(Floorplan firstFloorplan, Floorplan secondFloorplan)
+                void GreatHallEffect(FloorplanConnectedEvent subEvt)
                 {
-                    if(!floorplan.ConnectedToFloorplan(firstFloorplan,secondFloorplan, out var other)) return;
+                    if(!floorplan.ConnectedToFloorplan(subEvt, out var other)) return;
                     connectedCategories |= other.Category;
                 }
                 break;
@@ -147,7 +149,7 @@ public class EffectsManager : MonoBehaviour
                 //surprise if reach the edge?
                 int exitId = (floorplan.entranceId + 2) % 4;
                 if (!GridManager.instance.ValidCoordinate
-                    (coordinates + Floorplan.IDToDirection(exitId)))
+                    (evt.Coordinates + Floorplan.IDToDirection(exitId)))
                 {
                     floorplan.connections[exitId] = false;
                     floorplan.AddItemToFloorplan(new Key(5));
@@ -156,14 +158,14 @@ public class EffectsManager : MonoBehaviour
                 //Aways draw a tunnel when drafting from tunnel
                 GameEvent.OnEnterFloorplan += OnEnterTunnel;
                 GameEvent.OnExitFloorplan += OnExitTunnel;
-                void OnEnterTunnel(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                void OnEnterTunnel(GenericFloorplanEvent subEvt)
                 {
-                    if(currentFloorplan != floorplan) return;
+                    if (evt.Floorplan != subEvt.Floorplan) return;
                     GameEvent.onDrawFloorplans += AddTunnelToDrawnFloorplans;
                 }
-                void OnExitTunnel(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                void OnExitTunnel(GenericFloorplanEvent subEvt)
                 {
-                    if(currentFloorplan != floorplan) return;
+                    if (evt.Floorplan != subEvt.Floorplan) return;
                     GameEvent.onDrawFloorplans -= AddTunnelToDrawnFloorplans;
                 }
                 void AddTunnelToDrawnFloorplans(DrawFloorplanEvent evt)
@@ -175,9 +177,9 @@ public class EffectsManager : MonoBehaviour
                 break;
             case "Vestibule":
                 GameEvent.onConnectFloorplans += OnConnectVestibule;
-                void OnConnectVestibule(Floorplan firstFloorplan, Floorplan secondFloorplan)
+                void OnConnectVestibule(FloorplanConnectedEvent subEvt)
                 {
-                    if (!floorplan.ConnectedToFloorplan(firstFloorplan, secondFloorplan, out var other)) return;
+                    if (!floorplan.ConnectedToFloorplan(subEvt, out var other)) return;
                     for (int i = 0; i < floorplan.connectedFloorplans.Count; i++)
                     {
                         Floorplan currentFloorplan = floorplan.connectedFloorplans[i];
@@ -186,7 +188,7 @@ public class EffectsManager : MonoBehaviour
                         currentFloorplan.connectedFloorplans.Add(other);
                         other.connectedFloorplans.Add(currentFloorplan);
                         //Debug.Log($"{floorplan.Name} connected {currentFloorplan.Name} to {other.Name}");
-                        GameEvent.onConnectFloorplans?.Invoke(currentFloorplan, other);
+                        GameEvent.onConnectFloorplans?.Invoke(subEvt);
                     }
                 }
                 break;
@@ -233,17 +235,17 @@ public class EffectsManager : MonoBehaviour
                 }
                 //power all following black rooms
                 GameEvent.onDraftedFloorplan += UtilityClosetEffect;
-                void UtilityClosetEffect(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                void UtilityClosetEffect(GenericFloorplanEvent subEvt)
                 {
-                    if(!NumberUtil.ContainsBytes((int)currentFloorplan.Category, (int)FloorCategory.BlackRooms)) return;
-                    currentFloorplan.pointMult.Add(() => 2);
+                    if(!NumberUtil.ContainsBytes((int)subEvt.Floorplan.Category, (int)FloorCategory.BlackRooms)) return;
+                    subEvt.Floorplan.pointMult.Add(() => 2);
                 }
                 break;
             case "Boiler Room":
                 GameEvent.onConnectFloorplans += BoilerRoomEffect;
-                void BoilerRoomEffect(Floorplan firstFloorplan, Floorplan secondFloorplan)
+                void BoilerRoomEffect(FloorplanConnectedEvent subEvt)
                 {
-                    if (!floorplan.ConnectedToFloorplan(firstFloorplan, secondFloorplan, out var other)) return;
+                    if (!floorplan.ConnectedToFloorplan(subEvt, out var other)) return;
                     //connected rooms are powered
                     other.pointMult.Add(() => 2);
                 }
@@ -278,9 +280,9 @@ public class EffectsManager : MonoBehaviour
                 bool enteredKitchen = false;
                 GameEvent.OnEnterFloorplan += OnEnterKitchen;
                 GameEvent.OnExitFloorplan += OnExitShop;
-                void OnEnterKitchen(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                void OnEnterKitchen(GenericFloorplanEvent subEvt)
                 {
-                    if(currentFloorplan != floorplan) return;
+                    if (evt.Floorplan != subEvt.Floorplan) return;
                     if (!enteredKitchen)
                     {
                         enteredKitchen = true;
@@ -332,9 +334,9 @@ public class EffectsManager : MonoBehaviour
                 bool enteredGiftShop = false;
                 GameEvent.OnEnterFloorplan += OnEnterGiftShop;
                 GameEvent.OnExitFloorplan += OnExitShop;
-                void OnEnterGiftShop(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                void OnEnterGiftShop(GenericFloorplanEvent subEvt)
                 {
-                    if(currentFloorplan != floorplan) return;
+                    if (evt.Floorplan != subEvt.Floorplan) return;
                     if (!enteredGiftShop)
                     {
                         enteredGiftShop = true;
@@ -382,9 +384,9 @@ public class EffectsManager : MonoBehaviour
                 bool enteredCommissary = false;
                 GameEvent.OnEnterFloorplan += OnEnterCommissary;
                 GameEvent.OnExitFloorplan += OnExitShop;
-                void OnEnterCommissary(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                void OnEnterCommissary(GenericFloorplanEvent subEvt)
                 {
-                    if(currentFloorplan != floorplan) return;
+                    if (evt.Floorplan != subEvt.Floorplan) return;
                     if (!enteredCommissary)
                     {
                         enteredCommissary = true;
@@ -396,9 +398,9 @@ public class EffectsManager : MonoBehaviour
                 break;
             case "Cassino":
                 GameEvent.OnEnterFloorplan += OnEnterCassino;
-                void OnEnterCassino(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                void OnEnterCassino(GenericFloorplanEvent subEvt)
                 {
-                    if(currentFloorplan != floorplan) return;
+                    if (evt.Floorplan != subEvt.Floorplan) return;
                     int r = Random.Range(0, 100);
                     if (r < 70) // gotta lie to the player sometimes
                     {
@@ -416,9 +418,9 @@ public class EffectsManager : MonoBehaviour
             case "Vault":
                 int lastRoomCount = 0;
                 GameEvent.OnEnterFloorplan += OnEnterVault;
-                void OnEnterVault(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                void OnEnterVault(GenericFloorplanEvent subEvt)
                 {
-                    if(currentFloorplan != floorplan) return;
+                    if (evt.Floorplan != subEvt.Floorplan) return;
                     int coinAmount = GameManager.floorplanDict.Count - lastRoomCount;
                     if (coinAmount <= 0) return;
                     lastRoomCount = GameManager.floorplanDict.Count;
@@ -430,9 +432,9 @@ public class EffectsManager : MonoBehaviour
                 floorplan.AddItemToFloorplan(new Food(10));
                 floorplan.pointBonus.Add(() => eatenFood);
                 GameEvent.OnCollectItem += OnCollectFood;
-                void OnCollectFood(Item item)
+                void OnCollectFood(ItemEvent subEvt)
                 {
-                    if(item is not Food) return;
+                    if(subEvt.item is not Food) return;
                     eatenFood++;
                 }
                 break;
@@ -440,9 +442,9 @@ public class EffectsManager : MonoBehaviour
                 int visits = 0;
                 floorplan.pointBonus.Add(() => visits);
                 GameEvent.OnEnterFloorplan += OnEnterGallery;
-                void OnEnterGallery(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+                void OnEnterGallery(GenericFloorplanEvent subEvt)
                 {
-                    if(currentFloorplan != floorplan) return;
+                    if (evt.Floorplan != subEvt.Floorplan) return;
                     if(Player.coins <= 0) return;
                     Player.ChangeCoins(-1);
                     visits++;
@@ -450,21 +452,31 @@ public class EffectsManager : MonoBehaviour
                 break;
             case "Pump Room":
                 GameEvent.onConnectFloorplans += PumpRoomEffect;
-                void PumpRoomEffect(Floorplan firstFloorplan, Floorplan secondFloorplan)
+                void PumpRoomEffect(FloorplanConnectedEvent subEvt)
                 {
-                    if (!floorplan.ConnectedToFloorplan(firstFloorplan, secondFloorplan, out var other)) return;
+                    if (!floorplan.ConnectedToFloorplan(subEvt, out var other)) return;
                     //connected bedrooms gain extra points
-                    
                     other.pointBonus.Add(floorplan.CalculatePoints);
                 }
                 break;
             case "":
                 break;
         }
-        void OnExitShop(Vector2Int currentCoordinates, Floorplan currentFloorplan)
+        void OnExitShop(GenericFloorplanEvent subEvt)
         {
-            if (currentFloorplan != floorplan) return;
+            if (evt.Floorplan != subEvt.Floorplan) return;
             ShopWindow.CloseShop();
+        }
+    }
+
+    public static void AddFloorplanEffect(Floorplan floorplan)
+    {
+        switch (floorplan.Name)
+        {
+            case "Den":
+                Debug.Log("Den effect");
+                floorplan.TheNext_Times(5).FloorplanIsDrafted().AddItemToFloorplan(new Food(2));
+                break;
         }
     }
 }

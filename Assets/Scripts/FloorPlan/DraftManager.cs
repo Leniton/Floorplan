@@ -247,7 +247,7 @@ public class DraftManager : MonoBehaviour
     }
 }
 
-public class DrawFloorplanEvent
+public class DrawFloorplanEvent : Event
 {
     public Floorplan[] drawnFloorplans;
     public List<Floorplan> possibleFloorplans;

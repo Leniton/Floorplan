@@ -26,18 +26,18 @@ public class MinimapManager : MonoBehaviour
         CloseMinimap();        
     }
 
-    private void PlaceFloorplan(Vector2Int coordinates, Floorplan floorplan)
+    private void PlaceFloorplan(GenericFloorplanEvent evt)
     {
-        Button slotButton = minimapGrid.GetSlot(coordinates).GetComponent<Button>();
+        Button slotButton = minimapGrid.GetSlot(evt.Coordinates).GetComponent<Button>();
         FloorplanUI instance = Instantiate(floorplanPrefab, slotButton.transform);
-        instance.Setup(floorplan);
+        instance.Setup(evt.Floorplan);
         RectTransform floorplanRect = (RectTransform)instance.transform;
         floorplanRect.anchoredPosition = Vector2.zero;
         floorplanRect.anchorMin = Vector2.zero;
         floorplanRect.anchorMax = Vector2.one;
         floorplanRect.sizeDelta = Vector2.zero;
 
-        slotButton.onClick.AddListener(() => UIManager.ShowDetails(floorplan));
+        slotButton.onClick.AddListener(() => UIManager.ShowDetails(evt.Floorplan));
     }
 
     public void OpenMinimap()
