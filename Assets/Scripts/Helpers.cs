@@ -60,6 +60,18 @@ public static class Helpers
     #endregion
 
     #region Effects
+    public static void Do<T>(this EventListener<Action<T>> listener, Action<T> action) where T : Event
+    {
+        listener.AddAction(DoAction);
+        void DoAction(T evt)
+        {
+            bool hasMoreUses = listener.effect.TryUse(out var canUse);
+            if (!canUse) return;
+            action?.Invoke(evt);
+            if (hasMoreUses) return;
+            listener.RemoveAction(DoAction);
+        }
+    }
     //Player changes
     public static void ChangePlayerSteps<T>(this EventListener<Action<T>> listener, int amount) where T : Event
     {

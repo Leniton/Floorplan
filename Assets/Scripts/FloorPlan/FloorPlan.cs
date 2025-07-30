@@ -70,8 +70,6 @@ public class Floorplan : ScriptableObject
         //int randomRotation = Random.Range(1, 3);
         //for (int i = 0; i < randomRotation; i++)
         //    floorplan.InternalRotation();
-
-        EffectsManager.AddFloorplanEffect(floorplan);
         return floorplan;
     }
 
