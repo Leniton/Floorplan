@@ -28,26 +28,18 @@ public class EventListener<T> where T : Delegate
     private Action<T> addAction = null;
     private Action<T> removeAction = null;
 
-    private Action<Action> genericAdd = null;
-    private Action<Action> genericRemove = null;
-
     public Effect effect;
 
     public EventListener(Effect _effect, 
-        Action<T> add = null, Action<T> remove = null,
-        Action<Action> genericActionAdd = null, Action<Action> genericActionRemove = null)
+        Action<T> add = null, Action<T> remove = null)
     {
         effect = _effect;
         addAction += add;
         removeAction += remove;
-        genericAdd = genericActionAdd;
-        genericRemove = genericActionRemove;
     }
 
     public void AddAction(T action) => addAction?.Invoke(action);
-    public void AddGenericAction(Action action) => genericAdd?.Invoke(action);
     public void RemoveAction(T action) => removeAction?.Invoke(action);
-    public void RemoveGenericAction(Action action) => genericRemove?.Invoke(action);
 }
 
 public class Condition

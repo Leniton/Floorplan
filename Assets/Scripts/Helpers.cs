@@ -60,6 +60,48 @@ public static class Helpers
     #endregion
 
     #region Effects
+    //Player changes
+    public static void ChangePlayerSteps<T>(this EventListener<Action<T>> listener, int amount) where T : Event
+    {
+        listener.AddAction(ChangeSteps);
+
+        void ChangeSteps(Event evt)
+        {
+            bool hasMoreUses = listener.effect.TryUse(out var canUse);
+            if (!canUse) return;
+            Player.ChangeSteps(amount);
+            if (hasMoreUses) return;
+            listener.RemoveAction(ChangeSteps);
+        }
+    }
+    public static void ChangePlayerCoins<T>(this EventListener<Action<T>> listener, int amount) where T : Event
+    {
+        listener.AddAction(ChangeCoins);
+
+        void ChangeCoins(Event evt)
+        {
+            bool hasMoreUses = listener.effect.TryUse(out var canUse);
+            if (!canUse) return;
+            Player.ChangeCoins(amount);
+            if (hasMoreUses) return;
+            listener.RemoveAction(ChangeCoins);
+        }
+    }
+    public static void ChangePlayerKeys<T>(this EventListener<Action<T>> listener, int amount) where T : Event
+    {
+        listener.AddAction(ChangeKeys);
+
+        void ChangeKeys(Event evt)
+        {
+            bool hasMoreUses = listener.effect.TryUse(out var canUse);
+            if (!canUse) return;
+            Player.ChangeKeys(amount);
+            if (hasMoreUses) return;
+            listener.RemoveAction(ChangeKeys);
+        }
+    }
+
+    //Floorplan changes
     public static void AddItemToFloorplan<T>(this EventListener<Action<T>> listener, Item item) where T: Event
     {
         listener.AddAction(AddItem);
@@ -83,18 +125,6 @@ public static class Helpers
             GameManager.floorplanDict[evt.Coordinates].AddItemToFloorplan(item);
             if (hasMoreUses) return;
             listener.RemoveAction(AddItem);
-        }
-    }
-    public static void ChangePlayerSteps<T>(this EventListener<Action<T>> listener, int amount) where T : Event
-    {
-        listener.AddAction(AddSteps);
-        void AddSteps(Event evt)
-        {
-            bool hasMoreUses = listener.effect.TryUse(out var canUse);
-            if (!canUse) return;
-            Player.ChangeSteps(amount);
-            if (hasMoreUses) return;
-            listener.RemoveAction(AddSteps);
         }
     }
     public static void AddPointsToFloorplan<T>(this EventListener<Action<T>> listener, int amount) where T : Event
