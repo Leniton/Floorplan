@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public static class Helpers
 {
@@ -96,6 +95,71 @@ public static class Helpers
             Player.ChangeSteps(amount);
             if (hasMoreUses) return;
             listener.RemoveAction(AddSteps);
+        }
+    }
+    public static void AddPointsToFloorplan<T>(this EventListener<Action<T>> listener, int amount) where T : Event
+    {
+        listener.AddAction(AddPoints);
+        void AddPoints(Event evt)
+        {
+            bool hasMoreUses = listener.effect.TryUse(out var canUse);
+            if (!canUse) return;
+            listener.effect.floorplan.pointBonus.Add(() => amount);
+            if (hasMoreUses) return;
+            listener.RemoveAction(AddPoints);
+        }
+    }
+    public static void AddPointBonusToFloorplan<T>(this EventListener<Action<T>> listener, Func<int> amount) where T : Event
+    {
+        listener.AddAction(AddPoints);
+
+        void AddPoints(Event evt)
+        {
+            bool hasMoreUses = listener.effect.TryUse(out var canUse);
+            if (!canUse) return;
+            listener.effect.floorplan.pointBonus.Add(amount);
+            if (hasMoreUses) return;
+            listener.RemoveAction(AddPoints);
+        }
+    }
+    public static void PowerFloorplan<T>(this EventListener<Action<T>> listener) where T : Event
+    {
+        listener.AddAction(AddPoints);
+        void AddPoints(Event evt)
+        {
+            bool hasMoreUses = listener.effect.TryUse(out var canUse);
+            if (!canUse) return;
+            listener.effect.floorplan.pointMult.Add(() => 2);
+            if (hasMoreUses) return;
+            listener.RemoveAction(AddPoints);
+        }
+    }
+    public static void SetupFloorplanShop<T>(this EventListener<Action<T>> listener, string title, List<PurchaseData> shopList) 
+        where T : CoordinateEvent
+    {
+        listener.AddAction(CreateShop);
+        void CreateShop(CoordinateEvent evt)
+        {
+            Floorplan floorplan = GameManager.floorplanDict[evt.Coordinates];
+            bool firstEntered = false;
+            bool hasMoreUses = listener.effect.TryUse(out var canUse);
+            if (!canUse) return;
+            floorplan.onEnter += SetupShop;
+            floorplan.onExit += SetupShop;
+            if (hasMoreUses) return;
+            listener.RemoveAction(CreateShop);
+            
+            return;
+            void SetupShop(Event subEvt)
+            {
+                if (firstEntered)
+                    ShopWindow.SetupShop(title, shopList);
+                else
+                    ShopWindow.OpenShop(title, shopList);
+                firstEntered = true;
+            }
+
+            void CloseShop(Event subEvt) => ShopWindow.CloseShop();
         }
     }
     #endregion
