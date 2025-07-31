@@ -40,6 +40,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Bunk Room":
+                break;
                 GameEvent.onDraftedFloorplan -= AddFloorplanEffect;
                 GameEvent.onDraftedFloorplan?.Invoke(evt);
                 GameEvent.onDraftedFloorplan += AddFloorplanEffect;
@@ -55,6 +56,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Dormitory":
+                break;
                 GameEvent.onConnectFloorplans += DormitoryEffect;
                 void DormitoryEffect(FloorplanConnectedEvent subEvt)
                 {
@@ -176,6 +178,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Vestibule":
+                break;
                 GameEvent.onConnectFloorplans += OnConnectVestibule;
                 void OnConnectVestibule(FloorplanConnectedEvent subEvt)
                 {
@@ -185,10 +188,8 @@ public class EffectsManager : MonoBehaviour
                         Floorplan currentFloorplan = floorplan.connectedFloorplans[i];
                         if (currentFloorplan == other) continue;
                         if (currentFloorplan.connectedFloorplans.Contains(other)) continue;
-                        currentFloorplan.connectedFloorplans.Add(other);
-                        other.connectedFloorplans.Add(currentFloorplan);
                         //Debug.Log($"{floorplan.Name} connected {currentFloorplan.Name} to {other.Name}");
-                        GameEvent.onConnectFloorplans?.Invoke(subEvt);
+                        Helpers.ConnectFloorplans(currentFloorplan, other);
                     }
                 }
                 break;
@@ -248,6 +249,7 @@ public class EffectsManager : MonoBehaviour
                 {
                     if (!floorplan.ConnectedToFloorplan(subEvt, out var other)) return;
                     //connected rooms are powered
+                    Debug.Log($"power {other.Name}");
                     other.pointMult.Add(() => 2);
                 }
                 break;
@@ -475,9 +477,38 @@ public class EffectsManager : MonoBehaviour
     {
         switch (floorplan.Name)
         {
+            case "Bunk Room":
+                //double draft
+                floorplan.TheFirstTime().
+                    FloorplanIsDrafted().Do(evt =>
+                    {
+                        floorplan.onDrafted?.Invoke(evt);
+                        GameEvent.onDraftedFloorplan?.Invoke(new(evt.Coordinates,
+                            GameManager.floorplanDict[evt.Coordinates]));
+                    });
+                //double connect
+                floorplan.TheFirstTime().//has to be everytime; but need to fix stackOverflow
+                    FloorplanConnected().Do(evt =>
+                        Helpers.ConnectFloorplans(evt.baseFloorplan, evt.connectedFloorplan));
+                break;
             case "Den":
-                Debug.Log("Den effect");
                 floorplan.TheFirstTime().FloorplanIsDrafted().AddItemToFloorplan(new Key(1));
+                break;
+            case "Dormitory":
+                //connected rest room gain extra points
+                floorplan.EveryTime().FloorplanConnected().
+                    Where(IsOfCategory(FloorCategory.RestRoom)).
+                    AddPointsToThatFloorplan(2);
+                //first time entering a connected restroom gain steps
+                floorplan.EveryTime().FloorplanConnected().
+                    Where(IsOfCategory(FloorCategory.RestRoom)).
+                    Do(evt =>
+                    {
+                        evt.connectedFloorplan.
+                            TheFirstTime().
+                            PlayerEnterFloorplan().
+                            ChangePlayerSteps(5);
+                    });
                 break;
             case "Vault":
                 int lastRoomCount = 0;
@@ -488,6 +519,20 @@ public class EffectsManager : MonoBehaviour
                     new Coin(coinAmount).Initialize();
                     lastRoomCount = GameManager.floorplanDict.Count;
                 });
+                break;
+            case "Vestibule":
+                floorplan.EveryTime().FloorplanConnected().
+                    Do(evt =>
+                    {
+                        for (int i = 0; i < floorplan.connectedFloorplans.Count; i++)
+                        {
+                            Floorplan currentFloorplan = floorplan.connectedFloorplans[i];
+                            if (currentFloorplan == evt.connectedFloorplan) continue;
+                            if (currentFloorplan.connectedFloorplans.Contains(evt.connectedFloorplan)) continue;
+                            Helpers.ConnectFloorplans(currentFloorplan, evt.connectedFloorplan);
+                            Debug.Log($"{floorplan.Name} connected {currentFloorplan.Name} to {evt.connectedFloorplan.Name}");
+                        }
+                    });
                 break;
             case "Utility Closet":
                 //power all rooms of the same category

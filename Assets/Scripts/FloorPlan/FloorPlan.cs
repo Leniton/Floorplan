@@ -22,6 +22,8 @@ public class Floorplan : ScriptableObject
 
     [HideInInspector] public int entranceId = 0;
     [HideInInspector] public bool[] connections;
+    
+    public Vector2Int coordinate { get; set; }
 
     public Floorplan original { get; private set; }
 

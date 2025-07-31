@@ -27,6 +27,16 @@ public static class Helpers
             floorplan.TheFirstTime().PlayerEnterFloorplan().Do(_ => item?.Initialize());
     }
 
+    public static void ConnectFloorplans(Floorplan baseFloorplan, Floorplan connectedFloorplan)
+    {
+        //the floorplan who's already there first
+        baseFloorplan.connectedFloorplans.Add(connectedFloorplan);
+        baseFloorplan.onConnectToFloorplan?.Invoke(new(baseFloorplan, connectedFloorplan, connectedFloorplan.coordinate));
+        connectedFloorplan.connectedFloorplans.Add(baseFloorplan);
+        connectedFloorplan.onConnectToFloorplan?.Invoke(new(connectedFloorplan, baseFloorplan, baseFloorplan.coordinate));
+        GameEvent.onConnectFloorplans?.Invoke(new(connectedFloorplan, baseFloorplan, baseFloorplan.coordinate));
+    }
+
     #region EffectCreation
     public static Effect TheFirstTime(this Floorplan floorplan) => new (floorplan, 1);
     public static Effect EveryTime(this Floorplan floorplan) => new (floorplan);

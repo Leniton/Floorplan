@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour
         floorplanRect.sizeDelta = Vector2.zero;
 
         floorplanDict[currentDraftPosition] = floorplan;
+        floorplan.coordinate = currentDraftPosition;
         EffectsManager.AddFloorplanEffect(floorplan);
         floorplan.onDrafted?.Invoke(new(currentDraftPosition));
         GameEvent.onDraftedFloorplan?.Invoke(new(currentDraftPosition, floorplan));
@@ -101,11 +102,12 @@ public class GameManager : MonoBehaviour
             //Debug.Log($"{floorplan.Name} is connected to {targetFloorplan.Name}");
             
             //the floorplan who's already there first
-            targetFloorplan.connectedFloorplans.Add(floorplan);
-            targetFloorplan.onConnectToFloorplan?.Invoke(new(targetFloorplan, floorplan, currentDraftPosition));
-            floorplan.connectedFloorplans.Add(targetFloorplan);
-            floorplan.onConnectToFloorplan?.Invoke(new(floorplan, targetFloorplan, slot));
-            GameEvent.onConnectFloorplans?.Invoke(new(floorplan, targetFloorplan, slot));
+            Helpers.ConnectFloorplans(targetFloorplan, floorplan);
+            //targetFloorplan.connectedFloorplans.Add(floorplan);
+            //targetFloorplan.onConnectToFloorplan?.Invoke(new(targetFloorplan, floorplan, currentDraftPosition));
+            //floorplan.connectedFloorplans.Add(targetFloorplan);
+            //floorplan.onConnectToFloorplan?.Invoke(new(floorplan, targetFloorplan, slot));
+            //GameEvent.onConnectFloorplans?.Invoke(new(floorplan, targetFloorplan, slot));
         }
     }
 
