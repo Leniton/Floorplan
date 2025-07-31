@@ -227,6 +227,7 @@ public class EffectsManager : MonoBehaviour
                 floorplan.AddItemToFloorplan(terraceItems.PickRandom());
                 break;
             case "Utility Closet":
+                break;
                 //power all current black rooms
                 foreach (var room in GameManager.floorplanDict.Values)
                 {
@@ -488,6 +489,26 @@ public class EffectsManager : MonoBehaviour
                     lastRoomCount = GameManager.floorplanDict.Count;
                 });
                 break;
+            case "Utility Closet":
+                //power all rooms of the same category
+                foreach (var room in GameManager.floorplanDict.Values)
+                {
+                    if (!NumberUtil.ContainsAnyBits((int)room.Category, (int)floorplan.Category)) continue;
+                    Debug.Log($"Powering {room.Name}");
+                    room.pointMult.Add(() => 2);
+                }
+                //power all rooms of the same category
+                floorplan.EveryTime().AnyFloorplanIsDrafted().
+                    Where(IsNot(floorplan), MatchCategoryWith(floorplan)).
+                    PowerThatFloorplan();
+                break;
         }
     }
+
+    public static Func<FloorplanEvent, bool> IsOfCategory(FloorCategory type) =>
+        evt => NumberUtil.ContainsBytes((int)evt.Floorplan.Category, (int)type);
+    public static Func<FloorplanEvent, bool> MatchCategoryWith(Floorplan floorplan) =>
+        evt => NumberUtil.ContainsAnyBits((int)evt.Floorplan.Category, (int)floorplan.Category);
+    public static Func<FloorplanEvent, bool> IsNot(Floorplan floorplan) =>
+        evt => evt.Floorplan != floorplan;
 }

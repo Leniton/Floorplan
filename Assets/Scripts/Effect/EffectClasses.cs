@@ -23,26 +23,23 @@ public class Effect
     }
 }
 
-public class EventListener<T> where T : Delegate
+public class EventListener<D,T2> where D : Delegate
 {
-    private Action<T> addAction = null;
-    private Action<T> removeAction = null;
+    private Action<D> addAction = null;
+    private Action<D> removeAction = null;
 
     public Effect effect;
 
+    public List<Func<T2,bool>> conditions = new();
+
     public EventListener(Effect _effect, 
-        Action<T> add = null, Action<T> remove = null)
+        Action<D> add = null, Action<D> remove = null)
     {
         effect = _effect;
         addAction += add;
         removeAction += remove;
     }
 
-    public void AddAction(T action) => addAction?.Invoke(action);
-    public void RemoveAction(T action) => removeAction?.Invoke(action);
-}
-
-public class Condition
-{
-    
+    public void AddAction(D action) => addAction?.Invoke(action);
+    public void RemoveAction(D action) => removeAction?.Invoke(action);
 }
