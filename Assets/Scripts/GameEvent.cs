@@ -6,10 +6,10 @@ using UnityEngine;
 public static class GameEvent
 {
     public static Action<DrawFloorplanEvent> onDrawFloorplans;
-    public static Action<GenericFloorplanEvent> onDraftedFloorplan;
+    public static Action<FloorplanEvent> onDraftedFloorplan;
     public static Action<FloorplanConnectedEvent> onConnectFloorplans;
-    public static Action<GenericFloorplanEvent> OnExitFloorplan;
-    public static Action<GenericFloorplanEvent> OnEnterFloorplan;
+    public static Action<FloorplanEvent> OnExitFloorplan;
+    public static Action<FloorplanEvent> OnEnterFloorplan;
     public static Action<ItemEvent> OnCollectItem;
 
     public static void ResetListeners()
@@ -29,24 +29,24 @@ public class CoordinateEvent : Event
     public Vector2Int Coordinates;
     public CoordinateEvent(Vector2Int coordinates) => Coordinates = coordinates;
 }
-public class GenericFloorplanEvent : CoordinateEvent
+public class FloorplanEvent : CoordinateEvent
 {
     public Floorplan Floorplan;
 
-    public GenericFloorplanEvent(Vector2Int coordinates, Floorplan floorplan) : base(coordinates)
+    public FloorplanEvent(Vector2Int coordinates, Floorplan floorplan) : base(coordinates)
     {
         Floorplan = floorplan;
     }
 }
-public class FloorplanConnectedEvent : Event
+public class FloorplanConnectedEvent : FloorplanEvent
 {
     public Floorplan baseFloorplan;
-    public Floorplan connectedFloorplan;
+    public Floorplan connectedFloorplan => Floorplan;
 
-    public FloorplanConnectedEvent(Floorplan baseFloorplan, Floorplan connectedFloorplan)
+    public FloorplanConnectedEvent(Floorplan baseFloorplan, Floorplan connectedFloorplan, Vector2Int connectedCoordinates) :
+        base(connectedCoordinates, connectedFloorplan)
     {
         this.baseFloorplan = baseFloorplan;
-        this.connectedFloorplan = connectedFloorplan;
     }
 }
 public class ItemEvent : Event

@@ -12,7 +12,7 @@ public class EffectsManager : MonoBehaviour
         GameEvent.onDraftedFloorplan += AddFloorplanEffect;
     }
 
-    public void AddFloorplanEffect(GenericFloorplanEvent evt)
+    public void AddFloorplanEffect(FloorplanEvent evt)
     {
         Vector2Int draftedCoordinates = evt.Coordinates + Floorplan.IDToDirection(evt.Floorplan.entranceId);
         Floorplan floorplan = evt.Floorplan;
@@ -21,7 +21,7 @@ public class EffectsManager : MonoBehaviour
         {
             case "Bedroom":
                 GameEvent.OnEnterFloorplan += BedroomEffect;
-                void BedroomEffect(GenericFloorplanEvent subEvt)
+                void BedroomEffect(FloorplanEvent subEvt)
                 {
                     if (evt.Floorplan != subEvt.Floorplan) return;
                     Player.ChangeSteps(5);
@@ -30,7 +30,7 @@ public class EffectsManager : MonoBehaviour
                 break;
             case "Bathroom":
                 GameEvent.OnEnterFloorplan += BathroomEffect;
-                void BathroomEffect(GenericFloorplanEvent subEvt)
+                void BathroomEffect(FloorplanEvent subEvt)
                 {
                     if (evt.Floorplan != subEvt.Floorplan) return;
                     int currentSteps = Player.steps;
@@ -64,7 +64,7 @@ public class EffectsManager : MonoBehaviour
                     other.pointBonus.Add(() => 2);
                     //first time entering a connected restroom gain steps
                     GameEvent.OnEnterFloorplan += AddStepsEffect;
-                    void AddStepsEffect(GenericFloorplanEvent addedEvt)
+                    void AddStepsEffect(FloorplanEvent addedEvt)
                     {
                         if(addedEvt.Floorplan != other) return;
                         Player.ChangeSteps(5);
@@ -75,12 +75,12 @@ public class EffectsManager : MonoBehaviour
             case "Boudoir":
                 GameEvent.OnEnterFloorplan += OnEnterBoudoir;
                 GameEvent.OnExitFloorplan += OnExitBoudoir;
-                void OnEnterBoudoir(GenericFloorplanEvent subEvt)
+                void OnEnterBoudoir(FloorplanEvent subEvt)
                 {
                     if (evt.Floorplan != subEvt.Floorplan) return;
                     GameEvent.onDrawFloorplans += IncreaseRestroomChance;
                 }
-                void OnExitBoudoir(GenericFloorplanEvent subEvt)
+                void OnExitBoudoir(FloorplanEvent subEvt)
                 {
                     if (evt.Floorplan != subEvt.Floorplan) return;
                     GameEvent.onDrawFloorplans -= IncreaseRestroomChance;
@@ -118,7 +118,7 @@ public class EffectsManager : MonoBehaviour
                 break;
             case "Guest Bedroom":
                 GameEvent.OnEnterFloorplan += GuestBedroomStepsEffect;
-                void GuestBedroomStepsEffect(GenericFloorplanEvent subEvt)
+                void GuestBedroomStepsEffect(FloorplanEvent subEvt)
                 {
                     if (evt.Floorplan != subEvt.Floorplan) return;
                     Player.ChangeSteps(2);
@@ -158,12 +158,12 @@ public class EffectsManager : MonoBehaviour
                 //Aways draw a tunnel when drafting from tunnel
                 GameEvent.OnEnterFloorplan += OnEnterTunnel;
                 GameEvent.OnExitFloorplan += OnExitTunnel;
-                void OnEnterTunnel(GenericFloorplanEvent subEvt)
+                void OnEnterTunnel(FloorplanEvent subEvt)
                 {
                     if (evt.Floorplan != subEvt.Floorplan) return;
                     GameEvent.onDrawFloorplans += AddTunnelToDrawnFloorplans;
                 }
-                void OnExitTunnel(GenericFloorplanEvent subEvt)
+                void OnExitTunnel(FloorplanEvent subEvt)
                 {
                     if (evt.Floorplan != subEvt.Floorplan) return;
                     GameEvent.onDrawFloorplans -= AddTunnelToDrawnFloorplans;
@@ -235,7 +235,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 //power all following black rooms
                 GameEvent.onDraftedFloorplan += UtilityClosetEffect;
-                void UtilityClosetEffect(GenericFloorplanEvent subEvt)
+                void UtilityClosetEffect(FloorplanEvent subEvt)
                 {
                     if(!NumberUtil.ContainsBytes((int)subEvt.Floorplan.Category, (int)FloorCategory.BlackRooms)) return;
                     subEvt.Floorplan.pointMult.Add(() => 2);
@@ -280,7 +280,7 @@ public class EffectsManager : MonoBehaviour
                 bool enteredKitchen = false;
                 GameEvent.OnEnterFloorplan += OnEnterKitchen;
                 GameEvent.OnExitFloorplan += OnExitShop;
-                void OnEnterKitchen(GenericFloorplanEvent subEvt)
+                void OnEnterKitchen(FloorplanEvent subEvt)
                 {
                     if (evt.Floorplan != subEvt.Floorplan) return;
                     if (!enteredKitchen)
@@ -334,7 +334,7 @@ public class EffectsManager : MonoBehaviour
                 bool enteredGiftShop = false;
                 GameEvent.OnEnterFloorplan += OnEnterGiftShop;
                 GameEvent.OnExitFloorplan += OnExitShop;
-                void OnEnterGiftShop(GenericFloorplanEvent subEvt)
+                void OnEnterGiftShop(FloorplanEvent subEvt)
                 {
                     if (evt.Floorplan != subEvt.Floorplan) return;
                     if (!enteredGiftShop)
@@ -384,7 +384,7 @@ public class EffectsManager : MonoBehaviour
                 bool enteredCommissary = false;
                 GameEvent.OnEnterFloorplan += OnEnterCommissary;
                 GameEvent.OnExitFloorplan += OnExitShop;
-                void OnEnterCommissary(GenericFloorplanEvent subEvt)
+                void OnEnterCommissary(FloorplanEvent subEvt)
                 {
                     if (evt.Floorplan != subEvt.Floorplan) return;
                     if (!enteredCommissary)
@@ -398,7 +398,7 @@ public class EffectsManager : MonoBehaviour
                 break;
             case "Cassino":
                 GameEvent.OnEnterFloorplan += OnEnterCassino;
-                void OnEnterCassino(GenericFloorplanEvent subEvt)
+                void OnEnterCassino(FloorplanEvent subEvt)
                 {
                     if (evt.Floorplan != subEvt.Floorplan) return;
                     int r = Random.Range(0, 100);
@@ -419,7 +419,7 @@ public class EffectsManager : MonoBehaviour
                 break;
                 int lastRoomCount = 0;
                 GameEvent.OnEnterFloorplan += OnEnterVault;
-                void OnEnterVault(GenericFloorplanEvent subEvt)
+                void OnEnterVault(FloorplanEvent subEvt)
                 {
                     if (evt.Floorplan != subEvt.Floorplan) return;
                     int coinAmount = GameManager.floorplanDict.Count - lastRoomCount;
@@ -443,7 +443,7 @@ public class EffectsManager : MonoBehaviour
                 int visits = 0;
                 floorplan.pointBonus.Add(() => visits);
                 GameEvent.OnEnterFloorplan += OnEnterGallery;
-                void OnEnterGallery(GenericFloorplanEvent subEvt)
+                void OnEnterGallery(FloorplanEvent subEvt)
                 {
                     if (evt.Floorplan != subEvt.Floorplan) return;
                     if(Player.coins <= 0) return;
@@ -463,7 +463,7 @@ public class EffectsManager : MonoBehaviour
             case "":
                 break;
         }
-        void OnExitShop(GenericFloorplanEvent subEvt)
+        void OnExitShop(FloorplanEvent subEvt)
         {
             if (evt.Floorplan != subEvt.Floorplan) return;
             ShopWindow.CloseShop();

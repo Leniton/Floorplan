@@ -99,11 +99,13 @@ public class GameManager : MonoBehaviour
             //Debug.Log($"there's a floorplan on {slot}({targetFloorplan.Name})");
             if (!targetFloorplan.connections[Floorplan.DirectionToID(-direction)]) continue;
             //Debug.Log($"{floorplan.Name} is connected to {targetFloorplan.Name}");
-            floorplan.connectedFloorplans.Add(targetFloorplan);
-            floorplan.onConnectToFloorplan?.Invoke(new(floorplan, targetFloorplan));
+            
+            //the floorplan who's already there first
             targetFloorplan.connectedFloorplans.Add(floorplan);
-            targetFloorplan.onConnectToFloorplan?.Invoke(new(targetFloorplan, floorplan));
-            GameEvent.onConnectFloorplans?.Invoke(new(floorplan, targetFloorplan));
+            targetFloorplan.onConnectToFloorplan?.Invoke(new(targetFloorplan, floorplan, currentDraftPosition));
+            floorplan.connectedFloorplans.Add(targetFloorplan);
+            floorplan.onConnectToFloorplan?.Invoke(new(floorplan, targetFloorplan, slot));
+            GameEvent.onConnectFloorplans?.Invoke(new(floorplan, targetFloorplan, slot));
         }
     }
 

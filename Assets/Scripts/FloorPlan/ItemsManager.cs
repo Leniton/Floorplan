@@ -10,7 +10,7 @@ public class ItemsManager : MonoBehaviour
         GameEvent.onDraftedFloorplan += OnFloorplanDrafted;
     }
 
-    private void OnFloorplanDrafted(GenericFloorplanEvent evt)
+    private void OnFloorplanDrafted(FloorplanEvent evt)
     {
         if (evt.Floorplan.Name == "Entrance Hall") return;
         AddFloorplanItems(evt.Floorplan);

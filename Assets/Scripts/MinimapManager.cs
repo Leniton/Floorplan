@@ -26,7 +26,7 @@ public class MinimapManager : MonoBehaviour
         CloseMinimap();        
     }
 
-    private void PlaceFloorplan(GenericFloorplanEvent evt)
+    private void PlaceFloorplan(FloorplanEvent evt)
     {
         Button slotButton = minimapGrid.GetSlot(evt.Coordinates).GetComponent<Button>();
         FloorplanUI instance = Instantiate(floorplanPrefab, slotButton.transform);
