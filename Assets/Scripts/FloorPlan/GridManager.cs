@@ -9,6 +9,8 @@ public class GridManager : MonoBehaviour
     public const int xSize = 5;
     public const int ySize = 5;
 
+    [SerializeField] private bool isInstance = false;
+
     [SerializeField] private GameObject slotPrefab;
     [SerializeField] private GridLayoutGroup grid;
 
@@ -37,16 +39,17 @@ public class GridManager : MonoBehaviour
 
         coordinate = new((xSize / 2), 0);
         UpdatePosition(false);
-        instance = this;
+        if (isInstance)
+            instance = this;
     }
 
     public void ShiftSelection(Vector2Int direction)
     {
-        //print($"direction {direction}");
         Vector2Int newCoordinate = coordinate + direction;
         if (!ValidCoordinate(newCoordinate)) return;
         lastCoordinate = coordinate;
         coordinate = newCoordinate;
+        //print($"{lastCoordinate} shift {direction} to {coordinate}");
         UpdatePosition();
     }
 
@@ -101,7 +104,6 @@ public class GridManager : MonoBehaviour
             }
             rectTransform.anchoredPosition = targetPosition;
             OnMove?.Invoke(targetCoordinate);
-            yield return null;
         }
         moveCoroutine = null;
     }

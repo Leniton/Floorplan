@@ -477,7 +477,7 @@ public class EffectsManager : MonoBehaviour
         {
             case "Den":
                 Debug.Log("Den effect");
-                floorplan.TheNext_Times(5).FloorplanIsDrafted().AddItemToFloorplan(new Food(2));
+                floorplan.TheFirstTime().FloorplanIsDrafted().AddItemToFloorplan(new Key(1));
                 break;
             case "Vault":
                 int lastRoomCount = 0;

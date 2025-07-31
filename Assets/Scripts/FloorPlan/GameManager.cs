@@ -120,8 +120,8 @@ public class GameManager : MonoBehaviour
 
     private void TriggerFloorplanEnterEvent(Vector2Int coordinate)
     {
-        //Debug.Log($"entered {floorplanDict[coordinate]}");
         Floorplan floorplan = floorplanDict[coordinate];
+        //Debug.Log($"entered {floorplan.Name}({coordinate})\n{GridManager.instance.currentPosition}");
         floorplan.onEnter?.Invoke(new());
         GameEvent.OnEnterFloorplan?.Invoke(new(coordinate, floorplan));
         StartCoroutine(CheckSteps());

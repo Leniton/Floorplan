@@ -87,28 +87,28 @@ public class DraftManager : MonoBehaviour
         {
             sb.Append($"\n{(Rarity)i}: {rarityCount[i]}");
         }
-        Debug.Log(sb.ToString());
+        Debug.LogWarning(sb.ToString());
 
         sb = new($"Costs:");
         for (int i = 0; i < costCount.Length; i++)
         {
             sb.Append($"\n{i}: {costCount[i]}");
         }
-        Debug.Log(sb.ToString());
+        Debug.LogWarning(sb.ToString());
 
         sb = new($"Types:");
         foreach (var type in typesCount)
         {
             sb.Append($"\n{type.Key}: {type.Value}");
         }
-        Debug.Log(sb.ToString());
+        Debug.LogWarning(sb.ToString());
 
         sb = new($"Points:");
         foreach (var point in pointsCount)
         {
             sb.Append($"\n{point.Key}: {point.Value}");
         }
-        Debug.Log(sb.ToString());
+        Debug.LogWarning(sb.ToString());
     }
 
     public void DraftFloorplan(Vector2Int direction, List<Vector2Int> possibleSlots)

@@ -11,16 +11,20 @@ public static class Helpers
         other = evt.baseFloorplan == targetFloorplan ? evt.connectedFloorplan : evt.baseFloorplan;
         return true;
     }
+
+    public static Floorplan CurrentFloorplan()
+    {
+        GameManager.floorplanDict.TryGetValue(GridManager.instance.currentPosition, out var current);
+        return current;
+    }
     
     public static void AddItemToFloorplan(this Floorplan floorplan, Item item)
     {
-        GameEvent.OnEnterFloorplan += OnEnterFloorplan;
-        void OnEnterFloorplan(FloorplanEvent evt)
-        {
-            if (evt.Floorplan != floorplan) return;
+        //Debug.Log($"add {item?.GetType()} to {floorplan?.Name}({GridManager.instance.currentPosition})");
+        if (CurrentFloorplan() == floorplan)
             item?.Initialize();
-            GameEvent.OnEnterFloorplan -= OnEnterFloorplan;
-        }
+        else
+            floorplan.TheFirstTime().PlayerEnterFloorplan().Do(_ => item?.Initialize());
     }
 
     #region EffectCreation

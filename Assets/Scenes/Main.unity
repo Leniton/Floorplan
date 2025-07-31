@@ -1332,6 +1332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e756eababb971b43879ed6c8e89183a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInstance: 1
   slotPrefab: {fileID: 5788833743850687806, guid: 8a7df2c0eef11214a9c6b2ab259f13a8,
     type: 3}
   grid: {fileID: 0}
@@ -2516,6 +2517,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e756eababb971b43879ed6c8e89183a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInstance: 0
   slotPrefab: {fileID: 5788833743850687806, guid: bd40e651e9801944ab3a83fb4c966e66,
     type: 3}
   grid: {fileID: 619478187}
