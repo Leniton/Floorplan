@@ -14,7 +14,7 @@ public static class Helpers
     public static void AddItemToFloorplan(this Floorplan floorplan, Item item)
     {
         GameEvent.OnEnterFloorplan += OnEnterFloorplan;
-        void OnEnterFloorplan(GenericFloorplanEvent evt)
+        void OnEnterFloorplan(FloorplanEvent evt)
         {
             if (evt.Floorplan != floorplan) return;
             item?.Initialize();
@@ -44,16 +44,16 @@ public static class Helpers
         (a) => effect.floorplan.onExit -= a);
     
     //GameEvent
-    public static EventListener<Action<GenericFloorplanEvent>> AnyFloorplanIsDrafted(this Effect effect) => new(effect, 
+    public static EventListener<Action<FloorplanEvent>> AnyFloorplanIsDrafted(this Effect effect) => new(effect, 
             (a) => GameEvent.onDraftedFloorplan += a,
             (a) => GameEvent.onDraftedFloorplan -= a);
     public static EventListener<Action<FloorplanConnectedEvent>> AnyFloorplanConnected(this Effect effect) => new(effect,
         (a) => GameEvent.onConnectFloorplans += a,
         (a) => GameEvent.onConnectFloorplans -= a);
-    public static EventListener<Action<GenericFloorplanEvent>> PlayerEnterAnyFloorplan(this Effect effect) => new (effect, 
+    public static EventListener<Action<FloorplanEvent>> PlayerEnterAnyFloorplan(this Effect effect) => new (effect, 
         (a) => GameEvent.OnEnterFloorplan += a,
         (a) => GameEvent.OnEnterFloorplan -= a);
-    public static EventListener<Action<GenericFloorplanEvent>> PlayerExitAnyFloorplan(this Effect effect) => new (effect, 
+    public static EventListener<Action<FloorplanEvent>> PlayerExitAnyFloorplan(this Effect effect) => new (effect, 
         (a) => GameEvent.OnExitFloorplan += a,
         (a) => GameEvent.OnExitFloorplan -= a);
 
@@ -73,122 +73,34 @@ public static class Helpers
         }
     }
     //Player changes
-    public static void ChangePlayerSteps<T>(this EventListener<Action<T>> listener, int amount) where T : Event
-    {
-        listener.AddAction(ChangeSteps);
-
-        void ChangeSteps(Event evt)
-        {
-            bool hasMoreUses = listener.effect.TryUse(out var canUse);
-            if (!canUse) return;
-            Player.ChangeSteps(amount);
-            if (hasMoreUses) return;
-            listener.RemoveAction(ChangeSteps);
-        }
-    }
-    public static void ChangePlayerCoins<T>(this EventListener<Action<T>> listener, int amount) where T : Event
-    {
-        listener.AddAction(ChangeCoins);
-
-        void ChangeCoins(Event evt)
-        {
-            bool hasMoreUses = listener.effect.TryUse(out var canUse);
-            if (!canUse) return;
-            Player.ChangeCoins(amount);
-            if (hasMoreUses) return;
-            listener.RemoveAction(ChangeCoins);
-        }
-    }
-    public static void ChangePlayerKeys<T>(this EventListener<Action<T>> listener, int amount) where T : Event
-    {
-        listener.AddAction(ChangeKeys);
-
-        void ChangeKeys(Event evt)
-        {
-            bool hasMoreUses = listener.effect.TryUse(out var canUse);
-            if (!canUse) return;
-            Player.ChangeKeys(amount);
-            if (hasMoreUses) return;
-            listener.RemoveAction(ChangeKeys);
-        }
-    }
+    public static void ChangePlayerSteps<T>(this EventListener<Action<T>> listener, int amount) where T : Event =>
+        listener.Do(_ => Player.ChangeSteps(amount));
+    public static void ChangePlayerCoins<T>(this EventListener<Action<T>> listener, int amount) where T : Event =>
+        listener.Do(_ => Player.ChangeCoins(amount));
+    public static void ChangePlayerKeys<T>(this EventListener<Action<T>> listener, int amount) where T : Event =>
+        listener.Do(_ => Player.ChangeKeys(amount));
 
     //Floorplan changes
-    public static void AddItemToFloorplan<T>(this EventListener<Action<T>> listener, Item item) where T: Event
-    {
-        listener.AddAction(AddItem);
-        void AddItem(Event evt)
-        {
-            bool hasMoreUses = listener.effect.TryUse(out var canUse);
-            if (!canUse) return;
-            listener.effect.floorplan.AddItemToFloorplan(item);
-            if (hasMoreUses) return;
-            listener.RemoveAction(AddItem);
-        }
-    }
-    public static void AddItemToThatFloorplan<T>(this EventListener<Action<T>> listener, Item item) where T : CoordinateEvent
-    {
-        listener.AddAction(AddItem);
-
-        void AddItem(CoordinateEvent evt)
-        {
-            bool hasMoreUses = listener.effect.TryUse(out var canUse);
-            if (!canUse) return;
-            GameManager.floorplanDict[evt.Coordinates].AddItemToFloorplan(item);
-            if (hasMoreUses) return;
-            listener.RemoveAction(AddItem);
-        }
-    }
-    public static void AddPointsToFloorplan<T>(this EventListener<Action<T>> listener, int amount) where T : Event
-    {
-        listener.AddAction(AddPoints);
-        void AddPoints(Event evt)
-        {
-            bool hasMoreUses = listener.effect.TryUse(out var canUse);
-            if (!canUse) return;
-            listener.effect.floorplan.pointBonus.Add(() => amount);
-            if (hasMoreUses) return;
-            listener.RemoveAction(AddPoints);
-        }
-    }
-    public static void AddPointBonusToFloorplan<T>(this EventListener<Action<T>> listener, Func<int> amount) where T : Event
-    {
-        listener.AddAction(AddPoints);
-
-        void AddPoints(Event evt)
-        {
-            bool hasMoreUses = listener.effect.TryUse(out var canUse);
-            if (!canUse) return;
-            listener.effect.floorplan.pointBonus.Add(amount);
-            if (hasMoreUses) return;
-            listener.RemoveAction(AddPoints);
-        }
-    }
-    public static void PowerFloorplan<T>(this EventListener<Action<T>> listener) where T : Event
-    {
-        listener.AddAction(AddPoints);
-        void AddPoints(Event evt)
-        {
-            bool hasMoreUses = listener.effect.TryUse(out var canUse);
-            if (!canUse) return;
-            listener.effect.floorplan.pointMult.Add(() => 2);
-            if (hasMoreUses) return;
-            listener.RemoveAction(AddPoints);
-        }
-    }
+    public static void AddItemToFloorplan<T>(this EventListener<Action<T>> listener, Item item) where T : Event =>
+        listener.Do(_ => listener.effect.floorplan.AddItemToFloorplan(item));
+    public static void AddItemToThatFloorplan<T>(this EventListener<Action<T>> listener, Item item) where T : CoordinateEvent =>
+        listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].AddItemToFloorplan(item));
+    public static void AddPointsToFloorplan<T>(this EventListener<Action<T>> listener, int amount) where T : Event =>
+        listener.Do(_ => listener.effect.floorplan.pointBonus.Add(() => amount));
+    public static void AddPointBonusToFloorplan<T>(this EventListener<Action<T>> listener, Func<int> amount) where T : Event =>
+        listener.Do(_ => listener.effect.floorplan.pointBonus.Add(amount));
+    public static void PowerFloorplan<T>(this EventListener<Action<T>> listener) where T : Event =>
+        listener.Do(_ => listener.effect.floorplan.pointMult.Add(() => 2));
     public static void SetupFloorplanShop<T>(this EventListener<Action<T>> listener, string title, List<PurchaseData> shopList) 
         where T : CoordinateEvent
     {
-        listener.AddAction(CreateShop);
+        listener.Do(CreateShop);
         void CreateShop(CoordinateEvent evt)
         {
             Floorplan floorplan = GameManager.floorplanDict[evt.Coordinates];
             bool firstEntered = false;
-            bool hasMoreUses = listener.effect.TryUse(out var canUse);
-            if (!canUse) return;
             floorplan.onEnter += SetupShop;
-            floorplan.onExit += SetupShop;
-            if (hasMoreUses) return;
+            floorplan.onExit += CloseShop;
             listener.RemoveAction(CreateShop);
             
             return;
@@ -200,7 +112,6 @@ public static class Helpers
                     ShopWindow.OpenShop(title, shopList);
                 firstEntered = true;
             }
-
             void CloseShop(Event subEvt) => ShopWindow.CloseShop();
         }
     }
