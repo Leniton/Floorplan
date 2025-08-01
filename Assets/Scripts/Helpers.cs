@@ -94,6 +94,11 @@ public static class Helpers
         (a) => GameEvent.onDrawFloorplans += a,
         (a) => GameEvent.onDrawFloorplans -= a);
 
+    public static EventListener<Action<ItemEvent>, ItemEvent>
+        ItemCollected(this Effect effect) => new(effect,
+        (a) => GameEvent.OnCollectItem += a,
+        (a) => GameEvent.OnCollectItem -= a);
+
     #endregion
 
     #region Effects

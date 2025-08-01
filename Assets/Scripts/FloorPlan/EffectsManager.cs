@@ -233,6 +233,7 @@ public class EffectsManager : MonoBehaviour
                 floorplan.AddItemToFloorplan(cloisterItems.PickRandom());
                 break;
             case "Terrace":
+                break;
                 RarityPicker<Item> terraceItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 terraceItems.ChangeRarities(0,1,0,0);
                 floorplan.AddItemToFloorplan(terraceItems.PickRandom());
@@ -254,6 +255,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Boiler Room":
+                break;
                 GameEvent.onConnectFloorplans += BoilerRoomEffect;
                 void BoilerRoomEffect(FloorplanConnectedEvent subEvt)
                 {
@@ -410,6 +412,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Cassino":
+                break;
                 GameEvent.OnEnterFloorplan += OnEnterCassino;
                 void OnEnterCassino(FloorplanEvent subEvt)
                 {
@@ -442,6 +445,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Dining Room":
+                break;
                 int eatenFood = 0;
                 floorplan.AddItemToFloorplan(new Food(10));
                 floorplan.pointBonus.Add(() => eatenFood);
@@ -466,6 +470,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Pump Room":
+                break;
                 GameEvent.onConnectFloorplans += PumpRoomEffect;
                 void PumpRoomEffect(FloorplanConnectedEvent subEvt)
                 {
@@ -506,6 +511,9 @@ public class EffectsManager : MonoBehaviour
             case "Bedroom":
                 floorplan.TheFirstTime().PlayerExitFloorplan()
                     .Do(_ => Player.ChangeSteps(floorplan.CalculatePoints()));
+                break;
+            case "Boiler Room":
+                floorplan.EveryTime().FloorplanConnected().PowerThatFloorplan();
                 break;
             case "Boudoir":
                 bool isInBoudoir = false;
@@ -554,6 +562,22 @@ public class EffectsManager : MonoBehaviour
                 floorplan.EveryTime().FloorplanConnected().Where(_ => retrigger = !retrigger)
                     .Do(evt => Helpers.ConnectFloorplans(evt.baseFloorplan, evt.connectedFloorplan));
                 break;
+            case "Cassino":
+                floorplan.TheFirstTime().PlayerEnterFloorplan().Do(evt =>
+                {
+                    int r = Random.Range(0, 100);
+                    if (r < 70) // gotta lie to the player sometimes
+                    {
+                        Player.ChangeCoins(Player.coins);
+                        UIManager.ShowMessage($"Luck is on your side, your coins doubled!!!");
+                    }
+                    else
+                    {
+                        Player.ChangeCoins(-(Player.coins / 2));
+                        UIManager.ShowMessage($"That's too bad, you lost half your coins...");
+                    }
+                });
+                break;
             case "Cloister":
                 RarityPicker<Item> cloisterItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 cloisterItems.ChangeRarities(1,0,0,0);
@@ -561,6 +585,12 @@ public class EffectsManager : MonoBehaviour
                 break;
             case "Den":
                 floorplan.TheFirstTime().FloorplanIsDrafted().AddItemToFloorplan(new Key(1));
+                break;
+            case "Dining Room":
+                int eatenFood = 0;
+                floorplan.AddItemToFloorplan(new Food(10));
+                floorplan.pointBonus.Add(() => eatenFood);
+                floorplan.EveryTime().ItemCollected().Where(evt => evt.item is Food).Do(_ => eatenFood++);
                 break;
             case "Dormitory":
                 //connected rest room gain extra points
@@ -610,6 +640,14 @@ public class EffectsManager : MonoBehaviour
                 
                 for (int i = 0; i < hallwayClosetItemCount; i++)
                     floorplan.AddItemToFloorplan(hallwayClosetItems.PickRandom());
+                break;
+            case "Pump Room":
+                floorplan.EveryTime().FloorplanConnected().AddPointBonusToThatFloorplan(floorplan.CalculatePoints);
+                break;
+            case "Terrace":
+                RarityPicker<Item> terraceItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
+                terraceItems.ChangeRarities(0,1,0,0);
+                floorplan.AddItemToFloorplan(terraceItems.PickRandom());
                 break;
             case "Tunnel":
                 //Aways draw a tunnel when drafting from tunnel
