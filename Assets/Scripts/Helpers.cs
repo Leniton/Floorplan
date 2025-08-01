@@ -12,6 +12,13 @@ public static class Helpers
         return true;
     }
 
+    public static Floorplan DraftedFrom(this Floorplan floorplan)
+    {
+        Vector2Int draftedCoordinates = floorplan.coordinate + Floorplan.IDToDirection(floorplan.entranceId);
+        GameManager.floorplanDict.TryGetValue(draftedCoordinates, out var draftedFloorplan);
+        return floorplan;
+    }
+    
     public static Floorplan CurrentFloorplan()
     {
         GameManager.floorplanDict.TryGetValue(GridManager.instance.currentPosition, out var current);
@@ -81,6 +88,11 @@ public static class Helpers
         PlayerExitAnyFloorplan(this Effect effect) => new(effect,
         (a) => GameEvent.OnExitFloorplan += a,
         (a) => GameEvent.OnExitFloorplan -= a);
+
+    public static EventListener<Action<DrawFloorplanEvent>, DrawFloorplanEvent>
+        FloorplansAreDrawn(this Effect effect) => new(effect,
+        (a) => GameEvent.onDrawFloorplans += a,
+        (a) => GameEvent.onDrawFloorplans -= a);
 
     #endregion
 

@@ -20,6 +20,7 @@ public class EffectsManager : MonoBehaviour
         switch (evt.Floorplan.Name)
         {
             case "Bedroom":
+                break;
                 GameEvent.OnEnterFloorplan += BedroomEffect;
                 void BedroomEffect(FloorplanEvent subEvt)
                 {
@@ -29,6 +30,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Bathroom":
+                break;
                 GameEvent.OnEnterFloorplan += BathroomEffect;
                 void BathroomEffect(FloorplanEvent subEvt)
                 {
@@ -75,6 +77,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Boudoir":
+                break;
                 GameEvent.OnEnterFloorplan += OnEnterBoudoir;
                 GameEvent.OnExitFloorplan += OnExitBoudoir;
                 void OnEnterBoudoir(FloorplanEvent subEvt)
@@ -148,6 +151,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Tunnel":
+                break;
                 //surprise if reach the edge?
                 int exitId = (floorplan.entranceId + 2) % 4;
                 if (!GridManager.instance.ValidCoordinate
@@ -200,6 +204,7 @@ public class EffectsManager : MonoBehaviour
                     floorplan.AddItemToFloorplan(atticItems.PickRandom());
                 break;
             case "Walk-In Closet":
+                break;
                 RarityPicker<Item> walkinClosetItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 int walkinClosetItemCount = 4;
                 if (NumberUtil.ContainsBytes((int)draftedFloorplan.Category, (int)FloorCategory.Hallway))
@@ -209,6 +214,7 @@ public class EffectsManager : MonoBehaviour
                     floorplan.AddItemToFloorplan(walkinClosetItems.PickRandom());
                 break;
             case "Hallway Closet":
+                break;
                 RarityPicker<Item> hallwayClosetItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 int hallwayClosetItemCount = 2;
                 if (NumberUtil.ContainsBytes((int)draftedFloorplan.Category, (int)FloorCategory.Hallway))
@@ -443,6 +449,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Gallery":
+                break;
                 int visits = 0;
                 floorplan.pointBonus.Add(() => visits);
                 GameEvent.OnEnterFloorplan += OnEnterGallery;
@@ -475,8 +482,54 @@ public class EffectsManager : MonoBehaviour
 
     public static void AddFloorplanEffect(Floorplan floorplan)
     {
+        Floorplan draftedFloorplan = floorplan.DraftedFrom();
         switch (floorplan.Name)
         {
+            case "Bathroom":
+                floorplan.TheFirstTime().PlayerEnterFloorplan().Do(_ =>
+                {
+                    int currentSteps = Player.steps;
+                    currentSteps = Mathf.CeilToInt(currentSteps / 10f);
+                    Player.ChangeSteps((currentSteps * 10) - Player.steps);
+                });
+                break;
+            case "Bedroom":
+                floorplan.TheFirstTime().PlayerExitFloorplan()
+                    .Do(_ => Player.ChangeSteps(floorplan.CalculatePoints()));
+                break;
+            case "Boudoir":
+                bool isInBoudoir = false;
+                floorplan.EveryTime().FloorplansAreDrawn().Where(DraftedFromHere).Do(evt =>
+                {
+                    int restroomCount = 0;
+                    for (int i = 0; i < evt.drawnFloorplans.Length; i++)
+                    {
+                        if (!NumberUtil.ContainsBytes((int)evt.drawnFloorplans[i].Category,
+                                (int)FloorCategory.RestRoom)) continue;
+                        restroomCount++;
+                    }
+
+                    if (restroomCount > 0) return;
+                    List<Floorplan> possibleRestroom = new();
+                    RarityPicker<Floorplan> modifiedList = new();
+                    for (int i = 0; i < evt.possibleFloorplans.Count; i++)
+                    {
+                        Floorplan restRoom = evt.possibleFloorplans[i];
+                        if (!NumberUtil.ContainsBytes((int)restRoom.Category, (int)FloorCategory.RestRoom))
+                            continue;
+                        //check if it is selected already
+                        if (restRoom == evt.drawnFloorplans[0] ||
+                            restRoom == evt.drawnFloorplans[1] ||
+                            restRoom == evt.drawnFloorplans[2]) continue;
+                        modifiedList.AddToPool(restRoom, restRoom.Rarity);
+                        possibleRestroom.Add(restRoom);
+                    }
+
+                    if (possibleRestroom.Count <= 0) return;
+                    int id = Random.Range(0, 2);
+                    evt.drawnFloorplans[id] = modifiedList.PickRandom();
+                });
+                break;
             case "Bunk Room":
                 //double draft
                 floorplan.TheFirstTime().
@@ -510,6 +563,56 @@ public class EffectsManager : MonoBehaviour
                             ChangePlayerSteps(5);
                     });
                 break;
+            case "Gallery":
+                int visits = 0;
+                floorplan.pointBonus.Add(() => visits);
+                floorplan.EveryTime().PlayerEnterFloorplan().Where(_ => Player.coins > 0).Do(_ =>
+                {
+                    Player.ChangeCoins(-1);
+                    visits++;
+                });
+                break;
+            case "Hallway Closet":
+                RarityPicker<Item> hallwayClosetItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
+                int hallwayClosetItemCount = 2;
+                if (!ReferenceEquals(draftedFloorplan, null) &&
+                    NumberUtil.ContainsBytes((int)draftedFloorplan.Category, (int)FloorCategory.Hallway))
+                    hallwayClosetItemCount += 1;
+                
+                for (int i = 0; i < hallwayClosetItemCount; i++)
+                    floorplan.AddItemToFloorplan(hallwayClosetItems.PickRandom());
+                break;
+            case "Tunnel":
+                //Aways draw a tunnel when drafting from tunnel
+                floorplan.EveryTime().FloorplansAreDrawn().Where(DraftedFromHere).Do(evt =>
+                {
+                    Floorplan tunnel = floorplan.original.CreateInstance(Floorplan.IDToDirection(floorplan.entranceId));
+                    int id = Random.Range(0, 2);
+                    evt.drawnFloorplans[id] = tunnel;
+                });
+                //surprise if reach the edge
+                int exitId = (floorplan.entranceId + 2) % 4;
+                if (!GridManager.instance.ValidCoordinate
+                        (floorplan.coordinate + Floorplan.IDToDirection(exitId)))
+                {
+                    floorplan.connections[exitId] = false;
+                    floorplan.AddItemToFloorplan(new Key(5));
+                    floorplan.OnChanged?.Invoke();
+                }
+                break;
+            case "Utility Closet":
+                //power all rooms of the same category
+                foreach (var room in GameManager.floorplanDict.Values)
+                {
+                    if (!NumberUtil.ContainsAnyBits((int)room.Category, (int)floorplan.Category)) continue;
+                    Debug.Log($"Powering {room.Name}");
+                    room.pointMult.Add(() => 2);
+                }
+                //power all rooms of the same category
+                floorplan.EveryTime().AnyFloorplanIsDrafted().
+                    Where(IsNot(floorplan), MatchCategoryWith(floorplan)).
+                    PowerThatFloorplan();
+                break;
             case "Vault":
                 int lastRoomCount = 0;
                 floorplan.EveryTime().PlayerEnterFloorplan().Do(_ =>
@@ -534,20 +637,19 @@ public class EffectsManager : MonoBehaviour
                         }
                     });
                 break;
-            case "Utility Closet":
-                //power all rooms of the same category
-                foreach (var room in GameManager.floorplanDict.Values)
-                {
-                    if (!NumberUtil.ContainsAnyBits((int)room.Category, (int)floorplan.Category)) continue;
-                    Debug.Log($"Powering {room.Name}");
-                    room.pointMult.Add(() => 2);
-                }
-                //power all rooms of the same category
-                floorplan.EveryTime().AnyFloorplanIsDrafted().
-                    Where(IsNot(floorplan), MatchCategoryWith(floorplan)).
-                    PowerThatFloorplan();
+            case "Walk-In Closet":
+                RarityPicker<Item> walkinClosetItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
+                int walkinClosetItemCount = 4;
+                if (!ReferenceEquals(draftedFloorplan, null) &&
+                    NumberUtil.ContainsBytes((int)draftedFloorplan.Category, (int)FloorCategory.Hallway))
+                    walkinClosetItemCount += 2;
+
+                for (int i = 0; i < walkinClosetItemCount; i++)
+                    floorplan.AddItemToFloorplan(walkinClosetItems.PickRandom());
                 break;
         }
+
+        bool DraftedFromHere<T>(T evt) where T : Event => Helpers.CurrentFloorplan() == floorplan;
     }
 
     public static Func<FloorplanEvent, bool> IsOfCategory(FloorCategory type) =>
