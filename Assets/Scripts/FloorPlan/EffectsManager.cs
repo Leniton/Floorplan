@@ -122,6 +122,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Guest Bedroom":
+                break;
                 GameEvent.OnEnterFloorplan += GuestBedroomStepsEffect;
                 void GuestBedroomStepsEffect(FloorplanEvent subEvt)
                 {
@@ -139,6 +140,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Great Hall":
+                break;
                 //extra points for each different type of room connected
                 FloorCategory connectedCategories = 0;
                 floorplan.pointBonus.Add(() => NumberUtil.SeparateBits((int)connectedCategories).Length * 2);
@@ -198,6 +200,7 @@ public class EffectsManager : MonoBehaviour
                 }
                 break;
             case "Attic":
+                break;
                 RarityPicker<Item> atticItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 int atticItemCount = 6;
                 for (int i = 0; i < atticItemCount; i++)
@@ -224,6 +227,7 @@ public class EffectsManager : MonoBehaviour
                     floorplan.AddItemToFloorplan(hallwayClosetItems.PickRandom());
                 break;
             case "Cloister":
+                break;
                 RarityPicker<Item> cloisterItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 cloisterItems.ChangeRarities(1,0,0,0);
                 floorplan.AddItemToFloorplan(cloisterItems.PickRandom());
@@ -485,6 +489,12 @@ public class EffectsManager : MonoBehaviour
         Floorplan draftedFloorplan = floorplan.DraftedFrom();
         switch (floorplan.Name)
         {
+            case "Attic":
+                RarityPicker<Item> atticItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
+                int atticItemCount = 6;
+                for (int i = 0; i < atticItemCount; i++)
+                    floorplan.AddItemToFloorplan(atticItems.PickRandom());
+                break;
             case "Bathroom":
                 floorplan.TheFirstTime().PlayerEnterFloorplan().Do(_ =>
                 {
@@ -544,6 +554,11 @@ public class EffectsManager : MonoBehaviour
                 floorplan.EveryTime().FloorplanConnected().Where(_ => retrigger = !retrigger)
                     .Do(evt => Helpers.ConnectFloorplans(evt.baseFloorplan, evt.connectedFloorplan));
                 break;
+            case "Cloister":
+                RarityPicker<Item> cloisterItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
+                cloisterItems.ChangeRarities(1,0,0,0);
+                floorplan.AddItemToFloorplan(cloisterItems.PickRandom());
+                break;
             case "Den":
                 floorplan.TheFirstTime().FloorplanIsDrafted().AddItemToFloorplan(new Key(1));
                 break;
@@ -571,6 +586,20 @@ public class EffectsManager : MonoBehaviour
                     Player.ChangeCoins(-1);
                     visits++;
                 });
+                break;
+            case "Great Hall":
+                //extra points for each different type of room connected
+                FloorCategory connectedCategories = 0;
+                floorplan.pointBonus.Add(() => NumberUtil.SeparateBits((int)connectedCategories).Length * 2);
+                floorplan.EveryTime().FloorplanConnected()
+                    .Do(evt => connectedCategories |= evt.connectedFloorplan.Category);
+                break;
+            case "Guest Bedroom":
+                //essentialy free to move in
+                floorplan.EveryTime().PlayerEnterFloorplan().ChangePlayerSteps(2);
+                //combine points of connected rest rooms
+                floorplan.EveryTime().FloorplanConnected().Where(IsOfCategory(FloorCategory.RestRoom)).Do(evt =>
+                    floorplan.pointBonus.Add(evt.connectedFloorplan.CalculatePoints));
                 break;
             case "Hallway Closet":
                 RarityPicker<Item> hallwayClosetItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
