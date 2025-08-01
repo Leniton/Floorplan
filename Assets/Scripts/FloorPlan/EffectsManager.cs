@@ -487,9 +487,9 @@ public class EffectsManager : MonoBehaviour
                             GameManager.floorplanDict[evt.Coordinates]));
                     });
                 //double connect
-                floorplan.TheFirstTime().//has to be everytime; but need to fix stackOverflow
-                    FloorplanConnected().Do(evt =>
-                        Helpers.ConnectFloorplans(evt.baseFloorplan, evt.connectedFloorplan));
+                bool retrigger = false;
+                floorplan.EveryTime().FloorplanConnected().Where(_ => retrigger = !retrigger)
+                    .Do(evt => Helpers.ConnectFloorplans(evt.baseFloorplan, evt.connectedFloorplan));
                 break;
             case "Den":
                 floorplan.TheFirstTime().FloorplanIsDrafted().AddItemToFloorplan(new Key(1));
