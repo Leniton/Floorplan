@@ -1,3 +1,4 @@
+using AddressableAsyncInstances;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,16 +11,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private DraftManager draftManager;
     [SerializeField] private GridManager gridManager;
     [SerializeField] private Player player;
-    [SerializeField] private FloorplanUI floorplanPrefab;
     [SerializeField] private Floorplan entrance;
     [SerializeField] private Image currentImage;
     [SerializeField] private Button finishButton;
 
     public static Dictionary<Vector2Int, Floorplan> floorplanDict;
 
+    private FloorplanUI floorplanPrefab;
     private Vector2Int currentDraftPosition;
 
-    private void Start()
+    private void Awake()
     {
         floorplanDict = new();
         player.OnMove += OnMoveSlot;
@@ -28,11 +29,24 @@ public class GameManager : MonoBehaviour
         gridManager.OnMove += TriggerFloorplanEnterEvent;
         finishButton.onClick.AddListener(FinishRun);
 
+        Checklist loadedAssets = new(1);
+        loadedAssets.onCompleted += Setup;
+        gridManager.onDoneLoading += loadedAssets.FinishStep;
+        loadedAssets.AddStep();
+        AAComponent<FloorplanUI>.LoadComponent("FloorplanUI", prefab =>
+        {
+            floorplanPrefab = prefab;
+            loadedAssets.FinishStep();
+        });
+    }
+
+    private void Setup()
+    {
         //add entrance hall
+        GridManager.instance = gridManager;
         currentDraftPosition = gridManager.currentPosition;
         Floorplan floorplan = entrance.CreateInstance(Vector2Int.left);
         PlaceFloorplan(floorplan);
-
         UIManager.ShowMessage($"Current objective:\n\n <b>{PointsManager.currentRequirement} points");
     }
 

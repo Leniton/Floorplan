@@ -2,18 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
-public class GridManager : MonoBehaviour
+public class GridManager : SetupComponent
 {
     public const int xSize = 5;
     public const int ySize = 5;
 
-    [SerializeField] private bool isInstance = false;
-
-    [SerializeField] private GameObject slotPrefab;
+    [SerializeField] private string prefabPath;
     [SerializeField] private GridLayoutGroup grid;
 
+    private GameObject slotPrefab;
     private Vector2Int lastCoordinate;
     private Vector2Int coordinate;
     private GameObject[] slots;
@@ -29,18 +29,21 @@ public class GridManager : MonoBehaviour
 
     public static GridManager instance;
 
-    private void Awake()
+    protected override void Awake()
     {
         grid ??= gameObject.GetComponent<GridLayoutGroup>();
         rectTransform = (RectTransform)grid.transform;
+        Addressables.LoadAssetAsync<GameObject>(prefabPath).Completed += operation =>
+        {
+            slotPrefab = operation.Result;
+            for (int i = 0; i < slots.Length; i++)
+                slots[i] = Instantiate(slotPrefab, transform);
+            onDoneLoading?.Invoke();
+        };
         slots = new GameObject[xSize * ySize];
-        for (int i = 0; i < slots.Length; i++)
-            slots[i] = Instantiate(slotPrefab, transform);
 
         coordinate = new((xSize / 2), 0);
         UpdatePosition(false);
-        if (isInstance)
-            instance = this;
     }
 
     public void ShiftSelection(Vector2Int direction)

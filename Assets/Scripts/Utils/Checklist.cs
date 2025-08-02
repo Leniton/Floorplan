@@ -18,7 +18,9 @@ public class Checklist
 
     public void AddStep(int amount = 1) => requiredSteps += amount;
 
-    public void FinishStep(int stepAmount = 1)
+    public void FinishStep() => FinishSteps();
+
+    public void FinishSteps(int stepAmount = 1)
     {
         currentSteps += stepAmount;
         currentSteps = Math.Min(currentSteps, requiredSteps);
