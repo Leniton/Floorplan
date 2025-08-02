@@ -97,9 +97,9 @@ public class GameManager : MonoBehaviour
         floorplanRect.anchorMax = Vector2.one;
         floorplanRect.sizeDelta = Vector2.zero;
 
+        EffectsManager.AddFloorplanEffect(floorplan);
         floorplanDict[currentDraftPosition] = floorplan;
         floorplan.coordinate = currentDraftPosition;
-        EffectsManager.AddFloorplanEffect(floorplan);
         floorplan.onDrafted?.Invoke(new(currentDraftPosition));
         GameEvent.onDraftedFloorplan?.Invoke(new(currentDraftPosition, floorplan));
         

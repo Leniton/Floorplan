@@ -262,6 +262,21 @@ public static class EffectsManager
                 List<PurchaseData> kitchenList = new () { apple, banana, orange };
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, kitchenList);
                 break;
+            case "Master Bedroom":
+                int selfBonus = 0;
+                int otherBonus = 5;
+                floorplan.pointBonus.Add(() => selfBonus);
+                foreach (var room in GameManager.floorplanDict.Values)
+                {
+                    if (!NumberUtil.ContainsAnyBits((int)room.Category, (int)floorplan.Category)) continue;
+                    Debug.Log($"buffing {room.Name}");
+                    selfBonus += 2;
+                    room.pointBonus.Add(() => otherBonus);
+                }
+                floorplan.EveryTime().AnyFloorplanIsDrafted().
+                    Where(IsOfCategory(FloorCategory.RestRoom)).
+                    AddPointsToThatFloorplan(otherBonus).Do(_ => selfBonus += 2);
+                break;
             case "Pantry":
                 floorplan.AddItemToFloorplan(new Coin());
                 floorplan.AddItemToFloorplan(new Food());
@@ -402,12 +417,12 @@ public static class EffectsManager
         (a) => GameEvent.OnCollectItem -= a);
 
     #endregion
-    
+
     #region Effects
-    public static void Do<T>(this EventListener<Action<T>, T> listener, Action<T> action) where T : Event
+    public static EventListener<Action<T>, T> Do<T>(this EventListener<Action<T>, T> listener, Action<T> action) where T : Event
     {
         listener.AddAction(DoAction);
-
+        return listener;
         void DoAction(T evt)
         {
             bool fulfilConditions = true;
@@ -424,36 +439,36 @@ public static class EffectsManager
     }
 
     //Player changes
-    public static void ChangePlayerSteps<T>(this EventListener<Action<T>,T> listener, int amount) where T : Event =>
+    public static EventListener<Action<T>, T> ChangePlayerSteps<T>(this EventListener<Action<T>,T> listener, int amount) where T : Event =>
         listener.Do(_ => Player.ChangeSteps(amount));
-    public static void ChangePlayerCoins<T>(this EventListener<Action<T>,T> listener, int amount) where T : Event =>
+    public static EventListener<Action<T>,T> ChangePlayerCoins<T>(this EventListener<Action<T>,T> listener, int amount) where T : Event =>
         listener.Do(_ => Player.ChangeCoins(amount));
-    public static void ChangePlayerKeys<T>(this EventListener<Action<T>,T> listener, int amount) where T : Event =>
+    public static EventListener<Action<T>,T> ChangePlayerKeys<T>(this EventListener<Action<T>,T> listener, int amount) where T : Event =>
         listener.Do(_ => Player.ChangeKeys(amount));
 
     //Floorplan changes
-    public static void AddItemToFloorplan<T>(this EventListener<Action<T>,T> listener, Item item) where T : Event =>
+    public static EventListener<Action<T>,T> AddItemToFloorplan<T>(this EventListener<Action<T>,T> listener, Item item) where T : Event =>
         listener.Do(_ => listener.effect.floorplan.AddItemToFloorplan(item));
-    public static void AddItemToThatFloorplan<T>(this EventListener<Action<T>,T> listener, Item item) where T : CoordinateEvent =>
+    public static EventListener<Action<T>,T> AddItemToThatFloorplan<T>(this EventListener<Action<T>,T> listener, Item item) where T : CoordinateEvent =>
         listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].AddItemToFloorplan(item));
-    public static void AddPointsToFloorplan<T>(this EventListener<Action<T>,T> listener, int amount) where T : Event =>
+    public static EventListener<Action<T>,T> AddPointsToFloorplan<T>(this EventListener<Action<T>,T> listener, int amount) where T : Event =>
         listener.Do(_ => listener.effect.floorplan.pointBonus.Add(() => amount));
-    public static void AddPointBonusToFloorplan<T>(this EventListener<Action<T>,T> listener, Func<int> amount) where T : Event =>
+    public static EventListener<Action<T>,T> AddPointBonusToFloorplan<T>(this EventListener<Action<T>,T> listener, Func<int> amount) where T : Event =>
         listener.Do(_ => listener.effect.floorplan.pointBonus.Add(amount));
-    public static void PowerFloorplan<T>(this EventListener<Action<T>,T> listener) where T : Event =>
+    public static EventListener<Action<T>,T> PowerFloorplan<T>(this EventListener<Action<T>,T> listener) where T : Event =>
         listener.Do(_ => listener.effect.floorplan.pointMult.Add(() => 2));
-    public static void AddPointsToThatFloorplan<T>(this EventListener<Action<T>,T> listener, int amount) where T : CoordinateEvent =>
+    public static EventListener<Action<T>,T> AddPointsToThatFloorplan<T>(this EventListener<Action<T>,T> listener, int amount) where T : CoordinateEvent =>
         listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].pointBonus.Add(() => amount));
-    public static void AddPointBonusToThatFloorplan<T>(this EventListener<Action<T>,T> listener, Func<int> amount) where T : CoordinateEvent =>
+    public static EventListener<Action<T>,T> AddPointBonusToThatFloorplan<T>(this EventListener<Action<T>,T> listener, Func<int> amount) where T : CoordinateEvent =>
         listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].pointBonus.Add(amount));
-    public static void PowerThatFloorplan<T>(this EventListener<Action<T>, T> listener) where T : CoordinateEvent =>
+    public static EventListener<Action<T>,T> PowerThatFloorplan<T>(this EventListener<Action<T>, T> listener) where T : CoordinateEvent =>
         listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].pointMult.Add(() => 2));
 
-    public static void SetupFloorplanShop<T>(this EventListener<Action<T>, T> listener, string title, List<PurchaseData> shopList)
+    public static EventListener<Action<T>,T> SetupFloorplanShop<T>(this EventListener<Action<T>, T> listener, string title, List<PurchaseData> shopList)
         where T : CoordinateEvent
     {
         listener.Do(CreateShop);
-
+        return listener;
         void CreateShop(CoordinateEvent evt)
         {
             if (!GameManager.floorplanDict.TryGetValue(evt.Coordinates, out var floorplan)) return;

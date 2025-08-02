@@ -65,6 +65,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ec968dd14a917848a10952ca25c25e6
+    m_Address: MasterBedroom
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4ecd842046bc3e240a1dae4d0183cbfd
     m_Address: Vault
     m_ReadOnly: 0
