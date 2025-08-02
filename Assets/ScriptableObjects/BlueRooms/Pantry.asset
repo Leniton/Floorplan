@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c2ec7ddf6ecb914e8686ca425ec3201, type: 3}
-  m_Name: Terrace
+  m_Name: Pantry
   m_EditorClassIdentifier: 
-  Name: Terrace
-  Description: Contains a uncommon item
+  Name: Pantry
+  Description: Contains coins and food
   Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
   Category: 4
   Type: -2
   Rarity: 0
-  keyCost: 1
-  basePoints: 2
+  keyCost: 0
+  basePoints: 1
   entranceId: 0
   connections: 
   connectedFloorplans: []

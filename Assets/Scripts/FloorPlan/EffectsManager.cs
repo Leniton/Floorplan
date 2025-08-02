@@ -262,6 +262,10 @@ public static class EffectsManager
                 List<PurchaseData> kitchenList = new () { apple, banana, orange };
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, kitchenList);
                 break;
+            case "Pantry":
+                floorplan.AddItemToFloorplan(new Coin());
+                floorplan.AddItemToFloorplan(new Food());
+                break;
             case "Pump Room":
                 floorplan.EveryTime().FloorplanConnected().AddPointBonusToThatFloorplan(floorplan.CalculatePoints);
                 break;
