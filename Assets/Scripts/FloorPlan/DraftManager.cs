@@ -1,10 +1,10 @@
+using AddressableAsyncInstances;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -13,8 +13,6 @@ public class DraftManager : MonoBehaviour
     [SerializeField] private GameObject background;
     [SerializeField] private GameObject draftScreen;
     [SerializeField] private Button rerollButton;
-    [SerializeField] private FloorplanDetails floorplanUI;
-    [SerializeField] private List<Floorplan> allFloorplans;
 
     private int amountDrafted = 3;
     private List<FloorplanDetails> draftList;
@@ -38,77 +36,74 @@ public class DraftManager : MonoBehaviour
 
     private void Awake()
     {
-        draftList = new(amountDrafted);
-        for (int i = 0; i < amountDrafted; i++)
+        AAComponent<FloorplanDetails>.LoadComponent("FloorplanDetails", prefab =>
         {
-            FloorplanDetails instance = Instantiate(floorplanUI, draftScreen.transform);
-            instance.onPickedFloorplan += PickFloorplan;
-            draftList.Add(instance);
-        }
-
-        draftPool = new(allFloorplans.Count);
-        for (int i = 0; i < allFloorplans.Count; i++)
-            draftPool.Add(allFloorplans[i].CreateInstance(Vector2Int.up));
+            draftList = new(amountDrafted);
+            for (int i = 0; i < amountDrafted; i++)
+            {
+                FloorplanDetails instance = Instantiate(prefab, draftScreen.transform);
+                instance.onPickedFloorplan += PickFloorplan;
+                draftList.Add(instance);
+            }
+        });
 
         rerollButton.onClick.AddListener(RedrawFloorplans);
         rerollCount = rerollButton.GetComponentInChildren<TMP_Text>();
         background.SetActive(false);
         draftScreen.SetActive(false);
 
-        float finalCommonRate = .4f;
-        float finalUncommonRate = .3f;
-        float finalRareRate = .28f;
-        float finalLegendRate = .02f;
-
-        commonGrowth = (finalCommonRate - commonRate) / (GridManager.ySize - 1);
-        uncommonGrowth = (finalUncommonRate - uncommonRate) / (GridManager.ySize - 1);
-        rareGrowth = (finalRareRate - rareRate) / (GridManager.ySize - 1);
-        legendGrowth = (finalLegendRate - legendRate) / (GridManager.ySize - 1);
-
-        int[] rarityCount = new int[4];
-        int[] costCount = new int[5];
-        Dictionary<FloorType, int> typesCount = new();
-        Dictionary<int, int> pointsCount = new();
-        for (int i = 0; i < draftPool.Count; i++)
+        draftPool = new();
+        Addressables.LoadAssetsAsync<Floorplan>("BaseFloorplan", floorplan =>
+        draftPool.Add(floorplan.CreateInstance(Vector2Int.up))).
+        Completed += _ =>
         {
-            int rarity = (int)draftPool[i].Rarity;
-            rarityCount[rarity]++;
-            costCount[draftPool[i].keyCost]++;
+            float finalCommonRate = .4f;
+            float finalUncommonRate = .3f;
+            float finalRareRate = .28f;
+            float finalLegendRate = .02f;
 
-            if (!typesCount.ContainsKey(draftPool[i].Type)) typesCount.Add(draftPool[i].Type, 1);
-            else typesCount[draftPool[i].Type]++;
+            commonGrowth = (finalCommonRate - commonRate) / (GridManager.ySize - 1);
+            uncommonGrowth = (finalUncommonRate - uncommonRate) / (GridManager.ySize - 1);
+            rareGrowth = (finalRareRate - rareRate) / (GridManager.ySize - 1);
+            legendGrowth = (finalLegendRate - legendRate) / (GridManager.ySize - 1);
 
-            if (!pointsCount.ContainsKey(draftPool[i].basePoints)) pointsCount.Add(draftPool[i].basePoints, 1);
-            else pointsCount[draftPool[i].basePoints]++;
-        }
+            int[] rarityCount = new int[4];
+            int[] costCount = new int[5];
+            Dictionary<FloorType, int> typesCount = new();
+            Dictionary<int, int> pointsCount = new();
+            for (int i = 0; i < draftPool.Count; i++)
+            {
+                int rarity = (int)draftPool[i].Rarity;
+                rarityCount[rarity]++;
+                costCount[draftPool[i].keyCost]++;
 
-        StringBuilder sb = new("Rarities:");
-        for (int i = 0; i < rarityCount.Length; i++)
-        {
-            sb.Append($"\n{(Rarity)i}: {rarityCount[i]}");
-        }
-        Debug.LogWarning(sb.ToString());
+                if (!typesCount.ContainsKey(draftPool[i].Type)) typesCount.Add(draftPool[i].Type, 1);
+                else typesCount[draftPool[i].Type]++;
 
-        sb = new($"Costs:");
-        for (int i = 0; i < costCount.Length; i++)
-        {
-            sb.Append($"\n{i}: {costCount[i]}");
-        }
-        Debug.LogWarning(sb.ToString());
+                if (!pointsCount.ContainsKey(draftPool[i].basePoints)) pointsCount.Add(draftPool[i].basePoints, 1);
+                else pointsCount[draftPool[i].basePoints]++;
+            }
 
-        sb = new($"Types:");
-        foreach (var type in typesCount)
-        {
-            sb.Append($"\n{type.Key}: {type.Value}");
-        }
-        Debug.LogWarning(sb.ToString());
+            StringBuilder sb = new("Rarities:");
+            for (int i = 0; i < rarityCount.Length; i++)
+                sb.Append($"\n{(Rarity)i}: {rarityCount[i]}");
+            Debug.LogWarning(sb.ToString());
 
-        sb = new($"Points:");
-        foreach (var point in pointsCount)
-        {
-            sb.Append($"\n{point.Key}: {point.Value}");
-        }
-        Debug.LogWarning(sb.ToString());
+            sb = new($"Costs:");
+            for (int i = 0; i < costCount.Length; i++)
+                sb.Append($"\n{i}: {costCount[i]}");
+            Debug.LogWarning(sb.ToString());
+
+            sb = new($"Types:");
+            foreach (var type in typesCount)
+                sb.Append($"\n{type.Key}: {type.Value}");
+            Debug.LogWarning(sb.ToString());
+
+            sb = new($"Points:");
+            foreach (var point in pointsCount)
+                sb.Append($"\n{point.Key}: {point.Value}");
+            Debug.LogWarning(sb.ToString());
+        };
     }
 
     public void DraftFloorplan(Vector2Int direction, List<Vector2Int> possibleSlots)
