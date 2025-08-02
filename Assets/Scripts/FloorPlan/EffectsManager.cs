@@ -317,7 +317,7 @@ public static class EffectsManager
                 }
                 //power all rooms of the same category
                 floorplan.EveryTime().AnyFloorplanIsDrafted().
-                    Where(IsNot(floorplan), MatchCategoryWith(floorplan)).
+                    Where(MatchCategoryWith(floorplan)).
                     PowerThatFloorplan();
                 break;
             case "Vault":

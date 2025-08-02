@@ -18,7 +18,7 @@ MonoBehaviour:
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Category: 1
   Type: 1
-  Rarity: 0
+  Rarity: 3
   keyCost: 2
   basePoints: 0
   entranceId: 0
