@@ -262,6 +262,13 @@ public static class EffectsManager
                 List<PurchaseData> kitchenList = new () { apple, banana, orange };
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, kitchenList);
                 break;
+            case "Library":
+                floorplan.EveryTime().FloorplansAreDrawn().Where(DraftedFromHere).Do(evt =>
+                {
+                    for (int i = 0; i < evt.drawnFloorplans.Length; i++)
+                        evt.drawnFloorplans[i].keyCost = 0;
+                });
+                break;
             case "Master Bedroom":
                 int selfBonus = 0;
                 int otherBonus = 5;

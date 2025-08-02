@@ -38,8 +38,8 @@ public class FloorplanDetails : MonoBehaviour
     private void InternalSetup()
     {
         floorplanUI.Setup(currentFloorplan);
-        int currentPoints = this.currentFloorplan.CalculatePoints();
-        points.text = currentPoints != 0 ? $"+{currentPoints}" : string.Empty;
+        int currentPoints = currentFloorplan.CalculatePoints();
+        points.text = (currentPoints > 0 ? "+" : string.Empty) + $"{currentPoints}";
         cost.gameObject.SetActive(currentFloorplan.keyCost > 0);
         cost.text = currentFloorplan.keyCost.ToString();
         description.text = currentFloorplan.Description;
