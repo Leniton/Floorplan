@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] private CircleLayoutGroup layoutGroup;
+    [SerializeField] private LenixSOLayoutGroup layoutGroup;
     [SerializeField] private float expandRadius;
 
     private HoverButton[] hoverButtons;

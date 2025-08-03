@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -15,6 +16,7 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if(!interactable) return;
         print("pointer enter");
     }
 
@@ -25,6 +27,7 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (!interactable) return;
         print("pointer up");
     }
 
