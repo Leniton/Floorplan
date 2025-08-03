@@ -6,8 +6,9 @@ using UnityEngine;
 public abstract class LenixSOLayoutGroup : MonoBehaviour
 {
     [Tooltip("If true this layout group will update its positions every frame")] public bool isStatic = false;
+    public float spacing = 50;
 
-    [SerializeField] protected List<RectTransform> overrideElements;
+    [SerializeField] protected List<RectTransform> overrideElements = new();
 
     protected virtual void OnEnable() => AdjustElements();
 
@@ -15,6 +16,21 @@ public abstract class LenixSOLayoutGroup : MonoBehaviour
     {
         if (isStatic && Application.isPlaying) return; //Check for application playing to ignore it when in editor
         AdjustElements();
+    }
+
+    public RectTransform[] GetEnabledElements()
+    {
+        if (overrideElements is { Count: <= 0 })
+        {
+            List<RectTransform> enabledChilds = new(transform.childCount);
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                RectTransform rectTransform = (RectTransform)transform.GetChild(i);
+                if (rectTransform.gameObject.activeSelf) enabledChilds.Add(rectTransform);
+            }
+            return enabledChilds.ToArray();
+        }
+        return overrideElements.ToArray();
     }
 
     public abstract void AdjustElements();

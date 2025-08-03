@@ -8,9 +8,17 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     [SerializeField] private CircleLayoutGroup layoutGroup;
     [SerializeField] private float expandRadius;
 
-    bool expand;
+    private HoverButton[] hoverButtons;
+
+    private bool expand;
     private Coroutine moveCoroutine;
     private bool moving => moveCoroutine != null;
+
+    private void Awake()
+    {
+        hoverButtons = layoutGroup.GetComponentsInChildren<HoverButton>();
+        moveCoroutine = StartCoroutine(MoveAnimation());
+    }
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -21,6 +29,12 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        //trickle down
+        if (eventData.pointerCurrentRaycast.gameObject?.TryGetComponent<HoverButton>(out var button) ?? false)
+        {
+            button.OnPointerUp(eventData);
+        }
+
         expand = false;
         if (!moving)
             moveCoroutine = StartCoroutine(MoveAnimation());
@@ -31,7 +45,7 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         const float duration = .08f;
 
         bool expandLayout = !expand;
-
+        SetHoverButtonsInteractable(false);
         while (expandLayout != expand)
         {
             expandLayout = expand;
@@ -41,15 +55,21 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             while (time < duration)
             {
                 float scaledTime = time / duration;
-                layoutGroup.radius = Mathf.Lerp(origin, goal, scaledTime);
+                layoutGroup.spacing = Mathf.Lerp(origin, goal, scaledTime);
                 layoutGroup.AdjustElements();
                 yield return null;
                 time += Time.deltaTime;
             }
-            layoutGroup.radius = goal;
+            layoutGroup.spacing = goal;
             layoutGroup.AdjustElements();
         }
-
+        SetHoverButtonsInteractable(expandLayout);
         moveCoroutine = null;
+    }
+
+    private void SetHoverButtonsInteractable(bool value)
+    {
+        for (int i = 0; i < hoverButtons.Length; i++)
+            hoverButtons[i].SetInteractable(value);
     }
 }

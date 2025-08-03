@@ -9,7 +9,6 @@ public class CircleLayoutGroup : LenixSOLayoutGroup
 
     [Range(0, 1)] public float offset;
     public Rotation rotation = Rotation.Clockwise;
-    public float radius = 50;
     public float startPadding = 0;
     public float endPadding = 0;
 
@@ -20,24 +19,7 @@ public class CircleLayoutGroup : LenixSOLayoutGroup
 
     public override void AdjustElements()
     {
-        List<RectTransform> enabledChilds = new();
-        if (overrideElements is { Count: <= 0 })
-        {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                RectTransform rectTransform = (RectTransform)transform.GetChild(i);
-                if (rectTransform.gameObject.activeSelf) enabledChilds.Add(rectTransform);
-            }
-        }
-        else
-        {
-            for (int i = 0; i < overrideElements.Count; i++)
-            {
-                RectTransform rectTransform = overrideElements[i];
-                if (rectTransform.gameObject.activeSelf) enabledChilds.Add(rectTransform);
-            }
-        }
-        RectTransform[] childs = enabledChilds.ToArray();
+        RectTransform[] childs = GetEnabledElements();
         int elementPositions = overlapEnd ? 1 : 0;
         float progression = Mathf.Clamp01((1 - endPadding) - startPadding) / (childs.Length - elementPositions);
         float currentP = offset + startPadding;
@@ -50,8 +32,8 @@ public class CircleLayoutGroup : LenixSOLayoutGroup
             float y = Mathf.Cos(2 * Mathf.PI * proportion * order);
 
             Vector2 pos = childs[i].anchoredPosition;
-            pos.x = x * radius;
-            pos.y = y * radius;
+            pos.x = x * spacing;
+            pos.y = y * spacing;
             childs[i].anchoredPosition = pos;
 
             Vector3 rotation = childs[i].eulerAngles;
