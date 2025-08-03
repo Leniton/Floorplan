@@ -4,8 +4,8 @@ using UnityEngine;
 [ExecuteAlways]
 public class CircleLayoutGroup : LenixSOLayoutGroup
 {
-    [Space(10), Tooltip("Will the final object overlap with the first one?")] 
-    public bool overlapEnd = false;
+    [Space(10), Tooltip("how many extra elements will be accounted for?")]
+    public int endOffset = 0;
 
     [Range(0, 1)] public float offset;
     public Rotation rotation = Rotation.Clockwise;
@@ -20,8 +20,8 @@ public class CircleLayoutGroup : LenixSOLayoutGroup
     public override void AdjustElements()
     {
         RectTransform[] childs = GetEnabledElements();
-        int elementPositions = overlapEnd ? 1 : 0;
-        float progression = Mathf.Clamp01((1 - endPadding) - startPadding) / (childs.Length - elementPositions);
+        int extraElements = endOffset;
+        float progression = Mathf.Clamp01((1 - endPadding) - startPadding) / (childs.Length + extraElements);
         float currentP = offset + startPadding;
         int order = (int)rotation;
         int rotationOrder = (int)elementRotation;

@@ -384,7 +384,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -219.6901, y: -120.77562}
+  m_AnchoredPosition: {x: -217.11256, y: -125.35001}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &285864587
@@ -518,7 +518,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -215.78801, y: 127.6167}
+  m_AnchoredPosition: {x: -217.11258, y: 125.34999}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &331668987
@@ -1353,12 +1353,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isStatic: 1
   spacing: 250.7
-  overrideElements: []
-  overlapEnd: 1
+  overrideElements:
+  - {fileID: 282816531}
+  - {fileID: 331668986}
+  - {fileID: 285864586}
+  endOffset: 0
   offset: 0
   rotation: -1
   startPadding: 0
-  endPadding: 0.67
+  endPadding: 0.5
   rotateElements: 0
   elementRotation: 1
   rotationOffset: 0
