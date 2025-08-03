@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteAlways]
 public class CircleLayoutGroup : LenixSOLayoutGroup
 {
     [Space(10), Tooltip("how many extra elements will be accounted for?")]
