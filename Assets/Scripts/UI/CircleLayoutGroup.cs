@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteAlways]
-public class CircleLayoutGroup : MonoBehaviour
+public class CircleLayoutGroup : LenixSOLayoutGroup
 {
-    [Tooltip("If true this layout group will update its positions every frame")] public bool isStatic = false;
-    [Tooltip("Will the final object overlap with the first one?")] public bool overlapEnd = false;
+    [Space(10), Tooltip("Will the final object overlap with the first one?")] 
+    public bool overlapEnd = false;
 
-    [Space, Range(0, 1)] public float offset;
+    [Range(0, 1)] public float offset;
     public Rotation rotation = Rotation.Clockwise;
     public float radius = 50;
     public float startPadding = 0;
@@ -18,20 +18,7 @@ public class CircleLayoutGroup : MonoBehaviour
     public Rotation elementRotation = Rotation.Clockwise;
     [SerializeField, Range(0, 360)] private float rotationOffset;
 
-    [SerializeField] private List<RectTransform> overrideElements;
-
-    private void OnEnable()
-    {
-        AdjustElements();
-    }
-
-    private void Update()
-    {
-        if (isStatic && Application.isPlaying) return; //Check for application playing to ignore it when in editor
-        AdjustElements();
-    }
-
-    public void AdjustElements()
+    public override void AdjustElements()
     {
         List<RectTransform> enabledChilds = new();
         if (overrideElements is { Count: <= 0 })
