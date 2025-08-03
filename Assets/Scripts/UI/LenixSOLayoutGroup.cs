@@ -6,9 +6,10 @@ using UnityEngine;
 public abstract class LenixSOLayoutGroup : MonoBehaviour
 {
     [Tooltip("If true this layout group will update its positions every frame")] public bool isStatic = false;
-    public float spacing = 50;
+    public float spacing = 50; 
+    public float offset;
 
-    [SerializeField] protected List<RectTransform> overrideElements = new();
+    public List<RectTransform> overrideElements = new();
 
     protected virtual void OnEnable() => AdjustElements();
 

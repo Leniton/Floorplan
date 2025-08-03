@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class LinearLayoutGroup : LenixSOLayoutGroup
 {
-    public float offset;
     [Tooltip("direction in witch the elements will expand to")] public Vector2 direction;
 
     public override void AdjustElements()

@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: fa7128094e4598f4c8854af0c5474eeb
   m_SerializeEntries:
+  - m_GUID: 036b5041c91eebf4c8f5b80d8a7619e4
+    m_Address: HoverButton
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3958d9f0bcd99e64f958a9d8a9650994
     m_Address: FloorplanDetails
     m_ReadOnly: 0

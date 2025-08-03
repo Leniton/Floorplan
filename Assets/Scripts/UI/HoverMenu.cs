@@ -49,6 +49,10 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         while (expandLayout != expand)
         {
             expandLayout = expand;
+            if (!expandLayout)
+                for (int i = 0; i < hoverButtons.Length; i++)
+                    hoverButtons[i].ChangeOptionsVisibility(false);
+
             float goal = expandLayout ? expandRadius : 0;
             float origin = Mathf.Abs(goal - expandRadius);
             float time = 0;

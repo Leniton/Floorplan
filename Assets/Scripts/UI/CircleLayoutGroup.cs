@@ -6,7 +6,6 @@ public class CircleLayoutGroup : LenixSOLayoutGroup
     [Space(10), Tooltip("how many extra elements will be accounted for?")]
     public int endOffset = 0;
 
-    [Range(0, 1)] public float offset;
     public Rotation rotation = Rotation.Clockwise;
     public float startPadding = 0;
     public float endPadding = 0;
