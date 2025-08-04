@@ -468,7 +468,6 @@ GameObject:
   - component: {fileID: 940244118}
   - component: {fileID: 940244121}
   - component: {fileID: 940244120}
-  - component: {fileID: 940244119}
   m_Layer: 5
   m_Name: MainMenu
   m_TagString: Untagged
@@ -496,20 +495,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 225.1808, y: 225.1808}
   m_Pivot: {x: 1, y: 0}
---- !u!114 &940244119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 940244117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8932a7c01bcf824fbbb2c02ec1d2b69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  layoutGroup: {fileID: 1604066528}
-  expandRadius: 250.7
 --- !u!114 &940244120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1230,6 +1215,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1604066527}
   - component: {fileID: 1604066528}
+  - component: {fileID: 1604066529}
   m_Layer: 5
   m_Name: ButtonWheel
   m_TagString: Untagged
@@ -1287,6 +1273,20 @@ MonoBehaviour:
   rotateElements: 0
   elementRotation: 1
   rotationOffset: 0
+--- !u!114 &1604066529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1604066526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8932a7c01bcf824fbbb2c02ec1d2b69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layoutGroup: {fileID: 1604066528}
+  expandRadius: 250.7
 --- !u!1001 &1997686583
 PrefabInstance:
   m_ObjectHideFlags: 0

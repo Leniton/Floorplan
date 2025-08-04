@@ -39,7 +39,6 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         layoutRectTransform = optionsExpansion.GetComponent<RectTransform>();
         openOffset = optionsExpansion.offset;
         openSpacing = optionsExpansion.spacing;
-        ChangeOptionsVisibility(false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -67,12 +66,19 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void ChangeOptionsVisibility(bool value)
     {
         if (ReferenceEquals(optionsExpansion, null)) return;
-        //if (expand == value) return;
+        if (expand == value) return;
         expand = value;
         optionsExpansion.gameObject.SetActive(true);
         layoutRectTransform.anchoredPosition = rectTransform.anchoredPosition;
         if (!moving)
             moveCoroutine = StartCoroutine(MoveAnimation());
+    }
+
+    public void ResetButton()
+    {
+        expand = false;
+        StopAllCoroutines();
+        moveCoroutine = null;
     }
 
     public void AddOption(HoverOption option)

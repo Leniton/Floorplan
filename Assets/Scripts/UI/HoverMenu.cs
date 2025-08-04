@@ -1,14 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler
 {
     [SerializeField] private LenixSOLayoutGroup layoutGroup;
     [SerializeField] private float expandRadius;
 
-    private HoverButton[] hoverButtons;
+    private List<HoverButton> hoverButtons;
 
     private bool expand;
     private Coroutine moveCoroutine;
@@ -16,7 +17,14 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void Awake()
     {
-        hoverButtons = layoutGroup.GetComponentsInChildren<HoverButton>();
+        RectTransform[] elements = layoutGroup.GetEnabledElements();
+        hoverButtons = new (elements.Length);
+        for (int i = 0; i < elements.Length; i++)
+            hoverButtons.Add(elements[i].GetComponent<HoverButton>());
+    }
+
+    private void Start()
+    {
         moveCoroutine = StartCoroutine(MoveAnimation());
     }
 
@@ -50,7 +58,7 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             expandLayout = expand;
             if (!expandLayout)
-                for (int i = 0; i < hoverButtons.Length; i++)
+                for (int i = 0; i < hoverButtons.Count; i++)
                     hoverButtons[i].ChangeOptionsVisibility(false);
 
             float goal = expandLayout ? expandRadius : 0;
@@ -64,16 +72,30 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                 yield return null;
                 time += Time.deltaTime;
             }
+
             layoutGroup.spacing = goal;
             layoutGroup.AdjustElements();
         }
+
         SetHoverButtonsInteractable(expandLayout);
         moveCoroutine = null;
     }
 
     private void SetHoverButtonsInteractable(bool value)
     {
-        for (int i = 0; i < hoverButtons.Length; i++)
+        for (int i = 0; i < hoverButtons.Count; i++)
             hoverButtons[i].SetInteractable(value);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        var hoverButton = eventData.pointerCurrentRaycast.gameObject?.GetComponent<HoverButton>();
+        if (ReferenceEquals(hoverButton, null)) return;
+        if (!hoverButtons.Contains(hoverButton)) return;
+        for (int i = 0; i < hoverButtons.Count; i++)
+        {
+            if (ReferenceEquals(hoverButtons[i], hoverButton)) continue;
+            hoverButtons[i]?.ResetButton();
+        }
     }
 }
