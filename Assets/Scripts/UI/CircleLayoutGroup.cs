@@ -25,10 +25,10 @@ public class CircleLayoutGroup : LenixSOLayoutGroup
         int rotationOrder = (int)elementRotation;
         for (int i = 0; i < childs.Length; i++)
         {
+            if(ReferenceEquals(childs[i],null)) continue;
             float proportion = currentP % 1;
             float x = Mathf.Sin(2 * Mathf.PI * proportion * order);
             float y = Mathf.Cos(2 * Mathf.PI * proportion * order);
-
             Vector2 pos = childs[i].anchoredPosition;
             pos.x = x * spacing;
             pos.y = y * spacing;

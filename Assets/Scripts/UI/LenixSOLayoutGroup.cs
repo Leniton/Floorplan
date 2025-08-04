@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [ExecuteAlways]
 public abstract class LenixSOLayoutGroup : MonoBehaviour
@@ -27,7 +28,10 @@ public abstract class LenixSOLayoutGroup : MonoBehaviour
             for (int i = 0; i < transform.childCount; i++)
             {
                 RectTransform rectTransform = (RectTransform)transform.GetChild(i);
-                if (rectTransform.gameObject.activeSelf) enabledChilds.Add(rectTransform);
+                var layoutElement = rectTransform.GetComponent<LayoutElement>();
+                if (layoutElement is { ignoreLayout: true } || 
+                    !rectTransform.gameObject.activeSelf) continue;
+                enabledChilds.Add(rectTransform);
             }
             return enabledChilds.ToArray();
         }

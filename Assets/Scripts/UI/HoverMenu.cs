@@ -3,99 +3,74 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler
 {
-    [SerializeField] private LenixSOLayoutGroup layoutGroup;
-    [SerializeField] private float expandRadius;
+    [SerializeField] private GameObject mainButton;
+    [SerializeField] private HoverOptions hoverOptions;
+    [SerializeField] private HoverOptions subOptions;
 
-    private List<HoverButton> hoverButtons;
-
-    private bool expand;
-    private Coroutine moveCoroutine;
-    private bool moving => moveCoroutine != null;
-
-    private void Awake()
-    {
-        RectTransform[] elements = layoutGroup.GetEnabledElements();
-        hoverButtons = new (elements.Length);
-        for (int i = 0; i < elements.Length; i++)
-            hoverButtons.Add(elements[i].GetComponent<HoverButton>());
-    }
+    private HoverButton lastButton;
 
     private void Start()
     {
-        moveCoroutine = StartCoroutine(MoveAnimation());
+        hoverOptions.SetupOptions(new()
+        {
+            new HoverOption(),
+            new HoverOption(),
+            new HoverOption(),
+        });
+        hoverOptions.ChangeOptionsVisibility(false);
+        for (int i = 0; i < hoverOptions.optionsButton.Count; i++)
+            hoverOptions.optionsButton[i].HoverOptions = subOptions;
+        mainButton.transform.SetAsLastSibling();
+
+        //test
+        hoverOptions.optionsButton[0].gameObject.name = "option 1";
+        hoverOptions.optionsButton[0].AddOption(new());
+        hoverOptions.optionsButton[0].AddOption(new());
+        hoverOptions.optionsButton[0].AddOption(new());
+        hoverOptions.optionsButton[1].gameObject.name = "option 2";
+        hoverOptions.optionsButton[1].AddOption(new());
+        hoverOptions.optionsButton[1].AddOption(new());
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        expand = true;
-        if (!moving)
-            moveCoroutine = StartCoroutine(MoveAnimation());
+        if(!ReferenceEquals(eventData.pointerCurrentRaycast.gameObject, mainButton)) return;
+        SetHoverButtonsInteractable(true);
+        hoverOptions.ChangeOptionsVisibility(true);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         //trickle down
         if (eventData.pointerCurrentRaycast.gameObject?.TryGetComponent<HoverButton>(out var button) ?? false)
-        {
             button.OnPointerUp(eventData);
-        }
-
-        expand = false;
-        if (!moving)
-            moveCoroutine = StartCoroutine(MoveAnimation());
-    }
-
-    private IEnumerator MoveAnimation()
-    {
-        const float duration = .08f;
-
-        bool expandLayout = !expand;
+        
         SetHoverButtonsInteractable(false);
-        while (expandLayout != expand)
-        {
-            expandLayout = expand;
-            if (!expandLayout)
-                for (int i = 0; i < hoverButtons.Count; i++)
-                    hoverButtons[i].ChangeOptionsVisibility(false);
-
-            float goal = expandLayout ? expandRadius : 0;
-            float origin = Mathf.Abs(goal - expandRadius);
-            float time = 0;
-            while (time < duration)
-            {
-                float scaledTime = time / duration;
-                layoutGroup.spacing = Mathf.Lerp(origin, goal, scaledTime);
-                layoutGroup.AdjustElements();
-                yield return null;
-                time += Time.deltaTime;
-            }
-
-            layoutGroup.spacing = goal;
-            layoutGroup.AdjustElements();
-        }
-
-        SetHoverButtonsInteractable(expandLayout);
-        moveCoroutine = null;
+        hoverOptions.ChangeOptionsVisibility(false);
     }
 
     private void SetHoverButtonsInteractable(bool value)
     {
-        for (int i = 0; i < hoverButtons.Count; i++)
-            hoverButtons[i].SetInteractable(value);
+        for (int i = 0; i < hoverOptions.optionsButton.Count; i++)
+        {
+            hoverOptions.optionsButton[i].SetInteractable(value);
+            if(!value) hoverOptions.optionsButton[i].ResetButton();
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         var hoverButton = eventData.pointerCurrentRaycast.gameObject?.GetComponent<HoverButton>();
         if (ReferenceEquals(hoverButton, null)) return;
-        if (!hoverButtons.Contains(hoverButton)) return;
-        for (int i = 0; i < hoverButtons.Count; i++)
-        {
-            if (ReferenceEquals(hoverButtons[i], hoverButton)) continue;
-            hoverButtons[i]?.ResetButton();
-        }
+        if (ReferenceEquals(hoverButton, lastButton)) return;
+        if (!hoverOptions.optionsButton.Contains(hoverButton)) return;
+        for (int i = 0; i < hoverOptions.optionsButton.Count; i++)
+            hoverOptions.optionsButton[i].ResetButton();
+        hoverButton.OnPointerEnter(eventData);
+        lastButton = hoverButton;
     }
 }
