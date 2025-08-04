@@ -55,12 +55,13 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerUp(PointerEventData eventData)
     {
         if (!interactable) return;
-        if (options.Count > 1) return;
-        print("pointer up");
+        if (options.Count != 1) return;
+        options[0].onPick?.Invoke();
     }
 
     public void SetInteractable(bool value)
     {
+        value &= options.Count > 0;
         interactable = value;
         graphic.raycastTarget = value;
     }
@@ -80,9 +81,22 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         HoverOptions?.Hide();
     }
 
+    public void SetOption(HoverOption option)
+    {
+        options = new() { option };
+        SetInteractable(true);
+    }
+
     public void AddOption(HoverOption option)
     {
+        SetInteractable(options.Count > 0);
         options.Add(option);
+    }
+
+    public void RemoveOption(HoverOption option)
+    {
+        options.Remove(option);
+        SetInteractable(options.Count > 0);
     }
 }
 

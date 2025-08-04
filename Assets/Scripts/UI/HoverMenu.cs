@@ -17,9 +17,9 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
     {
         hoverOptions.SetupOptions(new()
         {
-            new HoverOption(),
-            new HoverOption(),
-            new HoverOption(),
+            null,
+            null,
+            null,
         });
         hoverOptions.ChangeOptionsVisibility(false);
         for (int i = 0; i < hoverOptions.optionsButton.Count; i++)
@@ -28,12 +28,12 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
 
         //test
         hoverOptions.optionsButton[0].gameObject.name = "option 1";
-        hoverOptions.optionsButton[0].AddOption(new());
-        hoverOptions.optionsButton[0].AddOption(new());
-        hoverOptions.optionsButton[0].AddOption(new());
+        hoverOptions.optionsButton[0].AddOption(new() { onPick = () => Debug.Log("0 => 0") });
+        hoverOptions.optionsButton[0].AddOption(new() { onPick = () => Debug.Log("0 => 1") });
+        hoverOptions.optionsButton[0].AddOption(new() { onPick = () => Debug.Log("0 => 2") });
         hoverOptions.optionsButton[1].gameObject.name = "option 2";
-        hoverOptions.optionsButton[1].AddOption(new());
-        hoverOptions.optionsButton[1].AddOption(new());
+        hoverOptions.optionsButton[1].AddOption(new() { onPick = () => Debug.Log("1 => 0") });
+        hoverOptions.optionsButton[1].gameObject.name = "option 3";
     }
 
     public void OnPointerDown(PointerEventData eventData)
