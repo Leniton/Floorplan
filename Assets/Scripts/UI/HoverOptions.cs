@@ -32,7 +32,7 @@ public class HoverOptions : MonoBehaviour
                 (o) => prefab = o.Result.GetComponent<HoverButton>();
     }
 
-    public void SetupOptions(List<HoverOption> options)
+    public void SetupOptions(List<ButtonCallback> options)
     {
         int optionCount = Mathf.Min(options.Count, maxElements);
 

@@ -26,7 +26,7 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             layoutRectTransform = optionsExpansion.rectTransform;
         }
     }
-    private List<HoverOption> options = new();
+    private List<ButtonCallback> options = new();
 
     private RectTransform rectTransform;
     private RectTransform layoutRectTransform;
@@ -81,26 +81,26 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         HoverOptions?.Hide();
     }
 
-    public void SetOption(HoverOption option)
+    public void SetOption(ButtonCallback option)
     {
         options = new() { option };
         SetInteractable(true);
     }
 
-    public void AddOption(HoverOption option)
+    public void AddOption(ButtonCallback option)
     {
         SetInteractable(options.Count > 0);
         options.Add(option);
     }
 
-    public void RemoveOption(HoverOption option)
+    public void RemoveOption(ButtonCallback option)
     {
         options.Remove(option);
         SetInteractable(options.Count > 0);
     }
 }
 
-public class HoverOption
+public class ButtonCallback
 {
     public string Name;
     public Action onPick;
