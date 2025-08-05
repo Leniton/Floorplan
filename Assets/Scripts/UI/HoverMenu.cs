@@ -15,6 +15,7 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
 
     private void Start()
     {
+        hoverOptions.OnDoneMoving += OnDoneMoving;
         hoverOptions.SetupOptions(new()
         {
             null,
@@ -39,7 +40,7 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
     public void OnPointerDown(PointerEventData eventData)
     {
         if(!ReferenceEquals(eventData.pointerCurrentRaycast.gameObject, mainButton)) return;
-        SetHoverButtonsInteractable(true);
+        SetHoverButtonsInteractable(false);
         hoverOptions.ChangeOptionsVisibility(true);
     }
 
@@ -51,6 +52,12 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
         
         SetHoverButtonsInteractable(false);
         hoverOptions.ChangeOptionsVisibility(false);
+    }
+
+    private void OnDoneMoving()
+    {
+        if(!hoverOptions.expand) return;
+        SetHoverButtonsInteractable(true);
     }
 
     private void SetHoverButtonsInteractable(bool value)

@@ -18,9 +18,11 @@ public class HoverOptions : MonoBehaviour
     //move animation
     private float openOffset;
     private float openSpacing;
-    private bool expand = true;
+    public bool expand { get; private set; } = true;
     private Coroutine moveCoroutine;
     private bool moving => moveCoroutine != null;
+
+    public event Action OnDoneMoving;
 
     private void Awake()
     {
@@ -97,6 +99,7 @@ public class HoverOptions : MonoBehaviour
             layoutGroup.spacing = targetSpacing;
             layoutGroup.AdjustElements();
         }
+        OnDoneMoving?.Invoke();
         moveCoroutine = null;
     }
 
