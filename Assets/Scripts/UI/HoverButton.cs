@@ -15,6 +15,7 @@ using UnityEngine.UI;
 public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler
 {
     [SerializeField] private Graphic graphic;
+    [SerializeField] private Image icon;
     [SerializeField] private HoverOptions optionsExpansion;
 
     public HoverOptions HoverOptions
