@@ -24,15 +24,6 @@ public static class Helpers
         GameManager.floorplanDict.TryGetValue(GridManager.instance.currentPosition, out var current);
         return current;
     }
-    
-    public static void AddItemToFloorplan(this Floorplan floorplan, Item item)
-    {
-        //Debug.Log($"add {item?.GetType()} to {floorplan?.Name}({GridManager.instance.currentPosition})");
-        if (CurrentFloorplan() == floorplan)
-            item?.Initialize();
-        else
-            floorplan.TheFirstTime().PlayerEnterFloorplan().Do(_ => item?.Initialize());
-    }
 
     public static void ConnectFloorplans(Floorplan baseFloorplan, Floorplan connectedFloorplan)
     {

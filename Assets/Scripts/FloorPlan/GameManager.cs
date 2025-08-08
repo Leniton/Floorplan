@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        GameSettings.current = new();
         floorplanDict = new();
         player.OnMove += OnMoveSlot;
         draftManager.OnDraftFloorplan += PlaceFloorplan;

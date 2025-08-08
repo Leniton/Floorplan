@@ -24,6 +24,7 @@ public class Floorplan : ScriptableObject
     [HideInInspector] public bool[] connections;
     
     public Vector2Int coordinate { get; set; }
+    public List<Item> items { get; set; } = new();
 
     public Floorplan original { get; private set; }
 
@@ -59,20 +60,25 @@ public class Floorplan : ScriptableObject
             Type == FloorType.Crossroad,
         };
         floorplan.connectedFloorplans = new(Mathf.Abs((int)floorplan.Type));
+        floorplan.ChangeEntrance(entranceDirection);
+        floorplan.Setup();
+        
+        return floorplan;
+    }
 
-        StringBuilder sb = new();
-        for (int i = 0; i < floorplan.connections.Length; i++)
-            sb.Append($"{floorplan.connections[i]} | ");
+    private void Setup()
+    {
+        connectedFloorplans = new(Mathf.Abs((int)Type));
+
+        //StringBuilder sb = new();
+        //for (int i = 0; i < floorplan.connections.Length; i++)
+        //    sb.Append($"{floorplan.connections[i]} | ");
         //Debug.Log(sb);
 
-        floorplan.ChangeEntrance(entranceDirection);
-        while (!floorplan.connections[floorplan.entranceId])
-            floorplan.InternalRotation();
-        //int entrance = floorplan.entranceId;
-        //int randomRotation = Random.Range(1, 3);
-        //for (int i = 0; i < randomRotation; i++)
-        //    floorplan.InternalRotation();
-        return floorplan;
+        while (!connections[entranceId])
+            InternalRotation();
+
+        onEnter += OnEnterFloorplan;
     }
 
     public void ChangeEntrance(Vector2Int entranceDirection) => entranceId = DirectionToID(entranceDirection);
@@ -107,6 +113,49 @@ public class Floorplan : ScriptableObject
         InternalRotation();
     }
 
+    public void AddItem(Item item)
+    {
+        item.Setup(this);
+        items.Add(item);
+        if (Helpers.CurrentFloorplan() != this ||
+            !GameSettings.current.autoCollectItems ||
+            item.placed) return;
+        PickupItem(item);
+    }
+
+    private void OnEnterFloorplan(Event evt)
+    {
+        if (!GameSettings.current.autoCollectItems) return;
+        int itemCount = items.Count;
+        int currentId = 0;
+        for (int i = 0; i < itemCount; i++)
+        {
+            Item item = items[currentId];
+            if (item.placed)
+            {
+                currentId++;
+                continue;
+            }
+            PickupItem(item);
+        }
+    }
+
+    private void PickupItem(Item item)
+    {
+        item.PickUp();
+        items.Remove(item);
+    }
+
+    public int CalculatePoints()
+    {
+        int finalValue = basePoints;
+        for (int i = 0; i < pointBonus.Count; i++)
+            finalValue += pointBonus[i]?.Invoke() ?? 0;
+        for (int i = 0; i < pointMult.Count; i++)
+            finalValue *= pointMult[i]?.Invoke() ?? 1;
+        return finalValue;
+    }
+
     public static int DirectionToID(Vector2Int direction)
     {
         if(direction == Vector2Int.up)
@@ -132,16 +181,6 @@ public class Floorplan : ScriptableObject
         }
 
         return Vector2Int.zero;
-    }
-
-    public int CalculatePoints()
-    {
-        int finalValue = basePoints;
-        for (int i = 0; i < pointBonus.Count; i++)
-            finalValue += pointBonus[i]?.Invoke() ?? 0;
-        for (int i = 0; i < pointMult.Count; i++)
-            finalValue *= pointMult[i]?.Invoke() ?? 1;
-        return finalValue;
     }
 }
 public enum FloorType

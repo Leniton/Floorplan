@@ -15,7 +15,7 @@ public static class EffectsManager
                 RarityPicker<Item> atticItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 int atticItemCount = 6;
                 for (int i = 0; i < atticItemCount; i++)
-                    floorplan.AddItemToFloorplan(atticItems.PickRandom());
+                    floorplan.AddItem(atticItems.PickRandom());
                 break;
             case "Bathroom":
                 floorplan.TheFirstTime().PlayerEnterFloorplan().Do(_ =>
@@ -98,7 +98,7 @@ public static class EffectsManager
             case "Cloister":
                 RarityPicker<Item> cloisterItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 cloisterItems.ChangeRarities(1,0,0,0);
-                floorplan.AddItemToFloorplan(cloisterItems.PickRandom());
+                floorplan.AddItem(cloisterItems.PickRandom());
                 break;
             case "Commissary":
                 PurchaseData bananas = new()
@@ -107,7 +107,7 @@ public static class EffectsManager
                     amount = 3,
                     name = "Banana",
                     description = "Gain +3 steps",
-                    OnBuy = () => new Food(3).Initialize()
+                    OnBuy = () => new Food(3).PickUp()
                 };
                 PurchaseData keys = new()
                 {
@@ -115,7 +115,7 @@ public static class EffectsManager
                     amount = 5,
                     name = "Key",
                     description = "Used to draft powerful floorplans",
-                    OnBuy = () => new Key(1).Initialize()
+                    OnBuy = () => new Key(1).PickUp()
                 };
                 PurchaseData dice = new()
                 {
@@ -123,7 +123,7 @@ public static class EffectsManager
                     amount = 2,
                     name = "Dice",
                     description = "Used to reroll drawn floorplans",
-                    OnBuy = () => new Dice(1).Initialize()
+                    OnBuy = () => new Dice(1).PickUp()
                 };
                 PurchaseData keyBundle = new()
                 {
@@ -131,7 +131,7 @@ public static class EffectsManager
                     amount = 1,
                     name = "Key bundle",
                     description = "Used to draft powerful floorplans, now in a neat package",
-                    OnBuy = () => new Key(3).Initialize()
+                    OnBuy = () => new Key(3).PickUp()
                 };
                 List<PurchaseData> commissaryList = new() { bananas, keys, dice, keyBundle };
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, commissaryList);
@@ -141,7 +141,7 @@ public static class EffectsManager
                 break;
             case "Dining Room":
                 int eatenFood = 0;
-                floorplan.AddItemToFloorplan(new Food(10));
+                floorplan.AddItem(new Food(10));
                 floorplan.pointBonus.Add(() => eatenFood);
                 floorplan.EveryTime().ItemCollected().Where(evt => evt.item is Food).Do(_ => eatenFood++);
                 break;
@@ -232,7 +232,7 @@ public static class EffectsManager
                     hallwayClosetItemCount += 1;
                 
                 for (int i = 0; i < hallwayClosetItemCount; i++)
-                    floorplan.AddItemToFloorplan(hallwayClosetItems.PickRandom());
+                    floorplan.AddItem(hallwayClosetItems.PickRandom());
                 break;
             case "Kitchen":
                 PurchaseData apple = new()
@@ -241,7 +241,7 @@ public static class EffectsManager
                     amount = 6,
                     name = "Apple",
                     description = "Gain +2 steps",
-                    OnBuy = () => new Food(2).Initialize()
+                    OnBuy = () => new Food(2).PickUp()
                 };
                 PurchaseData banana = new()
                 {
@@ -249,7 +249,7 @@ public static class EffectsManager
                     amount = 5,
                     name = "Banana",
                     description = "Gain +3 steps",
-                    OnBuy = () => new Food(3).Initialize()
+                    OnBuy = () => new Food(3).PickUp()
                 };
                 PurchaseData orange = new()
                 {
@@ -257,7 +257,7 @@ public static class EffectsManager
                     amount = 3,
                     name = "Orange",
                     description = "Gain +5 steps",
-                    OnBuy = () => new Food(5).Initialize()
+                    OnBuy = () => new Food(5).PickUp()
                 };
                 List<PurchaseData> kitchenList = new () { apple, banana, orange };
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, kitchenList);
@@ -285,8 +285,8 @@ public static class EffectsManager
                     AddPointsToThatFloorplan(otherBonus).Do(_ => selfBonus += 2);
                 break;
             case "Pantry":
-                floorplan.AddItemToFloorplan(new Coin());
-                floorplan.AddItemToFloorplan(new Food());
+                floorplan.AddItem(new Coin());
+                floorplan.AddItem(new Food());
                 break;
             case "Pump Room":
                 floorplan.EveryTime().FloorplanConnected().AddPointBonusToThatFloorplan(floorplan.CalculatePoints);
@@ -294,7 +294,7 @@ public static class EffectsManager
             case "Terrace":
                 RarityPicker<Item> terraceItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 terraceItems.ChangeRarities(0,1,0,0);
-                floorplan.AddItemToFloorplan(terraceItems.PickRandom());
+                floorplan.AddItem(terraceItems.PickRandom());
                 break;
             case "Tunnel":
                 //Aways draw a tunnel when drafting from tunnel
@@ -310,7 +310,7 @@ public static class EffectsManager
                         (floorplan.coordinate + Floorplan.IDToDirection(exitId)))
                 {
                     floorplan.connections[exitId] = false;
-                    floorplan.AddItemToFloorplan(new Key(5));
+                    floorplan.AddItem(new Key(5));
                     floorplan.OnChanged?.Invoke();
                 }
                 break;
@@ -333,7 +333,7 @@ public static class EffectsManager
                 {
                     int coinAmount = GameManager.floorplanDict.Count - lastRoomCount;
                     if (coinAmount <= 0) return;
-                    new Coin(coinAmount).Initialize();
+                    new Coin(coinAmount).PickUp();
                     lastRoomCount = GameManager.floorplanDict.Count;
                 });
                 break;
@@ -359,7 +359,7 @@ public static class EffectsManager
                     walkinClosetItemCount += 2;
 
                 for (int i = 0; i < walkinClosetItemCount; i++)
-                    floorplan.AddItemToFloorplan(walkinClosetItems.PickRandom());
+                    floorplan.AddItem(walkinClosetItems.PickRandom());
                 break;
             case "":
                 break;
@@ -455,9 +455,9 @@ public static class EffectsManager
 
     //Floorplan changes
     public static EventListener<Action<T>,T> AddItemToFloorplan<T>(this EventListener<Action<T>,T> listener, Item item) where T : Event =>
-        listener.Do(_ => listener.effect.floorplan.AddItemToFloorplan(item));
+        listener.Do(_ => listener.effect.floorplan.AddItem(item));
     public static EventListener<Action<T>,T> AddItemToThatFloorplan<T>(this EventListener<Action<T>,T> listener, Item item) where T : CoordinateEvent =>
-        listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].AddItemToFloorplan(item));
+        listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].AddItem(item));
     public static EventListener<Action<T>,T> AddPointsToFloorplan<T>(this EventListener<Action<T>,T> listener, int amount) where T : Event =>
         listener.Do(_ => listener.effect.floorplan.pointBonus.Add(() => amount));
     public static EventListener<Action<T>,T> AddPointBonusToFloorplan<T>(this EventListener<Action<T>,T> listener, Func<int> amount) where T : Event =>

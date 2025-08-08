@@ -76,13 +76,15 @@ public class ItemsManager : MonoBehaviour
 
         Item item = possibleItems.PickRandom();
         if(item == null) return;
-        floorplan.AddItemToFloorplan(item);
+        floorplan.AddItem(item);
     }
 }
 
 public abstract class Item
 {
-    public abstract void Initialize();
+    public bool placed;
+    public virtual void Setup(Floorplan floorplan){}
+    public abstract void PickUp();
 }
 
 public class Food : Item
@@ -90,7 +92,7 @@ public class Food : Item
     public int stepsAmount; //null equals random
     public Food(int? amountSteps = null) => stepsAmount = amountSteps ?? Random.Range(2, 6);
 
-    public override void Initialize()
+    public override void PickUp()
     {
         int amount = stepsAmount;
         //Debug.Log($"found food!!\n{Player.steps} + {amount}");
@@ -105,7 +107,7 @@ public class Coin : Item
     public int? coinsAmount; //null equals random
     public Coin(int? amountCoin = null) => coinsAmount = amountCoin;
 
-    public override void Initialize()
+    public override void PickUp()
     {
         int amount = coinsAmount ?? Random.Range(1, 4);
         //Debug.Log($"found coins!!\n{Player.coins} + {amount}");
@@ -120,7 +122,7 @@ public class Key : Item
     public int? keyAmount; //null equals random
     public Key(int? amountKey = null) => keyAmount = amountKey;
 
-    public override void Initialize()
+    public override void PickUp()
     {
         int amount = keyAmount ?? Random.Range(1, 3);
         //Debug.Log($"found keys!!\n{Player.keys} + {amount}");
@@ -135,7 +137,7 @@ public class Dice : Item
     public int? diceAmount; //null equals random
     public Dice(int? amountDice = null) => diceAmount = amountDice;
 
-    public override void Initialize()
+    public override void PickUp()
     {
         int amount = diceAmount ?? Random.Range(1, 3);
         //Debug.Log($"found dice!!\n{Player.dices} + {amount}");
