@@ -310,7 +310,6 @@ public static class EffectsManager
                     Where(_ => !GridManager.instance.ValidCoordinate(floorplan.coordinate + Floorplan.IDToDirection(exitId))).
                     Do(_ =>
                 {
-                    Debug.Log("end");
                     floorplan.connections[exitId] = false;
                     floorplan.AddItem(new Key(5));
                     floorplan.OnChanged?.Invoke();
