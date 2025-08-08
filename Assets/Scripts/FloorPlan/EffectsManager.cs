@@ -306,13 +306,15 @@ public static class EffectsManager
                 });
                 //surprise if reach the edge
                 int exitId = (floorplan.entranceId + 2) % 4;
-                if (!GridManager.instance.ValidCoordinate
-                        (floorplan.coordinate + Floorplan.IDToDirection(exitId)))
+                floorplan.TheFirstTime().FloorplanIsDrafted().
+                    Where(_ => !GridManager.instance.ValidCoordinate(floorplan.coordinate + Floorplan.IDToDirection(exitId))).
+                    Do(_ =>
                 {
+                    Debug.Log("end");
                     floorplan.connections[exitId] = false;
                     floorplan.AddItem(new Key(5));
                     floorplan.OnChanged?.Invoke();
-                }
+                });
                 break;
             case "Utility Closet":
                 //power all rooms of the same category
