@@ -53,15 +53,32 @@ public class GameManager : MonoBehaviour
 
     private void OnMoveSlot(Vector2Int direction)
     {
-        Floorplan current = floorplanDict[gridManager.currentPosition];
-        if (!current.connections[Floorplan.DirectionToID(direction)]) return;
+        bool forceEntrance = Player.activeSledgeHammer;
+        Floorplan current = Helpers.CurrentFloorplan();
         Vector2Int targetedSlot = gridManager.currentPosition + direction;
         if (!gridManager.ValidCoordinate(targetedSlot)) return;
+
+        if (!current.connections[Floorplan.DirectionToID(direction)] && !Player.activeSledgeHammer) return;
+        if (!current.connections[Floorplan.DirectionToID(direction)] && Player.activeSledgeHammer)
+        {
+            //add connection
+            current.OpenConnection(Floorplan.DirectionToID(direction));
+            Player.activeSledgeHammer = false;
+        }
+
         if (floorplanDict.TryGetValue(targetedSlot, out var targetFloorplan))
         {
             if (Player.steps <= 0) return;
             //check if floorplan is connected to this one
-            if (!targetFloorplan.connections[Floorplan.DirectionToID(-direction)]) return;
+            if (!targetFloorplan.connections[Floorplan.DirectionToID(-direction)])
+            {
+
+                if (!Player.activeSledgeHammer) return;
+                //Add connection to other floorplans
+                targetFloorplan.OpenConnection(Floorplan.DirectionToID(-direction));
+                Player.activeSledgeHammer = false;
+            }
+
             //slot enter event
             gridManager.ShiftSelection(direction);
         }

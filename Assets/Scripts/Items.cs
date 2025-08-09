@@ -72,8 +72,21 @@ public class Dice : Item
 
 public class SledgeHammer : Item
 {
+    private Floorplan currentFloorplan;
+    public override void Setup(Floorplan floorplan) => currentFloorplan = floorplan;
+
     public override void PickUp()
     {
-        throw new System.NotImplementedException();
+        if (!Player.activeSledgeHammer)
+        {
+            UIManager.ShowMessage($"found a Sledge Hammer!!",
+                () => Player.activeSledgeHammer = true);
+            return;
+        }
+
+        //add it back to floorplan
+        if (ReferenceEquals(currentFloorplan, null)) return;
+        UIManager.ShowMessage($"found a Sledge Hammer (you already have one, so this one will stay here until you use your current one)", 
+            () => currentFloorplan.items.Add(this));
     }
 }
