@@ -36,6 +36,7 @@ public class ItemsManager : MonoBehaviour
             case FloorCategory.BlackRooms:
                 possibleItems.AddToPool(new Key(), Rarity.Common);
                 possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
+                possibleItems.AddToPool(new SledgeHammer(), Rarity.Uncommon);
                 break;
             case FloorCategory.WhiteRoom:
                 possibleItems.AddToPool(new Food(), Rarity.Common);
@@ -47,6 +48,7 @@ public class ItemsManager : MonoBehaviour
                 possibleItems.AddToPool(new Food(), Rarity.Common);
                 possibleItems.AddToPool(new Key(), Rarity.Common);
                 possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
+                possibleItems.AddToPool(new SledgeHammer(), Rarity.Uncommon);
                 break;
         }
 
