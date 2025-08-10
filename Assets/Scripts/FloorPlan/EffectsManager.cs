@@ -12,7 +12,6 @@ public static class EffectsManager
         switch (floorplan.Name)
         {
             case "Attic":
-                RarityPicker<Item> atticItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 int atticItemCount = 6;
                 for (int i = 0; i < atticItemCount; i++)
                     ItemsManager.AddFloorplanItems(floorplan, true);
@@ -225,12 +224,11 @@ public static class EffectsManager
                     floorplan.pointBonus.Add(evt.connectedFloorplan.CalculatePoints));
                 break;
             case "Hallway Closet":
-                RarityPicker<Item> hallwayClosetItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 int hallwayClosetItemCount = 2;
                 if (!ReferenceEquals(draftedFloorplan, null) &&
                     NumberUtil.ContainsBytes((int)draftedFloorplan.Category, (int)FloorCategory.Hallway))
                     hallwayClosetItemCount += 1;
-                
+
                 for (int i = 0; i < hallwayClosetItemCount; i++)
                     ItemsManager.AddFloorplanItems(floorplan, true);
                 break;
@@ -290,6 +288,56 @@ public static class EffectsManager
                 break;
             case "Pump Room":
                 floorplan.EveryTime().FloorplanConnected().AddPointBonusToThatFloorplan(floorplan.CalculatePoints);
+                break;
+            case "Secret Passage":
+                //add connection to drafted floorplans
+                floorplan.EveryTime().FloorplansAreDrawn().Where(DraftedFromHere).Do(evt =>
+                {
+                    for (int i = 0; i < evt.drawnFloorplans.Length; i++)
+                    {
+                        Floorplan drawnFloorplan = evt.drawnFloorplans[i];
+                        int maxConnections = Mathf.Abs((int)evt.possibleFloorTypes[^1]);
+                        int openConnections = 0;
+                        int closedConnectionID = -1;
+                        for (int c = 0; c < maxConnections; c++)
+                        {
+                            if (drawnFloorplan.connections[c]) openConnections++;
+                            else if (closedConnectionID < 0)
+                            {
+                                //Debug.Log($"{drawnFloorplan.Name} closed at {Floorplan.IDToDirection(c)}({drawnFloorplan.connections[c]})");
+                                closedConnectionID = c;
+                            }
+                        }
+
+                        //if there's no closed connections, add item to floorplan
+                        if (openConnections >= maxConnections)
+                        {
+                            //Debug.Log($"{drawnFloorplan.Name} already has 4 connections, adding item");
+                            ItemsManager.AddFloorplanItems(drawnFloorplan);
+                            continue;
+                        }
+                        //otherwise open a connection on floorplan
+                        Floorplan newFloorplan = drawnFloorplan.original.CreateInstance(Floorplan.IDToDirection(drawnFloorplan.entranceId));
+                        newFloorplan.connections[closedConnectionID] = true;
+                        evt.drawnFloorplans[i] = newFloorplan;
+                        //Debug.Log($"open connection on {newFloorplan} => {Floorplan.IDToDirection(closedConnectionID)}({newFloorplan.connections[closedConnectionID]})");
+                    }
+                });
+
+                //if there's already a floorplan on a openConnection, connect to it
+                floorplan.TheFirstTime().FloorplanIsDrafted().Do(evt =>
+                {
+                    for (int i = 0; i < floorplan.connections.Length; i++)
+                    {
+                        if (i == floorplan.entranceId || !floorplan.connections[i]) continue;
+                        Vector2Int connection = Floorplan.IDToDirection(i);
+                        if (!GameManager.floorplanDict.TryGetValue(floorplan.coordinate + connection, out var otherFloorplan)) continue;
+                        int connectionID = Floorplan.DirectionToID(-connection);
+                        if (otherFloorplan.connections[connectionID]) continue;
+                        //Debug.Log($"{otherFloorplan.Name} may connect with {floorplan.Name}");
+                        otherFloorplan.OpenConnection(connectionID);
+                    }
+                });
                 break;
             case "Terrace":
                 RarityPicker<Item> terraceItems = ItemsManager.GetPossibleFloorplanItems(floorplan);

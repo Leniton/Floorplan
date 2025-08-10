@@ -52,13 +52,28 @@ public class Floorplan : ScriptableObject
         floorplan.Rarity = Rarity;
         floorplan.keyCost = keyCost;
         floorplan.basePoints = basePoints;
-        floorplan.connections = new [] 
+        if (connections is { Length: > 0 })
         {
-            true,
-            Type != FloorType.DeadEnd && Type != FloorType.Straw,
-            Type != FloorType.DeadEnd && Type != FloorType.Ankle,
-            Type == FloorType.Crossroad,
-        };
+            //instance floorplan; copy floorplan connections and determine its type
+            floorplan.connections = new[]
+            {
+                connections[0],
+                connections[1],
+                connections[2],
+                connections[3],
+            };
+        }
+        else
+        {
+            //default floorplan; connections based on type
+            floorplan.connections = new[]
+            {
+                true,
+                Type != FloorType.DeadEnd && Type != FloorType.Straw,
+                Type != FloorType.DeadEnd && Type != FloorType.Ankle,
+                Type == FloorType.Crossroad,
+            };
+        }
         floorplan.connectedFloorplans = new(Mathf.Abs((int)floorplan.Type));
         floorplan.ChangeEntrance(entranceDirection);
         floorplan.Setup();
@@ -191,6 +206,7 @@ public enum FloorType
     TPiece = 3,
     Crossroad = 4,
 }
+
 [Flags]
 public enum FloorCategory
 {

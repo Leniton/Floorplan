@@ -44,7 +44,7 @@ public static class Helpers
         floorplan.OnChanged?.Invoke();
         if (!GameManager.floorplanDict.TryGetValue(floorplan.coordinate + Floorplan.IDToDirection(connectionID), out var targetFloorplan)) return;
         if (!targetFloorplan.connections[(connectionID + 2) % 4]) return;
-        //Debug.Log($"now connected to {targetFloorplan.Name}");
+        //Debug.Log($"{floorplan.Name} now connected to {targetFloorplan.Name}");
         ConnectFloorplans(floorplan, targetFloorplan);
     }
 }
