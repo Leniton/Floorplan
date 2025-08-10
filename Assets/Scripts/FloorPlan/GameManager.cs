@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     private FloorplanUI floorplanPrefab;
     private Vector2Int currentDraftPosition;
 
-    private void Awake()
+    private void Start()
     {
         GameSettings.current = new();
         floorplanDict = new();
@@ -46,8 +46,8 @@ public class GameManager : MonoBehaviour
         //add entrance hall
         GridManager.instance = gridManager;
         currentDraftPosition = gridManager.currentPosition;
-        Floorplan floorplan = entrance.CreateInstance(Vector2Int.left);
-        PlaceFloorplan(floorplan);
+        Floorplan entranceHall = entrance.CreateInstance(Vector2Int.left);
+        PlaceFloorplan(entranceHall);
         UIManager.ShowMessage($"Current objective:\n\n <b>{PointsManager.currentRequirement} points");
     }
 

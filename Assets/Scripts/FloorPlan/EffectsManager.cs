@@ -32,7 +32,6 @@ public static class EffectsManager
                 floorplan.EveryTime().FloorplanConnected().PowerThatFloorplan();
                 break;
             case "Boudoir":
-                bool isInBoudoir = false;
                 floorplan.EveryTime().FloorplansAreDrawn().Where(DraftedFromHere).Do(evt =>
                 {
                     int restroomCount = 0;
