@@ -13,8 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject messageContainer;
     [SerializeField] private TMP_Text messageText;
     [Header("Floorplan Details")]
-    [SerializeField] private GameObject detailsContainer;
-    [SerializeField] private FloorplanDetails details;
+    [SerializeField] private FloorplanWindow details;
 
     private static UIManager instance;
     private static Coroutine messageCoroutine;
@@ -34,13 +33,8 @@ public class UIManager : MonoBehaviour
 
     public static void ShowDetails(Floorplan floorplan)
     {
-        instance.details.Setup(floorplan);
-        instance.detailsContainer.SetActive(true);
-    }
-
-    public void CloseDetailsPopup()
-    {
-        detailsContainer.SetActive(false);
+        instance.details.SetupWindow(floorplan);
+        instance.details.gameObject.SetActive(true);
     }
 
     public static void ShowMessage(string message, Action onDone = null)

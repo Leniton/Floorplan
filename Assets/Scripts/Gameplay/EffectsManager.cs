@@ -110,10 +110,10 @@ public static class EffectsManager
                 floorplan.TheFirstTime().FloorplanIsDrafted().AddItemToFloorplan(new Key(1));
                 break;
             case "Dining Room":
-                int eatenFood = 0;
-                floorplan.AddItem(new Food(10));
-                floorplan.pointBonus.Add(() => eatenFood);
-                floorplan.EveryTime().ItemCollected().Where(evt => evt.item is Food).Do(_ => eatenFood++);
+                int stepsFromFood = 0;
+                floorplan.AddItem(new Food(10) { Name = "Meal"});
+                floorplan.pointBonus.Add(floorplan.Name, () => stepsFromFood);
+                floorplan.EveryTime().ItemCollected().Where(evt => evt.item is Food).Do(evt => stepsFromFood += (evt.item as Food).stepsAmount);
                 break;
             case "Dormitory":
                 //connected rest room gain extra points
@@ -133,7 +133,7 @@ public static class EffectsManager
                 break;
             case "Gallery":
                 int visits = 0;
-                floorplan.pointBonus.Add(() => visits);
+                floorplan.pointBonus.Add(floorplan.Name, () => visits);
                 floorplan.EveryTime().PlayerEnterFloorplan().Where(_ => Player.coins > 0).Do(_ =>
                 {
                     Player.ChangeCoins(-1);
@@ -176,14 +176,14 @@ public static class EffectsManager
                 };
 
                 void AddPoints(int amount) => bonusPoints += amount;
-                floorplan.pointBonus.Add(() => bonusPoints);
+                floorplan.pointBonus.Add(floorplan.Name, () => bonusPoints);
                 List<PurchaseData> giftList = new () { one, three, five, ten };
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, giftList);
                 break;
             case "Great Hall":
                 //extra points for each different type of room connected
                 FloorCategory connectedCategories = 0;
-                floorplan.pointBonus.Add(() => NumberUtil.SeparateBits((int)connectedCategories).Length * 2);
+                floorplan.pointBonus.Add(floorplan.Name, () => NumberUtil.SeparateBits((int)connectedCategories).Length * 2);
                 floorplan.EveryTime().FloorplanConnected()
                     .Do(evt => connectedCategories |= evt.connectedFloorplan.Category);
                 break;
@@ -192,7 +192,7 @@ public static class EffectsManager
                 floorplan.EveryTime().PlayerEnterFloorplan().ChangePlayerSteps(2);
                 //combine points of connected rest rooms
                 floorplan.EveryTime().FloorplanConnected().Where(IsOfCategory(FloorCategory.RestRoom)).Do(evt =>
-                    floorplan.pointBonus.Add(evt.connectedFloorplan.CalculatePoints));
+                    floorplan.pointBonus.Add(floorplan.Name, evt.connectedFloorplan.CalculatePoints));
                 break;
             case "Hallway Closet":
                 int hallwayClosetItemCount = 2;
@@ -241,13 +241,13 @@ public static class EffectsManager
             case "Master Bedroom":
                 int selfBonus = 0;
                 int otherBonus = 5;
-                floorplan.pointBonus.Add(() => selfBonus);
+                floorplan.pointBonus.Add(floorplan.Name, () => selfBonus);
                 foreach (var room in GameManager.floorplanDict.Values)
                 {
                     if (!NumberUtil.ContainsAnyBits((int)room.Category, (int)floorplan.Category)) continue;
                     Debug.Log($"buffing {room.Name}");
                     selfBonus += 2;
-                    room.pointBonus.Add(() => otherBonus);
+                    room.pointBonus.Add(floorplan.Name, () => otherBonus);
                 }
                 floorplan.EveryTime().AnyFloorplanIsDrafted().
                     Where(IsOfCategory(FloorCategory.RestRoom)).
@@ -340,7 +340,7 @@ public static class EffectsManager
                 {
                     if (!NumberUtil.ContainsAnyBits((int)room.Category, (int)floorplan.Category)) continue;
                     Debug.Log($"Powering {room.Name}");
-                    room.pointMult.Add(() => 2);
+                    room.multBonus.Add(floorplan.Name, () => 2);
                 }
                 //power all rooms of the same category
                 floorplan.EveryTime().AnyFloorplanIsDrafted().
@@ -477,17 +477,17 @@ public static class EffectsManager
     public static EventListener<Action<T>,T> AddItemToThatFloorplan<T>(this EventListener<Action<T>,T> listener, Item item) where T : CoordinateEvent =>
         listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].AddItem(item));
     public static EventListener<Action<T>,T> AddPointsToFloorplan<T>(this EventListener<Action<T>,T> listener, int amount) where T : Event =>
-        listener.Do(_ => listener.effect.floorplan.pointBonus.Add(() => amount));
-    public static EventListener<Action<T>,T> AddPointBonusToFloorplan<T>(this EventListener<Action<T>,T> listener, Func<int> amount) where T : Event =>
-        listener.Do(_ => listener.effect.floorplan.pointBonus.Add(amount));
+        listener.Do(_ => listener.effect.floorplan.pointBonus.Add(listener.effect.floorplan.Name, () => amount));
+    public static EventListener<Action<T>,T> AddPointBonusToFloorplan<T>(this EventListener<Action<T>,T> listener, Func<int> bonus) where T : Event =>
+        listener.Do(_ => listener.effect.floorplan.pointBonus.Add(listener.effect.floorplan.Name, bonus));
     public static EventListener<Action<T>,T> PowerFloorplan<T>(this EventListener<Action<T>,T> listener) where T : Event =>
-        listener.Do(_ => listener.effect.floorplan.pointMult.Add(() => 2));
+        listener.Do(_ => listener.effect.floorplan.multBonus.Add(listener.effect.floorplan.Name, () => 2));
     public static EventListener<Action<T>,T> AddPointsToThatFloorplan<T>(this EventListener<Action<T>,T> listener, int amount) where T : CoordinateEvent =>
-        listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].pointBonus.Add(() => amount));
+        listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].pointBonus.Add(listener.effect.floorplan.Name, () => amount));
     public static EventListener<Action<T>,T> AddPointBonusToThatFloorplan<T>(this EventListener<Action<T>,T> listener, Func<int> amount) where T : CoordinateEvent =>
-        listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].pointBonus.Add(amount));
+        listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].pointBonus.Add(listener.effect.floorplan.Name, amount));
     public static EventListener<Action<T>,T> PowerThatFloorplan<T>(this EventListener<Action<T>, T> listener) where T : CoordinateEvent =>
-        listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].pointMult.Add(() => 2));
+        listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].multBonus.Add(listener.effect.floorplan.Name, () => 2));
 
     public static EventListener<Action<T>,T> SetupFloorplanShop<T>(this EventListener<Action<T>, T> listener, string title, List<PurchaseData> shopList)
         where T : CoordinateEvent

@@ -31,8 +31,8 @@ public class Floorplan : ScriptableObject
     public Action OnChanged;
 
     [HideInInspector] public List<Floorplan> connectedFloorplans;
-    public List<Func<int>> pointBonus = new();
-    public List<Func<int>> pointMult = new();
+    public Dictionary<string, Func<int>> pointBonus = new();
+    public Dictionary<string, Func<int>> multBonus = new();
 
     public Action<CoordinateEvent> onDrafted = null;
     public Action<FloorplanConnectedEvent> onConnectToFloorplan = null;
@@ -164,10 +164,10 @@ public class Floorplan : ScriptableObject
     public int CalculatePoints()
     {
         int finalValue = basePoints;
-        for (int i = 0; i < pointBonus.Count; i++)
-            finalValue += pointBonus[i]?.Invoke() ?? 0;
-        for (int i = 0; i < pointMult.Count; i++)
-            finalValue *= pointMult[i]?.Invoke() ?? 1;
+        foreach(var point in pointBonus.Values)
+            finalValue += point?.Invoke() ?? 0;
+        foreach (var mult in multBonus.Values)
+            finalValue *= mult?.Invoke() ?? 1;
         return finalValue;
     }
 
