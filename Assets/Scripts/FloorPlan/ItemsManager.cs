@@ -18,7 +18,7 @@ public class ItemsManager : MonoBehaviour
 
     public static RarityPicker<Item> GetPossibleFloorplanItems(Floorplan floorplan)
     {
-        RarityPicker<Item> possibleItems = new(.3f, .1f, 0, 0);
+        RarityPicker<Item> possibleItems = new(.25f, .1f, .05f, 0);
         switch (floorplan.Category)
         {
             case FloorCategory.Shop:
@@ -48,7 +48,7 @@ public class ItemsManager : MonoBehaviour
                 possibleItems.AddToPool(new Food(), Rarity.Common);
                 possibleItems.AddToPool(new Key(), Rarity.Common);
                 possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
-                possibleItems.AddToPool(new SledgeHammer(), Rarity.Uncommon);
+                possibleItems.AddToPool(new SledgeHammer(), Rarity.Rare);
                 break;
         }
 
@@ -72,7 +72,7 @@ public class ItemsManager : MonoBehaviour
             possibleItems.ChangeRarities(
                 possibleItems.commonRate + distributeRate,
                 possibleItems.uncommonRate + distributeRate,
-                0,//no rare items yet
+                possibleItems.rareRate + distributeRate,//no rare items yet
                 possibleItems.legendRate - cutRate);
         }
 
