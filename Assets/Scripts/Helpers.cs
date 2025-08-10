@@ -51,7 +51,7 @@ public static class Helpers
         ConnectFloorplans(floorplan, targetFloorplan);
     }
 
-    public static bool IsOfCategory(this Floorplan floorplan, FloorCategory category) => NumberUtil.ContainsBytes((int)floorplan.Category, (int)category));
+    public static bool IsOfCategory(this Floorplan floorplan, FloorCategory category) => NumberUtil.ContainsBytes((int)floorplan.Category, (int)category);
 
     public static void IncreaseChanceOfDrawing(this DrawFloorplanEvent evt, Func<Floorplan, bool> condition, float chance = .4f)
     {
