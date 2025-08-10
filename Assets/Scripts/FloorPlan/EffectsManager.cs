@@ -15,7 +15,7 @@ public static class EffectsManager
                 RarityPicker<Item> atticItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 int atticItemCount = 6;
                 for (int i = 0; i < atticItemCount; i++)
-                    floorplan.AddItem(atticItems.PickRandom());
+                    ItemsManager.AddFloorplanItems(floorplan, true);
                 break;
             case "Bathroom":
                 floorplan.TheFirstTime().PlayerEnterFloorplan().Do(_ =>
@@ -232,7 +232,7 @@ public static class EffectsManager
                     hallwayClosetItemCount += 1;
                 
                 for (int i = 0; i < hallwayClosetItemCount; i++)
-                    floorplan.AddItem(hallwayClosetItems.PickRandom());
+                    ItemsManager.AddFloorplanItems(floorplan, true);
                 break;
             case "Kitchen":
                 PurchaseData apple = new()
@@ -353,14 +353,13 @@ public static class EffectsManager
                     });
                 break;
             case "Walk-In Closet":
-                RarityPicker<Item> walkinClosetItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 int walkinClosetItemCount = 4;
                 if (!ReferenceEquals(draftedFloorplan, null) &&
-                    NumberUtil.ContainsBytes((int)draftedFloorplan.Category, (int)FloorCategory.Hallway))
+                    NumberUtil.ContainsBytes((int)draftedFloorplan.Category, (int)FloorCategory.RestRoom))
                     walkinClosetItemCount += 2;
 
                 for (int i = 0; i < walkinClosetItemCount; i++)
-                    floorplan.AddItem(walkinClosetItems.PickRandom());
+                    ItemsManager.AddFloorplanItems(floorplan, true);
                 break;
             case "":
                 break;

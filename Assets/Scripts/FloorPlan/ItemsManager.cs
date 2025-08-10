@@ -43,7 +43,7 @@ public class ItemsManager : MonoBehaviour
                 possibleItems.AddToPool(new Key(), Rarity.Common);
                 possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
                 break;
-            default:
+            default://blue rooms
                 possibleItems.AddToPool(new Coin(), Rarity.Common);
                 possibleItems.AddToPool(new Food(), Rarity.Common);
                 possibleItems.AddToPool(new Key(), Rarity.Common);
@@ -55,13 +55,13 @@ public class ItemsManager : MonoBehaviour
         return possibleItems;
     }
 
-    public static void AddFloorplanItems(Floorplan floorplan)
+    public static void AddFloorplanItems(Floorplan floorplan, bool forceItem = false)
     {
         RarityPicker<Item> possibleItems = GetPossibleFloorplanItems(floorplan);
         //for items, legend means you get nothing
         possibleItems.allowEmptyResult = true;
         float nothingRate = possibleItems.commonRate + possibleItems.uncommonRate + possibleItems.rareRate;
-        nothingRate = 1 - nothingRate;
+        nothingRate = forceItem ? 0 : 1 - nothingRate;
         possibleItems.legendRate = nothingRate;
         
         //blue rooms are most likely to contain items
