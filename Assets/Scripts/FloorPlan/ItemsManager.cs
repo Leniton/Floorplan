@@ -65,7 +65,7 @@ public class ItemsManager : MonoBehaviour
         possibleItems.legendRate = nothingRate;
         
         //blue rooms are most likely to contain items
-        if (NumberUtil.ContainsBytes((int)floorplan.Category, (int)FloorCategory.BlueRoom))
+        if (floorplan.IsOfCategory(FloorCategory.BlueRoom))
         {
             float cutRate = possibleItems.legendRate / 2f;
             float distributeRate = cutRate / 2f;//to be 3 when rare items are introduced

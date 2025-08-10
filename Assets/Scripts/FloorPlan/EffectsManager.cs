@@ -33,35 +33,7 @@ public static class EffectsManager
                 break;
             case "Boudoir":
                 floorplan.EveryTime().FloorplansAreDrawn().Where(DraftedFromHere).Do(evt =>
-                {
-                    int restroomCount = 0;
-                    for (int i = 0; i < evt.drawnFloorplans.Length; i++)
-                    {
-                        if (!NumberUtil.ContainsBytes((int)evt.drawnFloorplans[i].Category,
-                                (int)FloorCategory.RestRoom)) continue;
-                        restroomCount++;
-                    }
-
-                    if (restroomCount > 0) return;
-                    List<Floorplan> possibleRestroom = new();
-                    RarityPicker<Floorplan> modifiedList = new();
-                    for (int i = 0; i < evt.possibleFloorplans.Count; i++)
-                    {
-                        Floorplan restRoom = evt.possibleFloorplans[i];
-                        if (!NumberUtil.ContainsBytes((int)restRoom.Category, (int)FloorCategory.RestRoom))
-                            continue;
-                        //check if it is selected already
-                        if (restRoom == evt.drawnFloorplans[0] ||
-                            restRoom == evt.drawnFloorplans[1] ||
-                            restRoom == evt.drawnFloorplans[2]) continue;
-                        modifiedList.AddToPool(restRoom, restRoom.Rarity);
-                        possibleRestroom.Add(restRoom);
-                    }
-
-                    if (possibleRestroom.Count <= 0) return;
-                    int id = Random.Range(0, 2);
-                    evt.drawnFloorplans[id] = modifiedList.PickRandom();
-                });
+                    evt.IncreaseChanceOfDrawing(target => target.IsOfCategory(FloorCategory.RestRoom)));
                 break;
             case "Bunk Room":
                 //double draft
@@ -225,7 +197,7 @@ public static class EffectsManager
             case "Hallway Closet":
                 int hallwayClosetItemCount = 2;
                 if (!ReferenceEquals(draftedFloorplan, null) &&
-                    NumberUtil.ContainsBytes((int)draftedFloorplan.Category, (int)FloorCategory.Hallway))
+                    draftedFloorplan.IsOfCategory(FloorCategory.Hallway))
                     hallwayClosetItemCount += 1;
 
                 for (int i = 0; i < hallwayClosetItemCount; i++)
@@ -401,8 +373,7 @@ public static class EffectsManager
                 break;
             case "Walk-In Closet":
                 int walkinClosetItemCount = 4;
-                if (!ReferenceEquals(draftedFloorplan, null) &&
-                    NumberUtil.ContainsBytes((int)draftedFloorplan.Category, (int)FloorCategory.RestRoom))
+                if (!ReferenceEquals(draftedFloorplan, null) && draftedFloorplan.IsOfCategory(FloorCategory.RestRoom))
                     walkinClosetItemCount += 2;
 
                 for (int i = 0; i < walkinClosetItemCount; i++)
@@ -557,7 +528,7 @@ public static class EffectsManager
     public static Func<FloorplanEvent, bool> IsOfCategory(FloorCategory type) =>
         evt => NumberUtil.ContainsBytes((int)evt.Floorplan.Category, (int)type);
     public static Func<FloorplanEvent, bool> MatchCategoryWith(Floorplan floorplan) =>
-        evt => NumberUtil.ContainsAnyBits((int)evt.Floorplan.Category, (int)floorplan.Category);
+        evt => evt.Floorplan.IsOfCategory(floorplan.Category);
     public static Func<FloorplanEvent, bool> IsNot(Floorplan floorplan) =>
         evt => evt.Floorplan != floorplan;
     #endregion

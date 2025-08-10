@@ -147,6 +147,7 @@ public class DraftManager : MonoBehaviour
         evt.drawnFloorplans = new Floorplan[3];
         evt.possibleFloorTypes = possibleTypes;
         evt.possibleFloorplans = possibleFloorplans;
+        evt.floorplanPicker = floorplanPicker;
 
         for (int i = 0; i < amountDrafted - 1; i++) AddToDraftList(i);
         //last one is rarer
@@ -248,4 +249,5 @@ public class DrawFloorplanEvent : Event
     public Floorplan[] drawnFloorplans;
     public List<Floorplan> possibleFloorplans;
     public List<FloorType> possibleFloorTypes;
+    public RarityPicker<Floorplan> floorplanPicker;
 }
