@@ -44,11 +44,27 @@ public static class Helpers
         if (floorplan.connections[connectionID]) return;//already open
         //Debug.Log($"create opening on {floorplan.name}");
         floorplan.connections[connectionID] = true;
+        floorplan.UpdateFloorplanType();
         floorplan.OnChanged?.Invoke();
         if (!GameManager.floorplanDict.TryGetValue(floorplan.coordinate + Floorplan.IDToDirection(connectionID), out var targetFloorplan)) return;
         if (!targetFloorplan.connections[(connectionID + 2) % 4]) return;
         //Debug.Log($"{floorplan.Name} now connected to {targetFloorplan.Name}");
         ConnectFloorplans(floorplan, targetFloorplan);
+    }
+
+    private static void UpdateFloorplanType(this Floorplan floorplan)
+    {
+        var connections = floorplan.connections;
+        //change floorplan type
+        int connectionCount = 0;
+        for (int i = 0; i < connections.Length; i++)
+            if (connections[i]) connectionCount++;
+
+        if (connectionCount == 4) floorplan.Type = FloorType.Crossroad;
+        else if (connectionCount == 3) floorplan.Type = FloorType.TPiece;
+        else if (connections[floorplan.entranceId + 2 % 4]) floorplan.Type = FloorType.Straw;
+        else if (connectionCount > 1) floorplan.Type = FloorType.Ankle;
+        else floorplan.Type = FloorType.DeadEnd;
     }
 
     public static bool IsOfCategory(this Floorplan floorplan, FloorCategory category) => NumberUtil.ContainsBytes((int)floorplan.Category, (int)category);

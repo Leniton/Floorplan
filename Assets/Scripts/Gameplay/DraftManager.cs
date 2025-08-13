@@ -224,7 +224,17 @@ public class DraftManager : MonoBehaviour
         background.SetActive(false);
         draftScreen.SetActive(false);
         Player.ChangeKeys(-floorplan.keyCost);
-        draftPool.Remove(floorplan.original);
+        Floorplan originalFloorplan = floorplan;
+        while (!draftPool.Contains(originalFloorplan))
+        {
+            if (ReferenceEquals(originalFloorplan, null))
+            {
+                Debug.LogWarning("Original floorplan not found!!");
+                break;
+            }
+            originalFloorplan = originalFloorplan.original;
+        }
+        draftPool.Remove(originalFloorplan);
         OnDraftFloorplan?.Invoke(floorplan);
     }
 

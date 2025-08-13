@@ -288,8 +288,8 @@ public static class EffectsManager
                             continue;
                         }
                         //otherwise open a connection on floorplan
-                        Floorplan newFloorplan = drawnFloorplan.original.CreateInstance(Floorplan.IDToDirection(drawnFloorplan.entranceId));
-                        newFloorplan.connections[closedConnectionID] = true;
+                        Floorplan newFloorplan = drawnFloorplan.CreateInstance(Floorplan.IDToDirection(drawnFloorplan.entranceId));
+                        newFloorplan.OpenConnection(closedConnectionID);
                         evt.drawnFloorplans[i] = newFloorplan;
                         //Debug.Log($"open connection on {newFloorplan} => {Floorplan.IDToDirection(closedConnectionID)}({newFloorplan.connections[closedConnectionID]})");
                     }
