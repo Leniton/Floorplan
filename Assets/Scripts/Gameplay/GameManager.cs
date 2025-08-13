@@ -58,12 +58,12 @@ public class GameManager : MonoBehaviour
         Vector2Int targetedSlot = gridManager.currentPosition + direction;
         if (!gridManager.ValidCoordinate(targetedSlot)) return;
 
-        if (!current.connections[Floorplan.DirectionToID(direction)] && !Player.activeSledgeHammer) return;
-        if (!current.connections[Floorplan.DirectionToID(direction)] && Player.activeSledgeHammer)
+        if (!current.connections[Floorplan.DirectionToID(direction)] && !forceEntrance) return;
+        if (!current.connections[Floorplan.DirectionToID(direction)] && forceEntrance)
         {
             //add connection
             current.OpenConnection(Floorplan.DirectionToID(direction));
-            Player.activeSledgeHammer = false;
+            if (Player.activeSledgeHammer) Player.activeSledgeHammer = false;
         }
 
         if (floorplanDict.TryGetValue(targetedSlot, out var targetFloorplan))
@@ -73,10 +73,10 @@ public class GameManager : MonoBehaviour
             if (!targetFloorplan.connections[Floorplan.DirectionToID(-direction)])
             {
 
-                if (!Player.activeSledgeHammer) return;
+                if (!Player.activeSledgeHammer && !forceEntrance) return;
                 //Add connection to other floorplans
                 targetFloorplan.OpenConnection(Floorplan.DirectionToID(-direction));
-                Player.activeSledgeHammer = false;
+                if (Player.activeSledgeHammer) Player.activeSledgeHammer = false;
             }
 
             //slot enter event

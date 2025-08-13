@@ -62,7 +62,7 @@ public static class Helpers
 
         if (connectionCount == 4) floorplan.Type = FloorType.Crossroad;
         else if (connectionCount == 3) floorplan.Type = FloorType.TPiece;
-        else if (connections[floorplan.entranceId + 2 % 4]) floorplan.Type = FloorType.Straw;
+        else if (connections[(floorplan.entranceId + 2) % 4]) floorplan.Type = FloorType.Straw;
         else if (connectionCount > 1) floorplan.Type = FloorType.Ankle;
         else floorplan.Type = FloorType.DeadEnd;
     }
