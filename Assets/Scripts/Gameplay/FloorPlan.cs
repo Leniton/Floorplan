@@ -130,11 +130,10 @@ public class Floorplan : ScriptableObject
 
     public void AddItem(Item item)
     {
-        item.Setup(this);
         items.Add(item);
         if (Helpers.CurrentFloorplan() != this ||
             !GameSettings.current.autoCollectItems ||
-            item.placed) return;
+            item is PlaceableItem and { placed: true }) return;
         PickupItem(item);
     }
 
@@ -146,7 +145,7 @@ public class Floorplan : ScriptableObject
         for (int i = 0; i < itemCount; i++)
         {
             Item item = items[currentId];
-            if (item.placed)
+            if (item is PlaceableItem and { placed: true })
             {
                 currentId++;
                 continue;

@@ -5,9 +5,11 @@ using UnityEngine;
 public abstract class Item
 {
     public string Name;
-    public bool placed;
 
-    public virtual void Setup(Floorplan floorplan) { }
+    public virtual void Place(Floorplan floorplan) 
+    {
+        floorplan.AddItem(this);
+    }
     public abstract void PickUp();
 }
 
@@ -91,24 +93,51 @@ public class Dice : Item
     }
 }
 
-public class SledgeHammer : Item
+public abstract class ToggleItem : Item
 {
-    private Floorplan currentFloorplan;
+    public bool active {  get; protected set; }
+    public virtual void Toggle() => active = !active;
+}
+
+public class SledgeHammer : ToggleItem
+{
     public SledgeHammer() => Name = "Sledge Hammer";
-    public override void Setup(Floorplan floorplan) => currentFloorplan = floorplan;
 
     public override void PickUp()
     {
-        if (!Player.activeSledgeHammer)
-        {
-            UIManager.ShowMessage($"Found a {Name}!!",
-                () => Player.activeSledgeHammer = true);
-            return;
-        }
+        //if (!Player.activeSledgeHammer)
+        //{
+        //    UIManager.ShowMessage($"Found a {Name}!!",
+        //        () => Player.activeSledgeHammer = true);
+        //    return;
+        //}
 
-        //add it back to floorplan
-        if (ReferenceEquals(currentFloorplan, null)) return;
-        UIManager.ShowMessage($"Found a {Name} (you already have one, so this one will stay here until you use your current one)", 
-            () => currentFloorplan.items.Add(this));
+        //Player.items.Add(this);
+        UIManager.ShowMessage($"Found a {Name}!!", () => Player.items.Add(this));
+    }
+}
+
+public abstract class PlaceableItem : Item
+{
+    public bool placed;
+    protected bool firstPlaced;
+
+    public PlaceableItem(bool alreadyCanPlace = false) => firstPlaced = alreadyCanPlace;
+
+    public override void Place(Floorplan floorplan)
+    {
+        base.Place(floorplan);
+        if(!firstPlaced) PlaceOnFloorplan(floorplan);
+        firstPlaced = true;
+    }
+
+    protected virtual void PlaceOnFloorplan(Floorplan floorplan)
+    {
+        placed = true;
+    }
+
+    public override void PickUp()
+    {
+        placed = false;
     }
 }

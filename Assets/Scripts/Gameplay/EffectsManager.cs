@@ -68,7 +68,7 @@ public static class EffectsManager
             case "Cloister":
                 RarityPicker<Item> cloisterItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 cloisterItems.ChangeRarities(1,0,0,0);
-                floorplan.AddItem(cloisterItems.PickRandom());
+                cloisterItems.PickRandom().Place(floorplan);
                 break;
             case "Commissary":
                 PurchaseData bananas = new()
@@ -111,7 +111,7 @@ public static class EffectsManager
                 break;
             case "Dining Room":
                 int stepsFromFood = 0;
-                floorplan.AddItem(new Food(10) { Name = "Meal"});
+                new Food(10) { Name = "Meal"}.Place(floorplan);
                 floorplan.pointBonus.Add(floorplan.Name, () => stepsFromFood);
                 floorplan.EveryTime().ItemCollected().Where(evt => evt.item is Food).Do(evt => stepsFromFood += (evt.item as Food).stepsAmount);
                 break;
@@ -254,8 +254,8 @@ public static class EffectsManager
                     AddPointsToThatFloorplan(otherBonus).Do(_ => selfBonus += 2);
                 break;
             case "Pantry":
-                floorplan.AddItem(new Coin());
-                floorplan.AddItem(new Food());
+                new Coin().Place(floorplan);
+                new Food().Place(floorplan);
                 break;
             case "Pump Room":
                 floorplan.EveryTime().FloorplanConnected().AddPointBonusToThatFloorplan(floorplan.CalculatePoints);
@@ -313,7 +313,7 @@ public static class EffectsManager
             case "Terrace":
                 RarityPicker<Item> terraceItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
                 terraceItems.ChangeRarities(0,1,0,0);
-                floorplan.AddItem(terraceItems.PickRandom());
+                terraceItems.PickRandom().Place(floorplan);
                 break;
             case "Tunnel":
                 //Aways draw a tunnel when drafting from tunnel
@@ -330,7 +330,7 @@ public static class EffectsManager
                     Do(_ =>
                 {
                     floorplan.connections[exitId] = false;
-                    floorplan.AddItem(new Key(5));
+                    new Key(5).Place(floorplan);
                     floorplan.OnChanged?.Invoke();
                 });
                 break;
@@ -473,9 +473,9 @@ public static class EffectsManager
 
     //Floorplan changes
     public static EventListener<Action<T>,T> AddItemToFloorplan<T>(this EventListener<Action<T>,T> listener, Item item) where T : Event =>
-        listener.Do(_ => listener.effect.floorplan.AddItem(item));
-    public static EventListener<Action<T>,T> AddItemToThatFloorplan<T>(this EventListener<Action<T>,T> listener, Item item) where T : CoordinateEvent =>
-        listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].AddItem(item));
+        listener.Do(_ => item.Place(listener.effect.floorplan));
+    public static EventListener<Action<T>, T> AddItemToThatFloorplan<T>(this EventListener<Action<T>, T> listener, Item item) where T : CoordinateEvent =>
+        listener.Do(evt => item.Place(GameManager.floorplanDict[evt.Coordinates]));
     public static EventListener<Action<T>,T> AddPointsToFloorplan<T>(this EventListener<Action<T>,T> listener, int amount) where T : Event =>
         listener.Do(_ => listener.effect.floorplan.pointBonus.Add(listener.effect.floorplan.Name, () => amount));
     public static EventListener<Action<T>,T> AddPointBonusToFloorplan<T>(this EventListener<Action<T>,T> listener, Func<int> bonus) where T : Event =>

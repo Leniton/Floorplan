@@ -76,8 +76,6 @@ public class ItemsManager : MonoBehaviour
                 possibleItems.legendRate - cutRate);
         }
 
-        Item item = possibleItems.PickRandom();
-        if(item == null) return;
-        floorplan.AddItem(item);
+        possibleItems.PickRandom()?.Place(floorplan);
     }
 }
