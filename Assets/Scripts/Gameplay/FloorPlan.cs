@@ -160,6 +160,24 @@ public class Floorplan : ScriptableObject
         items.Remove(item);
     }
 
+    public void AddBonus(string name, Func<int> bonus)
+    {
+        string key = name;
+        int duplicateID = 1;
+        while(pointBonus.ContainsKey(key)) key = $"{name} {++duplicateID}";
+        Debug.Log($"adding {key} to bonus");
+        pointBonus[key] = bonus;
+    }
+
+    public void AddMultiplier(string name, Func<int> bonus)
+    {
+        string key = name;
+        int duplicateID = 1;
+        while (multBonus.ContainsKey(key)) key = $"{name} {++duplicateID}";
+        Debug.Log($"adding {key} to mult");
+        multBonus[key] = bonus;
+    }
+
     public int CalculatePoints()
     {
         int finalValue = basePoints;

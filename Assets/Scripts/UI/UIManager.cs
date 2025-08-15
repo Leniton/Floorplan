@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text messageText;
     [Header("Floorplan Details")]
     [SerializeField] private FloorplanWindow details;
+    [SerializeField] private BagWindow currentDetails;
 
     private static UIManager instance;
     private static Coroutine messageCoroutine;
@@ -35,6 +36,11 @@ public class UIManager : MonoBehaviour
     {
         instance.details.SetupWindow(floorplan);
         instance.details.gameObject.SetActive(true);
+    }
+
+    public static void ShowCurrentFloorplan()
+    {
+        instance.currentDetails.OpenBag();
     }
 
     public static void ShowMessage(string message, Action onDone = null)

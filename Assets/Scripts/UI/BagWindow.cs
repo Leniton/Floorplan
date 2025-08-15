@@ -16,13 +16,14 @@ public class BagWindow : MonoBehaviour
     private List<ItemButton> floorplanItems = new();
     private List<ItemButton> playerItems = new();
 
-    public void OpenBag()
+    private void Awake()
     {
-        Floorplan floorplan = Helpers.CurrentFloorplan();
-        floorplanDetails.Setup(floorplan);
-        autoPickupToggle.isOn = GameSettings.current.autoCollectItems;
-        UpdateItems();
+        autoPickupToggle.onValueChanged.AddListener(on => GameSettings.current.autoCollectItems = on);
+        openDetailsButton.onClick.AddListener(OpenDetails);
+        CloseBag();
     }
+
+    private void OpenDetails() => UIManager.ShowDetails(Helpers.CurrentFloorplan());
 
     private void UpdateItems()
     {
@@ -42,5 +43,19 @@ public class BagWindow : MonoBehaviour
         int requiredItems = Player.items.Count;
         playerItems.EnsureEnoughInstances(itemPrefab, requiredItems, playerContainer);
         for (int i = 0; i < requiredItems; i++) playerItems[i].Setup(Player.items[i]);
+    }
+
+    public void OpenBag()
+    {
+        gameObject.SetActive(true);
+        Floorplan floorplan = Helpers.CurrentFloorplan();
+        floorplanDetails.Setup(floorplan);
+        autoPickupToggle.isOn = GameSettings.current.autoCollectItems;
+        UpdateItems();
+    }
+
+    public void CloseBag()
+    {
+        gameObject.SetActive(false);
     }
 }

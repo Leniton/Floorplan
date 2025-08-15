@@ -27,14 +27,7 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
             hoverOptions.optionsButton[i].HoverOptions = subOptions;
         mainButton.transform.SetAsLastSibling();
 
-        //test
-        hoverOptions.optionsButton[0].gameObject.name = "option 1";
-        hoverOptions.optionsButton[0].AddOption(new() { onPick = () => Debug.Log("0 => 0") });
-        hoverOptions.optionsButton[0].AddOption(new() { onPick = () => Debug.Log("0 => 1") });
-        hoverOptions.optionsButton[0].AddOption(new() { onPick = () => Debug.Log("0 => 2") });
-        hoverOptions.optionsButton[1].gameObject.name = "option 2";
-        hoverOptions.optionsButton[1].AddOption(new() { onPick = () => Debug.Log("1 => 0") });
-        hoverOptions.optionsButton[1].gameObject.name = "option 3";
+        hoverOptions.optionsButton[0].AddOption(new() { onPick = UIManager.ShowCurrentFloorplan });
     }
 
     public void OnPointerDown(PointerEventData eventData)
