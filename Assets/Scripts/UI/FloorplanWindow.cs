@@ -33,48 +33,29 @@ public class FloorplanWindow : MonoBehaviour
     private void SetupItems()
     {
         int requiredTexts = currentFloorplan.items.Count;
-        if (pointsTexts.Count < requiredTexts)
-        {
-            int diff = requiredTexts - itemsTexts.Count;
-            for (int i = 0; i < diff; i++)
-                itemsTexts.Add(Instantiate(textPrefab, itemsContent));
-        }
+        itemsTexts.EnsureEnoughInstances(textPrefab, requiredTexts, itemsContent);
 
         for (int i = 0;i < requiredTexts; i++)
-        {
-            itemsTexts[i].gameObject.SetActive(true);
             itemsTexts[i].text = $"{currentFloorplan.items[i].Name}";
-        }
-        for (int i = requiredTexts; i < itemsTexts.Count; i++)
-            itemsTexts[i].gameObject.SetActive(false);
     }
 
     private void SetupPoints()
     {
         basePointsText.text = $"Base: {currentFloorplan.basePoints}";
         int requiredTexts = currentFloorplan.pointBonus.Count + currentFloorplan.multBonus.Count;
-        if (pointsTexts.Count < requiredTexts)
-        {
-            int diff = requiredTexts - pointsTexts.Count;
-            for (int i = 0; i < diff; i++)
-                pointsTexts.Add(Instantiate(textPrefab, pointsContent));
-        }
+        pointsTexts.EnsureEnoughInstances(textPrefab , requiredTexts, pointsContent);
 
         int id = 0;
         foreach (var bonus in currentFloorplan.pointBonus)
         {
             int points = bonus.Value.Invoke();
-            pointsTexts[id].gameObject.SetActive(true);
             pointsTexts[id].text = $"{bonus.Key} => {(points > 0 ? "+" : string.Empty) + $"{points}"}";
             id++;
         }
         foreach (var mult in currentFloorplan.multBonus)
         {
-            pointsTexts[id].gameObject.SetActive(true);
             pointsTexts[id].text = $"{mult.Key} => {mult.Value.Invoke()}x";
             id++;
         }
-        for (int i = id; i < pointsTexts.Count; i++)
-            pointsTexts[i].gameObject.SetActive(false);
     }
 }

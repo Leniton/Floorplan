@@ -7,6 +7,24 @@ using Random = UnityEngine.Random;
 
 public static class Helpers
 {
+    #region General helpers
+    /// <summary>
+    /// Create nedded instances and adds to the list; also disables extra instances and enables the required ones
+    /// </summary>
+    public static void EnsureEnoughInstances<T>(this List<T> list, T prefab, int requiredInstances, Transform parent = null) where T : MonoBehaviour
+    {
+        if (list.Count < requiredInstances)
+        {
+            int diff = requiredInstances - list.Count;
+            for (int i = 0; i < diff; i++)
+                list.Add(GameObject.Instantiate(prefab, parent));
+        }
+        for (int i = 0; i < list.Count; i++)
+            list[i].gameObject.SetActive(i < requiredInstances);
+    }
+    #endregion
+
+    #region Floorplan helpers
     public static bool ConnectedToFloorplan(this Floorplan targetFloorplan, FloorplanConnectedEvent evt, out Floorplan other)
     {
         other = null;
@@ -114,4 +132,5 @@ public static class Helpers
             if(possiblesFloorplans <= 0) break;
         }
     }
+    #endregion
 }
