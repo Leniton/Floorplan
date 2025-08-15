@@ -11,6 +11,7 @@ public abstract class Item
         floorplan.AddItem(this);
     }
     public abstract void PickUp();
+    public abstract void Activate();
 }
 
 public class Food : Item
@@ -29,7 +30,9 @@ public class Food : Item
         };
     }
 
-    public override void PickUp()
+    public override void PickUp() => Activate();
+
+    public override void Activate()
     {
         int amount = stepsAmount;
         //Debug.Log($"found food!!\n{Player.steps} + {amount}");
@@ -48,7 +51,9 @@ public class Coin : Item
         Name = coinsAmount > 1 ? $"Coins ({coinsAmount})" : "Coin";
     }
 
-    public override void PickUp()
+    public override void PickUp() => Activate();
+
+    public override void Activate()
     {
         //Debug.Log($"found coins!!\n{Player.coins} + {amount}");
         GameEvent.OnCollectItem?.Invoke(new(this));
@@ -66,7 +71,9 @@ public class Key : Item
         Name = keyAmount > 1 ? $"Keys ({keyAmount})" : "Key";
     }
 
-    public override void PickUp()
+    public override void PickUp() => Activate();
+
+    public override void Activate()
     {
         //Debug.Log($"found keys!!\n{Player.keys} + {amount}");
         GameEvent.OnCollectItem?.Invoke(new(this));
@@ -84,7 +91,9 @@ public class Dice : Item
         Name = diceAmount > 1 ? $"Dices ({diceAmount})" : "Dice";
     }
 
-    public override void PickUp()
+    public override void PickUp() => Activate();
+
+    public override void Activate()
     {
         //Debug.Log($"found dice!!\n{Player.dices} + {amount}");
         GameEvent.OnCollectItem?.Invoke(new(this));
@@ -105,15 +114,14 @@ public class SledgeHammer : ToggleItem
 
     public override void PickUp()
     {
-        //if (!Player.activeSledgeHammer)
-        //{
-        //    UIManager.ShowMessage($"Found a {Name}!!",
-        //        () => Player.activeSledgeHammer = true);
-        //    return;
-        //}
+        Player.items.Add(this);
+        UIManager.ShowMessage($"Found a {Name}!!");
+    }
 
-        //Player.items.Add(this);
-        UIManager.ShowMessage($"Found a {Name}!!", () => Player.items.Add(this));
+    public override void Activate()
+    {
+        if (active != Player.activeSledgeHammer) return;
+        Player.activeSledgeHammer = active = !active;
     }
 }
 

@@ -27,6 +27,7 @@ public class BagWindow : MonoBehaviour
 
     private void UpdateItems()
     {
+        Debug.Log("update items list");
         SetupFloorplanItems(Helpers.CurrentFloorplan());
         SetupPlayerItems();
     }
@@ -35,14 +36,30 @@ public class BagWindow : MonoBehaviour
     {
         int requiredItems = floorplan.items.Count;
         floorplanItems.EnsureEnoughInstances(itemPrefab, requiredItems, floorplanContainer);
-        for (int i = 0; i < requiredItems; i++) floorplanItems[i].Setup(floorplan.items[i]);
+        for (int i = 0; i < requiredItems; i++)
+        {
+            Item item = floorplan.items[i];
+            ItemButton button = floorplanItems[i];
+            button.onClick = null;
+            button.Setup(item);
+            button.onClick += () => floorplan.PickupItem(item);
+            button.onClick += UpdateItems;
+        }
     }
 
     private void SetupPlayerItems()
     {
         int requiredItems = Player.items.Count;
         playerItems.EnsureEnoughInstances(itemPrefab, requiredItems, playerContainer);
-        for (int i = 0; i < requiredItems; i++) playerItems[i].Setup(Player.items[i]);
+        for (int i = 0; i < requiredItems; i++)
+        {
+            Item item = Player.items[i];
+            ItemButton button = playerItems[i];
+            button.onClick = null;
+            button.Setup(item);
+            button.onClick += item.Activate;
+            button.onClick += UpdateItems;
+        }
     }
 
     public void OpenBag()

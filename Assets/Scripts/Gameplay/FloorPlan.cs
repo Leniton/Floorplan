@@ -154,8 +154,9 @@ public class Floorplan : ScriptableObject
         }
     }
 
-    private void PickupItem(Item item)
+    public void PickupItem(Item item)
     {
+        if(!items.Contains(item)) return;
         item.PickUp();
         items.Remove(item);
     }
