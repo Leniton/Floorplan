@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
         {
             //add connection
             current.OpenConnection(Floorplan.DirectionToID(direction));
-            if (Player.activeSledgeHammer) Player.activeSledgeHammer = false;
+            if (Player.activeSledgeHammer) Player.ConsumeSledgeHammer();
         }
 
         if (floorplanDict.TryGetValue(targetedSlot, out var targetFloorplan))
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
                 if (!Player.activeSledgeHammer && !forceEntrance) return;
                 //Add connection to other floorplans
                 targetFloorplan.OpenConnection(Floorplan.DirectionToID(-direction));
-                if (Player.activeSledgeHammer) Player.activeSledgeHammer = false;
+                if (Player.activeSledgeHammer) Player.ConsumeSledgeHammer();
             }
 
             //slot enter event
@@ -120,6 +120,7 @@ public class GameManager : MonoBehaviour
         floorplan.coordinate = currentDraftPosition;
         floorplan.onDrafted?.Invoke(new(currentDraftPosition));
         GameEvent.onDraftedFloorplan?.Invoke(new(currentDraftPosition, floorplan));
+        floorplan.AddItem(new SledgeHammer());
         
         //connect floorplan
         for (int i = 0; i < floorplan.connections.Length; i++)
