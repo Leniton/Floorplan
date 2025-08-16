@@ -31,7 +31,8 @@ public class Player : MonoBehaviour
     public static int keys;
     public static int coins;
     public static int dices;
-    public static bool activeSledgeHammer;
+    public static bool activeSledgeHammer => currentSledgeHammer?.active ?? false;
+    private static SledgeHammer currentSledgeHammer;
     public static List<Item> items;
     #endregion
 
@@ -126,13 +127,26 @@ public class Player : MonoBehaviour
         keys += delta;
     }
 
+    public static void ActivateSledgeHammer(SledgeHammer sledgeHammer)
+    {
+        if(sledgeHammer == null) return;
+        if(!items.Contains(sledgeHammer)) items.Add(sledgeHammer);
+        currentSledgeHammer = sledgeHammer;
+    }
+
+    public static void ConsumeSledgeHammer()
+    {
+        items.Remove(currentSledgeHammer);
+        currentSledgeHammer = null;
+    }
+
     public static void ResetPlayer()
     {
         steps = 20;
         keys = 2;
         coins = 5;
         dices = 0;
-        activeSledgeHammer = false;
         items = new();
+        currentSledgeHammer = null;
     }
 }

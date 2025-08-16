@@ -19,7 +19,7 @@ public class ItemButton : MonoBehaviour
 
     private void OnClick(bool value)
     {
-        toggle.isOn = false;
+        toggle.SetIsOnWithoutNotify(false);
         onClick?.Invoke();
     }
 
@@ -28,10 +28,10 @@ public class ItemButton : MonoBehaviour
         itemName.text = item.Name;
         if (item is not ToggleItem)
         {
-            toggle.isOn = false;
+            toggle.SetIsOnWithoutNotify(false);
             return;
         }
         ToggleItem toggleItem = (ToggleItem)item;
-        toggle.isOn = toggleItem.active;
+        toggle.SetIsOnWithoutNotify(toggleItem.active);
     }
 }

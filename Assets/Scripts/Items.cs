@@ -35,10 +35,9 @@ public class Food : Item
     public override void Activate()
     {
         int amount = stepsAmount;
-        //Debug.Log($"found food!!\n{Player.steps} + {amount}");
         GameEvent.OnCollectItem?.Invoke(new(this));
-        UIManager.ShowMessage($"found {Name}!!\n+{amount} steps",
-            () => Player.ChangeSteps(amount));
+        //UIManager.ShowMessage($"found {Name}!!\n+{amount} steps",
+        Player.ChangeSteps(amount);
     }
 }
 
@@ -57,8 +56,7 @@ public class Coin : Item
     {
         //Debug.Log($"found coins!!\n{Player.coins} + {amount}");
         GameEvent.OnCollectItem?.Invoke(new(this));
-        UIManager.ShowMessage($"found {Name}",
-            () => Player.ChangeCoins(coinsAmount));
+        Player.ChangeCoins(coinsAmount);
     }
 }
 
@@ -77,8 +75,7 @@ public class Key : Item
     {
         //Debug.Log($"found keys!!\n{Player.keys} + {amount}");
         GameEvent.OnCollectItem?.Invoke(new(this));
-        UIManager.ShowMessage($"found {Name}",
-            () => Player.ChangeKeys(keyAmount));
+        Player.ChangeKeys(keyAmount);
     }
 }
 
@@ -97,8 +94,7 @@ public class Dice : Item
     {
         //Debug.Log($"found dice!!\n{Player.dices} + {amount}");
         GameEvent.OnCollectItem?.Invoke(new(this));
-        UIManager.ShowMessage($"found {Name}",
-            () => Player.dices += diceAmount);
+        Player.dices += diceAmount;
     }
 }
 
@@ -112,16 +108,15 @@ public class SledgeHammer : ToggleItem
 {
     public SledgeHammer() => Name = "Sledge Hammer";
 
-    public override void PickUp()
-    {
-        Player.items.Add(this);
-        UIManager.ShowMessage($"Found a {Name}!!");
-    }
+    public override void PickUp() => Player.items.Add(this);
 
     public override void Activate()
     {
         if (active != Player.activeSledgeHammer) return;
-        Player.activeSledgeHammer = active = !active;
+        active = !active;
+        if (!active) return;
+        Player.ActivateSledgeHammer(this);
+
     }
 }
 

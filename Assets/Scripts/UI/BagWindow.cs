@@ -27,7 +27,6 @@ public class BagWindow : MonoBehaviour
 
     private void UpdateItems()
     {
-        Debug.Log("update items list");
         SetupFloorplanItems(Helpers.CurrentFloorplan());
         SetupPlayerItems();
     }

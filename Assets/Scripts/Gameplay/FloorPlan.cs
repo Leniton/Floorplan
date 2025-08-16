@@ -134,7 +134,7 @@ public class Floorplan : ScriptableObject
         if (Helpers.CurrentFloorplan() != this ||
             !GameSettings.current.autoCollectItems ||
             item is PlaceableItem and { placed: true }) return;
-        PickupItem(item);
+        UIManager.ShowMessage($"found {Name}", () => PickupItem(item));
     }
 
     private void OnEnterFloorplan(Event evt)
@@ -150,7 +150,7 @@ public class Floorplan : ScriptableObject
                 currentId++;
                 continue;
             }
-            PickupItem(item);
+            UIManager.ShowMessage($"found {Name}", () => PickupItem(item));
         }
     }
 
@@ -166,7 +166,6 @@ public class Floorplan : ScriptableObject
         string key = name;
         int duplicateID = 1;
         while(pointBonus.ContainsKey(key)) key = $"{name} {++duplicateID}";
-        Debug.Log($"adding {key} to bonus");
         pointBonus[key] = bonus;
     }
 
@@ -175,7 +174,6 @@ public class Floorplan : ScriptableObject
         string key = name;
         int duplicateID = 1;
         while (multBonus.ContainsKey(key)) key = $"{name} {++duplicateID}";
-        Debug.Log($"adding {key} to mult");
         multBonus[key] = bonus;
     }
 
