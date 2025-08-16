@@ -128,6 +128,10 @@ public class Floorplan : ScriptableObject
         InternalRotation();
     }
 
+    /// <summary>
+    /// Used by the items so they place themselves on the floorplan
+    /// </summary>
+    /// <param name="item"></param>
     public void AddItem(Item item)
     {
         items.Add(item);
@@ -161,20 +165,36 @@ public class Floorplan : ScriptableObject
         items.Remove(item);
     }
 
-    public void AddBonus(string name, Func<int> bonus)
+    public string AddBonus(string name, Func<int> bonus)
     {
         string key = name;
         int duplicateID = 1;
         while(pointBonus.ContainsKey(key)) key = $"{name} {++duplicateID}";
         pointBonus[key] = bonus;
+        OnChanged?.Invoke();
+        return key;
     }
 
-    public void AddMultiplier(string name, Func<int> bonus)
+    public void RemoveBonus(string name)
+    {
+        pointBonus.Remove(name);
+        OnChanged?.Invoke();
+    }
+
+    public string AddMultiplier(string name, Func<int> bonus)
     {
         string key = name;
         int duplicateID = 1;
         while (multBonus.ContainsKey(key)) key = $"{name} {++duplicateID}";
         multBonus[key] = bonus;
+        OnChanged?.Invoke();
+        return key;
+    }
+
+    public void RemoveMultiplier(string name)
+    {
+        multBonus.Remove(name);
+        OnChanged?.Invoke();
     }
 
     public int CalculatePoints()

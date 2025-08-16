@@ -120,7 +120,6 @@ public class GameManager : MonoBehaviour
         floorplan.coordinate = currentDraftPosition;
         floorplan.onDrafted?.Invoke(new(currentDraftPosition));
         GameEvent.onDraftedFloorplan?.Invoke(new(currentDraftPosition, floorplan));
-        floorplan.AddItem(new SledgeHammer());
         
         //connect floorplan
         for (int i = 0; i < floorplan.connections.Length; i++)

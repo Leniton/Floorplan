@@ -26,12 +26,18 @@ public class ItemButton : MonoBehaviour
     public void Setup(Item item)
     {
         itemName.text = item.Name;
-        if (item is not ToggleItem)
+        if (item is ToggleItem)
         {
-            toggle.SetIsOnWithoutNotify(false);
+            ToggleItem toggleItem = (ToggleItem)item;
+            toggle.SetIsOnWithoutNotify(toggleItem.active);
             return;
         }
-        ToggleItem toggleItem = (ToggleItem)item;
-        toggle.SetIsOnWithoutNotify(toggleItem.active);
+        if (item is PlaceableItem)
+        {
+            PlaceableItem placeableItem = (PlaceableItem)item;
+            toggle.SetIsOnWithoutNotify(placeableItem.placed);
+            return;
+        }
+        toggle.SetIsOnWithoutNotify(false);
     }
 }

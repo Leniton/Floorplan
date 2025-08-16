@@ -122,25 +122,86 @@ public class SledgeHammer : ToggleItem
 
 public abstract class PlaceableItem : Item
 {
-    public bool placed;
+    public bool placed => !ReferenceEquals(currentFloorplan, null);
     protected bool firstPlaced;
+    protected Floorplan currentFloorplan;
 
     public PlaceableItem(bool alreadyCanPlace = false) => firstPlaced = alreadyCanPlace;
 
     public override void Place(Floorplan floorplan)
     {
         base.Place(floorplan);
-        if(!firstPlaced) PlaceOnFloorplan(floorplan);
+        if(firstPlaced) PlaceOnFloorplan(floorplan);
         firstPlaced = true;
     }
 
     protected virtual void PlaceOnFloorplan(Floorplan floorplan)
     {
-        placed = true;
+        currentFloorplan = floorplan;
+        Player.items.Remove(this);
     }
 
     public override void PickUp()
     {
-        placed = false;
+        currentFloorplan = null;
+        Player.items.Add(this);
     }
+
+    public override void Activate() => Place(Helpers.CurrentFloorplan());
+}
+
+public class Decoration : PlaceableItem
+{
+    public int bonus;
+    private string bonusKey;
+
+    public Decoration(int? pointBonus = null, bool activate = false) : base(activate)
+    {
+        bonus = pointBonus ?? Random.Range(2, 6);
+        Name = bonus switch
+        {
+            2 => "Rock",
+            3 => "Toy",
+            4 => "Couch",
+            5 => "TV",
+            _ => $"Decoration (+{bonus})",
+        };
+    }
+
+    protected override void PlaceOnFloorplan(Floorplan floorplan)
+    {
+        if (placed) PickUp();
+        base.PlaceOnFloorplan(floorplan);
+        bonusKey = currentFloorplan.AddBonus(Name, PointBonus);
+    }
+
+    public override void PickUp()
+    {
+        currentFloorplan?.RemoveBonus(bonusKey);
+        base.PickUp();
+    }
+
+    private int PointBonus() => bonus;
+}
+
+public class Battery : PlaceableItem
+{
+    private string multKey;
+
+    public Battery(bool activate = false) : base(activate) => Name = "Battery";
+
+    protected override void PlaceOnFloorplan(Floorplan floorplan)
+    {
+        if (placed) PickUp();
+        base.PlaceOnFloorplan(floorplan);
+        multKey = currentFloorplan.AddMultiplier(Name, Multiplier);
+    }
+
+    public override void PickUp()
+    {
+        currentFloorplan?.RemoveMultiplier(multKey);
+        base.PickUp();
+    }
+
+    private int Multiplier() => 2;
 }
