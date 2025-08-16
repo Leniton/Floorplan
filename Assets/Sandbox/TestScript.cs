@@ -6,4 +6,9 @@ using UnityEngine.InputSystem;
 
 public class TestScript : MonoBehaviour
 {
+
+    private void Update()
+    {
+        if (Keyboard.current.spaceKey.wasPressedThisFrame) Application.targetFrameRate = Application.targetFrameRate == 100 ? 30 : 100;
+    }
 }

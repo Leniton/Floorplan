@@ -74,8 +74,6 @@ public class HoverOptions : MonoBehaviour
     public IEnumerator MoveAnimation()
     {
         const float duration = .08f;
-        const float stepDelay = 0.01f;
-        WaitForSeconds delay = new WaitForSeconds(stepDelay);
 
         bool expandLayout = !expand;
         while (expandLayout != expand)
@@ -92,8 +90,8 @@ public class HoverOptions : MonoBehaviour
                 layoutGroup.offset = Mathf.Lerp(initialOffset, targetOffset, scaledTime);
                 layoutGroup.spacing = Mathf.Lerp(initialSpacing, targetSpacing, scaledTime);
                 layoutGroup.AdjustElements();
-                yield return delay;
-                time += stepDelay;
+                yield return null;
+                time += Time.deltaTime;
             }
             layoutGroup.offset = targetOffset;
             layoutGroup.spacing = targetSpacing;

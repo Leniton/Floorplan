@@ -262,12 +262,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -745,7 +745,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1604066527
 RectTransform:
   m_ObjectHideFlags: 0
@@ -833,6 +833,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CurrentFloorplan
+      objectReference: {fileID: 0}
+    - target: {fileID: 215929467384609468, guid: edd4904ba9301334bbdab7e5a1598f5e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3497532616671372583, guid: edd4904ba9301334bbdab7e5a1598f5e,
         type: 3}
@@ -937,12 +942,12 @@ PrefabInstance:
     - target: {fileID: 3956420746842702404, guid: edd4904ba9301334bbdab7e5a1598f5e,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8442339408376052983, guid: edd4904ba9301334bbdab7e5a1598f5e,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
