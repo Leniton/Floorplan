@@ -101,14 +101,56 @@ public class Dice : Item
 public abstract class ToggleItem : Item
 {
     public bool active {  get; protected set; }
+
+    public override void PickUp() => Player.items.Add(this);
+
     public virtual void Toggle() => active = !active;
+}
+
+public class ColorKey : ToggleItem
+{
+    private FloorCategory floorCategory;
+
+    public ColorKey(FloorCategory? category = null)
+    {
+        floorCategory = category ?? (FloorCategory)Mathf.Pow(2, Random.Range(0, 7));//will be 8 with addition of red rooms
+        Name = floorCategory switch
+        {
+            FloorCategory.RestRoom => "Rest Room Key",
+            FloorCategory.Hallway => "Hallway Key",
+            FloorCategory.BlueRoom => "Blue Room Key",
+            FloorCategory.WhiteRoom => "White Room Key",
+            FloorCategory.Shop => "Shop Key",
+            FloorCategory.BlackRooms => "Black Room Key",
+            _ => $"{floorCategory.ToString()} Key",
+        };
+    }
+
+    public override void Activate()
+    {
+        if (active != Player.activeKey) return;
+        Player.activeKey = active = !active;
+        if (active) GameEvent.onDrawFloorplans += GuaranteeCategory;
+        else GameEvent.onDrawFloorplans -= GuaranteeCategory;
+    }
+
+    private void GuaranteeCategory(DrawFloorplanEvent evt)
+    {
+        evt.IncreaseChanceOfDrawing(CheckCategory, 1);
+        new Effect(null, 1).AnyFloorplanIsDrafted().Do(_ =>
+        {
+            GameEvent.onDrawFloorplans -= GuaranteeCategory;
+            Player.activeKey = active = !active;
+            Player.items.Remove(this);
+        });
+    }
+
+    private bool CheckCategory(Floorplan floorplan) => floorplan.IsOfCategory(floorCategory);
 }
 
 public class SledgeHammer : ToggleItem
 {
     public SledgeHammer() => Name = "Sledge Hammer";
-
-    public override void PickUp() => Player.items.Add(this);
 
     public override void Activate()
     {

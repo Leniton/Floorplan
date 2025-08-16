@@ -32,8 +32,9 @@ public class Player : MonoBehaviour
     public static int coins;
     public static int dices;
     public static bool activeSledgeHammer => currentSledgeHammer?.active ?? false;
-    private static SledgeHammer currentSledgeHammer;
+    public static bool activeKey;
     public static List<Item> items;
+    private static SledgeHammer currentSledgeHammer;
     #endregion
 
     private void Awake()
@@ -142,11 +143,12 @@ public class Player : MonoBehaviour
 
     public static void ResetPlayer()
     {
+        items = new();
         steps = 20;
         keys = 2;
         coins = 5;
         dices = 0;
-        items = new();
         currentSledgeHammer = null;
+        activeKey = false;
     }
 }
