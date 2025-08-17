@@ -1466,8 +1466,8 @@ RectTransform:
   - {fileID: 1068915550}
   - {fileID: 235302141}
   - {fileID: 125311812}
-  - {fileID: 1931191424}
   - {fileID: 26167817}
+  - {fileID: 1931191424}
   - {fileID: 1496901577}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4199,6 +4199,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Minimap
+      objectReference: {fileID: 0}
+    - target: {fileID: 8230182400006727843, guid: 4bad80005d5f19545a6be592d4734dfa,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8907447
+      objectReference: {fileID: 0}
+    - target: {fileID: 8230182400006727843, guid: 4bad80005d5f19545a6be592d4734dfa,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8907447
       objectReference: {fileID: 0}
     - target: {fileID: 8326405481397828259, guid: 4bad80005d5f19545a6be592d4734dfa,
         type: 3}
