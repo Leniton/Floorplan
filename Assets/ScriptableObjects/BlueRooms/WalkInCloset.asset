@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WalkInCloset
   m_EditorClassIdentifier: 
   Name: Walk-In Closet
-  Description: +3 items. +2 extra items if drafted from a <b>Rest Room<b>
+  Description: 4 items. +2 extra items if drafted from a <b>Rest Room<b>
   Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
   Category: 4
   Type: 1

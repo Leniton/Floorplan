@@ -16,7 +16,7 @@ public static class EffectsManager
                 int atticItemCount = 6;
                 for (int i = 0; i < atticItemCount; i++)
                     Helpers.AddFloorplanItems(floorplan, true);
-                break;
+                return;
             case "Bathroom":
                 floorplan.TheFirstTime().PlayerEnterFloorplan().Do(_ =>
                 {
@@ -224,7 +224,7 @@ public static class EffectsManager
 
                 for (int i = 0; i < hallwayClosetItemCount; i++)
                     Helpers.AddFloorplanItems(floorplan, true);
-                break;
+                return;
             case "Kitchen":
                 PurchaseData apple = new()
                 {
@@ -417,7 +417,7 @@ public static class EffectsManager
 
                 for (int i = 0; i < walkinClosetItemCount; i++)
                     Helpers.AddFloorplanItems(floorplan, true);
-                break;
+                return;
             case "":
                 break;
         }
