@@ -172,8 +172,8 @@ public abstract class PlaceableItem : Item
 
     public override void Place(Floorplan floorplan)
     {
-        base.Place(floorplan);
         if(firstPlaced) PlaceOnFloorplan(floorplan);
+        base.Place(floorplan);
         firstPlaced = true;
     }
 

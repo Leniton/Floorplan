@@ -145,13 +145,13 @@ public class Floorplan : ScriptableObject
     {
         if (!GameSettings.current.autoCollectItems) return;
         int itemCount = items.Count;
-        int currentId = 0;
+        int skippedItems = 0;
         for (int i = 0; i < itemCount; i++)
         {
-            Item item = items[currentId];
+            Item item = items[i + skippedItems];
             if (item is PlaceableItem and { placed: true })
             {
-                currentId++;
+                skippedItems++;
                 continue;
             }
             UIManager.ShowMessage($"found {item.Name}", () => PickupItem(item));
