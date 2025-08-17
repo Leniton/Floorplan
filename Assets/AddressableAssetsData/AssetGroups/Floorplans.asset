@@ -17,8 +17,20 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 0d19e8767ca8e144ab18abf922619682
   m_SerializeEntries:
+  - m_GUID: 0e9e7184794f1a249b5b2c3655048dc9
+    m_Address: Cloister 1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 10d06c86e414c84478232b496b62c5b1
     m_Address: Commissary
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 137c5c24d4b664543a72b28117174b39
+    m_Address: MailRoom
     m_ReadOnly: 0
     m_SerializedLabels:
     - BaseFloorplan

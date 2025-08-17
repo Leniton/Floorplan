@@ -8,13 +8,14 @@ public static class EffectsManager
 {
     public static void AddFloorplanEffect(Floorplan floorplan)
     {
+        if (floorplan.Name == "Entrance Hall") return;
         Floorplan draftedFloorplan = floorplan.DraftedFrom();
         switch (floorplan.Name)
         {
             case "Attic":
                 int atticItemCount = 6;
                 for (int i = 0; i < atticItemCount; i++)
-                    ItemsManager.AddFloorplanItems(floorplan, true);
+                    Helpers.AddFloorplanItems(floorplan, true);
                 break;
             case "Bathroom":
                 floorplan.TheFirstTime().PlayerEnterFloorplan().Do(_ =>
@@ -66,7 +67,7 @@ public static class EffectsManager
                 });
                 break;
             case "Cloister":
-                RarityPicker<Item> cloisterItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
+                RarityPicker<Item> cloisterItems = floorplan.ItemPool();
                 cloisterItems.ChangeRarities(1,0,0,0);
                 cloisterItems.PickRandom().Place(floorplan);
                 break;
@@ -106,6 +107,9 @@ public static class EffectsManager
                 List<PurchaseData> commissaryList = new() { bananas, keys, dice, keyBundle };
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, commissaryList);
                 break;
+            case "Courtyard":
+                new Key(3).Place(floorplan);
+                break;
             case "Den":
                 floorplan.TheFirstTime().FloorplanIsDrafted().AddItemToFloorplan(new Key(1));
                 break;
@@ -130,6 +134,18 @@ public static class EffectsManager
                             PlayerEnterFloorplan().
                             ChangePlayerSteps(5);
                     });
+                break;
+            case "Drawing Room":
+                int startAmount = 0;
+                floorplan.EveryTime().PlayerEnterFloorplan().Do(_ =>
+                {
+                    startAmount = Player.dices;
+                    Player.dices += 2;
+                });
+                floorplan.EveryTime().PlayerExitFloorplan().Do(_ => 
+                {
+
+                });
                 break;
             case "Gallery":
                 int visits = 0;
@@ -201,7 +217,7 @@ public static class EffectsManager
                     hallwayClosetItemCount += 1;
 
                 for (int i = 0; i < hallwayClosetItemCount; i++)
-                    ItemsManager.AddFloorplanItems(floorplan, true);
+                    Helpers.AddFloorplanItems(floorplan, true);
                 break;
             case "Kitchen":
                 PurchaseData apple = new()
@@ -253,6 +269,23 @@ public static class EffectsManager
                     Where(IsOfCategory(FloorCategory.RestRoom)).
                     AddPointsToThatFloorplan(otherBonus).Do(_ => selfBonus += 2);
                 break;
+            case "Mail Room":
+                const int draftsNeeded = 3;
+                int count = 0;
+                floorplan.TheNext_Times(draftsNeeded).AnyFloorplanIsDrafted().Where(IsNot(floorplan)).Do(_ =>
+                {
+                    count++;
+                    if (count < draftsNeeded) return;
+                    UIManager.ShowMessage("Your package has been delivered!!");
+                    RarityPicker<Item> picker = floorplan.ItemPool();
+                    //add uncommon item
+                    picker.ChangeRarities(0, 1, 0, 0);
+                    picker.PickRandom().Place(floorplan);
+                    //add rare item
+                    picker.ChangeRarities(0, 0, 1, 0);
+                    picker.PickRandom().Place(floorplan);
+                });
+                break;
             case "Pantry":
                 new Coin().Place(floorplan);
                 new Food().Place(floorplan);
@@ -284,7 +317,7 @@ public static class EffectsManager
                         if (openConnections >= maxConnections)
                         {
                             //Debug.Log($"{drawnFloorplan.Name} already has 4 connections, adding item");
-                            ItemsManager.AddFloorplanItems(drawnFloorplan);
+                            Helpers.AddFloorplanItems(drawnFloorplan, true);
                             continue;
                         }
                         //otherwise open a connection on floorplan
@@ -311,7 +344,7 @@ public static class EffectsManager
                 });
                 break;
             case "Terrace":
-                RarityPicker<Item> terraceItems = ItemsManager.GetPossibleFloorplanItems(floorplan);
+                RarityPicker<Item> terraceItems = floorplan.ItemPool();
                 terraceItems.ChangeRarities(0,1,0,0);
                 terraceItems.PickRandom().Place(floorplan);
                 break;
@@ -377,12 +410,12 @@ public static class EffectsManager
                     walkinClosetItemCount += 2;
 
                 for (int i = 0; i < walkinClosetItemCount; i++)
-                    ItemsManager.AddFloorplanItems(floorplan, true);
+                    Helpers.AddFloorplanItems(floorplan, true);
                 break;
             case "":
                 break;
         }
-
+        Helpers.AddFloorplanItems(floorplan);
         bool DraftedFromHere<T>(T evt) where T : Event => Helpers.CurrentFloorplan() == floorplan;
     }
 
