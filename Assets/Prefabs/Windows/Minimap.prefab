@@ -28,7 +28,7 @@ RectTransform:
   m_GameObject: {fileID: 1160427399388830798}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.99837637, y: 0.99837637, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3002442810190594337}
@@ -90,7 +90,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   invert: 0
   minScale: 0.01
-  maxScale: 99999
+  maxScale: 1
   parent: {fileID: 3002442810190594337}
   baseSize: {x: 1080, y: 1920}
 --- !u!1 &2285992015041147426
