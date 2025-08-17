@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Item
@@ -10,7 +8,7 @@ public abstract class Item
     {
         floorplan.AddItem(this);
     }
-    public abstract void PickUp();
+    public virtual void PickUp() => GameEvent.OnCollectItem?.Invoke(new(this));
     public abstract void Activate();
 }
 
@@ -30,14 +28,16 @@ public class Food : Item
         };
     }
 
-    public override void PickUp() => Activate();
+    public override void PickUp()
+    {
+        Activate();
+        base.PickUp();
+    }
 
     public override void Activate()
     {
-        int amount = stepsAmount;
-        GameEvent.OnCollectItem?.Invoke(new(this));
-        //UIManager.ShowMessage($"found {Name}!!\n+{amount} steps",
-        Player.ChangeSteps(amount);
+        //UIManager.ShowMessage($"found {Name}!!\n+{amount} steps"
+        Player.ChangeSteps(stepsAmount);
     }
 }
 
@@ -50,12 +50,15 @@ public class Coin : Item
         Name = coinsAmount > 1 ? $"Coins ({coinsAmount})" : "Coin";
     }
 
-    public override void PickUp() => Activate();
+    public override void PickUp()
+    {
+        Activate();
+        base.PickUp();
+    }
 
     public override void Activate()
     {
         //Debug.Log($"found coins!!\n{Player.coins} + {amount}");
-        GameEvent.OnCollectItem?.Invoke(new(this));
         Player.ChangeCoins(coinsAmount);
     }
 }
@@ -69,12 +72,15 @@ public class Key : Item
         Name = keyAmount > 1 ? $"Keys ({keyAmount})" : "Key";
     }
 
-    public override void PickUp() => Activate();
+    public override void PickUp()
+    {
+        Activate();
+        base.PickUp();
+    }
 
     public override void Activate()
     {
         //Debug.Log($"found keys!!\n{Player.keys} + {amount}");
-        GameEvent.OnCollectItem?.Invoke(new(this));
         Player.ChangeKeys(keyAmount);
     }
 }
@@ -88,12 +94,15 @@ public class Dice : Item
         Name = diceAmount > 1 ? $"Dices ({diceAmount})" : "Dice";
     }
 
-    public override void PickUp() => Activate();
+    public override void PickUp()
+    {
+        Activate();
+        base.PickUp();
+    }
 
     public override void Activate()
     {
         //Debug.Log($"found dice!!\n{Player.dices} + {amount}");
-        GameEvent.OnCollectItem?.Invoke(new(this));
         Player.dices += diceAmount;
     }
 }
@@ -102,7 +111,11 @@ public abstract class ToggleItem : Item
 {
     public bool active {  get; protected set; }
 
-    public override void PickUp() => Player.items.Add(this);
+    public override void PickUp()
+    {
+        Player.items.Add(this);
+        base.PickUp();
+    }
 
     public virtual void Toggle() => active = !active;
 }
@@ -187,6 +200,7 @@ public abstract class PlaceableItem : Item
     {
         currentFloorplan = null;
         Player.items.Add(this);
+        base.PickUp();
     }
 
     public override void Activate() => Place(Helpers.CurrentFloorplan());

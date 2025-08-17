@@ -135,18 +135,6 @@ public static class EffectsManager
                             ChangePlayerSteps(5);
                     });
                 break;
-            case "Drawing Room":
-                int startAmount = 0;
-                floorplan.EveryTime().PlayerEnterFloorplan().Do(_ =>
-                {
-                    startAmount = Player.dices;
-                    Player.dices += 2;
-                });
-                floorplan.EveryTime().PlayerExitFloorplan().Do(_ => 
-                {
-
-                });
-                break;
             case "Gallery":
                 int visits = 0;
                 floorplan.AddBonus(floorplan.Name, () => visits);
