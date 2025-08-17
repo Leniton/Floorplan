@@ -30,7 +30,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 1679746278597082209}
   m_Father: {fileID: 3002442810190594337}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -844,7 +845,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6884980647438618871}
-  - {fileID: 1679746278597082209}
   - {fileID: 8230182400006727843}
   - {fileID: 2979829748456377629}
   - {fileID: 764871464058217367}
@@ -905,6 +905,7 @@ GameObject:
   - component: {fileID: 37465320665389788}
   - component: {fileID: 6039063966616210818}
   - component: {fileID: 4790734111410722595}
+  - component: {fileID: 1838666621170370745}
   m_Layer: 5
   m_Name: Current
   m_TagString: Untagged
@@ -921,14 +922,14 @@ RectTransform:
   m_GameObject: {fileID: 8001459463988069594}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 3002442810190594337}
+  m_Father: {fileID: 8230182400006727843}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 539.1232, y: -1068.5001}
+  m_AnchoredPosition: {x: 539.1232, y: -826.5001}
   m_SizeDelta: {x: 228.923, y: 228.923}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &37465320665389788
@@ -984,6 +985,26 @@ MonoBehaviour:
   targetSize: {x: 610, y: 610}
   targetPpu: 0.07
   widthToHeightRatio: 0.5
+--- !u!114 &1838666621170370745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8001459463988069594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &8797317501304859741
 GameObject:
   m_ObjectHideFlags: 0
