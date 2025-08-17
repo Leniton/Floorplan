@@ -43,11 +43,17 @@ public class MinimapManager : MonoBehaviour
     public void OpenMinimap()
     {
         minimapContainer.SetActive(true);
-        playerPosition.SetParent(minimapGrid.GetSlot(gameGrid.currentPosition), false);
         int currentPoints = PointsManager.GetTotalPoints();
         totalPointsSlider.maxValue = PointsManager.currentRequirement;
         totalPointsSlider.value = currentPoints;
         totalPoints.text = $"{currentPoints}/{PointsManager.currentRequirement}";
+        StartCoroutine(DelayedUpdate());
+    }
+
+    private IEnumerator DelayedUpdate()
+    {
+        yield return null;
+        playerPosition.anchoredPosition = minimapGrid.GetSlot(gameGrid.currentPosition).anchoredPosition;
     }
 
     public void CloseMinimap()
