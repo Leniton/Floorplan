@@ -227,6 +227,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f48d843898abf80438eb50235f31ac1e
+    m_Address: DrawingRoom
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f8dfc0bc76f339d41b44a41394b5c367
     m_Address: GreatHall
     m_ReadOnly: 0

@@ -135,6 +135,24 @@ public static class EffectsManager
                             ChangePlayerSteps(5);
                     });
                 break;
+            case "Drawing Room":
+                int startAmount = 0;
+                floorplan.EveryTime().PlayerEnterFloorplan().Do(_ =>
+                {
+                    startAmount = Player.dices;
+                    Debug.Log($"entered room with {startAmount} dices");
+                    Player.dices += 2;
+                });
+                floorplan.EveryTime().ItemCollected().
+                    Where(_ => ReferenceEquals(floorplan, Helpers.CurrentFloorplan()), evt => evt.item is Dice).
+                    Do(evt =>
+                {
+                    Debug.Log($"Gained dice while on drawing room");
+                    Dice dice = evt.item as Dice;
+                    startAmount += dice.diceAmount;
+                });
+                floorplan.EveryTime().PlayerExitFloorplan().Do(_ => Player.dices = Mathf.Min(startAmount, Player.dices));
+                break;
             case "Gallery":
                 int visits = 0;
                 floorplan.AddBonus(floorplan.Name, () => visits);
