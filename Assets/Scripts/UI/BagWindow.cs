@@ -42,7 +42,7 @@ public class BagWindow : MonoBehaviour
             button.onClick = null;
             button.Setup(item);
             button.onClick += () => floorplan.PickupItem(item);
-            button.onClick += UpdateItems;
+            button.onClick += OpenBag;
         }
     }
 
@@ -57,7 +57,7 @@ public class BagWindow : MonoBehaviour
             button.onClick = null;
             button.Setup(item);
             button.onClick += item.Activate;
-            button.onClick += UpdateItems;
+            button.onClick += OpenBag;
         }
     }
 

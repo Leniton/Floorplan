@@ -1,7 +1,7 @@
+using Lenix.NumberUtilities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Lenix.NumberUtilities;
 using Random = UnityEngine.Random;
 
 public static class EffectsManager
@@ -68,9 +68,21 @@ public static class EffectsManager
                 });
                 break;
             case "Cloister":
-                RarityPicker<Item> cloisterItems = floorplan.ItemPool();
-                cloisterItems.ChangeRarities(1,0,0,0);
-                cloisterItems.PickRandom().AddItemToFloorplan(floorplan);
+                //contains a placed statue
+                ItemUtilities.Statue(true).AddItemToFloorplan(floorplan);
+                //bonus for each decoration
+                floorplan.AddBonus(floorplan.Name, DecorationBonus);
+                int DecorationBonus()
+                {
+                    int bonus = 0;
+                    for (int i = 0; i < floorplan.items.Count; i++)
+                    {
+                        Decoration decoration = floorplan.items[i] as Decoration;
+                        if (decoration is null or { placed: false}) continue;
+                        bonus += 2;
+                    }
+                    return bonus;
+                }
                 break;
             case "Commissary":
                 PurchaseData bananas = new()
@@ -116,7 +128,7 @@ public static class EffectsManager
                 break;
             case "Dining Room":
                 int stepsFromFood = 0;
-                new Food(10) { Name = "Meal"}.AddItemToFloorplan(floorplan);
+                ItemUtilities.Meal().AddItemToFloorplan(floorplan);
                 floorplan.AddBonus(floorplan.Name, () => stepsFromFood);
                 floorplan.EveryTime().ItemCollected().Where(evt => evt.item is Food).Do(evt => stepsFromFood += (evt.item as Food).stepsAmount);
                 break;
@@ -141,14 +153,14 @@ public static class EffectsManager
                 floorplan.EveryTime().PlayerEnterFloorplan().Do(_ =>
                 {
                     startAmount = Player.dices;
-                    Debug.Log($"entered room with {startAmount} dices");
+                    //Debug.Log($"entered room with {startAmount} dices");
                     Player.dices += 2;
                 });
                 floorplan.EveryTime().ItemCollected().
                     Where(_ => ReferenceEquals(floorplan, Helpers.CurrentFloorplan()), evt => evt.item is Dice).
                     Do(evt =>
                 {
-                    Debug.Log($"Gained dice while on drawing room");
+                    //Debug.Log($"Gained dice while on drawing room");
                     Dice dice = evt.item as Dice;
                     startAmount += dice.diceAmount;
                 });

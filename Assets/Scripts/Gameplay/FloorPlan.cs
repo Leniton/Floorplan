@@ -148,12 +148,8 @@ public class Floorplan : ScriptableObject
         int skippedItems = 0;
         for (int i = 0; i < itemCount; i++)
         {
-            Item item = items[i + skippedItems];
-            if (item is PlaceableItem and { placed: true })
-            {
-                skippedItems++;
-                continue;
-            }
+            Item item = items[i];
+            if (item is PlaceableItem and { placed: true }) continue;
             UIManager.ShowMessage($"found {item.Name}", () => PickupItem(item));
         }
     }

@@ -19,7 +19,7 @@ MonoBehaviour:
   Type: 4
   Rarity: 2
   keyCost: 1
-  basePoints: 5
+  basePoints: 1
   entranceId: 0
   connections: 
   connectedFloorplans: []

@@ -52,5 +52,5 @@ public static class ItemUtilities
         return snack;
     }
 
-    public static Decoration Statue() => new() { Name = "Statue", bonus = 7 };
+    public static Decoration Statue(bool placed = false) => new(activate: placed) { Name = "Statue", bonus = 7 };
 }
