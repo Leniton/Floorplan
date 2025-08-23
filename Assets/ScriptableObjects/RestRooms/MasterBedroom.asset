@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: MasterBedroom
   m_EditorClassIdentifier: 
   Name: Master Bedroom
-  Description: Your <b>Rest rooms</b> gains +5 points. i gain +2 points for each
-    <b>Rest room</b> in the house
+  Description: Your <b>Rest Rooms</b> gains +5 points. i gain +2 points for each
+    <b>Rest Room</b> in the house
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Category: 1
   Type: 1

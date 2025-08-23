@@ -248,10 +248,10 @@ public enum FloorCategory
 {
     RestRoom = 1,
     Hallway = 2,
-    BlueRoom = 4,
-    WhiteRoom = 8,
+    StorageRoom = 4,
+    FancyRoom = 8,
     Shop = 16,
-    BlackRooms = 32,
-    RedRooms = 64,
+    MysteryRoom = 32,
+    CursedRooms = 64,
     Blank = 128 //added so Aquarium doesn't break Great Hall
 }

@@ -76,13 +76,13 @@ public static class Helpers
                 possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
                 possibleItems.AddToPool(new Decoration(), Rarity.Uncommon);
                 break;
-            case FloorCategory.BlackRooms:
+            case FloorCategory.MysteryRoom:
                 possibleItems.AddToPool(new Key(), Rarity.Common);
                 possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
                 possibleItems.AddToPool(new SledgeHammer(), Rarity.Rare);
                 possibleItems.AddToPool(new Battery(), Rarity.Rare);
                 break;
-            case FloorCategory.WhiteRoom:
+            case FloorCategory.FancyRoom:
                 possibleItems.AddToPool(new Food(), Rarity.Common);
                 possibleItems.AddToPool(new Key(), Rarity.Common);
                 possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
@@ -115,7 +115,7 @@ public static class Helpers
         possibleItems.legendRate = nothingRate;
 
         //blue rooms are most likely to contain items
-        if (floorplan.IsOfCategory(FloorCategory.BlueRoom))
+        if (floorplan.IsOfCategory(FloorCategory.StorageRoom))
         {
             float cutRate = possibleItems.legendRate / 2f;
             float distributeRate = cutRate / 2f;//to be 3 when rare items are introduced

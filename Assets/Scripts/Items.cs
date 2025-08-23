@@ -131,10 +131,10 @@ public class ColorKey : ToggleItem
         {
             FloorCategory.RestRoom => "Rest Room Key",
             FloorCategory.Hallway => "Hallway Key",
-            FloorCategory.BlueRoom => "Blue Room Key",
-            FloorCategory.WhiteRoom => "White Room Key",
+            FloorCategory.StorageRoom => "Blue Room Key",
+            FloorCategory.FancyRoom => "White Room Key",
             FloorCategory.Shop => "Shop Key",
-            FloorCategory.BlackRooms => "Black Room Key",
+            FloorCategory.MysteryRoom => "Black Room Key",
             _ => $"{floorCategory.ToString()} Key",
         };
     }
