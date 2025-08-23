@@ -91,7 +91,7 @@ public static class EffectsManager
                     amount = 3,
                     name = "Banana",
                     description = "Gain +3 steps",
-                    OnBuy = () => new Food(3).PickUp()
+                    OnBuy = () => ItemUtilities.Banana.PickUp()
                 };
                 PurchaseData keys = new()
                 {
@@ -239,31 +239,79 @@ public static class EffectsManager
                     Helpers.AddFloorplanItems(floorplan, true);
                 return;
             case "Kitchen":
+                PurchaseData cherry = new()
+                {
+                    cost = 1,
+                    amount = 6,
+                    name = "Cherry",
+                    description = "Gain +2 steps",
+                    OnBuy = () => ItemUtilities.Cherry.PickUp()
+                };
                 PurchaseData apple = new()
                 {
                     cost = 2,
-                    amount = 6,
+                    amount = 5,
                     name = "Apple",
-                    description = "Gain +2 steps",
-                    OnBuy = () => new Food(2).PickUp()
+                    description = "Gain +3 steps",
+                    OnBuy = () => ItemUtilities.Apple.PickUp()
                 };
                 PurchaseData banana = new()
                 {
                     cost = 3,
-                    amount = 5,
+                    amount = 4,
                     name = "Banana",
-                    description = "Gain +3 steps",
-                    OnBuy = () => new Food(3).PickUp()
+                    description = "Gain +4 steps",
+                    OnBuy = () => ItemUtilities.Banana.PickUp()
                 };
                 PurchaseData orange = new()
                 {
-                    cost = 5,
+                    cost = 4,
                     amount = 3,
                     name = "Orange",
                     description = "Gain +5 steps",
-                    OnBuy = () => new Food(5).PickUp()
+                    OnBuy = () => ItemUtilities.Orange.PickUp()
                 };
-                List<PurchaseData> kitchenList = new () { apple, banana, orange };
+                PurchaseData soda = new()
+                {
+                    cost = 6,
+                    amount = 3,
+                    name = "Soda",
+                    description = "Gain +7 steps",
+                    OnBuy = () => ItemUtilities.Soda.PickUp()
+                };
+                PurchaseData snack = new()
+                {
+                    cost = 10,
+                    amount = 1,
+                    name = "Snack",
+                    description = "Gain +1 step for each floorplan you drafted",
+                    OnBuy = () => ItemUtilities.Snack().PickUp()
+                };
+                PurchaseData energyBar = new()
+                {
+                    cost = 10,
+                    amount = 1,
+                    name = "Energy Bar",
+                    description = "Gain +2 steps for each <b>Dead end</b> you drafted",
+                    OnBuy = () => ItemUtilities.EnergyBar().PickUp()
+                };
+
+                RarityPicker<PurchaseData> picker = new();
+                picker.AddToPool(cherry, Rarity.Common);
+                picker.AddToPool(apple, Rarity.Common);
+                picker.AddToPool(banana, Rarity.Common);
+                picker.AddToPool(orange, Rarity.Uncommon);
+                picker.AddToPool(soda, Rarity.Uncommon);
+                picker.AddToPool(snack, Rarity.Rare);
+                picker.AddToPool(energyBar, Rarity.Rare);
+
+                List<PurchaseData> kitchenList = new (3);
+                picker.ChangeRarities(1, 0, 0, 0);
+                kitchenList.Add(picker.PickRandom());
+                picker.ChangeRarities(0, 1, 0, 0);
+                kitchenList.Add(picker.PickRandom());
+                picker.ChangeRarities(0, 0, 1, 0);
+                kitchenList.Add(picker.PickRandom());
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, kitchenList);
                 break;
             case "Library":
