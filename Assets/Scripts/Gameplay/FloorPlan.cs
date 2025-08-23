@@ -252,6 +252,6 @@ public enum FloorCategory
     FancyRoom = 8,
     Shop = 16,
     MysteryRoom = 32,
-    CursedRooms = 64,
+    CursedRoom = 64,
     Blank = 128 //added so Aquarium doesn't break Great Hall
 }
