@@ -30,13 +30,21 @@ public class GameManager : MonoBehaviour
         gridManager.OnMove += TriggerFloorplanEnterEvent;
         finishButton.onClick.AddListener(FinishRun);
 
-        Checklist loadedAssets = new(1);
+        Checklist loadedAssets = new(0);
         loadedAssets.onCompleted += Setup;
+
+        loadedAssets.AddStep();
         gridManager.onDoneLoading += loadedAssets.FinishStep;
         loadedAssets.AddStep();
         AAComponent<FloorplanUI>.LoadComponent("FloorplanUI", prefab =>
         {
             floorplanPrefab = prefab;
+            loadedAssets.FinishStep();
+        });
+        loadedAssets.AddStep();
+        AAAsset<FloorplanColors>.LoadAsset("DefaultFloorplanColors", colors =>
+        {
+            GameSettings.current.floorplanColors = colors;
             loadedAssets.FinishStep();
         });
     }
