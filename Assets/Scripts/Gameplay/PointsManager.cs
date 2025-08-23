@@ -27,8 +27,12 @@ public static class PointsManager
     public static int GetTotalPoints()
     {
         int finalValue = 0;
-        foreach (var floorplan in GameManager.floorplanDict.Values)
+        foreach (var pair in GameManager.floorplanDict)
+        {
+            var floorplan = pair.Value;
+            if (!GridManager.instance.ValidCoordinate(pair.Key)) continue;
             finalValue += floorplan.CalculatePoints();
+        }
 
         return finalValue;
     }

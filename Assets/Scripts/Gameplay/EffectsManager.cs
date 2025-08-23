@@ -41,6 +41,7 @@ public static class EffectsManager
                 floorplan.TheFirstTime().
                     FloorplanIsDrafted().Do(evt =>
                     {
+                        GameManager.floorplanDict[floorplan.coordinate * -1] = floorplan;
                         floorplan.onDrafted?.Invoke(evt);
                         GameEvent.onDraftedFloorplan?.Invoke(new(evt.Coordinates,
                             GameManager.floorplanDict[evt.Coordinates]));
