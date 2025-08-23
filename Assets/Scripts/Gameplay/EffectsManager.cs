@@ -85,21 +85,29 @@ public static class EffectsManager
                 }
                 break;
             case "Commissary":
-                PurchaseData bananas = new()
+                PurchaseData bananaCommissary = new()
                 {
-                    cost = 4,
+                    cost = 3,
                     amount = 3,
                     name = "Banana",
-                    description = "Gain +3 steps",
+                    description = "Gain +4 steps",
                     OnBuy = () => ItemUtilities.Banana.PickUp()
                 };
-                PurchaseData keys = new()
+                PurchaseData keyCommissary = new()
                 {
                     cost = 5,
-                    amount = 5,
+                    amount = 3,
                     name = "Key",
                     description = "Used to draft powerful floorplans",
                     OnBuy = () => new Key(1).PickUp()
+                };
+                PurchaseData rock = new()
+                {
+                    cost = 2,
+                    amount = 2,
+                    name = "Rock",
+                    description = "Place on floorplans to add +2 points to it",
+                    OnBuy = () => ItemUtilities.Rock().PickUp()
                 };
                 PurchaseData dice = new()
                 {
@@ -109,15 +117,47 @@ public static class EffectsManager
                     description = "Used to reroll drawn floorplans",
                     OnBuy = () => new Dice(1).PickUp()
                 };
-                PurchaseData keyBundle = new()
+                PurchaseData toy = new()
                 {
-                    cost = 12,
-                    amount = 1,
-                    name = "Key bundle",
-                    description = "Used to draft powerful floorplans, now in a neat package",
-                    OnBuy = () => new Key(3).PickUp()
+                    cost = 6,
+                    amount = 2,
+                    name = "Toy",
+                    description = "Place on floorplans to add +3 points to it",
+                    OnBuy = () => ItemUtilities.Toy().PickUp()
                 };
-                List<PurchaseData> commissaryList = new() { bananas, keys, dice, keyBundle };
+                PurchaseData battery = new()
+                {
+                    cost = 15,
+                    amount = 1,
+                    name = "Battery",
+                    description = "Place on floorplans to <b>Power</b> them",
+                    OnBuy = () => new Dice(1).PickUp()
+                };
+                PurchaseData couch = new()
+                {
+                    cost = 10,
+                    amount = 1,
+                    name = "Couch",
+                    description = "Place on floorplans to add +4 points to it",
+                    OnBuy = () =>ItemUtilities.Couch().PickUp()
+                };
+
+                RarityPicker<PurchaseData> picker = new();
+                picker.AddToPool(bananaCommissary, Rarity.Common);
+                picker.AddToPool(keyCommissary, Rarity.Common);
+                picker.AddToPool(rock, Rarity.Common);
+                picker.AddToPool(dice, Rarity.Uncommon);
+                picker.AddToPool(toy, Rarity.Uncommon);
+                picker.AddToPool(battery, Rarity.Rare);
+                picker.AddToPool(couch, Rarity.Rare);
+
+                List<PurchaseData> commissaryList = new(3);
+                picker.ChangeRarities(1, 0, 0, 0);
+                commissaryList.Add(picker.PickRandom());
+                picker.ChangeRarities(0, 1, 0, 0);
+                commissaryList.Add(picker.PickRandom());
+                picker.ChangeRarities(0, 0, 1, 0);
+                commissaryList.Add(picker.PickRandom());
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, commissaryList);
                 break;
             case "Courtyard":
@@ -296,22 +336,22 @@ public static class EffectsManager
                     OnBuy = () => ItemUtilities.EnergyBar().PickUp()
                 };
 
-                RarityPicker<PurchaseData> picker = new();
-                picker.AddToPool(cherry, Rarity.Common);
-                picker.AddToPool(apple, Rarity.Common);
-                picker.AddToPool(banana, Rarity.Common);
-                picker.AddToPool(orange, Rarity.Uncommon);
-                picker.AddToPool(soda, Rarity.Uncommon);
-                picker.AddToPool(snack, Rarity.Rare);
-                picker.AddToPool(energyBar, Rarity.Rare);
+                RarityPicker<PurchaseData> kitchenPicker = new();
+                kitchenPicker.AddToPool(cherry, Rarity.Common);
+                kitchenPicker.AddToPool(apple, Rarity.Common);
+                kitchenPicker.AddToPool(banana, Rarity.Common);
+                kitchenPicker.AddToPool(orange, Rarity.Uncommon);
+                kitchenPicker.AddToPool(soda, Rarity.Uncommon);
+                kitchenPicker.AddToPool(snack, Rarity.Rare);
+                kitchenPicker.AddToPool(energyBar, Rarity.Rare);
 
                 List<PurchaseData> kitchenList = new (3);
-                picker.ChangeRarities(1, 0, 0, 0);
-                kitchenList.Add(picker.PickRandom());
-                picker.ChangeRarities(0, 1, 0, 0);
-                kitchenList.Add(picker.PickRandom());
-                picker.ChangeRarities(0, 0, 1, 0);
-                kitchenList.Add(picker.PickRandom());
+                kitchenPicker.ChangeRarities(1, 0, 0, 0);
+                kitchenList.Add(kitchenPicker.PickRandom());
+                kitchenPicker.ChangeRarities(0, 1, 0, 0);
+                kitchenList.Add(kitchenPicker.PickRandom());
+                kitchenPicker.ChangeRarities(0, 0, 1, 0);
+                kitchenList.Add(kitchenPicker.PickRandom());
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, kitchenList);
                 break;
             case "Library":
@@ -320,6 +360,44 @@ public static class EffectsManager
                     for (int i = 0; i < evt.drawnFloorplans.Length; i++)
                         evt.drawnFloorplans[i].keyCost = 0;
                 });
+                break;
+            case "Locksmith":
+                PurchaseData key = new()
+                {
+                    cost = 5,
+                    amount = 5,
+                    name = "Key",
+                    description = "Used to draft powerful floorplans",
+                    OnBuy = () => new Key(1).PickUp()
+                };
+                PurchaseData keyBundle = new()
+                {
+                    cost = 12,
+                    amount = 3,
+                    name = "Key bundle",
+                    description = "A 3 key bundle",
+                    OnBuy = () => new Key(3).PickUp()
+                };
+                ColorKey keyColor = new();
+                PurchaseData colorKey = new()
+                {
+                    cost = 8,
+                    amount = 1,
+                    name = keyColor.Name,
+                    description = "Guarantee you draw rooms of the same category",
+                    OnBuy = () => keyColor.PickUp()
+                };
+                PurchaseData sledgeHammer = new()
+                {
+                    cost = 10,
+                    amount = 1,
+                    name = "Energy Bar",
+                    description = "Gain +2 steps for each <b>Dead end</b> you drafted",
+                    OnBuy = () => new SledgeHammer().PickUp()
+                };
+
+                List<PurchaseData> locksmithList = new() { key, keyBundle, colorKey, sledgeHammer };
+                floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, locksmithList);
                 break;
             case "Master Bedroom":
                 int selfBonus = 0;

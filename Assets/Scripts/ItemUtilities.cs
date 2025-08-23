@@ -83,6 +83,25 @@ public static class ItemUtilities
     #endregion
 
     #region Decoration
+    /// <summary>
+    /// +2 points
+    /// </summary>
+    public static Decoration Rock(bool placed = false) => new(2, placed);
+    /// <summary>
+    /// +3 points
+    /// </summary>
+    public static Decoration Toy(bool placed = false) => new(3, placed);
+    /// <summary>
+    /// +4 points
+    /// </summary>
+    public static Decoration Couch(bool placed = false) => new(4, placed);
+    /// <summary>
+    /// +5 points
+    /// </summary>
+    public static Decoration TV(bool placed = false) => new(5, placed);
+    /// <summary>
+    /// +7 points
+    /// </summary>
     public static Decoration Statue(bool placed = false) => new(activate: placed) { Name = "Statue", bonus = 7 };
     #endregion
 }

@@ -137,6 +137,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6e4e98353bf837f4987bf277ed62e761
+    m_Address: Locksmith
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 77e40c7ebaaaa724f8819aef8a9039d8
     m_Address: Vestibule
     m_ReadOnly: 0
