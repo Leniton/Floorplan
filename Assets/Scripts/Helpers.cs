@@ -126,8 +126,10 @@ public static class Helpers
                 possibleItems.legendRate - cutRate);
         }
 
-        possibleItems.PickRandom()?.Place(floorplan);
+        possibleItems.PickRandom()?.AddItemToFloorplan(floorplan);
     }
+
+    public static void AddItemToFloorplan(this Item item, Floorplan floorplan) => item.Place(floorplan);
 
     public static void OpenConnection(this Floorplan floorplan, int connectionID)
     {
