@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f8711f4700f34f40b15532162e3c95a, type: 3}
+  m_Name: CustomColors
+  m_EditorClassIdentifier: 
+  blankColor: {r: 0.77254903, g: 0, b: 0.5019608, a: 1}
+  restRoomColor: {r: 0.7294118, g: 0.4, b: 1, a: 1}
+  hallwayColor: {r: 0.77254903, g: 0.44705883, b: 0, a: 1}
+  storageRoomColor: {r: 0.29803923, g: 0.7176471, b: 1, a: 1}
+  fancyRoomColor: {r: 1, g: 1, b: 1, a: 1}
+  shopColor: {r: 0.98039216, g: 1, b: 0, a: 1}
+  mysteryRoomColor: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
+  cursedRoomColor: {r: 1, g: 0, b: 0, a: 1}
