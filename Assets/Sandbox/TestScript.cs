@@ -6,9 +6,17 @@ using UnityEngine.InputSystem;
 
 public class TestScript : MonoBehaviour
 {
+    public FloorplanUI floorplanUI;
+    public Floorplan floorplan;
+
+    private void Awake()
+    {
+        floorplanUI.Setup(floorplan.CreateInstance(Vector2Int.down));
+    }
 
     private void Update()
     {
-        if (Keyboard.current.spaceKey.wasPressedThisFrame) Application.targetFrameRate = Application.targetFrameRate == 100 ? 30 : 100;
+        if(Keyboard.current.spaceKey.wasPressedThisFrame) 
+            floorplanUI.Setup(floorplan.CreateInstance(Vector2Int.down));
     }
 }
