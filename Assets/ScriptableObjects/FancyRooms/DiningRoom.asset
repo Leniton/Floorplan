@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Dining Room
   Description: Contains meal. Gain extra points for each step from food you gain.
   Color: {r: 1, g: 1, b: 1, a: 1}
-  Category: 8
+  Category: 9
   Type: 3
   Rarity: 2
   keyCost: 0

@@ -16,7 +16,7 @@ MonoBehaviour:
   Description: <b>Connected Rest Rooms</b> give +5 extra steps the first time you
     enter them. Connected <b>Rest Rooms</b> gain +2 extra points
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
-  Category: 1
+  Category: 3
   Type: 3
   Rarity: 2
   keyCost: 1

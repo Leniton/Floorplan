@@ -16,7 +16,7 @@ MonoBehaviour:
   Description: After drafting 3 other rooms, add an uncommon and rare item to this
     room
   Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
-  Category: 4
+  Category: 36
   Type: 1
   Rarity: 0
   keyCost: 0
