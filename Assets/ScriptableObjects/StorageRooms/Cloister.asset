@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Cloister
   m_EditorClassIdentifier: 
   Name: Cloister
-  Description: Contains a common item
+  Description: Contains a <b>Statue</b>. Gains +2 points for each <b>Decoration</b>
+    in this room
   Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
   Category: 4
   Type: 4
