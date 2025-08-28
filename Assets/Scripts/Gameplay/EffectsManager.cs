@@ -21,8 +21,9 @@ public static class EffectsManager
                 floorplan.TheFirstTime().PlayerEnterFloorplan().Do(_ =>
                 {
                     int currentSteps = Player.steps;
-                    currentSteps = Mathf.CeilToInt(currentSteps / 10f);
-                    Player.ChangeSteps((currentSteps * 10) - Player.steps);
+                    int stepChange = 10 - (currentSteps % 10);
+                    floorplan.AddMultiplier(floorplan.Name, () => stepChange);
+                    Player.ChangeSteps(stepChange);
                 });
                 break;
             case "Bedroom":
