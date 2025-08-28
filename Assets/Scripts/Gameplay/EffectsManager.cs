@@ -160,6 +160,9 @@ public static class EffectsManager
                 commissaryList.Add(picker.PickRandom());
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, commissaryList);
                 break;
+            case "Conservatory":
+                new ColorKey().AddItemToFloorplan(floorplan);
+                break;
             case "Courtyard":
                 new Key(3).AddItemToFloorplan(floorplan);
                 break;

@@ -77,6 +77,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 416bf249ba885e74cb3e48b71ca0fba9
+    m_Address: Conservatory
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 424c9f5365f8c9c48a539105b9b5e7b3
     m_Address: Cassino
     m_ReadOnly: 0
