@@ -281,6 +281,19 @@ public static class EffectsManager
                 for (int i = 0; i < hallwayClosetItemCount; i++)
                     Helpers.AddFloorplanItems(floorplan, true);
                 return;
+            case "Hovel":
+                //buff rest rooms
+                foreach (var room in GameManager.floorplanDict.Values)
+                {
+                    if (!NumberUtil.ContainsBytes((int)room.Category, 
+                            (int)FloorCategory.RestRoom)) continue;
+                    room.AddBonus(floorplan.Name, () => 1);
+                }
+                //power all rooms of the same category
+                floorplan.EveryTime().AnyFloorplanIsDrafted().
+                    Where(IsOfCategory(FloorCategory.RestRoom)).
+                    AddPointsToThatFloorplan(1);
+                break;
             case "Kitchen":
                 PurchaseData cherry = new()
                 {

@@ -173,6 +173,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 86be1ef297f3c6c439c608a607abbda4
+    m_Address: Hovel
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9191c02a1f5a87841873789826152b0b
     m_Address: Hallway
     m_ReadOnly: 0
