@@ -453,7 +453,20 @@ public static class EffectsManager
                 new Food().AddItemToFloorplan(floorplan);
                 break;
             case "Pump Room":
-                floorplan.EveryTime().FloorplanConnected().AddPointBonusToThatFloorplan(floorplan.CalculatePoints);
+                floorplan.EveryTime().FloorplanConnected().Do(evt =>
+                {
+                    evt.connectedFloorplan.AddBonus(floorplan.name, () =>
+                    {
+                        int bonus = 0;
+                        for (int i = 0; i < floorplan.connectedFloorplans.Count; i++)
+                        {
+                            var current = floorplan.connectedFloorplans[i];
+                            if(ReferenceEquals(current, evt.connectedFloorplan)) continue;
+                            bonus += current.basePoints;
+                        }
+                        return bonus;
+                    });
+                });
                 break;
             case "Secret Passage":
                 //add connection to drafted floorplans
