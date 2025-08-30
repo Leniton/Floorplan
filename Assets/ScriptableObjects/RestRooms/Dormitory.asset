@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Dormitory
   m_EditorClassIdentifier: 
   Name: Dormitory
-  Description: <b>Connected Rest Rooms</b> give +5 extra steps the first time you
-    enter them. Connected <b>Rest Rooms</b> gain +2 extra points
+  Description: +2 points for each <b>Rest Room</b> in the house. When you connect
+    a <b>Rest Room</b> to this room, add a <b>Snack</b> to this room
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Category: 3
   Type: 3

@@ -177,20 +177,22 @@ public static class EffectsManager
                 floorplan.EveryTime().ItemCollected().Where(evt => evt.item is Food).Do(evt => stepsFromFood += (evt.item as Food).stepsAmount);
                 break;
             case "Dormitory":
-                //connected rest room gain extra points
-                floorplan.EveryTime().FloorplanConnected().
-                    Where(IsOfCategory(FloorCategory.RestRoom)).
-                    AddPointsToThatFloorplan(2);
-                //first time entering a connected restroom gain steps
-                floorplan.EveryTime().FloorplanConnected().
-                    Where(IsOfCategory(FloorCategory.RestRoom)).
-                    Do(evt =>
+                //gains extra points for each restRoom in the house
+                floorplan.AddBonus(floorplan.Name, () =>
+                {
+                    int selfBonus = 0;
+                    foreach (var room in GameManager.floorplanDict.Values)
                     {
-                        evt.connectedFloorplan.
-                            TheFirstTime().
-                            PlayerEnterFloorplan().
-                            ChangePlayerSteps(5);
-                    });
+                        if (!NumberUtil.ContainsAnyBits((int)room.Category, (int)floorplan.Category)) continue;
+                        //Debug.Log($"buffing {room.Name}");
+                        selfBonus += 2;
+                    }
+                    return selfBonus;
+                });
+                //when you connect a rest room, add a snack to this room
+                floorplan.EveryTime().FloorplanConnected().
+                    Where(IsOfCategory(FloorCategory.RestRoom)).
+                    Do(_ => ItemUtilities.Snack().AddItemToFloorplan(floorplan));
                 break;
             case "Drawing Room":
                 int startAmount = 0;
@@ -269,9 +271,11 @@ public static class EffectsManager
             case "Guest Bedroom":
                 //essentialy free to move in
                 floorplan.EveryTime().PlayerEnterFloorplan().ChangePlayerSteps(2);
-                //combine points of connected rest rooms
-                floorplan.EveryTime().FloorplanConnected().Where(IsOfCategory(FloorCategory.RestRoom)).Do(evt =>
-                    floorplan.AddBonus(floorplan.Name, evt.connectedFloorplan.CalculatePoints));
+
+                //extra points for each connected rest room
+                floorplan.EveryTime().FloorplanConnected().
+                    Where(IsOfCategory(FloorCategory.RestRoom)).
+                    AddPointsToFloorplan(5);
                 break;
             case "Hallway Closet":
                 int hallwayClosetItemCount = 2;
@@ -417,19 +421,17 @@ public static class EffectsManager
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, locksmithList);
                 break;
             case "Master Bedroom":
-                int selfBonus = 0;
+                string mBedroomAlias = "M. Bedroom";
+                //buffs all floorplans
                 int otherBonus = 5;
-                floorplan.AddBonus(floorplan.Name, () => selfBonus);
                 foreach (var room in GameManager.floorplanDict.Values)
                 {
                     if (!NumberUtil.ContainsAnyBits((int)room.Category, (int)floorplan.Category)) continue;
-                    Debug.Log($"buffing {room.Name}");
-                    selfBonus += 2;
-                    room.AddBonus(floorplan.Name, () => otherBonus);
+                    //Debug.Log($"buffing {room.Name}");
+                    room.AddBonus(mBedroomAlias, () => otherBonus);
                 }
                 floorplan.EveryTime().AnyFloorplanIsDrafted().
-                    Where(IsOfCategory(FloorCategory.RestRoom)).
-                    AddPointsToThatFloorplan(otherBonus).Do(_ => selfBonus += 2);
+                    Where(IsOfCategory(FloorCategory.RestRoom)).Do(evt => evt.Floorplan.AddBonus(mBedroomAlias, () => otherBonus));
                 break;
             case "Mail Room":
                 const int draftsNeeded = 3;
