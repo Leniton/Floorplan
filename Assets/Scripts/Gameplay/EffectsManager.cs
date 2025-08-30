@@ -408,8 +408,8 @@ public static class EffectsManager
                 {
                     cost = 10,
                     amount = 1,
-                    name = "Energy Bar",
-                    description = "Gain +2 steps for each <b>Dead end</b> you drafted",
+                    name = "SledgeHammer",
+                    description = "Move towards an closed connection to open it.",
                     OnBuy = () => new SledgeHammer().PickUp()
                 };
 
