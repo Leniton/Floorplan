@@ -16,6 +16,7 @@ public class ShopWindow : MonoBehaviour
     private static ShopWindow instance;
 
     private List<PurchaseData> currentItems;
+    private List<ShopItem> shopItems = new();
 
     private void Awake()
     {
@@ -46,7 +47,12 @@ public class ShopWindow : MonoBehaviour
     private void Open()
     {
         window.SetActive(true);
-        StartCoroutine(OpenSequence());
+
+        shopItems.EnsureEnoughInstances(itemPrefab, currentItems.Count, window.transform);
+        for (int i = 0; i < currentItems.Count; i++)
+        {
+            shopItems[i].Setup(currentItems[i]);
+        }
     }
 
     public void Close() => instance.window.SetActive(false);
