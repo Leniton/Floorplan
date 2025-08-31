@@ -15,8 +15,10 @@ public class DraftManager : MonoBehaviour
     [SerializeField] private Button rerollButton;
     [SerializeField] private PlayerDeck playerDeck;
 
+    private FloorplanDetails detailsPrefab;
+
     private int amountDrafted = 3;
-    private List<FloorplanDetails> draftList;
+    private List<FloorplanDetails> draftList = new();
     private List<Floorplan> draftPool;
 
     public event Action<Floorplan> OnDraftFloorplan;
@@ -35,35 +37,46 @@ public class DraftManager : MonoBehaviour
     private float rareGrowth;
     private float legendGrowth;
 
-    private void Awake()
+    public void Setup(int draftOptions, PlayerDeck deck = null, Action onDone = null)
     {
-        AAComponent<FloorplanDetails>.LoadComponent("FloorplanDetails", prefab =>
+        if (!ReferenceEquals(detailsPrefab, null)) LoadDraftPool();
+        else
         {
-            draftList = new(amountDrafted);
-            for (int i = 0; i < amountDrafted; i++)
+            AAComponent<FloorplanDetails>.LoadComponent("FloorplanDetails", prefab =>
             {
-                FloorplanDetails instance = Instantiate(prefab, draftScreen.transform);
-                instance.onPickedFloorplan += PickFloorplan;
-                draftList.Add(instance);
-            }
-        });
-
-        rerollButton.onClick.AddListener(RedrawFloorplans);
-        rerollCount = rerollButton.GetComponentInChildren<TMP_Text>();
-        background.SetActive(false);
-        draftScreen.SetActive(false);
-
-        if (!ReferenceEquals(playerDeck, null))
-        {
-            draftPool = new(playerDeck.deck.Count);
-            for (int i = 0; i < draftPool.Capacity; i++)
-                draftPool.Add(playerDeck.deck[i].CreateInstance(Vector2Int.up));
-            CheckPoolData();
-            return;
+                detailsPrefab = prefab;
+                LoadDraftPool();
+            });
         }
-        draftPool = new();
-        Addressables.LoadAssetsAsync<Floorplan>("BaseFloorplan", floorplan =>
-            draftPool.Add(floorplan.CreateInstance(Vector2Int.up))).Completed += _ => CheckPoolData();
+
+        void LoadDraftPool()
+        {
+            amountDrafted = draftOptions;
+            draftList.EnsureEnoughInstances(detailsPrefab, amountDrafted, draftScreen.transform, i => i.onPickedFloorplan += PickFloorplan);
+            playerDeck = deck;
+
+            rerollButton.onClick.AddListener(RedrawFloorplans);
+            rerollCount = rerollButton.GetComponentInChildren<TMP_Text>();
+            background?.SetActive(false);
+            draftScreen.SetActive(false);
+
+            if (!ReferenceEquals(playerDeck, null))
+            {
+                draftPool = new(playerDeck.deck.Count);
+                for (int i = 0; i < draftPool.Capacity; i++)
+                    draftPool.Add(playerDeck.deck[i].CreateInstance(Vector2Int.up));
+                onDone?.Invoke();
+                CheckPoolData();
+                return;
+            }
+            draftPool = new();
+            Addressables.LoadAssetsAsync<Floorplan>("BaseFloorplan", floorplan =>
+                draftPool.Add(floorplan.CreateInstance(Vector2Int.up))).Completed += _ =>
+                {
+                    onDone?.Invoke();
+                    CheckPoolData();
+                };
+        }
     }
 
     private void CheckPoolData()
@@ -155,7 +168,7 @@ public class DraftManager : MonoBehaviour
         rerollCount?.SetText($"{Player.dices}");
 
         DrawFloorplanEvent evt = new();
-        evt.drawnFloorplans = new Floorplan[3];
+        evt.drawnFloorplans = new Floorplan[amountDrafted];
         evt.possibleFloorTypes = possibleTypes;
         evt.possibleFloorplans = possibleFloorplans;
         evt.floorplanPicker = floorplanPicker;
@@ -190,7 +203,7 @@ public class DraftManager : MonoBehaviour
             instance.Setup(floorplan);
         }
 
-        background.SetActive(true);
+        background?.SetActive(true);
         draftScreen.SetActive(true);
     }
 
@@ -232,7 +245,7 @@ public class DraftManager : MonoBehaviour
             UIManager.ShowMessage("You don't have enough keys!!");
             return;
         }
-        background.SetActive(false);
+        background?.SetActive(false);
         draftScreen.SetActive(false);
         Player.ChangeKeys(-floorplan.keyCost);
         Floorplan originalFloorplan = floorplan;

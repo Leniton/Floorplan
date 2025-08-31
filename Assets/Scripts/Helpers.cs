@@ -1,6 +1,7 @@
 using Lenix.NumberUtilities;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 using Random = UnityEngine.Random;
@@ -11,13 +12,18 @@ public static class Helpers
     /// <summary>
     /// Create nedded instances and adds to the list; also disables extra instances and enables the required ones
     /// </summary>
-    public static void EnsureEnoughInstances<T>(this List<T> list, T prefab, int requiredInstances, Transform parent = null) where T : MonoBehaviour
+    public static void EnsureEnoughInstances<T>(this List<T> list, T prefab, int requiredInstances, Transform parent = null,
+        Action<T> setupAction = null) where T : MonoBehaviour
     {
         if (list.Count < requiredInstances)
         {
             int diff = requiredInstances - list.Count;
             for (int i = 0; i < diff; i++)
-                list.Add(GameObject.Instantiate(prefab, parent));
+            {
+                T instance = GameObject.Instantiate(prefab, parent);
+                setupAction?.Invoke(instance);
+                list.Add(instance);
+            }
         }
         for (int i = 0; i < list.Count; i++)
             list[i].gameObject.SetActive(i < requiredInstances);

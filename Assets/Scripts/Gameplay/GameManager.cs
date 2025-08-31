@@ -34,6 +34,9 @@ public class GameManager : MonoBehaviour
         loadedAssets.onCompleted += Setup;
 
         loadedAssets.AddStep();
+        draftManager.Setup(3, onDone: loadedAssets.FinishStep);
+
+        loadedAssets.AddStep();
         gridManager.onDoneLoading += loadedAssets.FinishStep;
         loadedAssets.AddStep();
         AAComponent<FloorplanUI>.LoadComponent("FloorplanUI", prefab =>
