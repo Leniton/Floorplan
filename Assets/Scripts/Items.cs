@@ -122,7 +122,7 @@ public abstract class ToggleItem : Item
 
 public class ColorKey : ToggleItem
 {
-    private FloorCategory floorCategory;
+    public FloorCategory floorCategory { get; protected set; }
 
     public ColorKey(FloorCategory? category = null)
     {
@@ -142,7 +142,8 @@ public class ColorKey : ToggleItem
     public override void Activate()
     {
         if (active != Player.activeKey) return;
-        Player.activeKey = active = !active;
+        active = !active;
+        Player.currentKey = active ? this : null;
         if (active) GameEvent.onDrawFloorplans += GuaranteeCategory;
         else GameEvent.onDrawFloorplans -= GuaranteeCategory;
     }
@@ -153,7 +154,7 @@ public class ColorKey : ToggleItem
         new Effect(null, 1).AnyFloorplanIsDrafted().Do(_ =>
         {
             GameEvent.onDrawFloorplans -= GuaranteeCategory;
-            Player.activeKey = active = !active;
+            Player.currentKey = null;
             Player.items.Remove(this);
         });
     }

@@ -32,9 +32,10 @@ public class Player : MonoBehaviour
     public static int coins;
     public static int dices;
     public static bool activeSledgeHammer => currentSledgeHammer?.active ?? false;
-    public static bool activeKey;
+    public static bool activeKey => currentKey != null;
     public static List<Item> items;
     private static SledgeHammer currentSledgeHammer;
+    public static ColorKey currentKey;
     #endregion
 
     private void Awake()
@@ -149,6 +150,6 @@ public class Player : MonoBehaviour
         coins = 5;
         dices = 0;
         currentSledgeHammer = null;
-        activeKey = false;
+        currentKey = null;
     }
 }
