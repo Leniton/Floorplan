@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Floorplan entrance;
     [SerializeField] private Image currentImage;
     [SerializeField] private Button finishButton;
+    [SerializeField] private PlayerDeck deck;
 
     public static Dictionary<Vector2Int, Floorplan> floorplanDict;
 
@@ -34,7 +35,7 @@ public class GameManager : MonoBehaviour
         loadedAssets.onCompleted += Setup;
 
         loadedAssets.AddStep();
-        draftManager.Setup(3, onDone: loadedAssets.FinishStep);
+        draftManager.Setup(3, deck, loadedAssets.FinishStep);
 
         loadedAssets.AddStep();
         gridManager.onDoneLoading += loadedAssets.FinishStep;

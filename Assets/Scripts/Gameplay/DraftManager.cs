@@ -13,11 +13,11 @@ public class DraftManager : MonoBehaviour
     [SerializeField] private GameObject background;
     [SerializeField] private GameObject draftScreen;
     [SerializeField] private Button rerollButton;
-    [SerializeField] private PlayerDeck playerDeck;
 
     private FloorplanDetails detailsPrefab;
 
     private int amountDrafted = 3;
+    private PlayerDeck playerDeck;
     private List<FloorplanDetails> draftList = new();
     private List<Floorplan> draftPool;
 
