@@ -35,6 +35,7 @@ public class ShopItem : MonoBehaviour
         Player.ChangeCoins(-data.cost);
         data.OnBuy?.Invoke();
         data.amount--;
+        button.interactable = data.amount > 0;
         soldOutPanel.SetActive(data.amount <= 0);
     }
 }

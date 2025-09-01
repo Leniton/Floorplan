@@ -56,25 +56,4 @@ public class ShopWindow : MonoBehaviour
     }
 
     public void Close() => instance.window.SetActive(false);
-
-    private IEnumerator OpenSequence()
-    {
-        yield return EraseCurrentData();
-        for (int i = 0; i < currentItems.Count; i++)
-        {
-            PurchaseData data = currentItems[i];
-            ShopItem item = Instantiate(itemPrefab, window.transform);
-            item.Setup(data);
-        }
-    }
-
-    private IEnumerator EraseCurrentData()
-    {
-        //first is the title
-        while (window.transform.childCount > 2)
-        {
-            Destroy(window.transform.GetChild(2).gameObject);
-            yield return null;
-        }
-    }
 }
