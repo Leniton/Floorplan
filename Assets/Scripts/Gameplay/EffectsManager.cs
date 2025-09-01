@@ -406,7 +406,7 @@ public static class EffectsManager
                     amount = 1,
                     name = keyColor.Name,
                     description = "Guarantee you draw rooms of the same category",
-                    OnBuy = () => keyColor.PickUp()
+                    OnBuy = () => new ColorKey(keyColor.floorCategory).PickUp()
                 };
                 PurchaseData sledgeHammer = new()
                 {
