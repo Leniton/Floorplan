@@ -379,7 +379,12 @@ public static class EffectsManager
                 floorplan.EveryTime().FloorplansAreDrawn().Where(DraftedFromHere).Do(evt =>
                 {
                     for (int i = 0; i < evt.drawnFloorplans.Length; i++)
-                        evt.drawnFloorplans[i].keyCost = 0;
+                    {
+                        var costLessFloorplan = evt.drawnFloorplans[i].
+                            CreateInstance(Floorplan.IDToDirection(evt.drawnFloorplans[i].entranceId));
+                        costLessFloorplan.keyCost = 0;
+                        evt.drawnFloorplans[i] = costLessFloorplan;
+                    }
                 });
                 break;
             case "Locksmith":
