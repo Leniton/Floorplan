@@ -31,6 +31,17 @@ public static class Helpers
     #endregion
 
     #region Floorplan helpers
+
+    public static string CategoryName(FloorCategory category) => category switch
+    {
+        FloorCategory.RestRoom => "Rest Room Key",
+        FloorCategory.Hallway => "Hallway Key",
+        FloorCategory.StorageRoom => "Storage Room Key",
+        FloorCategory.FancyRoom => "Fancy Room Key",
+        FloorCategory.Shop => "Shop Key",
+        FloorCategory.MysteryRoom => "Mystery Room Key",
+        _ => $"{category.ToString()} Key",
+    };
     public static bool ConnectedToFloorplan(this Floorplan targetFloorplan, FloorplanConnectedEvent evt, out Floorplan other)
     {
         other = null;

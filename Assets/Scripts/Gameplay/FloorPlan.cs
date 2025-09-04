@@ -29,6 +29,9 @@ public class Floorplan : ScriptableObject
     public Floorplan original { get; private set; }
 
     public Action OnChanged;
+    
+    //Renovation parameters
+    public Renovation renovation;
 
     [HideInInspector] public List<Floorplan> connectedFloorplans;
     public Dictionary<string, Func<int>> pointBonus = new();
@@ -77,6 +80,8 @@ public class Floorplan : ScriptableObject
         floorplan.connectedFloorplans = new(Mathf.Abs((int)floorplan.Type));
         floorplan.ChangeEntrance(entranceDirection);
         floorplan.Setup();
+        renovation.activationEffect?.Invoke(floorplan);
+        floorplan.renovation = renovation;
         
         return floorplan;
     }
