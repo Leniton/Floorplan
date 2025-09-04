@@ -80,7 +80,7 @@ public class Floorplan : ScriptableObject
         floorplan.connectedFloorplans = new(Mathf.Abs((int)floorplan.Type));
         floorplan.ChangeEntrance(entranceDirection);
         floorplan.Setup();
-        renovation.activationEffect?.Invoke(floorplan);
+        renovation?.activationEffect?.Invoke(floorplan);
         floorplan.renovation = renovation;
         
         return floorplan;
