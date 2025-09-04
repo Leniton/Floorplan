@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour
 
     private void Setup()
     {
+        draftManager.CloseWindow();
         //add entrance hall
         GridManager.instance = gridManager;
         currentDraftPosition = gridManager.currentPosition;
@@ -145,13 +146,7 @@ public class GameManager : MonoBehaviour
             if (!targetFloorplan.connections[Floorplan.DirectionToID(-direction)]) continue;
             //Debug.Log($"{floorplan.Name} is connected to {targetFloorplan.Name}");
             
-            //the floorplan who's already there first
             Helpers.ConnectFloorplans(targetFloorplan, floorplan);
-            //targetFloorplan.connectedFloorplans.Add(floorplan);
-            //targetFloorplan.onConnectToFloorplan?.Invoke(new(targetFloorplan, floorplan, currentDraftPosition));
-            //floorplan.connectedFloorplans.Add(targetFloorplan);
-            //floorplan.onConnectToFloorplan?.Invoke(new(floorplan, targetFloorplan, slot));
-            //GameEvent.onConnectFloorplans?.Invoke(new(floorplan, targetFloorplan, slot));
         }
     }
 

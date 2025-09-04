@@ -57,8 +57,6 @@ public class DraftManager : MonoBehaviour
 
             rerollButton.onClick.AddListener(RedrawFloorplans);
             rerollCount = rerollButton.GetComponentInChildren<TMP_Text>();
-            background?.SetActive(false);
-            draftScreen.SetActive(false);
 
             if (!ReferenceEquals(playerDeck, null))
             {
@@ -245,8 +243,7 @@ public class DraftManager : MonoBehaviour
             UIManager.ShowMessage("You don't have enough keys!!");
             return;
         }
-        background?.SetActive(false);
-        draftScreen.SetActive(false);
+        CloseWindow();
         Player.ChangeKeys(-floorplan.keyCost);
         Floorplan originalFloorplan = floorplan;
         while (!draftPool.Contains(originalFloorplan))
@@ -275,6 +272,12 @@ public class DraftManager : MonoBehaviour
     {
         Player.dices--;
         DraftFloorplan(lastDraftDirection, lastPossibleSlots);
+    }
+
+    public void CloseWindow()
+    {
+        background?.SetActive(false);
+        draftScreen.SetActive(false);
     }
 }
 
