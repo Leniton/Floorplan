@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerDeck deck;
 
     public static Dictionary<Vector2Int, Floorplan> floorplanDict;
+    public static Floorplan EntranceHall;
 
     private FloorplanUI floorplanPrefab;
     private Vector2Int currentDraftPosition;
@@ -59,8 +60,8 @@ public class GameManager : MonoBehaviour
         //add entrance hall
         GridManager.instance = gridManager;
         currentDraftPosition = gridManager.currentPosition;
-        Floorplan entranceHall = entrance.CreateInstance(Vector2Int.left);
-        PlaceFloorplan(entranceHall);
+        EntranceHall = entrance.CreateInstance(Vector2Int.left);
+        PlaceFloorplan(entrance);
         UIManager.ShowMessage($"Current objective:\n\n <b>{PointsManager.currentRequirement} points");
     }
 

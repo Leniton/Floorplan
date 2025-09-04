@@ -319,6 +319,7 @@ GameObject:
   - component: {fileID: 5582992952427419826}
   - component: {fileID: 1016319558472621325}
   - component: {fileID: 7989205386279840025}
+  - component: {fileID: 2682786316010915155}
   m_Layer: 5
   m_Name: ShopWindow
   m_TagString: Untagged
@@ -381,3 +382,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8708487885027792536}
   m_CullTransparentMesh: 1
+--- !u!114 &2682786316010915155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8708487885027792536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f94f686fbaada1e47b58420ec351aa65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 2209767603725136882, guid: 584250a9cb51e7b4baf6a88223a38f82,
+    type: 3}
+  window: {fileID: 8708487885027792536}
+  titleText: {fileID: 7289332188365144132}
+  ShopButton: {fileID: 0}

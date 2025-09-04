@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ShopWindow : MonoBehaviour
@@ -21,8 +18,9 @@ public class ShopWindow : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        ShopButton.onClick.AddListener(Open);
         Close();
+        if (ReferenceEquals(ShopButton, null)) return;
+        ShopButton.onClick.AddListener(Open);
     }
 
     public static void OpenShop(string title, List<PurchaseData> items)
@@ -35,12 +33,14 @@ public class ShopWindow : MonoBehaviour
     {
         instance.currentItems = items;
         instance.titleText.text = title;
+        if (ReferenceEquals(instance.ShopButton, null)) return;
         instance.ShopButton.gameObject.SetActive(true);
     }
 
     public static void CloseShop()
     {
         instance.Close();
+        if (ReferenceEquals(instance.ShopButton, null)) return;
         instance.ShopButton.gameObject.SetActive(false);
     }
 

@@ -1481,6 +1481,7 @@ MonoBehaviour:
   entrance: {fileID: 11400000, guid: 0592fd1164e8f894c8ba4760b9093bc0, type: 2}
   currentImage: {fileID: 186562830}
   finishButton: {fileID: 1264867669}
+  deck: {fileID: 0}
 --- !u!4 &467979806
 Transform:
   m_ObjectHideFlags: 0
@@ -1581,7 +1582,6 @@ GameObject:
   m_Component:
   - component: {fileID: 617881886}
   - component: {fileID: 617881885}
-  - component: {fileID: 617881887}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -1629,23 +1629,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &617881887
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 617881884}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f94f686fbaada1e47b58420ec351aa65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 2209767603725136882, guid: 584250a9cb51e7b4baf6a88223a38f82,
-    type: 3}
-  window: {fileID: 1793722999}
-  titleText: {fileID: 1646606081}
-  ShopButton: {fileID: 1298513098}
 --- !u!114 &619478186 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6133960910046742853, guid: 4bad80005d5f19545a6be592d4734dfa,
@@ -2823,29 +2806,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1646606081 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7289332188365144132, guid: 666210cfc03594048a9f11d70c8bbecb,
-    type: 3}
-  m_PrefabInstance: {fileID: 5765467119058999853}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1764916675 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1679746278597082209, guid: 4bad80005d5f19545a6be592d4734dfa,
     type: 3}
   m_PrefabInstance: {fileID: 8485993730953232199}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1793722999 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8708487885027792536, guid: 666210cfc03594048a9f11d70c8bbecb,
-    type: 3}
-  m_PrefabInstance: {fileID: 5765467119058999853}
   m_PrefabAsset: {fileID: 0}
 --- !u!224 &1793723000 stripped
 RectTransform:
@@ -3327,6 +3292,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 320442874}
     m_Modifications:
+    - target: {fileID: 2682786316010915155, guid: 666210cfc03594048a9f11d70c8bbecb,
+        type: 3}
+      propertyPath: ShopButton
+      value: 
+      objectReference: {fileID: 1298513098}
     - target: {fileID: 5582992952427419826, guid: 666210cfc03594048a9f11d70c8bbecb,
         type: 3}
       propertyPath: m_Pivot.x
@@ -3431,11 +3401,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 617881887}
+      objectReference: {fileID: 0}
     - target: {fileID: 8708487885027792536, guid: 666210cfc03594048a9f11d70c8bbecb,
         type: 3}
       propertyPath: m_Name
       value: ShopWindow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708487885027792536, guid: 666210cfc03594048a9f11d70c8bbecb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
