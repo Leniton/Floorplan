@@ -141,7 +141,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2682786316010915155}
         m_TargetAssemblyTypeName: ShopWindow, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1
