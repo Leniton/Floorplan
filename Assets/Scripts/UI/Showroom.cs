@@ -152,6 +152,13 @@ public class Showroom : MonoBehaviour
 
     private void UseRenovation(Renovation renovation)
     {
-        
+        draftManager.DraftFloorplan(Vector2Int.down, null);
+        draftManager.OnDraftFloorplan += ApplyRenovation;
+
+        void ApplyRenovation(Floorplan floorplan)
+        {
+            renovation.Activate(floorplan);
+            draftManager.OnDraftFloorplan -= ApplyRenovation;
+        }
     }
 }

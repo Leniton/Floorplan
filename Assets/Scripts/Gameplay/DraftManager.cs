@@ -130,6 +130,17 @@ public class DraftManager : MonoBehaviour
 
     public void DraftFloorplan(Vector2Int direction, List<Vector2Int> possibleSlots)
     {
+        //if there's no possible slots, all of them is possible
+        if (possibleSlots is not { Count: > 0 })
+        {
+            possibleSlots = new()
+            {
+                Vector2Int.up,
+                Vector2Int.down,
+                Vector2Int.left,
+                Vector2Int.right
+            };
+        }
         List<FloorType> possibleTypes = new()
         {
             FloorType.DeadEnd,
