@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private GridManager gridManager;
     [SerializeField, Range(0, 1)] private float distanceTreshold;
     [SerializeField] GameObject bg;
     [SerializeField] Transform verticalArrow;
