@@ -64,15 +64,16 @@ public static class RenovationUtils
     /// <summary>
     /// Add category to floorplan
     /// </summary>
-    public static Renovation Paint(FloorCategory category)
+    public static Renovation Paint(FloorCategory? category = null)
     {
+        var floorCategory = category ?? Helpers.RandomCategory();
         return new()
         {
             name = "Paint",
-            description = $"Floorplan is also a {Helpers.CategoryName(category)}",
+            description = $"Floorplan is also a {Helpers.CategoryName(floorCategory)}",
             overlayPattern = null,
-            condition = floorplan => !floorplan.IsOfCategory(category),
-            activationEffect = floorplan => floorplan.Category |= category
+            condition = floorplan => !floorplan.IsOfCategory(floorCategory),
+            activationEffect = floorplan => floorplan.Category |= floorCategory
         };
     }
 }

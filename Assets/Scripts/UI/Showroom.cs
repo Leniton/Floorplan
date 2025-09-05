@@ -24,11 +24,65 @@ public class Showroom : MonoBehaviour
     
     private void Awake()
     {
+        SetupSuppliesShop();
+        SetupRenovationsShop();
+        
+        renovationPackButton.onClick.AddListener(OpenRenovationShop);
+        suppliesPackButton.onClick.AddListener(OpenSuppliesShop);
     }
 
     private void SetupRenovationsShop()
     {
+        RarityPicker<PurchaseData> possibleRenovations = new();
+        possibleRenovations.AddToPool(new()
+        {
+            name = "Key holder",
+            description = "Add 2 keys to a floorplan",
+            cost = 3,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.KeyHolder())
+        }, Rarity.Common);
+        possibleRenovations.AddToPool(new()
+        {
+            name = "Secret vault",
+            description = "Add 5 coins to a floorplan",
+            cost = 3,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.SecretVault())
+        }, Rarity.Common);
+        possibleRenovations.AddToPool(new()
+        {
+            name = "Mini Fridge",
+            description = "Add a <b>Soda</b> to a floorplan",
+            cost = 3,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.MiniFridge())
+        }, Rarity.Common);
+        possibleRenovations.AddToPool(new()
+        {
+            name = "Wallpaper",
+            description = "+5 base points to floorplan",
+            cost = 3,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.Wallpaper())
+        }, Rarity.Common);
+        FloorCategory paintCategory = Helpers.RandomCategory();
+        Renovation paint = RenovationUtils.Paint(paintCategory);
+        possibleRenovations.AddToPool(new()
+        {
+            name = paint.name,
+            description = paint.description,
+            cost = 3,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.Paint(paintCategory))
+        }, Rarity.Common);
         
+        List<PurchaseData> renovations = new(3);
+        for (int i = 0; i < renovations.Capacity; i++)
+        {
+            renovations.Add(possibleRenovations.PickRandom(removeFromPool: true));
+        }
+        renovationPack = renovations;
     }
     
     private void SetupSuppliesShop()
@@ -76,5 +130,20 @@ public class Showroom : MonoBehaviour
             OnBuy = () => new SledgeHammer().PickUp()
         });
         suppliesPack = possibleSupplies;
+    }
+
+    private void OpenRenovationShop()
+    {
+        ShopWindow.OpenShop("Renovations", renovationPack);
+    }
+
+    private void OpenSuppliesShop()
+    {
+        ShopWindow.OpenShop("Supplies Shop", suppliesPack);
+    }
+
+    private void UseRenovation(Renovation renovation)
+    {
+        
     }
 }
