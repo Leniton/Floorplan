@@ -66,6 +66,14 @@ public class Showroom : MonoBehaviour
             amount = 1,
             OnBuy = () => UseRenovation(RenovationUtils.Wallpaper())
         }, Rarity.Common);
+        possibleRenovations.AddToPool(new()
+        {
+            name = "Play table",
+            description = "Add 2 <b>Dices</b> to floorplan",
+            cost = 3,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.PlayTable())
+        }, Rarity.Common);
         FloorCategory paintCategory = Helpers.RandomCategory();
         Renovation paint = RenovationUtils.Paint(paintCategory);
         possibleRenovations.AddToPool(new()

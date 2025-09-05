@@ -48,6 +48,20 @@ public static class RenovationUtils
         };
     }
     /// <summary>
+    /// Add 2 <b>Dices</b> to floorplan
+    /// </summary>
+    public static Renovation PlayTable()
+    {
+        return new()
+        {
+            persistent = true,
+            name = "Play table",
+            description = "Add 2 dices to floorplan",
+            overlayPattern = null,
+            activationEffect = new Dice(2).AddItemToFloorplan
+        };
+    }
+    /// <summary>
     /// +5 base points
     /// </summary>
     public static Renovation Wallpaper()
