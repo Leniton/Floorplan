@@ -3292,6 +3292,36 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 320442874}
     m_Modifications:
+    - target: {fileID: 2476247405833519858, guid: 666210cfc03594048a9f11d70c8bbecb,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2476247405833519858, guid: 666210cfc03594048a9f11d70c8bbecb,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2476247405833519858, guid: 666210cfc03594048a9f11d70c8bbecb,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2476247405833519858, guid: 666210cfc03594048a9f11d70c8bbecb,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2476247405833519858, guid: 666210cfc03594048a9f11d70c8bbecb,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2476247405833519858, guid: 666210cfc03594048a9f11d70c8bbecb,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2682786316010915155, guid: 666210cfc03594048a9f11d70c8bbecb,
         type: 3}
       propertyPath: ShopButton
@@ -3396,11 +3426,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6049442408825238568, guid: 666210cfc03594048a9f11d70c8bbecb,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8708487885027792536, guid: 666210cfc03594048a9f11d70c8bbecb,
         type: 3}

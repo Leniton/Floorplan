@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
         GridManager.instance = gridManager;
         currentDraftPosition = gridManager.currentPosition;
         EntranceHall = entrance.CreateInstance(Vector2Int.left);
-        PlaceFloorplan(entrance);
+        PlaceFloorplan(EntranceHall);
         UIManager.ShowMessage($"Current objective:\n\n <b>{PointsManager.currentRequirement} points");
     }
 
