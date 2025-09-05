@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private DraftManager draftManager;
     [SerializeField] private GridManager gridManager;
-    [SerializeField] private Player player;
+    [SerializeField] private MovementManager movement;
     [SerializeField] private Floorplan entrance;
     [SerializeField] private Image currentImage;
     [SerializeField] private Button finishButton;
@@ -24,9 +24,10 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Player.ResetPlayer();
         GameSettings.current = new();
         floorplanDict = new();
-        player.OnMove += OnMoveSlot;
+        movement.OnMove += OnMoveSlot;
         draftManager.OnDraftFloorplan += PlaceFloorplan;
         gridManager.OnStartMove += TriggerFloorplanExitEvent;
         gridManager.OnMove += TriggerFloorplanEnterEvent;

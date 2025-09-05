@@ -282,32 +282,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 33131204}
-  - component: {fileID: 33131203}
+  - component: {fileID: 33131205}
   m_Layer: 0
-  m_Name: Player
+  m_Name: MovementManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &33131203
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 33131202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4135e3a311617774c92dcc6b0a81f541, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridManager: {fileID: 312588992}
-  distanceTreshold: 0.2
-  bg: {fileID: 1068915549}
-  verticalArrow: {fileID: 555203356}
-  horizontalArrow: {fileID: 1155218264}
-  currentDirection: {x: 0, y: 0}
 --- !u!4 &33131204
 Transform:
   m_ObjectHideFlags: 0
@@ -323,6 +305,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &33131205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33131202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4fcff5c7b6600e41a3f55ccb329d2d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distanceTreshold: 0.2
+  bg: {fileID: 1068915549}
+  verticalArrow: {fileID: 555203356}
+  horizontalArrow: {fileID: 1155218264}
+  currentDirection: {x: 0, y: 0}
 --- !u!1 &56849184
 GameObject:
   m_ObjectHideFlags: 0
@@ -1477,7 +1476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   draftManager: {fileID: 1334561371}
   gridManager: {fileID: 312588992}
-  player: {fileID: 33131203}
+  movement: {fileID: 33131205}
   entrance: {fileID: 11400000, guid: 0592fd1164e8f894c8ba4760b9093bc0, type: 2}
   currentImage: {fileID: 186562830}
   finishButton: {fileID: 1264867669}
@@ -2039,8 +2038,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 33131203}
-          m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        - m_Target: {fileID: 33131205}
+          m_TargetAssemblyTypeName: MovementManager, Assembly-CSharp
           m_MethodName: set_canMove
           m_Mode: 6
           m_Arguments:
@@ -2055,8 +2054,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 33131203}
-          m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        - m_Target: {fileID: 33131205}
+          m_TargetAssemblyTypeName: MovementManager, Assembly-CSharp
           m_MethodName: set_canMove
           m_Mode: 6
           m_Arguments:
