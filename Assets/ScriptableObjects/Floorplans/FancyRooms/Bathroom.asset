@@ -16,10 +16,9 @@ MonoBehaviour:
   Alias: Bathroom
   Description: The first time you enter this room, round up your steps (12 => 20).
     Multiply the points in this room by steps gained
-  Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Category: 40
   Type: 1
-  Rarity: 1
+  Rarity: 2
   keyCost: 0
   basePoints: 1
   entranceId: 0
