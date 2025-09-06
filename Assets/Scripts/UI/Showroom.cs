@@ -27,7 +27,7 @@ public class Showroom : MonoBehaviour
     {
         SetupSuppliesShop();
         SetupRenovationsShop();
-        draftManager.Setup(5, RunData.deck);
+        draftManager.Setup(5, RunData.playerDeck);
         draftManager.CloseWindow();
         
         renovationPackButton.onClick.AddListener(OpenRenovationShop);
@@ -156,12 +156,13 @@ public class Showroom : MonoBehaviour
 
     private void UseRenovation(Renovation renovation)
     {
-        draftManager.DraftFloorplan(Vector2Int.down, null);
+        draftManager.DraftFloorplan(Vector2Int.up, null);
         draftManager.OnDraftFloorplan += ApplyRenovation;
 
         void ApplyRenovation(Floorplan floorplan)
         {
-            renovation.Activate(floorplan);
+            var original = floorplan.FindOriginal(RunData.playerDeck.deck);
+            if (original != null) renovation.Activate(original);
             draftManager.OnDraftFloorplan -= ApplyRenovation;
         }
     }

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public static class RunData
 {
-    public static PlayerDeck deck;
+    public static PlayerDeck playerDeck;
 }

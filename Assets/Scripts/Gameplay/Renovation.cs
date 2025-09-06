@@ -68,7 +68,6 @@ public static class RenovationUtils
     {
         return new()
         {
-            persistent = true,
             name = "Wallpaper",
             description = "+5 base points",
             overlayPattern = null,
@@ -115,6 +114,7 @@ public class Renovation
             activationEffect?.Invoke(floorplan);
             return;
         }
+
         floorplan.renovation = this;
     }
 }

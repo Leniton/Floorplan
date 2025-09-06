@@ -12,6 +12,7 @@ public class DraftManager : MonoBehaviour
 {
     [SerializeField] private GameObject background;
     [SerializeField] private GameObject draftScreen;
+    [SerializeField] private Transform floorplansContainer;
     [SerializeField] private Button rerollButton;
 
     private FloorplanDetails detailsPrefab;
@@ -25,6 +26,7 @@ public class DraftManager : MonoBehaviour
 
     private TMP_Text rerollCount;
     private Vector2Int lastDraftDirection;
+    private int lastDraftHeight;
     private List<Vector2Int> lastPossibleSlots;
 
     private const float commonRate = .7f;
@@ -52,7 +54,7 @@ public class DraftManager : MonoBehaviour
         void LoadDraftPool()
         {
             amountDrafted = draftOptions;
-            draftList.EnsureEnoughInstances(detailsPrefab, amountDrafted, draftScreen.transform, i => i.onPickedFloorplan += PickFloorplan);
+            draftList.EnsureEnoughInstances(detailsPrefab, amountDrafted, floorplansContainer, i => i.onPickedFloorplan += PickFloorplan);
             playerDeck = deck;
 
             rerollButton.onClick.AddListener(RedrawFloorplans);
@@ -128,7 +130,7 @@ public class DraftManager : MonoBehaviour
         Debug.LogWarning(sb.ToString());
     }
 
-    public void DraftFloorplan(Vector2Int direction, List<Vector2Int> possibleSlots)
+    public void DraftFloorplan(Vector2Int direction, List<Vector2Int> possibleSlots, int draftHeight = 0)
     {
         //if there's no possible slots, all of them is possible
         if (possibleSlots is not { Count: > 0 })
@@ -162,7 +164,7 @@ public class DraftManager : MonoBehaviour
 
         //pick possible ones
         List<Floorplan> possibleFloorplans = new();
-        RarityPicker<Floorplan> floorplanPicker = GetRarityPicker((GridManager.instance.currentPosition + direction).y);
+        RarityPicker<Floorplan> floorplanPicker = GetRarityPicker(draftHeight);
         for (int i = 0; i < draftPool.Count; i++)
         {
             if (!possibleTypes.Contains(draftPool[i].Type)) continue;
@@ -172,6 +174,7 @@ public class DraftManager : MonoBehaviour
         }
 
         lastDraftDirection = direction;
+        lastDraftHeight = draftHeight;
         lastPossibleSlots = possibleSlots;
         rerollButton.gameObject.SetActive(Player.dices > 0);
         rerollCount?.SetText($"{Player.dices}");
@@ -256,16 +259,7 @@ public class DraftManager : MonoBehaviour
         }
         CloseWindow();
         Player.ChangeKeys(-floorplan.keyCost);
-        Floorplan originalFloorplan = floorplan;
-        while (!draftPool.Contains(originalFloorplan))
-        {
-            if (ReferenceEquals(originalFloorplan, null))
-            {
-                Debug.LogWarning("Original floorplan not found!!");
-                break;
-            }
-            originalFloorplan = originalFloorplan.original;
-        }
+        Floorplan originalFloorplan = floorplan.FindOriginal(draftPool);
         draftPool.Remove(originalFloorplan);
         OnDraftFloorplan?.Invoke(floorplan);
     }
@@ -282,7 +276,7 @@ public class DraftManager : MonoBehaviour
     public void RedrawFloorplans()
     {
         Player.dices--;
-        DraftFloorplan(lastDraftDirection, lastPossibleSlots);
+        DraftFloorplan(lastDraftDirection, lastPossibleSlots, lastDraftHeight);
     }
 
     public void CloseWindow()

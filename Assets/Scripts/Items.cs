@@ -127,7 +127,7 @@ public class ColorKey : ToggleItem
     public ColorKey(FloorCategory? category = null)
     {
         floorCategory = category ?? Helpers.RandomCategory();//will be 8 with addition of red rooms
-        Name = Helpers.CategoryName(floorCategory);
+        Name = $"{Helpers.CategoryName(floorCategory)} key";
     }
 
     public override void Activate()

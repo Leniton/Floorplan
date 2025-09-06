@@ -35,13 +35,13 @@ public static class Helpers
     public static FloorCategory RandomCategory() => (FloorCategory)Mathf.Pow(2, Random.Range(0, 7));
     public static string CategoryName(FloorCategory category) => category switch
     {
-        FloorCategory.RestRoom => "Rest Room Key",
-        FloorCategory.Hallway => "Hallway Key",
-        FloorCategory.StorageRoom => "Storage Room Key",
-        FloorCategory.FancyRoom => "Fancy Room Key",
-        FloorCategory.Shop => "Shop Key",
-        FloorCategory.MysteryRoom => "Mystery Room Key",
-        _ => $"{category.ToString()} Key",
+        FloorCategory.RestRoom => "Rest Room",
+        FloorCategory.Hallway => "Hallway",
+        FloorCategory.StorageRoom => "Storage Room",
+        FloorCategory.FancyRoom => "Fancy Room",
+        FloorCategory.Shop => "Shop",
+        FloorCategory.MysteryRoom => "Mystery Room",
+        _ => $"{category.ToString()}",
     };
     public static bool ConnectedToFloorplan(this Floorplan targetFloorplan, FloorplanConnectedEvent evt, out Floorplan other)
     {
@@ -49,6 +49,20 @@ public static class Helpers
         if(evt.baseFloorplan != targetFloorplan && evt.connectedFloorplan != targetFloorplan) return false;
         other = evt.baseFloorplan == targetFloorplan ? evt.connectedFloorplan : evt.baseFloorplan;
         return true;
+    }
+    public static Floorplan FindOriginal(this Floorplan floorplan, List<Floorplan> pool)
+    {
+        Floorplan originalFloorplan = floorplan;
+        while (!pool.Contains(originalFloorplan))
+        {
+            if (ReferenceEquals(originalFloorplan, null))
+            {
+                Debug.LogWarning("Original floorplan not found!!");
+                break;
+            }
+            originalFloorplan = originalFloorplan.original;
+        }
+        return originalFloorplan;
     }
 
     public static Floorplan DraftedFrom(this Floorplan floorplan)

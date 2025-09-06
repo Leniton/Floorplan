@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
         loadedAssets.onCompleted += Setup;
 
         loadedAssets.AddStep();
-        draftManager.Setup(3, RunData.deck, loadedAssets.FinishStep);
+        draftManager.Setup(3, RunData.playerDeck, loadedAssets.FinishStep);
 
         loadedAssets.AddStep();
         gridManager.onDoneLoading += loadedAssets.FinishStep;
@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
 
             //draft plan?
             currentDraftPosition = targetedSlot;
-            draftManager.DraftFloorplan(direction, possibleSlots);
+            draftManager.DraftFloorplan(direction, possibleSlots, (GridManager.instance.currentPosition + direction).y);
         }
     }
 

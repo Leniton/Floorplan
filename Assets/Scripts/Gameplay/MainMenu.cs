@@ -1,19 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
     [Header("Buttons")]
-    [SerializeField] Button startButton;
-    [SerializeField] Button settingsutton;
-    [SerializeField] Button glossaryButton;
+    [SerializeField] private Button startButton;
+    [SerializeField] private Button settingsutton;
+    [SerializeField] private Button glossaryButton;
     [Header("Windows")]
-    [SerializeField] GameObject deckPickWindow;
+    [SerializeField] private GameObject deckPickWindow;
     [Header("Other")]
-    [SerializeField] FloorplanColors colors;
+    [SerializeField] private FloorplanColors colors;
+
+    private PlayerDeck currentDeck;
 
     private void Awake()
     {
@@ -24,6 +28,25 @@ public class MainMenu : MonoBehaviour
 
     private void StartRun()
     {
-        SceneManager.LoadScene(1);
+        List<Floorplan> draftPool;
+        if (!ReferenceEquals(currentDeck, null))
+        {
+            draftPool = new(currentDeck.deck.Count);
+            for (int i = 0; i < draftPool.Capacity; i++)
+                draftPool.Add(currentDeck.deck[i].CreateInstance(Vector2Int.up));
+
+            StartGame();
+            return;
+        }
+        draftPool = new();
+        Addressables.LoadAssetsAsync<Floorplan>("BaseFloorplan", floorplan =>
+            draftPool.Add(floorplan.CreateInstance(Vector2Int.up))).Completed += _ => StartGame();
+
+        void StartGame()
+        {
+            RunData.playerDeck = ScriptableObject.CreateInstance<PlayerDeck>();
+            RunData.playerDeck.deck = draftPool;
+            SceneManager.LoadScene(1);
+        }
     }
 }
