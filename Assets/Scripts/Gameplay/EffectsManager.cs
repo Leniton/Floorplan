@@ -178,21 +178,13 @@ public static class EffectsManager
                 break;
             case "Dormitory":
                 //gains extra points for each restRoom in the house
-                floorplan.AddBonus(floorplan.Alias, () =>
-                {
-                    int selfBonus = 0;
-                    foreach (var room in GameManager.floorplanDict.Values)
-                    {
-                        if (!NumberUtil.ContainsAnyBits((int)room.Category, (int)floorplan.Category)) continue;
-                        //Debug.Log($"buffing {room.Name}");
-                        selfBonus += 2;
-                    }
-                    return selfBonus;
-                });
+                int selfBonus = 0;
+                floorplan.ForEveryFloorplan(IsOfCategory(FloorCategory.RestRoom), _ => selfBonus += 2);
+                floorplan.AddBonus(floorplan.Alias, () => selfBonus);
                 //when you connect a rest room, add a snack to this room
                 floorplan.EveryTime().FloorplanConnected().
                     Where(IsOfCategory(FloorCategory.RestRoom)).
-                    Do(_ => ItemUtilities.Snack().AddItemToFloorplan(floorplan));
+                    Do(evt => ItemUtilities.Snack().AddItemToFloorplan(evt.connectedFloorplan));
                 break;
             case "Drawing Room":
                 int startAmount = 0;
@@ -288,16 +280,7 @@ public static class EffectsManager
                 return;
             case "Hovel":
                 //buff rest rooms
-                foreach (var room in GameManager.floorplanDict.Values)
-                {
-                    if (!NumberUtil.ContainsBytes((int)room.Category, 
-                            (int)FloorCategory.RestRoom)) continue;
-                    room.AddBonus(floorplan.Alias, () => 1);
-                }
-                //power all rooms of the same category
-                floorplan.EveryTime().AnyFloorplanIsDrafted().
-                    Where(IsOfCategory(FloorCategory.RestRoom)).
-                    AddPointsToThatFloorplan(1);
+                floorplan.ForEveryFloorplan(IsOfCategory(FloorCategory.RestRoom), evt => evt.Floorplan.AddBonus(floorplan.Alias, () => 1));
                 break;
             case "Kitchen":
                 PurchaseData cherry = new()
@@ -426,17 +409,13 @@ public static class EffectsManager
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, locksmithList);
                 break;
             case "Master Bedroom":
-                string mBedroomAlias = "M. Bedroom";
-                //buffs all floorplans
-                int otherBonus = 5;
-                foreach (var room in GameManager.floorplanDict.Values)
+                //buffs all rest room for each rest room
+                int otherBonus = 0;
+                floorplan.ForEveryFloorplan(IsOfCategory(FloorCategory.RestRoom), evt =>
                 {
-                    if (!NumberUtil.ContainsAnyBits((int)room.Category, (int)floorplan.Category)) continue;
-                    //Debug.Log($"buffing {room.Name}");
-                    room.AddBonus(mBedroomAlias, () => otherBonus);
-                }
-                floorplan.EveryTime().AnyFloorplanIsDrafted().
-                    Where(IsOfCategory(FloorCategory.RestRoom)).AddPointsToThatFloorplan(otherBonus);
+                    otherBonus += 2;
+                    evt.Floorplan.AddBonus(floorplan.Alias, () => otherBonus);
+                });
                 break;
             case "Mail Room":
                 const int draftsNeeded = 3;
@@ -551,16 +530,7 @@ public static class EffectsManager
                 break;
             case "Utility Closet":
                 //power all rooms of the same category
-                foreach (var room in GameManager.floorplanDict.Values)
-                {
-                    if (!NumberUtil.ContainsAnyBits((int)room.Category, (int)floorplan.Category)) continue;
-                    Debug.Log($"Powering {room.Name}");
-                    room.AddMultiplier(floorplan.Alias, () => 2);
-                }
-                //power all rooms of the same category
-                floorplan.EveryTime().AnyFloorplanIsDrafted().
-                    Where(MatchCategoryWith(floorplan)).
-                    PowerThatFloorplan();
+                floorplan.ForEveryFloorplan(MatchCategoryWith(floorplan), evt => evt.Floorplan.AddMultiplier(floorplan.Alias, () => 2));
                 break;
             case "Vault":
                 int lastRoomCount = 0;
@@ -605,6 +575,18 @@ public static class EffectsManager
     public static Effect TheFirstTime(this Floorplan floorplan) => new (floorplan, 1);
     public static Effect EveryTime(this Floorplan floorplan) => new (floorplan);
     public static Effect TheNext_Times(this Floorplan floorplan, uint times) => new(floorplan, (int)times);
+    public static void ForEveryFloorplan(this Floorplan floorplan, Func<FloorplanEvent, bool> condition,
+        Action<FloorplanEvent> action)
+    {
+        foreach (var room in GameManager.floorplanDict)
+        {
+            if (!CheckCondition(room)) continue;
+            action?.Invoke(new(room.Key, room.Value));
+        }
+        floorplan.EveryTime().AnyFloorplanIsDrafted().Where(condition).Do(action);
+
+        bool CheckCondition(KeyValuePair<Vector2Int, Floorplan> data) => condition?.Invoke(new(data.Key, data.Value)) ?? true;
+    }
     #endregion
 
     #region EventListeners
@@ -703,7 +685,6 @@ public static class EffectsManager
         listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].AddBonus(listener.effect.floorplan.Alias, amount));
     public static EventListener<Action<T>,T> PowerThatFloorplan<T>(this EventListener<Action<T>, T> listener) where T : CoordinateEvent =>
         listener.Do(evt => GameManager.floorplanDict[evt.Coordinates].AddMultiplier(listener.effect.floorplan.Alias, () => 2));
-
     public static EventListener<Action<T>,T> SetupFloorplanShop<T>(this EventListener<Action<T>, T> listener, string title, List<PurchaseData> shopList)
         where T : CoordinateEvent
     {

@@ -49,6 +49,7 @@ public class Floorplan : ScriptableObject
         floorplan.original = this;
         floorplan.name = name;
         floorplan.Name = Name;
+        floorplan.Alias = Alias;
         floorplan.Description = Description;
         floorplan.Color = Color;
         floorplan.Category = Category;
