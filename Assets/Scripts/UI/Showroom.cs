@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Showroom : MonoBehaviour
@@ -26,9 +27,12 @@ public class Showroom : MonoBehaviour
     {
         SetupSuppliesShop();
         SetupRenovationsShop();
+        draftManager.Setup(5, RunData.deck);
+        draftManager.CloseWindow();
         
         renovationPackButton.onClick.AddListener(OpenRenovationShop);
         suppliesPackButton.onClick.AddListener(OpenSuppliesShop);
+        continueButton.onClick.AddListener(ContinueGame);
     }
 
     private void SetupRenovationsShop()
@@ -102,7 +106,7 @@ public class Showroom : MonoBehaviour
             description = "Gain +3 steps",
             cost = 3,
             amount = 10,
-            OnBuy = () => ItemUtilities.Apple.PickUp()
+            OnBuy = () => AddSupply(ItemUtilities.Apple)
         });
         possibleSupplies.Add(new()
         {
@@ -110,7 +114,7 @@ public class Showroom : MonoBehaviour
             description = "Used to draft powerful floorplans",
             cost = 3,
             amount = 10,
-            OnBuy = () => new Key(1).PickUp()
+            OnBuy = () => AddSupply(new Key(1))
         });
         possibleSupplies.Add(new()
         {
@@ -118,7 +122,7 @@ public class Showroom : MonoBehaviour
             description = "Used to reroll drawn floorplans",
             cost = 5,
             amount = 5,
-            OnBuy = () => new Dice(1).PickUp()
+            OnBuy = () => AddSupply(new Dice(1))
         });
         ColorKey colorKey = new();
         possibleSupplies.Add(new()
@@ -126,8 +130,8 @@ public class Showroom : MonoBehaviour
             cost = 8,
             amount = 2,
             name = colorKey.Name,
-            description = "Guarantee you draw rooms of the same category",
-            OnBuy = () => new ColorKey(colorKey.floorCategory).PickUp()
+            description = $"Guarantee you draw {Helpers.CategoryName(colorKey.floorCategory)}s",
+            OnBuy = () => AddSupply(new ColorKey(colorKey.floorCategory))
         });
         possibleSupplies.Add(new()
         {
@@ -135,7 +139,7 @@ public class Showroom : MonoBehaviour
             description = "Move towards an closed connection to open it.",
             cost = 10,
             amount = 1,
-            OnBuy = () => new SledgeHammer().PickUp()
+            OnBuy = () => AddSupply(new SledgeHammer())
         });
         suppliesPack = possibleSupplies;
     }
@@ -160,5 +164,21 @@ public class Showroom : MonoBehaviour
             renovation.Activate(floorplan);
             draftManager.OnDraftFloorplan -= ApplyRenovation;
         }
+    }
+
+    private void AddSupply(Item item)
+    {
+        GameEvent.onGameStart += AddItemToEntranceHall;
+
+        void AddItemToEntranceHall(Event evt)
+        {
+            item.AddItemToFloorplan(GameManager.EntranceHall);
+            GameEvent.onGameStart -= AddItemToEntranceHall;
+        }
+    }
+
+    private void ContinueGame()
+    {
+        SceneManager.LoadScene(1);
     }
 }

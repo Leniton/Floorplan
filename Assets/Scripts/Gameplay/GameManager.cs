@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Floorplan entrance;
     [SerializeField] private Image currentImage;
     [SerializeField] private Button finishButton;
-    [SerializeField] private PlayerDeck deck;
 
     public static Dictionary<Vector2Int, Floorplan> floorplanDict;
     public static Floorplan EntranceHall;
@@ -25,7 +24,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Player.ResetPlayer();
-        GameSettings.current = new();
         floorplanDict = new();
         movement.OnMove += OnMoveSlot;
         draftManager.OnDraftFloorplan += PlaceFloorplan;
@@ -37,7 +35,7 @@ public class GameManager : MonoBehaviour
         loadedAssets.onCompleted += Setup;
 
         loadedAssets.AddStep();
-        draftManager.Setup(3, deck, loadedAssets.FinishStep);
+        draftManager.Setup(3, RunData.deck, loadedAssets.FinishStep);
 
         loadedAssets.AddStep();
         gridManager.onDoneLoading += loadedAssets.FinishStep;
@@ -63,7 +61,8 @@ public class GameManager : MonoBehaviour
         currentDraftPosition = gridManager.currentPosition;
         EntranceHall = entrance.CreateInstance(Vector2Int.left);
         PlaceFloorplan(EntranceHall);
-        UIManager.ShowMessage($"Current objective:\n\n <b>{PointsManager.currentRequirement} points");
+        MessageWindow.ShowMessage($"Current objective:\n\n <b>{PointsManager.currentRequirement} points", 
+            () => GameEvent.onGameStart?.Invoke(new()));
     }
 
     private void OnMoveSlot(Vector2Int direction)
@@ -181,6 +180,7 @@ public class GameManager : MonoBehaviour
     private void FinishRun()
     {
         int finalPoints = PointsManager.GetTotalPoints();
+        int targetScene = 2;
         if (finalPoints >= PointsManager.currentRequirement)
         {
             //win, progress
@@ -190,8 +190,9 @@ public class GameManager : MonoBehaviour
         {
             //lose, reset
             PointsManager.Reset();
+            targetScene = 0;
         }
         GameEvent.ResetListeners();
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(targetScene);
     }
 }

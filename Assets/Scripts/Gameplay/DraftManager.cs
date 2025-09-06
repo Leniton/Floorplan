@@ -251,7 +251,7 @@ public class DraftManager : MonoBehaviour
     {
         if (Player.keys < floorplan.keyCost)
         {
-            UIManager.ShowMessage("You don't have enough keys!!");
+            MessageWindow.ShowMessage("You don't have enough keys!!");
             return;
         }
         CloseWindow();

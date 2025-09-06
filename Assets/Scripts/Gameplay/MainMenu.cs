@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
@@ -11,15 +12,18 @@ public class MainMenu : MonoBehaviour
     [SerializeField] Button glossaryButton;
     [Header("Windows")]
     [SerializeField] GameObject deckPickWindow;
+    [Header("Other")]
+    [SerializeField] FloorplanColors colors;
 
-    void Start()
+    private void Awake()
     {
-        
+        GameSettings.current = new();
+        GameSettings.current.floorplanColors = colors;
+        startButton.onClick.AddListener(StartRun);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void StartRun()
     {
-        
+        SceneManager.LoadScene(1);
     }
 }

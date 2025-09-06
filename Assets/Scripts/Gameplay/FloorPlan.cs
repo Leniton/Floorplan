@@ -143,7 +143,7 @@ public class Floorplan : ScriptableObject
         if (Helpers.CurrentFloorplan() != this ||
             !GameSettings.current.autoCollectItems ||
             item is PlaceableItem and { placed: true }) return;
-        UIManager.ShowMessage($"found {item.Name}", () => PickupItem(item));
+        MessageWindow.ShowMessage($"found {item.Name}", () => PickupItem(item));
     }
 
     private void OnEnterFloorplan(Event evt)
@@ -155,7 +155,7 @@ public class Floorplan : ScriptableObject
         {
             Item item = items[i];
             if (item is PlaceableItem and { placed: true }) continue;
-            UIManager.ShowMessage($"found {item.Name}", () => PickupItem(item));
+            MessageWindow.ShowMessage($"found {item.Name}", () => PickupItem(item));
         }
     }
 

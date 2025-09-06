@@ -28,7 +28,7 @@ public class ShopItem : MonoBehaviour
     {
         if (Player.coins < data.cost)
         {
-            UIManager.ShowMessage($"You don't have enough money to buy this item");
+            MessageWindow.ShowMessage($"You don't have enough money to buy this item");
             return;
         }
 

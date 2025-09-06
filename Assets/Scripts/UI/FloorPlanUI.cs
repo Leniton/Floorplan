@@ -14,7 +14,6 @@ public class FloorplanUI : MonoBehaviour
     
     [Header("External References")]
     [SerializeField] private FloorplanColorMask colorMaskPrefab;
-    [SerializeField] private FloorplanColors colorReference;
 
     private Floorplan currentFloorplan;
 
@@ -47,12 +46,12 @@ public class FloorplanUI : MonoBehaviour
         for (int i = categories.Length - 1; i > 0; i--)
         {
             var currentColor = colors[i];
-            currentColor.SetColor(colorReference.GetColor((FloorCategory)categories[i]));
+            currentColor.SetColor(GameSettings.current.floorplanColors.GetColor((FloorCategory)categories[i]));
             currentColor.SetFillAmount(fillSlice * (categories.Length - i));
         }
 
         var lastColor = colors[0];
-        lastColor.SetColor(colorReference.GetColor((FloorCategory)categories[0]));
+        lastColor.SetColor(GameSettings.current.floorplanColors.GetColor((FloorCategory)categories[0]));
         lastColor.SetFillAmount(1);
     }
 }

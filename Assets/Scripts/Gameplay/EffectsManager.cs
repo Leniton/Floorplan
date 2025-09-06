@@ -59,12 +59,12 @@ public static class EffectsManager
                     if (r < 70) // gotta lie to the player sometimes
                     {
                         Player.ChangeCoins(Player.coins);
-                        UIManager.ShowMessage($"Luck is on your side, your coins doubled!!!");
+                        MessageWindow.ShowMessage($"Luck is on your side, your coins doubled!!!");
                     }
                     else
                     {
                         Player.ChangeCoins(-(Player.coins / 2));
-                        UIManager.ShowMessage($"That's too bad, you lost half your coins...");
+                        MessageWindow.ShowMessage($"That's too bad, you lost half your coins...");
                     }
                 });
                 break;
@@ -424,7 +424,7 @@ public static class EffectsManager
                 {
                     count++;
                     if (count < draftsNeeded) return;
-                    UIManager.ShowMessage("Your package has been delivered!!");
+                    MessageWindow.ShowMessage("Your package has been delivered!!");
                     RarityPicker<Item> picker = floorplan.ItemPool();
                     //add uncommon item
                     picker.ChangeRarities(0, 1, 0, 0);

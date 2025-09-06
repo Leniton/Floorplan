@@ -5,6 +5,7 @@ using UnityEngine;
 
 public static class GameEvent
 {
+    public static Action<Event> onGameStart;
     public static Action<DrawFloorplanEvent> onDrawFloorplans;
     public static Action<FloorplanEvent> onDraftedFloorplan;
     public static Action<FloorplanConnectedEvent> onConnectFloorplans;
