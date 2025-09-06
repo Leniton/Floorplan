@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bedroom
   m_EditorClassIdentifier: 
   Name: Bedroom
-  Description: The first time you enter this room gain steps equal to this room points
+  Description: The first time you exit this room gain steps equal to this room points
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Category: 1
   Type: 1
