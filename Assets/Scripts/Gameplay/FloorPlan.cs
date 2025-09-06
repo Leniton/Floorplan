@@ -9,6 +9,7 @@ using UnityEngine.Events;
 public class Floorplan : ScriptableObject
 {
     public string Name;
+    public string Alias;
     [TextArea] public string Description;
 
     public Color Color = Color.white;

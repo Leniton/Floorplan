@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Aquarium
   m_EditorClassIdentifier: 
   Name: Aquarium
+  Alias: Aquarium
   Description: Counts as every room category
   Color: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
   Category: 127

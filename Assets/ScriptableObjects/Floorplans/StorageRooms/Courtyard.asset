@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Courtyard
   m_EditorClassIdentifier: 
   Name: Courtyard
+  Alias: Courtyard
   Description: Contains 3 keys
   Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
   Category: 4

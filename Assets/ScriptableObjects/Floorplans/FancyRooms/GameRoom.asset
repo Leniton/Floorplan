@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: GameRoom
   m_EditorClassIdentifier: 
   Name: Game Room
+  Alias: Game Room
   Description: '-'
   Color: {r: 1, g: 1, b: 1, a: 1}
   Category: 8

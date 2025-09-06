@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Dormitory
   m_EditorClassIdentifier: 
   Name: Dormitory
+  Alias: Dormitory
   Description: +2 points for each <b>Rest Room</b> in the house. When you connect
     a <b>Rest Room</b> to this room, add a <b>Snack</b> to this room
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Commissary
   m_EditorClassIdentifier: 
   Name: Commissary
+  Alias: Commissary
   Description: Spend money to buy items
   Color: {r: 0.98101246, g: 1, b: 0, a: 1}
   Category: 16

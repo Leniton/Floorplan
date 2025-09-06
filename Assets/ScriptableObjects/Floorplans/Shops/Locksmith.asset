@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Locksmith
   m_EditorClassIdentifier: 
   Name: Locksmith
+  Alias: Locksmith
   Description: Spend money to buy keys
   Color: {r: 0.98101246, g: 1, b: 0, a: 1}
   Category: 16

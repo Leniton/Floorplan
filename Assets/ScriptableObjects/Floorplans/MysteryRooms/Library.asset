@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Library
   m_EditorClassIdentifier: 
   Name: Library
+  Alias: Library
   Description: Floorplans drafted from this room cost no keys
   Color: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
   Category: 32

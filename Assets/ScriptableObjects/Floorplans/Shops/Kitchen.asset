@@ -13,11 +13,14 @@ MonoBehaviour:
   m_Name: Kitchen
   m_EditorClassIdentifier: 
   Name: Kitchen
+  Alias: Kitchen
   Description: Spend money to buy food
   Color: {r: 0.98101246, g: 1, b: 0, a: 1}
   Category: 16
   Type: -2
   Rarity: 1
+  keyCost: 0
   basePoints: 1
   entranceId: 0
   connections: 
+  connectedFloorplans: []

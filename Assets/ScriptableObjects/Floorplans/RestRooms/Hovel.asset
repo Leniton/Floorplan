@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Hovel
   m_EditorClassIdentifier: 
   Name: Hovel
+  Alias: Hovel
   Description: <b>Rest rooms</b> gains +1 extra points
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Category: 1

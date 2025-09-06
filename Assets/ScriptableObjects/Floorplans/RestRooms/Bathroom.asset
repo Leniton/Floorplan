@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Bathroom
   m_EditorClassIdentifier: 
   Name: Bathroom
+  Alias: Bathroom
   Description: The first time you enter this room, round up your steps (12 => 20).
     Multiply the points in this room by steps gained
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}

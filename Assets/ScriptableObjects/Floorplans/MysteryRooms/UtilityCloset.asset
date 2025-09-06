@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: UtilityCloset
   m_EditorClassIdentifier: 
   Name: Utility Closet
+  Alias: Utility Closet
   Description: <b>Power</b> rooms that shares a category with this room
   Color: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
   Category: 32

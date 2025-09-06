@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Vestibule
   m_EditorClassIdentifier: 
   Name: Vestibule
+  Alias: Vestibule
   Description: Rooms <b>Connected</b> to this room are also connected to each other
   Color: {r: 0.7735849, g: 0.44513544, b: 0, a: 1}
   Category: 2

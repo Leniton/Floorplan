@@ -13,11 +13,14 @@ MonoBehaviour:
   m_Name: Corridor
   m_EditorClassIdentifier: 
   Name: Corridor
+  Alias: Corridor
   Description: '-'
   Color: {r: 0.7735849, g: 0.44513544, b: 0, a: 1}
   Category: 2
   Type: 2
   Rarity: 0
+  keyCost: 0
   basePoints: 1
   entranceId: 0
   connections: 
+  connectedFloorplans: []

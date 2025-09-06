@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: MasterBedroom
   m_EditorClassIdentifier: 
   Name: Master Bedroom
+  Alias: M. Bedroom
   Description: Your <b>Rest Rooms</b> gains +5 points
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Category: 1

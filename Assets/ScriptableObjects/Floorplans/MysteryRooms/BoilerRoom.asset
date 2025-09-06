@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BoilerRoom
   m_EditorClassIdentifier: 
   Name: Boiler Room
+  Alias: Boiler Room
   Description: <b>Power</b> connected rooms
   Color: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
   Category: 32

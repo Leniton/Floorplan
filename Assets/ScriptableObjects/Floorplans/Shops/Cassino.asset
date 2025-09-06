@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Cassino
   m_EditorClassIdentifier: 
   Name: Cassino
+  Alias: Cassino
   Description: When you first enter this room, 50% to double or halve your money
   Color: {r: 0.98101246, g: 1, b: 0, a: 1}
   Category: 16

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Den
   m_EditorClassIdentifier: 
   Name: Den
+  Alias: Den
   Description: Contains a key
   Color: {r: 1, g: 1, b: 1, a: 1}
   Category: 8

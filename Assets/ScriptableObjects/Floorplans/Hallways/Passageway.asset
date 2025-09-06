@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Passageway
   m_EditorClassIdentifier: 
   Name: Passageway
+  Alias: Passageway
   Description: '-'
   Color: {r: 0.7735849, g: 0.44513544, b: 0, a: 1}
   Category: 2

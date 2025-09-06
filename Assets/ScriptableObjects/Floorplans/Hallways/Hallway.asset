@@ -13,11 +13,14 @@ MonoBehaviour:
   m_Name: Hallway
   m_EditorClassIdentifier: 
   Name: Hallway
+  Alias: Hallway
   Description: '-'
   Color: {r: 0.7735849, g: 0.44513544, b: 0, a: 1}
   Category: 2
   Type: 3
   Rarity: 0
+  keyCost: 0
   basePoints: 1
   entranceId: 0
   connections: 
+  connectedFloorplans: []

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: DrawingRoom
   m_EditorClassIdentifier: 
   Name: Drawing Room
+  Alias: Drawing Room
   Description: When you enter this room, gain 2 <b>Temporary</b> dices
   Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
   Category: 4

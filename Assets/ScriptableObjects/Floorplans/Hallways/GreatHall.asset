@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: GreatHall
   m_EditorClassIdentifier: 
   Name: Great Hall
+  Alias: Great Hall
   Description: This room gains 2 extra points for each room category <b>Connected</b>
     to this room
   Color: {r: 0.7735849, g: 0.44513544, b: 0, a: 1}

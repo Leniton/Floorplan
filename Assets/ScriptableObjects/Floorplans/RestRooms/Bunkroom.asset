@@ -13,11 +13,14 @@ MonoBehaviour:
   m_Name: Bunkroom
   m_EditorClassIdentifier: 
   Name: Bunk Room
+  Alias: Bunk Room
   Description: Count as 2 <b>Rest Rooms
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Category: 1
   Type: 1
   Rarity: 1
+  keyCost: 0
   basePoints: 2
   entranceId: 0
   connections: 
+  connectedFloorplans: []

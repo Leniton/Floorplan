@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: PumpRoom
   m_EditorClassIdentifier: 
   Name: Pump Room
+  Alias: Pump Room
   Description: <b>Connected</b> rooms gain points equal to other <b>Connected</b>
     room base points
   Color: {r: 1, g: 1, b: 1, a: 1}

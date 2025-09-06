@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Boudoir
   m_EditorClassIdentifier: 
   Name: Boudoir
+  Alias: Boudoir
   Description: Bigger chance to draft <b>Rest Rooms</b> from this room
   Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
   Category: 1
