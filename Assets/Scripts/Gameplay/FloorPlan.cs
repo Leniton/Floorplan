@@ -81,7 +81,6 @@ public class Floorplan : ScriptableObject
         floorplan.ChangeEntrance(entranceDirection);
         floorplan.Setup();
         renovation?.activationEffect?.Invoke(floorplan);
-        if (renovation != null) Debug.Log($"{Name} has a renovation");
         floorplan.renovation = renovation;
         
         return floorplan;
