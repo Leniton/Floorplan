@@ -53,8 +53,6 @@ public class Player
         items = new();
         steps = 20;
         keys = 2;
-        coins = 5;
-        dices = 0;
         currentSledgeHammer = null;
         currentKey = null;
     }
