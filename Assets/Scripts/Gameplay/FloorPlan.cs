@@ -12,7 +12,6 @@ public class Floorplan : ScriptableObject
     public string Alias;
     [TextArea] public string Description;
 
-    public Color Color = Color.white;
     public FloorCategory Category;
 
     public FloorType Type = FloorType.DeadEnd;
@@ -51,7 +50,6 @@ public class Floorplan : ScriptableObject
         floorplan.Name = Name;
         floorplan.Alias = Alias;
         floorplan.Description = Description;
-        floorplan.Color = Color;
         floorplan.Category = Category;
         floorplan.Type = Type;
         floorplan.Rarity = Rarity;
