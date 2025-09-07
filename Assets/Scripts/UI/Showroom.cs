@@ -15,6 +15,7 @@ public class Showroom : MonoBehaviour
     [SerializeField] private Button continueButton;
     [SerializeField] private Button rerollButton;
     [SerializeField] private TMP_Text rerollAmountText;
+    [SerializeField] private TMP_Text renovationPick;
 
     [Header("Windows")] 
     [SerializeField] private DraftManager draftManager;
@@ -165,6 +166,7 @@ public class Showroom : MonoBehaviour
 
     private void UseRenovation(Renovation renovation)
     {
+        renovationPick.text = renovation.description;
         draftManager.DraftFloorplan(Vector2Int.up, null);
         draftManager.OnDraftFloorplan += ApplyRenovation;
 
