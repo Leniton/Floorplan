@@ -29,24 +29,20 @@ public class MainMenu : MonoBehaviour
 
     private void StartRun()
     {
-        List<Floorplan> draftPool;
-        if (!ReferenceEquals(currentDeck, null))
-        {
-            draftPool = new(currentDeck.deck.Count);
-            for (int i = 0; i < draftPool.Capacity; i++)
-                draftPool.Add(currentDeck.deck[i].CreateInstance(Vector2Int.up));
-
-            StartGame();
-            return;
-        }
-        draftPool = new();
+        List<Floorplan> draftPool = new();
+        //Load all floorplans
         Addressables.LoadAssetsAsync<Floorplan>("BaseFloorplan", floorplan =>
             draftPool.Add(floorplan.CreateInstance(Vector2Int.up))).Completed += _ => StartGame();
 
         void StartGame()
         {
-            RunData.playerDeck = ScriptableObject.CreateInstance<PlayerDeck>();
-            RunData.playerDeck.deck = draftPool;
+            List<Floorplan> deckReference = ReferenceEquals(currentDeck, null) ? draftPool : currentDeck.deck;
+            List<Floorplan> playedDeck = new(deckReference.Count);
+            for (int i = 0; i < playedDeck.Capacity; i++)
+                playedDeck.Add(deckReference[i].CreateInstance(Vector2Int.up));
+            RunData.playerDeck.deck = playedDeck;
+            RunData.allFloorplans.deck = draftPool;
+
             SceneManager.LoadScene(1);
         }
     }

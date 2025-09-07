@@ -130,8 +130,9 @@ public class DraftManager : MonoBehaviour
         Debug.LogWarning(sb.ToString());
     }
 
-    public void DraftFloorplan(Vector2Int direction, List<Vector2Int> possibleSlots, int draftHeight = 0)
+    public void DraftFloorplan(Vector2Int direction = default, List<Vector2Int> possibleSlots = null, int draftHeight = 0)
     {
+        if (direction.sqrMagnitude <= 0) direction = Vector2Int.up;
         //if there's no possible slots, all of them is possible
         if (possibleSlots is not { Count: > 0 })
         {

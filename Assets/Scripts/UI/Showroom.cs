@@ -18,7 +18,8 @@ public class Showroom : MonoBehaviour
     [SerializeField] private TMP_Text renovationPick;
 
     [Header("Windows")] 
-    [SerializeField] private DraftManager draftManager;
+    [SerializeField] private DraftManager addFloorplan;
+    [SerializeField] private DraftManager pickFloorplan;
     [SerializeField] private ShopWindow shopWindow;
 
     private List<PurchaseData> renovationPack = new();
@@ -28,12 +29,27 @@ public class Showroom : MonoBehaviour
     {
         SetupSuppliesShop();
         SetupRenovationsShop();
-        draftManager.Setup(5, RunData.playerDeck);
-        draftManager.CloseWindow();
+        pickFloorplan.Setup(5, RunData.playerDeck);
+        pickFloorplan.CloseWindow();
+
+        addFloorplan.Setup(3, RunData.allFloorplans, () => addFloorplan.DraftFloorplan());
+        addFloorplan.OnDraftFloorplan += OnPickFloorplanToAdd;
         
         renovationPackButton.onClick.AddListener(OpenRenovationShop);
         suppliesPackButton.onClick.AddListener(OpenSuppliesShop);
+        rerollButton.onClick.AddListener(RerollAddFloorplans);
         continueButton.onClick.AddListener(ContinueGame);
+    }
+
+    private void RerollAddFloorplans()
+    {
+        addFloorplan.RedrawFloorplans();
+    }
+
+    private void OnPickFloorplanToAdd(Floorplan floorplan)
+    {
+        addFloorplan.CloseWindow();
+        RunData.playerDeck.deck.Add(floorplan);
     }
 
     private void SetupRenovationsShop()
@@ -167,13 +183,13 @@ public class Showroom : MonoBehaviour
     private void UseRenovation(Renovation renovation)
     {
         renovationPick.text = renovation.description;
-        draftManager.DraftFloorplan(Vector2Int.up, null);
-        draftManager.OnDraftFloorplan += ApplyRenovation;
+        pickFloorplan.DraftFloorplan();
+        pickFloorplan.OnDraftFloorplan += ApplyRenovation;
 
         void ApplyRenovation(Floorplan floorplan)
         {
-            draftManager.CloseWindow();
-            draftManager.OnDraftFloorplan -= ApplyRenovation;
+            pickFloorplan.CloseWindow();
+            pickFloorplan.OnDraftFloorplan -= ApplyRenovation;
 
             var original = floorplan.FindOriginal(RunData.playerDeck.deck);
             if (original != null) renovation.Activate(original);
