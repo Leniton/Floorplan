@@ -252,16 +252,13 @@ public class DraftManager : MonoBehaviour
 
     public void PickFloorplan(Floorplan floorplan)
     {
-        if (Player.keys < floorplan.keyCost)
-        {
-            MessageWindow.ShowMessage("You don't have enough keys!!");
-            return;
-        }
-        CloseWindow();
-        Player.ChangeKeys(-floorplan.keyCost);
+        OnDraftFloorplan?.Invoke(floorplan);
+    }
+
+    public void RemoveFloorplanFromPool(Floorplan floorplan)
+    {
         Floorplan originalFloorplan = floorplan.FindOriginal(draftPool);
         draftPool.Remove(originalFloorplan);
-        OnDraftFloorplan?.Invoke(floorplan);
     }
 
     public void RotateFloorplans()

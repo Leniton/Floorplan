@@ -121,6 +121,15 @@ public class GameManager : MonoBehaviour
 
     private void PlaceFloorplan(Floorplan floorplan)
     {
+        if (Player.keys < floorplan.keyCost)
+        {
+            MessageWindow.ShowMessage("You don't have enough keys!!");
+            return;
+        }
+        draftManager.CloseWindow();
+        Player.ChangeKeys(-floorplan.keyCost);
+        draftManager.RemoveFloorplanFromPool(floorplan);
+
         FloorplanUI instance = Instantiate(floorplanPrefab, gridManager.GetSlot(currentDraftPosition));
         instance.Setup(floorplan);
         RectTransform floorplanRect = (RectTransform)instance.transform;

@@ -361,6 +361,11 @@ PrefabInstance:
       propertyPath: diceText
       value: 
       objectReference: {fileID: 1575059988}
+    - target: {fileID: 2507112933259245621, guid: f3c31632a96e93544b8e14347790d5ab,
+        type: 3}
+      propertyPath: itemsContainer
+      value: 
+      objectReference: {fileID: 913655167}
     - target: {fileID: 2532671992741634167, guid: f3c31632a96e93544b8e14347790d5ab,
         type: 3}
       propertyPath: m_Name

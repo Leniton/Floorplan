@@ -172,9 +172,11 @@ public class Showroom : MonoBehaviour
 
         void ApplyRenovation(Floorplan floorplan)
         {
+            draftManager.CloseWindow();
+            draftManager.OnDraftFloorplan -= ApplyRenovation;
+
             var original = floorplan.FindOriginal(RunData.playerDeck.deck);
             if (original != null) renovation.Activate(original);
-            draftManager.OnDraftFloorplan -= ApplyRenovation;
         }
     }
 
