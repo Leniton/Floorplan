@@ -174,6 +174,14 @@ public class DraftManager : MonoBehaviour
             floorplanPicker.AddToPool(floorplan, floorplan.Rarity);
         }
 
+        int missingFloorplans = amountDrafted - possibleFloorplans.Count;
+        for (int i = 0; i < missingFloorplans; i++)
+        {
+            var spareRoom = Helpers.CreateSpareRoom(possibleTypes: possibleTypes);
+            possibleFloorplans.Add(spareRoom);
+            floorplanPicker.AddToPool(spareRoom, spareRoom.Rarity);
+        }
+
         lastDraftDirection = direction;
         lastDraftHeight = draftHeight;
         lastPossibleSlots = possibleSlots;

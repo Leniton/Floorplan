@@ -504,6 +504,29 @@ public static class EffectsManager
                     }
                 });
                 break;
+            case "Spare Room":
+                switch (floorplan.Category)
+                {
+                    case FloorCategory.CursedRoom:
+                        floorplan.TheFirstTime().FloorplanIsDrafted().ChangePlayerSteps(-3);
+                        break;
+                    case FloorCategory.RestRoom:
+                        floorplan.TheFirstTime().PlayerEnterFloorplan().ChangePlayerSteps(5);
+                        break;
+                    case FloorCategory.Shop:
+                        new Coin(3).AddItemToFloorplan(floorplan);
+                        break;
+                    case FloorCategory.StorageRoom:
+                        new Dice(2).AddItemToFloorplan(floorplan);
+                        break;
+                    case FloorCategory.Hallway:
+                        new Key(2).AddItemToFloorplan(floorplan);
+                        break;
+                    case FloorCategory.MysteryRoom:
+                        floorplan.TheFirstTime().FloorplanIsDrafted().PowerFloorplan();
+                        break;
+                }
+                break;
             case "Terrace":
                 RarityPicker<Item> terraceItems = floorplan.ItemPool();
                 terraceItems.ChangeRarities(0,1,0,0);

@@ -141,7 +141,7 @@ public class ColorKey : ToggleItem
 
     private void GuaranteeCategory(DrawFloorplanEvent evt)
     {
-        evt.IncreaseChanceOfDrawing(CheckCategory, 1);
+        evt.IncreaseChanceOfDrawing(CheckCategory, 1, Helpers.CategorySpareRoom(floorCategory));
         new Effect(null, 1).AnyFloorplanIsDrafted().Do(_ =>
         {
             GameEvent.onDrawFloorplans -= GuaranteeCategory;

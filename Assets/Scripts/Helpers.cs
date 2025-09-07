@@ -193,7 +193,8 @@ public static class Helpers
 
     public static bool IsOfCategory(this Floorplan floorplan, FloorCategory category) => NumberUtil.ContainsBytes((int)floorplan.Category, (int)category);
 
-    public static void IncreaseChanceOfDrawing(this DrawFloorplanEvent evt, Func<Floorplan, bool> condition, float chance = .4f)
+    public static void IncreaseChanceOfDrawing(this DrawFloorplanEvent evt, Func<Floorplan, bool> condition, float chance =  .4f,
+        Func<DrawFloorplanEvent, Floorplan> spareRoomMethod = null)
     {
         int possiblesFloorplans = 0;
         RarityPicker<Floorplan> picker = new(
@@ -221,22 +222,92 @@ public static class Helpers
         if (possiblesFloorplans <= 0) return; //there's no floorplan that fits the criteria
 
         float r = Random.Range(0f, 1f);
-        if (r <= chance && !condition.Invoke(evt.possibleFloorplans[^1])) 
+        if (r <= chance && !condition.Invoke(evt.possibleFloorplans[^1]))
         {
             evt.drawnFloorplans[^1] = picker.PickRandom(picker.commonRate, true);
             possiblesFloorplans--;
             //Debug.Log($"chance hit: changed to {evt.drawnFloorplans[^1].Name}");
         }
-        if (possiblesFloorplans <= 0) return;
+        if (possiblesFloorplans <= 0 && spareRoomMethod == null) return;
+        if (possiblesFloorplans <= 0) picker.AddToPool(spareRoomMethod.Invoke(evt), Rarity.Common);
         for (int i = evt.drawnFloorplans.Length - 2; i >= 0; i--)
         {
             r = Random.Range(0f, 1f);
-            if (r > chance || condition.Invoke(evt.possibleFloorplans[^1])) continue;
+            if (r > chance || condition.Invoke(evt.possibleFloorplans[i])) continue;
             evt.drawnFloorplans[i] = picker.PickRandom(removeFromPool: true);
             //Debug.Log($"chance hit: changed to {evt.drawnFloorplans[i].Name}");
             possiblesFloorplans--;
-            if(possiblesFloorplans <= 0) break;
+            if (possiblesFloorplans > 0 || spareRoomMethod == null) continue;
+            picker.AddToPool(spareRoomMethod.Invoke(evt), Rarity.Common);
         }
+    }
+
+    public static Func<DrawFloorplanEvent, Floorplan> CategorySpareRoom(FloorCategory category) => evt => CreateSpareRoom(new() { category }, evt.possibleFloorTypes);
+
+    public static Floorplan CreateSpareRoom(List<FloorCategory> possibleCategories = null, List<FloorType> possibleTypes = null)
+    {
+        if (possibleTypes is not { Count: > 0 })
+        {
+            possibleTypes = new()
+            {
+                FloorType.DeadEnd,
+                FloorType.Ankle,
+                FloorType.Straw,
+                FloorType.TPiece,
+                FloorType.Crossroad,
+            };
+        }
+
+        if (possibleCategories is not { Count: > 0 })
+        {
+            possibleCategories = new()
+            {
+                FloorCategory.CursedRoom,
+                FloorCategory.FancyRoom,
+                FloorCategory.Hallway,
+                FloorCategory.MysteryRoom,
+                FloorCategory.RestRoom,
+                FloorCategory.Shop,
+                FloorCategory.StorageRoom,
+            };
+        }
+
+        var spareOriginal = ScriptableObject.CreateInstance<Floorplan>();
+        spareOriginal.Name = "Spare Room";
+        spareOriginal.Alias = "Spare Room";
+        spareOriginal.Rarity = Rarity.Common;
+        spareOriginal.basePoints = 1;
+        spareOriginal.Type = possibleTypes[Random.Range(0, possibleTypes.Count)];
+        spareOriginal.Category = possibleCategories[Random.Range(0, possibleCategories.Count)];
+
+        var spareRoom = spareOriginal.CreateInstance(Vector2Int.up);
+        switch (spareRoom.Category)
+        {
+            case FloorCategory.FancyRoom:
+                spareRoom.basePoints = 10;
+                spareRoom.Description = "-";
+                break;
+            case FloorCategory.CursedRoom:
+                spareRoom.basePoints = 15;
+                spareRoom.Description = "When you draft this floorplan, lose 3 steps";
+                break;
+            case FloorCategory.RestRoom:
+                spareRoom.Description = "The first time you enter this floorplan, gain 5 steps";
+                break;
+            case FloorCategory.Shop:
+                spareRoom.Description = "+3 coins";
+                break;
+            case FloorCategory.StorageRoom:
+                spareRoom.Description = "+2 dices";
+                break;
+            case FloorCategory.Hallway:
+                spareRoom.Description = "+2 keys";
+                break;
+            case FloorCategory.MysteryRoom:
+                spareRoom.Description = "This floorplan is <b>Powered</b>";
+                break;
+        }
+        return spareRoom;
     }
     #endregion
 }
