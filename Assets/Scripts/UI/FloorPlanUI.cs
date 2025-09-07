@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class FloorplanUI : MonoBehaviour
 {
     [SerializeField] private Image image;
+    [SerializeField] private Image pattern;
     [SerializeField] private TMP_Text text;
     [SerializeField] private GameObject[] entrances;
     [SerializeField] private Transform colorsContainer;
@@ -36,10 +37,14 @@ public class FloorplanUI : MonoBehaviour
         for (int i = 0; i < entrances.Length; i++)
             entrances[i].SetActive(currentFloorplan.connections[i]);
         SetupColors();
+        pattern.gameObject.SetActive(currentFloorplan.renovation is not null and { overlayPattern: not null });
+        if (!pattern.gameObject.activeSelf) return;
+        pattern.sprite = currentFloorplan.renovation.overlayPattern;
     }
 
     private void SetupColors()
     {
+        image.color = default;
         int[] categories = NumberUtil.SeparateBits((int)currentFloorplan.Category);
         colors.EnsureEnoughInstances(colorMaskPrefab, categories.Length, colorsContainer);
         float fillSlice = 1f / categories.Length;

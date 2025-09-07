@@ -15,7 +15,7 @@ public static class RenovationUtils
             persistent = true,
             name = "Key Holder",
             description = "Add 2 keys to floorplan",
-            overlayPattern = null,
+            overlayPattern = GameAssets.patterns[9],
             activationEffect = new Key(2).AddItemToFloorplan
         };
     }
@@ -29,7 +29,7 @@ public static class RenovationUtils
             persistent = true,
             name = "Secret Vault",
             description = "Add 5 coins to floorplan",
-            overlayPattern = null,
+            overlayPattern = GameAssets.patterns[73],
             activationEffect = new Coin(5).AddItemToFloorplan
         };
     }
@@ -43,7 +43,7 @@ public static class RenovationUtils
             persistent = true,
             name = "Mini-Fridge",
             description = "Add a <b>Soda</b> to floorplan",
-            overlayPattern = null,
+            overlayPattern = GameAssets.patterns[54],
             activationEffect = ItemUtilities.Soda.AddItemToFloorplan
         };
     }
@@ -57,7 +57,7 @@ public static class RenovationUtils
             persistent = true,
             name = "Play table",
             description = "Add 2 dices to floorplan",
-            overlayPattern = null,
+            overlayPattern = GameAssets.patterns[14],
             activationEffect = new Dice(2).AddItemToFloorplan
         };
     }
@@ -70,7 +70,6 @@ public static class RenovationUtils
         {
             name = "Wallpaper",
             description = "+5 base points",
-            overlayPattern = null,
             activationEffect = floorplan => floorplan.basePoints += 5
         };
     }
@@ -80,11 +79,11 @@ public static class RenovationUtils
     public static Renovation Paint(FloorCategory? category = null)
     {
         var floorCategory = category ?? Helpers.RandomCategory();
+        var categoryName = Helpers.CategoryName(floorCategory);
         return new()
         {
-            name = "Paint",
-            description = $"Floorplan is also a {Helpers.CategoryName(floorCategory)}",
-            overlayPattern = null,
+            name = $"{categoryName} Paint",
+            description = $"Floorplan is also a {categoryName}",
             condition = floorplan => !floorplan.IsOfCategory(floorCategory),
             activationEffect = floorplan => floorplan.Category |= floorCategory
         };

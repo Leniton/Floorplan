@@ -38,45 +38,54 @@ public class Showroom : MonoBehaviour
     private void SetupRenovationsShop()
     {
         RarityPicker<PurchaseData> possibleRenovations = new();
+        var renovation = RenovationUtils.KeyHolder();
         possibleRenovations.AddToPool(new()
         {
-            name = "Key holder",
-            description = "Add 2 keys to a floorplan",
+            name = renovation.name,
+            description = renovation.description,
             cost = 3,
             amount = 1,
-            OnBuy = () => UseRenovation(RenovationUtils.KeyHolder())
+            OnBuy = () => UseRenovation(RenovationUtils.KeyHolder()),
+            pattern = renovation.overlayPattern
         }, Rarity.Common);
+        renovation = RenovationUtils.SecretVault();
         possibleRenovations.AddToPool(new()
         {
-            name = "Secret vault",
-            description = "Add 5 coins to a floorplan",
+            name = renovation.name,
+            description = renovation.description,
             cost = 3,
             amount = 1,
-            OnBuy = () => UseRenovation(RenovationUtils.SecretVault())
+            OnBuy = () => UseRenovation(RenovationUtils.SecretVault()),
+            pattern = renovation.overlayPattern
         }, Rarity.Common);
+        renovation = RenovationUtils.MiniFridge();
         possibleRenovations.AddToPool(new()
         {
-            name = "Mini Fridge",
-            description = "Add a <b>Soda</b> to a floorplan",
+            name = renovation.name,
+            description = renovation.description,
             cost = 3,
             amount = 1,
-            OnBuy = () => UseRenovation(RenovationUtils.MiniFridge())
+            OnBuy = () => UseRenovation(RenovationUtils.MiniFridge()),
+            pattern = renovation.overlayPattern
         }, Rarity.Common);
+        renovation = RenovationUtils.PlayTable();
         possibleRenovations.AddToPool(new()
         {
-            name = "Wallpaper",
-            description = "+5 base points to floorplan",
+            name = renovation.name,
+            description = renovation.description,
+            cost = 3,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.PlayTable()),
+            pattern = renovation.overlayPattern
+        }, Rarity.Common);
+        renovation = RenovationUtils.Wallpaper();
+        possibleRenovations.AddToPool(new()
+        {
+            name = renovation.name,
+            description = renovation.description,
             cost = 3,
             amount = 1,
             OnBuy = () => UseRenovation(RenovationUtils.Wallpaper())
-        }, Rarity.Common);
-        possibleRenovations.AddToPool(new()
-        {
-            name = "Play table",
-            description = "Add 2 <b>Dices</b> to floorplan",
-            cost = 3,
-            amount = 1,
-            OnBuy = () => UseRenovation(RenovationUtils.PlayTable())
         }, Rarity.Common);
         FloorCategory paintCategory = Helpers.RandomCategory();
         Renovation paint = RenovationUtils.Paint(paintCategory);

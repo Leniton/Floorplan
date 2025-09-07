@@ -9,6 +9,7 @@ public class ShopItem : MonoBehaviour
     [SerializeField] private TMP_Text name;
     [SerializeField] private TMP_Text cost;
     [SerializeField] private TMP_Text description;
+    [SerializeField] private Image pattern;
     [SerializeField] private GameObject soldOutPanel;
 
     private PurchaseData data;
@@ -22,6 +23,10 @@ public class ShopItem : MonoBehaviour
         cost.text = data.cost.ToString();
         description.text = data.description;
         soldOutPanel.SetActive(data.amount <= 0);
+
+        pattern.gameObject.SetActive(data.pattern != null);
+        if (!pattern.gameObject.activeSelf) return;
+        pattern.sprite = data.pattern;
     }
 
     private void TryBuyItem()
@@ -47,4 +52,5 @@ public class PurchaseData
     public string description;
     public int amount = 1;
     public Action OnBuy;
+    public Sprite pattern;
 }

@@ -21,6 +21,7 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
+        GameAssets.LoadAssets();
         GameSettings.current = new();
         GameSettings.current.floorplanColors = colors;
         startButton.onClick.AddListener(StartRun);
