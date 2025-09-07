@@ -29,8 +29,7 @@ public class Showroom : MonoBehaviour
     {
         SetupSuppliesShop();
         SetupRenovationsShop();
-        pickFloorplan.Setup(5, RunData.playerDeck);
-        pickFloorplan.CloseWindow();
+        pickFloorplan.Setup(5, RunData.playerDeck, pickFloorplan.CloseWindow);
 
         addFloorplan.Setup(3, RunData.allFloorplans, () => addFloorplan.DraftFloorplan());
         addFloorplan.OnDraftFloorplan += OnPickFloorplanToAdd;
