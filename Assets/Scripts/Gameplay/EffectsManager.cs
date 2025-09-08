@@ -746,8 +746,18 @@ public static class EffectsManager
     }
     public static Func<FloorplanEvent, bool> IsOfCategory(FloorCategory type) =>
         evt => NumberUtil.ContainsBytes((int)evt.Floorplan.Category, (int)type);
-    public static Func<FloorplanEvent, bool> MatchCategoryWith(Floorplan floorplan) =>
-        evt => evt.Floorplan.IsOfCategory(floorplan.Category);
+    public static Func<FloorplanEvent, bool> MatchCategoryWith(Floorplan floorplan)
+    {
+        return evt =>
+        {
+            int[] categories = NumberUtil.SeparateBits((int)evt.Floorplan.Category);
+            for (int i = 0; i < categories.Length; i++)
+                if (evt.Floorplan.IsOfCategory((FloorCategory)categories[i]))
+                    return true;
+            return false;
+        };
+    }
+
     public static Func<FloorplanEvent, bool> IsNot(Floorplan floorplan) =>
         evt => evt.Floorplan != floorplan;
     #endregion
