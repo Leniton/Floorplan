@@ -6,7 +6,18 @@ using UnityEngine;
 public static class GameEvent
 {
     public static Action<Event> onGameStart;
+    /// <summary>
+    /// Initial draw
+    /// </summary>
     public static Action<DrawFloorplanEvent> onDrawFloorplans;
+    /// <summary>
+    /// Changed drawn
+    /// </summary>
+    public static Action<DrawFloorplanEvent> onDrawChange;
+    /// <summary>
+    /// Modifies drawn
+    /// </summary>
+    public static Action<DrawFloorplanEvent> onModifyDraw;
     public static Action<FloorplanEvent> onDraftedFloorplan;
     public static Action<FloorplanConnectedEvent> onConnectFloorplans;
     public static Action<FloorplanEvent> OnExitFloorplan;

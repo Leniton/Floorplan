@@ -359,7 +359,7 @@ public static class EffectsManager
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, kitchenList);
                 break;
             case "Library":
-                floorplan.EveryTime().FloorplansAreDrawn().Where(DraftedFromHere).Do(evt =>
+                floorplan.EveryTime().ModifiedDraw().Where(DraftedFromHere).Do(evt =>
                 {
                     for (int i = 0; i < evt.drawnFloorplans.Length; i++)
                     {
@@ -534,7 +534,7 @@ public static class EffectsManager
                 break;
             case "Tunnel":
                 //Aways draw a tunnel when drafting from tunnel
-                floorplan.EveryTime().FloorplansAreDrawn().Where(DraftedFromHere).Do(evt =>
+                floorplan.EveryTime().DrawnFloorplansChange().Where(DraftedFromHere).Do(evt =>
                 {
                     Floorplan tunnel = floorplan.original.CreateInstance(Floorplan.IDToDirection(floorplan.entranceId));
                     int id = Random.Range(0, 2);
@@ -655,6 +655,14 @@ public static class EffectsManager
         FloorplansAreDrawn(this Effect effect) => new(effect,
         (a) => GameEvent.onDrawFloorplans += a,
         (a) => GameEvent.onDrawFloorplans -= a);
+    public static EventListener<Action<DrawFloorplanEvent>, DrawFloorplanEvent>
+        DrawnFloorplansChange(this Effect effect) => new(effect,
+        (a) => GameEvent.onDrawChange += a,
+        (a) => GameEvent.onDrawChange -= a);
+    public static EventListener<Action<DrawFloorplanEvent>, DrawFloorplanEvent>
+        ModifiedDraw(this Effect effect) => new(effect,
+        (a) => GameEvent.onModifyDraw += a,
+        (a) => GameEvent.onModifyDraw -= a);
 
     public static EventListener<Action<ItemEvent>, ItemEvent>
         ItemCollected(this Effect effect) => new(effect,

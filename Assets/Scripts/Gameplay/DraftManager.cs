@@ -198,6 +198,8 @@ public class DraftManager : MonoBehaviour
         //last one is rarer
         AddToDraftList(amountDrafted - 1, floorplanPicker.commonRate);
         GameEvent.onDrawFloorplans?.Invoke(evt);
+        GameEvent.onDrawChange?.Invoke(evt);
+        GameEvent.onModifyDraw?.Invoke(evt);
 
         void AddToDraftList(int id, float rarityOffset = 0)
         {
