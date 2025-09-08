@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
         draftManager.CloseWindow();
         Player.ChangeKeys(-floorplan.keyCost);
         draftManager.RemoveFloorplanFromPool(floorplan);
-
+        
         FloorplanUI instance = Instantiate(floorplanPrefab, gridManager.GetSlot(currentDraftPosition));
         instance.Setup(floorplan);
         RectTransform floorplanRect = (RectTransform)instance.transform;
@@ -138,7 +138,10 @@ public class GameManager : MonoBehaviour
         floorplanRect.anchorMax = Vector2.one;
         floorplanRect.sizeDelta = Vector2.zero;
 
+        //Apply floorplan effect
         EffectsManager.AddFloorplanEffect(floorplan);
+        //Apply renovation effect
+        floorplan.renovation?.activationEffect?.Invoke(floorplan);
         floorplanDict[currentDraftPosition] = floorplan;
         floorplan.coordinate = currentDraftPosition;
         floorplan.onDrafted?.Invoke(new(currentDraftPosition));
