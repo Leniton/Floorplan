@@ -219,7 +219,7 @@ public static class Helpers
             possiblesFloorplans++;
         }
 
-        if (possiblesFloorplans <= 0) return; //there's no floorplan that fits the criteria
+        if (possiblesFloorplans <= 0) picker.AddToPool(spareRoomMethod.Invoke(evt), Rarity.Common);
 
         float r = Random.Range(0f, 1f);
         if (r <= chance && !condition.Invoke(evt.possibleFloorplans[^1]))
