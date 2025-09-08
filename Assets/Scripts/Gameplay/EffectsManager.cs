@@ -752,7 +752,7 @@ public static class EffectsManager
         {
             int[] categories = NumberUtil.SeparateBits((int)evt.Floorplan.Category);
             for (int i = 0; i < categories.Length; i++)
-                if (evt.Floorplan.IsOfCategory((FloorCategory)categories[i]))
+                if (floorplan.IsOfCategory((FloorCategory)categories[i]))
                     return true;
             return false;
         };
