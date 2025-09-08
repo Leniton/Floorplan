@@ -23,6 +23,7 @@ public class ShopItem : MonoBehaviour
         cost.text = data.cost.ToString();
         description.text = data.description;
         soldOutPanel.SetActive(data.amount <= 0);
+        button.interactable = data.amount > 0;
 
         pattern.gameObject.SetActive(data.pattern != null);
         if (!pattern.gameObject.activeSelf) return;
