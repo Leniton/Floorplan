@@ -206,7 +206,7 @@ public static class Helpers
         for (int i = 0; i < evt.possibleFloorplans.Count; i++)
         {
             Floorplan targetFloorplan = evt.possibleFloorplans[i];
-            if (!condition.Invoke(evt.possibleFloorplans[i])) continue;
+            if (!condition.Invoke(targetFloorplan)) continue;
             bool alreadyDrawn = false;
             for (int f = 0; f < evt.drawnFloorplans.Length; f++)
             {
@@ -215,25 +215,26 @@ public static class Helpers
                 break;
             }
             if (alreadyDrawn) continue;
-            picker.AddToPool(evt.possibleFloorplans[i], evt.possibleFloorplans[i].Rarity);
+            picker.AddToPool(targetFloorplan, targetFloorplan.Rarity);
             possiblesFloorplans++;
         }
 
         if (possiblesFloorplans <= 0) picker.AddToPool(spareRoomMethod.Invoke(evt), Rarity.Common);
 
         float r = Random.Range(0f, 1f);
-        if (r <= chance && !condition.Invoke(evt.possibleFloorplans[^1]))
+        if (r <= chance && !condition.Invoke(evt.drawnFloorplans[^1]))
         {
             evt.drawnFloorplans[^1] = picker.PickRandom(picker.commonRate, true);
             possiblesFloorplans--;
             //Debug.Log($"chance hit: changed to {evt.drawnFloorplans[^1].Name}");
         }
+
         if (possiblesFloorplans <= 0 && spareRoomMethod == null) return;
         if (possiblesFloorplans <= 0) picker.AddToPool(spareRoomMethod.Invoke(evt), Rarity.Common);
         for (int i = evt.drawnFloorplans.Length - 2; i >= 0; i--)
         {
             r = Random.Range(0f, 1f);
-            if (r > chance || condition.Invoke(evt.possibleFloorplans[i])) continue;
+            if (r > chance || condition.Invoke(evt.drawnFloorplans[i])) continue;
             evt.drawnFloorplans[i] = picker.PickRandom(removeFromPool: true);
             //Debug.Log($"chance hit: changed to {evt.drawnFloorplans[i].Name}");
             possiblesFloorplans--;
