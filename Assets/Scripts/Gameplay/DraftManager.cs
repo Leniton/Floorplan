@@ -189,6 +189,7 @@ public class DraftManager : MonoBehaviour
         rerollCount?.SetText($"{Player.dices}");
 
         DrawFloorplanEvent evt = new();
+        evt.targetCoordinate = (GridManager.instance?.currentPosition ?? Vector2Int.zero) + direction;
         evt.drawnFloorplans = new Floorplan[amountDrafted];
         evt.possibleFloorTypes = possibleTypes;
         evt.possibleFloorplans = possibleFloorplans;
@@ -296,6 +297,7 @@ public class DraftManager : MonoBehaviour
 
 public class DrawFloorplanEvent : Event
 {
+    public Vector2Int targetCoordinate;
     public Floorplan[] drawnFloorplans;
     public List<Floorplan> possibleFloorplans;
     public List<FloorType> possibleFloorTypes;

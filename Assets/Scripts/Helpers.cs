@@ -176,6 +176,22 @@ public static class Helpers
         ConnectFloorplans(floorplan, targetFloorplan);
     }
 
+    public static void CloseConnection(this Floorplan floorplan, int connectionID)
+    {
+        if (!floorplan.connections[connectionID]) return;//already closed
+        floorplan.connections[connectionID] = false;
+        floorplan.UpdateFloorplanType();
+        floorplan.OnChanged?.Invoke();
+        
+        return;
+        //WIP remove conections
+        if (!GameManager.floorplanDict.TryGetValue
+                (floorplan.coordinate + Floorplan.IDToDirection(connectionID), 
+                    out var targetFloorplan)) return;
+        while (floorplan.connectedFloorplans.Contains(targetFloorplan))
+            floorplan.connectedFloorplans.Remove(targetFloorplan);
+    }
+
     private static void UpdateFloorplanType(this Floorplan floorplan)
     {
         var connections = floorplan.connections;

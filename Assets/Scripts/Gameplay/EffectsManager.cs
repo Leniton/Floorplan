@@ -537,19 +537,24 @@ public static class EffectsManager
                 floorplan.EveryTime().DrawnFloorplansChange().Where(DraftedFromHere).Do(evt =>
                 {
                     Floorplan tunnel = floorplan.original.CreateInstance(Floorplan.IDToDirection(floorplan.entranceId));
-                    int id = Random.Range(0, 2);
+                    
+                    //Add to pool
+                    int id = Random.Range(0, evt.drawnFloorplans.Length - 1);
                     evt.drawnFloorplans[id] = tunnel;
+                    
+                    //remove exit if leads to an invalid position
+                    for (int i = 0; i < tunnel.connections.Length; i++)
+                    {
+                        if (i == floorplan.entranceId) continue;
+                        int exitId = i;
+                        var exitCoordinate = evt.targetCoordinate + Floorplan.IDToDirection(exitId);
+                        if (GridManager.instance.ValidCoordinate(exitCoordinate)) continue;
+                        tunnel.CloseConnection(exitId);
+                    }
                 });
                 //surprise if reach the edge
-                int exitId = (floorplan.entranceId + 2) % 4;
                 floorplan.TheFirstTime().FloorplanIsDrafted().
-                    Where(_ => !GridManager.instance.ValidCoordinate(floorplan.coordinate + Floorplan.IDToDirection(exitId))).
-                    Do(_ =>
-                {
-                    floorplan.connections[exitId] = false;
-                    new Key(5).AddItemToFloorplan(floorplan);
-                    floorplan.OnChanged?.Invoke();
-                });
+                    Where(_ => floorplan.Type == FloorType.DeadEnd).AddItemToFloorplan(new Key(5));
                 break;
             case "Utility Closet":
                 //power all rooms of the same category
