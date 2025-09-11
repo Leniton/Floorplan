@@ -125,29 +125,52 @@ public class Showroom : MonoBehaviour
     private void SetupSuppliesShop()
     {
         List<PurchaseData> possibleSupplies = new();
+        int amountApple = 0;
+        var apple = new Food(0);
         possibleSupplies.Add(new()
         {
             name = "Apple",
             description = "Gain +3 steps",
             cost = 3,
             amount = 10,
-            OnBuy = () => AddSupply(ItemUtilities.Apple)
+            OnBuy = () =>
+            {
+                apple.stepsAmount += 3;
+                amountApple++;
+                apple.Name = $"Apple({amountApple})";
+                if (amountApple > 1) return;
+                AddSupply(apple);
+            }
         });
+        var key = new Key(0);
         possibleSupplies.Add(new()
         {
             name = "Key",
             description = "Used to draft powerful floorplans",
             cost = 3,
             amount = 10,
-            OnBuy = () => AddSupply(new Key(1))
+            OnBuy = () =>
+            {
+                key.keyAmount++;
+                key.Name = $"Key({key.keyAmount})";
+                if (key.keyAmount > 1) return;
+                AddSupply(key);
+            }
         });
+        var dice = new Dice(0);
         possibleSupplies.Add(new()
         {
             name = "Dice",
             description = "Used to reroll drawn floorplans",
             cost = 5,
             amount = 5,
-            OnBuy = () => AddSupply(new Dice(1))
+            OnBuy = () =>
+            {
+                dice.diceAmount++;
+                dice.Name = $"Dice({dice.diceAmount})";
+                if (dice.diceAmount > 1) return;
+                AddSupply(dice);
+            }
         });
         ColorKey colorKey = new();
         possibleSupplies.Add(new()
