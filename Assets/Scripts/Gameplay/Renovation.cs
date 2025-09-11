@@ -85,7 +85,7 @@ public static class RenovationUtils
             name = $"{categoryName} Paint",
             description = $"Floorplan is also a {categoryName}",
             condition = floorplan => !floorplan.IsOfCategory(floorCategory),
-            activationEffect = floorplan => floorplan.Category |= floorCategory
+            activationEffect = floorplan => floorplan.AddCategory(floorCategory)
         };
     }
 }

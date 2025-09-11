@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Lenix.NumberUtilities;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -41,6 +42,7 @@ public class Floorplan : ScriptableObject
     public Action<FloorplanConnectedEvent> onConnectToFloorplan = null;
     public Action<Event> onEnter = null;
     public Action<Event> onExit = null;
+    public Action<CategoryChangeEvent> onCategoryChanged = null;
 
     public Floorplan CreateInstance(Vector2Int entranceDirection)
     {
@@ -207,6 +209,15 @@ public class Floorplan : ScriptableObject
         return finalValue;
     }
 
+    public void AddCategory(FloorCategory category)
+    {
+        if(NumberUtil.ContainsBytes((int)Category, (int)category)) return;
+        Category |= category;
+        OnChanged?.Invoke();
+        onCategoryChanged?.Invoke(new(Category, coordinate, this));
+        GameEvent.OnFloorplanCategoryChanged?.Invoke(new(Category, coordinate, this));
+    }
+
     public static int DirectionToID(Vector2Int direction)
     {
         if(direction == Vector2Int.up)
@@ -234,6 +245,7 @@ public class Floorplan : ScriptableObject
         return Vector2Int.zero;
     }
 }
+
 public enum FloorType
 {
     DeadEnd = 1,
@@ -254,4 +266,15 @@ public enum FloorCategory
     MysteryRoom = 32,
     CursedRoom = 64,
     Blank = 128 //added so Aquarium doesn't break Great Hall
+}
+
+public class CategoryChangeEvent : FloorplanEvent
+{
+    public FloorCategory category;
+
+    public CategoryChangeEvent(FloorCategory newCategory, Vector2Int coordinates, Floorplan floorplan) : base(
+        coordinates, floorplan)
+    {
+        category = newCategory;
+    }
 }

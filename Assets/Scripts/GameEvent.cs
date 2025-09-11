@@ -23,6 +23,7 @@ public static class GameEvent
     public static Action<FloorplanEvent> OnExitFloorplan;
     public static Action<FloorplanEvent> OnEnterFloorplan;
     public static Action<ItemEvent> OnCollectItem;
+    public static Action<CategoryChangeEvent> OnFloorplanCategoryChanged;
 
     public static void ResetListeners()
     {

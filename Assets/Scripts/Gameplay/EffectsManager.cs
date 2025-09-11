@@ -47,10 +47,14 @@ public static class EffectsManager
                         GameEvent.onDraftedFloorplan?.Invoke(new(evt.Coordinates,
                             GameManager.floorplanDict[evt.Coordinates]));
                     });
+                //double recolor
+                floorplan.EveryTime().FloorplanChangedCategory().
+                    Do(evt => floorplan.onCategoryChanged?.Invoke(evt));
                 //double connect
                 bool retrigger = false;
                 floorplan.EveryTime().FloorplanConnected().Where(_ => retrigger = !retrigger)
-                    .Do(evt => Helpers.ConnectFloorplans(evt.baseFloorplan, evt.connectedFloorplan));
+                    .Do(evt => 
+                        Helpers.ConnectFloorplans(evt.baseFloorplan, evt.connectedFloorplan));
                 break;
             case "Cassino":
                 floorplan.TheFirstTime().PlayerEnterFloorplan().Do(evt =>
@@ -184,7 +188,13 @@ public static class EffectsManager
                 //when you connect a rest room, add a snack to this room
                 floorplan.EveryTime().FloorplanConnected().
                     Where(IsOfCategory(FloorCategory.RestRoom)).
-                    Do(evt => ItemUtilities.Snack().AddItemToFloorplan(evt.connectedFloorplan));
+                    Do(evt => ItemUtilities.Snack().
+                        AddItemToFloorplan(evt.Floorplan));
+                floorplan.EveryTime().AnyFloorplanChangeCategory().
+                    Where(GainedCategory(FloorCategory.RestRoom)).
+                    Where(IsConnectedToFloorplan(floorplan)).
+                    Do(evt => ItemUtilities.Snack().
+                        AddItemToFloorplan(evt.Floorplan));
                 break;
             case "Drawing Room":
                 int startAmount = 0;
@@ -256,18 +266,30 @@ public static class EffectsManager
             case "Great Hall":
                 //extra points for each different type of room connected
                 FloorCategory connectedCategories = 0;
-                floorplan.AddBonus(floorplan.Alias, () => NumberUtil.SeparateBits((int)connectedCategories).Length * 2);
+                floorplan.AddBonus(floorplan.Alias, 
+                    () => NumberUtil.SeparateBits((int)connectedCategories).Length * 2);
                 floorplan.EveryTime().FloorplanConnected()
-                    .Do(evt => connectedCategories |= evt.connectedFloorplan.Category);
+                    .Do(AddToConnectedCategories);
+                floorplan.EveryTime().AnyFloorplanChangeCategory().
+                    Where(IsConnectedToFloorplan(floorplan)).
+                    Do(AddToConnectedCategories);
+
+                void AddToConnectedCategories(FloorplanEvent evt) =>
+                    connectedCategories |= evt.Floorplan.Category;
                 break;
             case "Guest Bedroom":
                 //essentialy free to move in
                 floorplan.EveryTime().PlayerEnterFloorplan().ChangePlayerSteps(2);
 
+                int gBedroomBonus = 5;
                 //extra points for each connected rest room
                 floorplan.EveryTime().FloorplanConnected().
                     Where(IsOfCategory(FloorCategory.RestRoom)).
-                    AddPointsToFloorplan(5);
+                    AddPointsToFloorplan(gBedroomBonus);
+                floorplan.EveryTime().AnyFloorplanChangeCategory().
+                    Where(IsConnectedToFloorplan(floorplan)).
+                    Where(GainedCategory(FloorCategory.RestRoom)).
+                    AddPointsToFloorplan(gBedroomBonus);
                 break;
             case "Hallway Closet":
                 int hallwayClosetItemCount = 2;
@@ -280,7 +302,12 @@ public static class EffectsManager
                 return;
             case "Hovel":
                 //buff rest rooms
-                floorplan.ForEveryFloorplan(IsOfCategory(FloorCategory.RestRoom), evt => evt.Floorplan.AddBonus(floorplan.Alias, () => 1));
+                floorplan.ForEveryFloorplan(IsOfCategory(FloorCategory.RestRoom), 
+                    evt => evt.Floorplan.AddBonus(floorplan.Alias, HovelBonus));
+                floorplan.EveryTime().AnyFloorplanChangeCategory().
+                    Where(GainedCategory(FloorCategory.RestRoom)).
+                    AddPointBonusToThatFloorplan(HovelBonus);
+                int HovelBonus() => 1;
                 break;
             case "Kitchen":
                 PurchaseData cherry = new()
@@ -416,6 +443,9 @@ public static class EffectsManager
                     otherBonus += 2;
                     evt.Floorplan.AddBonus(floorplan.Alias, () => otherBonus);
                 });
+                floorplan.EveryTime().AnyFloorplanChangeCategory().
+                    Where(GainedCategory(FloorCategory.RestRoom)).
+                    AddPointBonusToThatFloorplan(() => otherBonus);
                 break;
             case "Mail Room":
                 const int draftsNeeded = 3;
@@ -558,7 +588,12 @@ public static class EffectsManager
                 break;
             case "Utility Closet":
                 //power all rooms of the same category
-                floorplan.ForEveryFloorplan(MatchCategoryWith(floorplan), evt => evt.Floorplan.AddMultiplier(floorplan.Alias, () => 2));
+                floorplan.ForEveryFloorplan(MatchCategoryWith(floorplan),
+                    evt => evt.Floorplan.AddMultiplier(floorplan.Alias, () => 2));
+                floorplan.EveryTime().AnyFloorplanChangeCategory().Where(evt =>
+                    NumberUtil.ContainsAnyBits((int)floorplan.Category, (int)evt.category)).
+                    Where(IsNot(floorplan)).
+                    PowerThatFloorplan();
                 break;
             case "Vault":
                 int lastRoomCount = 0;
@@ -668,11 +703,19 @@ public static class EffectsManager
         ModifiedDraw(this Effect effect) => new(effect,
         (a) => GameEvent.onModifyDraw += a,
         (a) => GameEvent.onModifyDraw -= a);
-
     public static EventListener<Action<ItemEvent>, ItemEvent>
         ItemCollected(this Effect effect) => new(effect,
         (a) => GameEvent.OnCollectItem += a,
         (a) => GameEvent.OnCollectItem -= a);
+
+    public static EventListener<Action<CategoryChangeEvent>, CategoryChangeEvent>
+        FloorplanChangedCategory(this Effect effect) => new(effect,
+        a => effect.floorplan.onCategoryChanged += a,
+        a => effect.floorplan.onCategoryChanged -= a);
+    public static EventListener<Action<CategoryChangeEvent>, CategoryChangeEvent>
+        AnyFloorplanChangeCategory(this Effect effect) => new(effect,
+        a => GameEvent.OnFloorplanCategoryChanged += a,
+        a => GameEvent.OnFloorplanCategoryChanged -= a);
 
     #endregion
 
@@ -773,5 +816,10 @@ public static class EffectsManager
 
     public static Func<FloorplanEvent, bool> IsNot(Floorplan floorplan) =>
         evt => evt.Floorplan != floorplan;
+    public static Func<FloorplanEvent, bool> IsConnectedToFloorplan(Floorplan floorplan) =>
+        evt => floorplan.connectedFloorplans.Contains(evt.Floorplan);
+    public static Func<CategoryChangeEvent, bool> GainedCategory(FloorCategory type) =>
+        evt => NumberUtil.ContainsBytes((int)evt.category, (int)type);
+    
     #endregion
 }
