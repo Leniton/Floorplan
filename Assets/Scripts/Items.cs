@@ -198,6 +198,35 @@ public abstract class PlaceableItem : Item
     public override void Activate() => Place(Helpers.CurrentFloorplan());
 }
 
+public class CategoryWallpaper : Item
+{
+    public FloorCategory floorCategory { get; protected set; }
+
+    public CategoryWallpaper(FloorCategory? category = null)
+    {
+        floorCategory = category ?? Helpers.RandomCategory();//will be 8 with addition of red rooms
+        Name = $"{Helpers.CategoryName(floorCategory)} Decor";
+    }
+
+    public override void PickUp()
+    {
+        Player.items.Add(this);
+        base.PickUp();
+    }
+
+    public override void Activate()
+    {
+        var floorplan = Helpers.CurrentFloorplan();
+        if (floorplan.IsOfCategory(floorCategory))
+        {
+            MessageWindow.ShowMessage($"Floorplan is already a {Helpers.CategoryName(floorCategory)}!");
+            return;
+        }
+        floorplan.AddCategory(floorCategory);
+        Player.items.Remove(this);
+    }
+}
+
 public class Decoration : PlaceableItem
 {
     public int bonus;
