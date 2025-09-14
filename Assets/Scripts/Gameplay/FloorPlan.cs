@@ -214,8 +214,8 @@ public class Floorplan : ScriptableObject
         if(NumberUtil.ContainsBytes((int)Category, (int)category)) return;
         Category |= category;
         OnChanged?.Invoke();
-        onCategoryChanged?.Invoke(new(Category, coordinate, this));
-        GameEvent.OnFloorplanCategoryChanged?.Invoke(new(Category, coordinate, this));
+        onCategoryChanged?.Invoke(new(category, coordinate, this));
+        GameEvent.OnFloorplanCategoryChanged?.Invoke(new(category, coordinate, this));
     }
 
     public static int DirectionToID(Vector2Int direction)

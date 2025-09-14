@@ -590,6 +590,7 @@ public static class EffectsManager
                 //power all rooms of the same category
                 floorplan.ForEveryFloorplan(MatchCategoryWith(floorplan),
                     evt => evt.Floorplan.AddMultiplier(floorplan.Alias, () => 2));
+                //when a floorplan changes category, power them too
                 floorplan.EveryTime().AnyFloorplanChangeCategory().Where(evt =>
                     NumberUtil.ContainsAnyBits((int)floorplan.Category, (int)evt.category)).
                     Where(IsNot(floorplan)).
@@ -818,8 +819,8 @@ public static class EffectsManager
         evt => evt.Floorplan != floorplan;
     public static Func<FloorplanEvent, bool> IsConnectedToFloorplan(Floorplan floorplan) =>
         evt => floorplan.connectedFloorplans.Contains(evt.Floorplan);
-    public static Func<CategoryChangeEvent, bool> GainedCategory(FloorCategory type) =>
-        evt => NumberUtil.ContainsBytes((int)evt.category, (int)type);
+    public static Func<CategoryChangeEvent, bool> GainedCategory(FloorCategory category) =>
+        evt => evt.category == category;
     
     #endregion
 }
