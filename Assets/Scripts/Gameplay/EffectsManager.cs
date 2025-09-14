@@ -590,11 +590,16 @@ public static class EffectsManager
                 //power all rooms of the same category
                 floorplan.ForEveryFloorplan(MatchCategoryWith(floorplan),
                     evt => evt.Floorplan.AddMultiplier(floorplan.Alias, () => 2));
-                //when a floorplan changes category, power them too
+                //when a floorplan gains a category, power them too
                 floorplan.EveryTime().AnyFloorplanChangeCategory().Where(evt =>
                     NumberUtil.ContainsAnyBits((int)floorplan.Category, (int)evt.category)).
                     Where(IsNot(floorplan)).
                     PowerThatFloorplan();
+                //when it gains a category, power floorplans of that category
+                floorplan.EveryTime().FloorplanChangedCategory().Do(evt =>
+                {
+                    //power only the new floorplans
+                });
                 break;
             case "Vault":
                 int lastRoomCount = 0;
