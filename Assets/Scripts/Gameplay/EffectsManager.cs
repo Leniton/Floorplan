@@ -612,13 +612,20 @@ public static class EffectsManager
                 });
                 break;
             case "Vault":
-                int lastRoomCount = 0;
-                floorplan.EveryTime().PlayerEnterFloorplan().Do(_ =>
+                bool canCollect = false;
+                Coin coins = new(GameManager.floorplanDict.Count * 2);
+                floorplan.EveryTime().AnyFloorplanIsDrafted().Do(_ =>
                 {
-                    int coinAmount = GameManager.floorplanDict.Count - lastRoomCount;
-                    if (coinAmount <= 0) return;
-                    new Coin(coinAmount).PickUp();
-                    lastRoomCount = GameManager.floorplanDict.Count;
+                    coins.coinsAmount += 2;
+                    coins.Name = $"Coins ({coins.coinsAmount})";
+                    if(canCollect) return;
+                    coins.AddItemToFloorplan(floorplan);
+                    canCollect = true;
+                });
+                floorplan.EveryTime().ItemCollected().Where(evt => evt.item == coins).Do(_ =>
+                {
+                    coins.coinsAmount = 0;
+                    canCollect = false;
                 });
                 break;
             case "Vestibule":
