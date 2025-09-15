@@ -132,6 +132,7 @@ public class Floorplan : ScriptableObject
     {
         if (Type != FloorType.TPiece && Type != FloorType.Ankle) return;
         InternalRotation();
+        OnChanged?.Invoke();
     }
 
     /// <summary>

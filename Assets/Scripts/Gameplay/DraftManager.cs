@@ -2,6 +2,7 @@ using AddressableAsyncInstances;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SerializableMethods;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -273,12 +274,12 @@ public class DraftManager : MonoBehaviour
         draftPool.Remove(originalFloorplan);
     }
 
+    [SerializeMethod]
     public void RotateFloorplans()
     {
         for (int i = 0; i < draftList.Count; i++)
         {
             draftList[i].currentFloorplan.Rotate();
-            draftList[i].Setup(draftList[i].currentFloorplan);
         }
     }
 
