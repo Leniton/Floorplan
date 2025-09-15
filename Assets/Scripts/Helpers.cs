@@ -64,13 +64,6 @@ public static class Helpers
         }
         return originalFloorplan;
     }
-
-    public static Floorplan DraftedFrom(this Floorplan floorplan)
-    {
-        Vector2Int draftedCoordinates = floorplan.coordinate + Floorplan.IDToDirection(floorplan.entranceId);
-        GameManager.floorplanDict.TryGetValue(draftedCoordinates, out var draftedFloorplan);
-        return floorplan;
-    }
     
     public static Floorplan CurrentFloorplan()
     {
@@ -89,9 +82,9 @@ public static class Helpers
         GameEvent.onConnectFloorplans?.Invoke(new(connectedFloorplan, baseFloorplan, baseFloorplan.coordinate));
     }
 
-    public static RarityPicker<Item> ItemPool(this Floorplan floorplan)
+    public static RarityPicker<Func<Item>> ItemPool(this Floorplan floorplan)
     {
-        RarityPicker<Item> possibleItems = new(.25f, .1f, .05f, 0);
+        RarityPicker<Func<Item>> possibleItems = new(.25f, .1f, .05f, 0);
         var categories = NumberUtil.SeparateBits((int)floorplan.Category);
         for (int i = 0; i < categories.Length; i++)
         {
@@ -99,43 +92,43 @@ public static class Helpers
             switch (category)
             {
                 case FloorCategory.Shop:
-                    possibleItems.AddToPool(new Coin(), Rarity.Common);
-                    possibleItems.AddToPool(new Coin(5), Rarity.Uncommon);
-                    possibleItems.AddToPool(new Decoration(), Rarity.Uncommon);
+                    possibleItems.AddToPool(() => new Coin(), Rarity.Common);
+                    possibleItems.AddToPool(() => new Coin(5), Rarity.Uncommon);
+                    possibleItems.AddToPool(() => new Decoration(), Rarity.Uncommon);
                     break;
                 case FloorCategory.Hallway:
-                    possibleItems.AddToPool(new Coin(), Rarity.Common);
-                    possibleItems.AddToPool(new Key(), Rarity.Common);
-                    possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
+                    possibleItems.AddToPool(() => new Coin(), Rarity.Common);
+                    possibleItems.AddToPool(() => new Key(), Rarity.Common);
+                    possibleItems.AddToPool(() => new Dice(), Rarity.Uncommon);
                     break;
                 case FloorCategory.RestRoom:
-                    possibleItems.AddToPool(new Food(), Rarity.Common);
-                    possibleItems.AddToPool(new Key(), Rarity.Common);
-                    possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
-                    possibleItems.AddToPool(new Decoration(), Rarity.Uncommon);
+                    possibleItems.AddToPool(() => new Food(), Rarity.Common);
+                    possibleItems.AddToPool(() => new Key(), Rarity.Common);
+                    possibleItems.AddToPool(() => new Dice(), Rarity.Uncommon);
+                    possibleItems.AddToPool(() => new Decoration(), Rarity.Uncommon);
                     break;
                 case FloorCategory.MysteryRoom:
-                    possibleItems.AddToPool(new Key(), Rarity.Common);
-                    possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
-                    possibleItems.AddToPool(new CategoryWallpaper(), Rarity.Uncommon);
-                    possibleItems.AddToPool(new ColorKey(), Rarity.Rare);
-                    possibleItems.AddToPool(new SledgeHammer(), Rarity.Rare);
-                    possibleItems.AddToPool(new Battery(), Rarity.Rare);
+                    possibleItems.AddToPool(() => new Key(), Rarity.Common);
+                    possibleItems.AddToPool(() => new Dice(), Rarity.Uncommon);
+                    possibleItems.AddToPool(() => new CategoryWallpaper(), Rarity.Uncommon);
+                    possibleItems.AddToPool(() => new ColorKey(), Rarity.Rare);
+                    possibleItems.AddToPool(() => new SledgeHammer(), Rarity.Rare);
+                    possibleItems.AddToPool(() => new Battery(), Rarity.Rare);
                     break;
                 case FloorCategory.FancyRoom:
-                    possibleItems.AddToPool(new Food(), Rarity.Common);
-                    possibleItems.AddToPool(new Key(), Rarity.Common);
-                    possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
+                    possibleItems.AddToPool(() => new Food(), Rarity.Common);
+                    possibleItems.AddToPool(() => new Key(), Rarity.Common);
+                    possibleItems.AddToPool(() => new Dice(), Rarity.Uncommon);
                     break;
-                default://blue rooms
-                    possibleItems.AddToPool(new Coin(), Rarity.Common);
-                    possibleItems.AddToPool(new Food(), Rarity.Common);
-                    possibleItems.AddToPool(new Key(), Rarity.Common);
-                    possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
-                    possibleItems.AddToPool(new Decoration(), Rarity.Uncommon);
-                    possibleItems.AddToPool(new ColorKey(), Rarity.Rare);
-                    possibleItems.AddToPool(new SledgeHammer(), Rarity.Rare);
-                    possibleItems.AddToPool(new Battery(), Rarity.Rare);
+                default: //blue rooms
+                    possibleItems.AddToPool(() => new Coin(), Rarity.Common);
+                    possibleItems.AddToPool(() => new Food(), Rarity.Common);
+                    possibleItems.AddToPool(() => new Key(), Rarity.Common);
+                    possibleItems.AddToPool(() => new Dice(), Rarity.Uncommon);
+                    possibleItems.AddToPool(() => new Decoration(), Rarity.Uncommon);
+                    possibleItems.AddToPool(() => new ColorKey(), Rarity.Rare);
+                    possibleItems.AddToPool(() => new SledgeHammer(), Rarity.Rare);
+                    possibleItems.AddToPool(() => new Battery(), Rarity.Rare);
                     break;
             }
         }
@@ -149,7 +142,7 @@ public static class Helpers
     /// <param name="forceItem">Guarantees an item will be added</param>
     public static void AddFloorplanItems(Floorplan floorplan, bool forceItem = false)
     {
-        RarityPicker<Item> possibleItems = floorplan.ItemPool();
+        RarityPicker<Func<Item>> possibleItems = floorplan.ItemPool();
         //for items, legend means you get nothing
         possibleItems.allowEmptyResult = true;
         float nothingRate = possibleItems.commonRate + possibleItems.uncommonRate + possibleItems.rareRate;
@@ -168,7 +161,7 @@ public static class Helpers
                 possibleItems.legendRate - cutRate);
         }
 
-        possibleItems.PickRandom()?.AddItemToFloorplan(floorplan);
+        possibleItems.PickRandom()?.Invoke()?.AddItemToFloorplan(floorplan);
     }
 
     public static void AddItemToFloorplan(this Item item, Floorplan floorplan) => item.Place(floorplan);
@@ -217,7 +210,8 @@ public static class Helpers
         else floorplan.Type = FloorType.DeadEnd;
     }
 
-    public static bool IsOfCategory(this Floorplan floorplan, FloorCategory category) => NumberUtil.ContainsBytes((int)floorplan.Category, (int)category);
+    public static bool IsOfCategory(this Floorplan floorplan, FloorCategory category) =>
+        NumberUtil.ContainsBytes((int)floorplan.Category, (int)category);
 
     public static void IncreaseChanceOfDrawing(this DrawFloorplanEvent evt, Func<Floorplan, bool> condition, float chance =  .4f,
         Func<DrawFloorplanEvent, Floorplan> spareRoomMethod = null)

@@ -237,7 +237,7 @@ public class Decoration : PlaceableItem
         bonus = pointBonus ?? Random.Range(2, 6);
         Name = bonus switch
         {
-            2 => "Rock",
+            2 => "Shiny Rock",
             3 => "Toy",
             4 => "Couch",
             5 => "TV",

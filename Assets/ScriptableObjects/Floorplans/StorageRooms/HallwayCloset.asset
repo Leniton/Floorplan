@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Hallway Closet
   Alias: Hallway Closet
-  Description: 2 items. +1 extra items if drafted from a <b>Hallway<b>
-  Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
+  Description: 2 items. +rare item if drafted from a <b>Hallway<b>
   Category: 4
   Type: 1
   Rarity: 0

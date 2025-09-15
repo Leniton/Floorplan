@@ -9,7 +9,7 @@ public static class EffectsManager
     public static void AddFloorplanEffect(Floorplan floorplan)
     {
         if (floorplan.Name == "Entrance Hall") return;
-        Floorplan draftedFloorplan = floorplan.DraftedFrom();
+        Floorplan draftedFloorplan = Helpers.CurrentFloorplan();
         switch (floorplan.Name)
         {
             case "Attic":
@@ -293,12 +293,14 @@ public static class EffectsManager
                 break;
             case "Hallway Closet":
                 int hallwayClosetItemCount = 2;
-                if (!ReferenceEquals(draftedFloorplan, null) &&
-                    draftedFloorplan.IsOfCategory(FloorCategory.Hallway))
-                    hallwayClosetItemCount += 1;
-
                 for (int i = 0; i < hallwayClosetItemCount; i++)
                     Helpers.AddFloorplanItems(floorplan, true);
+                
+                if (ReferenceEquals(draftedFloorplan, null) || !draftedFloorplan.IsOfCategory(FloorCategory.Hallway)) return;
+                //add rare item
+                var hallwayClosetPool = floorplan.ItemPool();
+                hallwayClosetPool.ChangeRarities(0,0,1,0);
+                hallwayClosetPool.PickRandom().Invoke().AddItemToFloorplan(floorplan);
                 return;
             case "Hovel":
                 //buff rest rooms
@@ -455,13 +457,13 @@ public static class EffectsManager
                     count++;
                     if (count < draftsNeeded) return;
                     MessageWindow.ShowMessage("Your package has been delivered!!");
-                    RarityPicker<Item> picker = floorplan.ItemPool();
+                    var picker = floorplan.ItemPool();
                     //add uncommon item
                     picker.ChangeRarities(0, 1, 0, 0);
-                    picker.PickRandom().AddItemToFloorplan(floorplan);
+                    picker.PickRandom().Invoke().AddItemToFloorplan(floorplan);
                     //add rare item
                     picker.ChangeRarities(0, 0, 1, 0);
-                    picker.PickRandom().AddItemToFloorplan(floorplan);
+                    picker.PickRandom().Invoke().AddItemToFloorplan(floorplan);
                 });
                 break;
             case "Office":
@@ -584,9 +586,9 @@ public static class EffectsManager
                 }
                 break;
             case "Terrace":
-                RarityPicker<Item> terraceItems = floorplan.ItemPool();
+                RarityPicker<Func<Item>> terraceItems = floorplan.ItemPool();
                 terraceItems.ChangeRarities(0,1,0,0);
-                terraceItems.PickRandom().AddItemToFloorplan(floorplan);
+                terraceItems.PickRandom().Invoke().AddItemToFloorplan(floorplan);
                 break;
             case "Tunnel":
                 //Aways draw a tunnel when drafting from tunnel
@@ -670,11 +672,17 @@ public static class EffectsManager
                 break;
             case "Walk-In Closet":
                 int walkinClosetItemCount = 4;
-                if (!ReferenceEquals(draftedFloorplan, null) && draftedFloorplan.IsOfCategory(FloorCategory.RestRoom))
-                    walkinClosetItemCount += 2;
-
                 for (int i = 0; i < walkinClosetItemCount; i++)
                     Helpers.AddFloorplanItems(floorplan, true);
+                
+                if (ReferenceEquals(draftedFloorplan, null) || !draftedFloorplan.IsOfCategory(FloorCategory.RestRoom)) return;
+                //add uncommon items
+                var walkinClosetPool = floorplan.ItemPool();
+                walkinClosetPool.ChangeRarities(0,1,0,0);
+                walkinClosetItemCount = 2;
+                for (int i = 0; i < walkinClosetItemCount; i++)
+                    walkinClosetPool.PickRandom().Invoke().AddItemToFloorplan(floorplan);
+                
                 return;
             case "":
                 break;
