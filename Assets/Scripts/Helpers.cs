@@ -166,8 +166,14 @@ public static class Helpers
 
     public static void AddItemToFloorplan(this Item item, Floorplan floorplan) => item.Place(floorplan);
 
-    public static void OpenConnection(this Floorplan floorplan, int connectionID)
+    public static void OpenConnection(this Floorplan floorplan, int connectionID = -1)
     {
+        if (connectionID < 0)
+        {
+            //open first found closed connection
+            for (connectionID = 0; connectionID < floorplan.connections.Length-1; connectionID++)
+                if (!floorplan.connections[connectionID]) break;
+        }
         if (floorplan.connections[connectionID]) return;//already open
         //Debug.Log($"create opening on {floorplan.name}");
         floorplan.connections[connectionID] = true;

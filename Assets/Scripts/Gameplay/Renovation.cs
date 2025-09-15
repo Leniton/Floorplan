@@ -88,6 +88,25 @@ public static class RenovationUtils
             activationEffect = floorplan => floorplan.AddCategory(floorCategory)
         };
     }
+    /// <summary>
+    /// Adds copy of floorplan to pool
+    /// </summary>
+    public static Renovation WallMirror() => new()
+    {
+        name = "Wall Mirror",
+        description = "Add a copy of the floorplan to the draft pool",
+        activationEffect = floorplan => RunData.playerDeck.deck.Add(floorplan.CreateInstance(Vector2Int.up))
+    };
+    /// <summary>
+    /// Adds an opening to floorplan
+    /// </summary>
+    public static Renovation NewDoor() => new()
+    {
+        name = "New Door",
+        description = "Adds an opening to floorplan",
+        condition = floorplan => floorplan.Type != FloorType.Crossroad,
+        activationEffect = floorplan => floorplan.OpenConnection()
+    };
 }
 
 public class Renovation

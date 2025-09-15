@@ -229,6 +229,7 @@ public class GameManager : MonoBehaviour
             PointsManager.Reset();
             targetScene = 0;
         }
+        floorplanDict.Clear();
         GameEvent.ResetListeners();
         SceneManager.LoadScene(targetScene);
     }

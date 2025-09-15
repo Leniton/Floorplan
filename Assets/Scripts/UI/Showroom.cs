@@ -113,6 +113,24 @@ public class Showroom : MonoBehaviour
             amount = 1,
             OnBuy = () => UseRenovation(RenovationUtils.Paint(paintCategory))
         }, Rarity.Common);
+        renovation = RenovationUtils.WallMirror();
+        possibleRenovations.AddToPool(new()
+        {
+            name = renovation.name,
+            description = renovation.description,
+            cost = 3,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.WallMirror())
+        }, Rarity.Common);
+        renovation = RenovationUtils.NewDoor();
+        possibleRenovations.AddToPool(new()
+        {
+            name = renovation.name,
+            description = renovation.description,
+            cost = 3,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.NewDoor())
+        }, Rarity.Common);
         
         List<PurchaseData> renovations = new(3);
         for (int i = 0; i < renovations.Capacity; i++)
@@ -205,6 +223,8 @@ public class Showroom : MonoBehaviour
     private void UseRenovation(Renovation renovation)
     {
         renovationPick.text = renovation.description;
+        if (renovation.condition != null)
+            GameEvent.onDrawFloorplans += CheckCondition;
         pickFloorplan.DraftFloorplan();
         pickFloorplan.OnDraftFloorplan += ApplyRenovation;
 
@@ -215,6 +235,12 @@ public class Showroom : MonoBehaviour
 
             var original = floorplan.FindOriginal(RunData.playerDeck.deck);
             if (original != null) renovation.Activate(original);
+            GameEvent.onDrawFloorplans -= CheckCondition;
+        }
+
+        void CheckCondition(DrawFloorplanEvent evt)
+        {
+            evt.IncreaseChanceOfDrawing(renovation.condition, 1);
         }
     }
 
