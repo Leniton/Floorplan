@@ -11,23 +11,21 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
     [SerializeField] private HoverOptions hoverOptions;
     [SerializeField] private HoverOptions subOptions;
 
+    private event Action _tapAction;
+
     private HoverButton lastButton;
 
-    private void Start()
+    private void Awake()
     {
         hoverOptions.OnDoneMoving += OnDoneMoving;
-        hoverOptions.SetupOptions(new()
-        {
-            null,
-            null,
-            null,
-        });
-        hoverOptions.ChangeOptionsVisibility(false);
-        for (int i = 0; i < hoverOptions.optionsButton.Count; i++)
-            hoverOptions.optionsButton[i].HoverOptions = subOptions;
-        mainButton.transform.SetAsLastSibling();
+    }
 
-        hoverOptions.optionsButton[0].AddOption(new() { onPick = UIManager.ShowCurrentFloorplan });
+    public void SetupOptions(List<ButtonCallback> options, Action tapAction = null)
+    {
+        _tapAction = tapAction;
+        hoverOptions.SetupOptions(options);
+        hoverOptions.ChangeOptionsVisibility(false);
+        mainButton.transform.SetAsLastSibling();
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -42,6 +40,10 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
         //trickle down
         if (eventData.pointerCurrentRaycast.gameObject?.TryGetComponent<HoverButton>(out var button) ?? false)
             button.OnPointerUp(eventData);
+
+        //self effect when releasing on itself
+        if(eventData.pointerCurrentRaycast.gameObject == mainButton)
+            _tapAction?.Invoke();
         
         SetHoverButtonsInteractable(false);
         hoverOptions.ChangeOptionsVisibility(false);

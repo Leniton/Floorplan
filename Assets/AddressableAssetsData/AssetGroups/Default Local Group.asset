@@ -22,6 +22,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 757a8929f9fd9a94fa0ad6ed83ec65aa
+    m_Address: searchIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 94febe1f5c5fbc741a1a0159fc0a03ae
     m_Address: DefaultFloorplanColors
     m_ReadOnly: 0

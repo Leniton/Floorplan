@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Floorplan entrance;
     [SerializeField] private Image currentImage;
     [SerializeField] private Button finishButton;
+    [SerializeField] private HoverMenu hoverMenu;
 
     public static Dictionary<Vector2Int, Floorplan> floorplanDict;
     public static Floorplan EntranceHall;
@@ -30,6 +31,30 @@ public class GameManager : MonoBehaviour
         gridManager.OnStartMove += TriggerFloorplanExitEvent;
         gridManager.OnMove += TriggerFloorplanEnterEvent;
         finishButton.onClick.AddListener(FinishRun);
+        Checklist hoverMenuIconLoad = new(0);
+        //details icon
+        hoverMenuIconLoad.AddStep();
+        Sprite detailsIcon = null;
+        AAAsset<Sprite>.LoadAsset("searchIcon", sprite =>
+        {
+            detailsIcon = sprite;
+            hoverMenuIconLoad.FinishStep();
+        });
+        
+        hoverMenuIconLoad.onCompleted += () =>
+        {
+            hoverMenu.SetupOptions(new()
+            {
+                new()
+                {
+                    icon = detailsIcon,
+                    color = new(.6f,.6f,.6f),
+                    onPick = UIManager.ShowCurrentFloorplan
+                },
+                null,
+                null,
+            });
+        };
 
         Checklist loadedAssets = new(0);
         loadedAssets.onCompleted += Setup;

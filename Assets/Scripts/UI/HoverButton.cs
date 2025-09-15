@@ -1,10 +1,6 @@
-using AddressableAsyncInstances;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -12,7 +8,7 @@ using UnityEngine.UI;
 /// It has 2 modes: First one triggers an action when pointer is released on top of it; 
 /// the other expands its layout group to show more options in the form of another hover button
 /// </summary>
-public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler
+public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerUpHandler
 {
     [SerializeField] private Graphic graphic;
     [SerializeField] private Image icon;
@@ -43,14 +39,10 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(!interactable) return;
-        if(options.Count <= 1) return;
+        if (!interactable) return;
+        if (options.Count <= 1) return;
         HoverOptions?.SetupOptions(options);
         ChangeOptionsVisibility(true);
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -84,8 +76,13 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void SetOption(ButtonCallback option)
     {
+        icon.gameObject.SetActive(!ReferenceEquals(option?.icon, null));
+        if(option == null) return;
         options = new() { option };
         SetInteractable(true);
+        if (!icon.gameObject.activeSelf) return;
+        icon.sprite = option.icon;
+        icon.color = option.color;
     }
 
     public void AddOption(ButtonCallback option)
@@ -104,5 +101,7 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 public class ButtonCallback
 {
     public string Name;
+    public Sprite icon;
+    public Color color;
     public Action onPick;
 }

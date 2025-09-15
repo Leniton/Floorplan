@@ -1380,6 +1380,7 @@ MonoBehaviour:
   entrance: {fileID: 11400000, guid: 0592fd1164e8f894c8ba4760b9093bc0, type: 2}
   currentImage: {fileID: 186562830}
   finishButton: {fileID: 1264867669}
+  hoverMenu: {fileID: 143603897}
 --- !u!4 &467979806
 Transform:
   m_ObjectHideFlags: 0

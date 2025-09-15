@@ -58,7 +58,7 @@ public class HoverOptions : MonoBehaviour
                 continue;
             }
             optionsButton[i].gameObject.SetActive(true);
-            if(options[i] != null) optionsButton[i].SetOption(options[i]);
+            optionsButton[i].SetOption(options[i]);
         }
         layoutGroup.AdjustElements();
     }
