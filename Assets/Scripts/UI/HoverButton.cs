@@ -78,6 +78,7 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerUpHandle
     {
         icon.gameObject.SetActive(!ReferenceEquals(option?.icon, null));
         if(option == null) return;
+        graphic.color = option.buttonColor;
         options = new() { option };
         SetInteractable(true);
         if (!icon.gameObject.activeSelf) return;
@@ -102,6 +103,7 @@ public class ButtonCallback
 {
     public string Name;
     public Sprite icon;
-    public Color color;
+    public Color color = Color.white;
+    public Color buttonColor = Color.white;
     public Action onPick;
 }

@@ -15,29 +15,86 @@ public class MinimapManager : MonoBehaviour
     [Header("points")]
     [SerializeField] private TMP_Text totalPoints;
     [SerializeField] private Slider totalPointsSlider;
+    [Header("PeekFloorplan")]
+    [SerializeField] private HoverMenu peekButtons;
+    [SerializeField] private Sprite arrowIcon;
+    [SerializeField] private Color buttonColor = Color.white;
+    
 
     private void Awake()
     {
+        minimapGrid.onDoneLoading += SetupGridMirror;
+    }
+
+    private void SetupGridMirror()
+    {
+        foreach (var floorplan in GameManager.floorplanDict.Values)
+            SetupFloorplan(floorplan);
         GameEvent.onDraftedFloorplan += PlaceFloorplan;
     }
 
     private void Start()
     {
-        CloseMinimap();        
+        peekButtons.SetupOptions(new()
+        {
+            //up
+            new()
+            {
+                icon = arrowIcon,
+                buttonColor = buttonColor,
+                onPick = () => PeekAt(Vector2Int.up),
+            },
+            //left
+            new()
+            {
+                icon = arrowIcon,
+                buttonColor = buttonColor,
+                onPick = () => PeekAt(Vector2Int.left),
+            },
+            //down
+            new()
+            {
+                icon = arrowIcon,
+                buttonColor = buttonColor,
+                onPick = () => PeekAt(Vector2Int.down),
+            },
+            //right
+            new()
+            {
+                icon = arrowIcon,
+                buttonColor = buttonColor,
+                onPick = () => PeekAt(Vector2Int.right),
+            },
+        }, () => PeekAt(Vector2Int.zero));
+
+        CloseMinimap();
+    }
+
+    private void PeekAt(Vector2Int direction)
+    {
+        Vector2Int coordinates = gameGrid.currentPosition + direction;
+        if (!gameGrid.ValidCoordinate(coordinates)) return;
+        if (!GameManager.floorplanDict.TryGetValue(coordinates, out var floorplan)) return;
+        UIManager.ShowDetails(floorplan);
     }
 
     private void PlaceFloorplan(FloorplanEvent evt)
     {
-        Button slotButton = minimapGrid.GetSlot(evt.Coordinates).GetComponent<Button>();
+        SetupFloorplan(evt.Floorplan);
+    }
+
+    private void SetupFloorplan(Floorplan floorplan)
+    {
+        Button slotButton = minimapGrid.GetSlot(floorplan.coordinate).GetComponent<Button>();
         FloorplanUI instance = Instantiate(floorplanPrefab, slotButton.transform);
-        instance.Setup(evt.Floorplan);
+        instance.Setup(floorplan);
         RectTransform floorplanRect = (RectTransform)instance.transform;
         floorplanRect.anchoredPosition = Vector2.zero;
         floorplanRect.anchorMin = Vector2.zero;
         floorplanRect.anchorMax = Vector2.one;
         floorplanRect.sizeDelta = Vector2.zero;
 
-        slotButton.onClick.AddListener(() => UIManager.ShowDetails(evt.Floorplan));
+        slotButton.onClick.AddListener(() => UIManager.ShowDetails(floorplan));
     }
 
     public void OpenMinimap()

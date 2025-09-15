@@ -67,14 +67,25 @@ public class HoverOptions : MonoBehaviour
     {
         if (expand == value) return;
         expand = value;
-        if (!moving)
-            moveCoroutine = StartCoroutine(MoveAnimation());
+        if (!moving) moveCoroutine = StartCoroutine(MoveAnimation());
+    }
+
+    public void ForceState(bool expandLayout)
+    {
+        if (moveCoroutine != null)
+            StopCoroutine(moveCoroutine);
+        expand = expandLayout;
+        moveCoroutine = null;
+        float targetSpacing = expand ? openSpacing : 0;
+        float targetOffset = expand ? openOffset : 0;
+        layoutGroup.offset = targetOffset;
+        layoutGroup.spacing = targetSpacing;
+        layoutGroup.AdjustElements();
     }
 
     public IEnumerator MoveAnimation()
     {
         const float duration = .08f;
-
         bool expandLayout = !expand;
         while (expandLayout != expand)
         {

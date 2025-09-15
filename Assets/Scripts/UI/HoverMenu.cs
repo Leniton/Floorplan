@@ -24,7 +24,7 @@ public class HoverMenu : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
     {
         _tapAction = tapAction;
         hoverOptions.SetupOptions(options);
-        hoverOptions.ChangeOptionsVisibility(false);
+        hoverOptions.ForceState(false);
         mainButton.transform.SetAsLastSibling();
     }
 
