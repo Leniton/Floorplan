@@ -10,7 +10,13 @@ public static class GameAssets
 
     public static void LoadAssets(Action onDone = null)
     {
+        Checklist loadedAssets = new(0);
+        loadedAssets.onCompleted += () => onDone?.Invoke();
+        
+        //load patterns
+        loadedAssets.AddStep();
         Checklist patternChecklist = new(0);
+        patternChecklist.onCompleted += loadedAssets.FinishStep;
         string fileName = "patterns";
         int patternCount = 84;
         patterns = new Sprite[patternCount];
