@@ -464,6 +464,32 @@ public static class EffectsManager
                     picker.PickRandom().AddItemToFloorplan(floorplan);
                 });
                 break;
+            case "Office":
+                Coin payment = new(2);
+                //floorplans of the same category gain coins
+                floorplan.ForEveryFloorplan(MatchCategoryWith(floorplan),
+                    evt => payment.AddItemToFloorplan(evt.Floorplan));
+                //when a floorplan gains a category, pay them too
+                floorplan.EveryTime().AnyFloorplanChangeCategory().Where(evt =>
+                        NumberUtil.ContainsAnyBits((int)floorplan.Category, (int)evt.category)).
+                    Where(IsNot(floorplan)).
+                    AddItemToThatFloorplan(payment);
+                //when it gains a category, pay floorplans of that category
+                floorplan.EveryTime().FloorplanChangedCategory().Do(evt =>
+                {
+                    //pay only the new floorplans
+                    FloorCategory categories = floorplan.Category ^ evt.category;
+                    floorplan.ForEveryFloorplan(NotReceivedPayment, evt =>
+                        payment.AddItemToFloorplan(evt.Floorplan));
+
+                    bool NotReceivedPayment(FloorplanEvent floorplanEvent) =>
+                        NumberUtil.ContainsAnyBits
+                            ((int)floorplanEvent.Floorplan.Category, (int)floorplan.Category) 
+                        &&
+                        !NumberUtil.ContainsAnyBits
+                            ((int)floorplanEvent.Floorplan.Category, (int)categories);
+                });
+                break;
             case "Pantry":
                 new Coin().AddItemToFloorplan(floorplan);
                 new Food().AddItemToFloorplan(floorplan);

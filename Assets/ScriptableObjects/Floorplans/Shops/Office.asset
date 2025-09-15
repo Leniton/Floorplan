@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c2ec7ddf6ecb914e8686ca425ec3201, type: 3}
-  m_Name: UtilityCloset
+  m_Name: Office
   m_EditorClassIdentifier: 
-  Name: Utility Closet
-  Alias: Utility Closet
-  Description: <b>Power</b> floorplans that shares a category with this room
-  Category: 32
+  Name: Office
+  Alias: Office
+  Description: Floorplans that share a <b>Category</b> with this room gain +2 coins
+  Category: 48
   Type: 1
-  Rarity: 0
-  keyCost: 0
+  Rarity: 1
+  keyCost: 1
   basePoints: 1
   entranceId: 0
   connections: 

@@ -143,6 +143,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6b21205b6d08de84ab005acd99837bcb
+    m_Address: Office
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6e4e98353bf837f4987bf277ed62e761
     m_Address: Locksmith
     m_ReadOnly: 0
