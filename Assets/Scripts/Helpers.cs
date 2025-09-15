@@ -105,7 +105,8 @@ public static class Helpers
                     break;
                 case FloorCategory.Hallway:
                     possibleItems.AddToPool(new Coin(), Rarity.Common);
-                    possibleItems.AddToPool(new Decoration(), Rarity.Uncommon);
+                    possibleItems.AddToPool(new Key(), Rarity.Common);
+                    possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
                     break;
                 case FloorCategory.RestRoom:
                     possibleItems.AddToPool(new Food(), Rarity.Common);
@@ -117,6 +118,7 @@ public static class Helpers
                     possibleItems.AddToPool(new Key(), Rarity.Common);
                     possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
                     possibleItems.AddToPool(new CategoryWallpaper(), Rarity.Uncommon);
+                    possibleItems.AddToPool(new ColorKey(), Rarity.Rare);
                     possibleItems.AddToPool(new SledgeHammer(), Rarity.Rare);
                     possibleItems.AddToPool(new Battery(), Rarity.Rare);
                     break;
@@ -124,15 +126,14 @@ public static class Helpers
                     possibleItems.AddToPool(new Food(), Rarity.Common);
                     possibleItems.AddToPool(new Key(), Rarity.Common);
                     possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
-                    possibleItems.AddToPool(new CategoryWallpaper(), Rarity.Uncommon);
                     break;
                 default://blue rooms
                     possibleItems.AddToPool(new Coin(), Rarity.Common);
                     possibleItems.AddToPool(new Food(), Rarity.Common);
                     possibleItems.AddToPool(new Key(), Rarity.Common);
                     possibleItems.AddToPool(new Dice(), Rarity.Uncommon);
-                    possibleItems.AddToPool(new CategoryWallpaper(), Rarity.Uncommon);
                     possibleItems.AddToPool(new Decoration(), Rarity.Uncommon);
+                    possibleItems.AddToPool(new ColorKey(), Rarity.Rare);
                     possibleItems.AddToPool(new SledgeHammer(), Rarity.Rare);
                     possibleItems.AddToPool(new Battery(), Rarity.Rare);
                     break;
