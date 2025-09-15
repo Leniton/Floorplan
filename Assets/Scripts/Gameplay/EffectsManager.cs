@@ -599,6 +599,16 @@ public static class EffectsManager
                 floorplan.EveryTime().FloorplanChangedCategory().Do(evt =>
                 {
                     //power only the new floorplans
+                    FloorCategory categories = floorplan.Category ^ evt.category;
+                    floorplan.ForEveryFloorplan(NotPoweredMatch, evt => 
+                        evt.Floorplan.AddMultiplier(floorplan.Alias, () => 2));
+
+                    bool NotPoweredMatch(FloorplanEvent floorplanEvent) =>
+                        NumberUtil.ContainsAnyBits
+                        ((int)floorplanEvent.Floorplan.Category, (int)floorplan.Category) 
+                        &&
+                        !NumberUtil.ContainsAnyBits
+                        ((int)floorplanEvent.Floorplan.Category, (int)categories);
                 });
                 break;
             case "Vault":
