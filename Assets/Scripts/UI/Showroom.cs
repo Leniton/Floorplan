@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Lenix.NumberUtilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,7 +14,6 @@ public class Showroom : MonoBehaviour
     [SerializeField] private Button renovationPackButton;
     [SerializeField] private Button suppliesPackButton;
     [SerializeField] private Button continueButton;
-    [SerializeField] private Button rerollButton;
     [SerializeField] private TMP_Text rerollAmountText;
     [SerializeField] private TMP_Text renovationPick;
 
@@ -31,18 +31,21 @@ public class Showroom : MonoBehaviour
         SetupRenovationsShop();
         pickFloorplan.Setup(5, RunData.playerDeck, pickFloorplan.CloseWindow);
 
+        GameEvent.onDrawFloorplans += DeckBias;
         addFloorplan.Setup(3, RunData.allFloorplans, () => addFloorplan.DraftFloorplan());
         addFloorplan.OnDraftFloorplan += OnPickFloorplanToAdd;
         
         renovationPackButton.onClick.AddListener(OpenRenovationShop);
         suppliesPackButton.onClick.AddListener(OpenSuppliesShop);
-        rerollButton.onClick.AddListener(RerollAddFloorplans);
         continueButton.onClick.AddListener(ContinueGame);
     }
 
-    private void RerollAddFloorplans()
+    private void DeckBias(DrawFloorplanEvent evt)
     {
-        addFloorplan.RedrawFloorplans();
+        if(RunData.playerDeck.preferredCategory == 0) return;
+        evt.IncreaseChanceOfDrawing(floorplan => 
+            NumberUtil.ContainsAnyBits((int)floorplan.Category, (int)RunData.playerDeck.preferredCategory), 
+            .2f);
     }
 
     private void OnPickFloorplanToAdd(Floorplan floorplan)
@@ -222,6 +225,7 @@ public class Showroom : MonoBehaviour
 
     private void UseRenovation(Renovation renovation)
     {
+        GameEvent.onDrawFloorplans -= DeckBias;
         renovationPick.text = renovation.description;
         if (renovation.condition != null)
             GameEvent.onDrawFloorplans += CheckCondition;
@@ -230,6 +234,7 @@ public class Showroom : MonoBehaviour
 
         void ApplyRenovation(Floorplan floorplan)
         {
+            GameEvent.onDrawFloorplans += DeckBias;
             pickFloorplan.CloseWindow();
             pickFloorplan.OnDraftFloorplan -= ApplyRenovation;
 
@@ -257,6 +262,7 @@ public class Showroom : MonoBehaviour
 
     private void ContinueGame()
     {
+        GameEvent.onDrawFloorplans -= DeckBias;
         SceneManager.LoadScene(1);
     }
 }

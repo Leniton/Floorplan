@@ -245,8 +245,9 @@ public static class Helpers
             possiblesFloorplans++;
         }
 
+        if (possiblesFloorplans <= 0 && spareRoomMethod == null) return;
+        
         if (possiblesFloorplans <= 0) picker.AddToPool(spareRoomMethod.Invoke(evt), Rarity.Common);
-
         float r = Random.Range(0f, 1f);
         if (r <= chance && !condition.Invoke(evt.drawnFloorplans[^1]))
         {
@@ -255,7 +256,6 @@ public static class Helpers
             //Debug.Log($"chance hit: changed to {evt.drawnFloorplans[^1].Name}");
         }
 
-        if (possiblesFloorplans <= 0 && spareRoomMethod == null) return;
         if (possiblesFloorplans <= 0) picker.AddToPool(spareRoomMethod.Invoke(evt), Rarity.Common);
         for (int i = evt.drawnFloorplans.Length - 2; i >= 0; i--)
         {
