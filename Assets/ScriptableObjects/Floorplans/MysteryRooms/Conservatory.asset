@@ -15,8 +15,7 @@ MonoBehaviour:
   Name: Conservatory
   Alias: Conservatory
   Description: Contains a color key
-  Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
-  Category: 4
+  Category: 36
   Type: -2
   Rarity: 1
   keyCost: 0
