@@ -40,6 +40,7 @@ public class MainMenu : MonoBehaviour
             for (int i = 0; i < playedDeck.Capacity; i++)
                 playedDeck.Add(deckReference[i].CreateInstance(Vector2Int.up));
             RunData.playerDeck.deck = playedDeck;
+            RunData.playerDeck.preferredCategory = currentDeck?.preferredCategory ?? 0;
             RunData.allFloorplans.deck = draftPool;
 
             SceneManager.LoadScene(1);
