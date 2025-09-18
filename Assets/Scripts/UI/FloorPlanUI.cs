@@ -47,6 +47,7 @@ public class FloorplanUI : MonoBehaviour
         image.color = default;
         int[] categories = NumberUtil.SeparateBits((int)currentFloorplan.Category);
         colors.EnsureEnoughInstances(colorMaskPrefab, categories.Length, colorsContainer);
+        if (categories is { Length: <= 0 }) categories = new[] { (int)FloorCategory.Blank };
         float fillSlice = 1f / categories.Length;
         for (int i = categories.Length - 1; i > 0; i--)
         {
