@@ -191,8 +191,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c82200fff695d84f8b8d3dfcc21fca6
+    m_Address: TradingPost
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9f6a6f9b1651e8c498e7459a0de7eb3b
     m_Address: GiftShop
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a80c6c7bdf7e8604ebd7ca3c69894e39
+    m_Address: Storeroom
     m_ReadOnly: 0
     m_SerializedLabels:
     - BaseFloorplan

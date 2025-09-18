@@ -562,6 +562,13 @@ public static class EffectsManager
                     }
                 });
                 break;
+            case "Storeroom":
+                int storeroomItemCount = 3;
+                var items = floorplan.ItemPool();
+                items.ChangeRarities(1, 0, 0, 0);
+                for (int i = 0; i < storeroomItemCount; i++)
+                    items.PickRandom().Invoke().AddItemToFloorplan(floorplan);
+                return;
             case "Spare Room":
                 switch (floorplan.Category)
                 {
@@ -589,6 +596,72 @@ public static class EffectsManager
                 RarityPicker<Func<Item>> terraceItems = floorplan.ItemPool();
                 terraceItems.ChangeRarities(0,1,0,0);
                 terraceItems.PickRandom().Invoke().AddItemToFloorplan(floorplan);
+                break;
+            case "Trading Post":
+                List<PurchaseData> trades = new();
+                floorplan.EveryTime().PlayerEnterFloorplan().Do(_ => UpdateTrades());
+                floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, trades);
+
+                void UpdateTrades()
+                {
+                    trades.Clear();
+                    if (Player.keys > 0)
+                    {
+                        trades.Add(new()
+                        {
+                            name = "Key",
+                            description = "Trade a Key for 2 coins",
+                            amount = 2,
+                            OnBuy = () =>
+                            {
+                                Player.ChangeKeys(-1);
+                                Player.ChangeCoins(2);
+                                RefreshTradingPost();
+                            }
+                        });
+                    }
+                    if (Player.dices > 0)
+                    {
+                        trades.Add(new()
+                        {
+                            name = "Dice",
+                            description = "Trade a Dice for 2 keys",
+                            amount = 2,
+                            OnBuy = () =>
+                            {
+                                Player.dices--;
+                                Player.ChangeKeys(2);
+                                RefreshTradingPost();
+                            }
+                        });
+                    }
+
+                    for (int i = 0; i < Player.items.Count; i++)
+                    {
+                        if (trades.Count >= 5) break;
+                        var item = Player.items[i];
+                        bool rare = item is SledgeHammer or Battery;
+                        int diceAmount = rare ? 4 : 2;
+                        trades.Add(new()
+                        {
+                            name = $"{item.Name}",
+                            description = $"Trade {item.Name} for {diceAmount} dices",
+                            amount = 2,
+                            OnBuy = () =>
+                            {
+                                Player.items.Remove(item);
+                                Player.dices += diceAmount;
+                                RefreshTradingPost();
+                            }
+                        });
+                    }
+                }
+
+                void RefreshTradingPost()
+                {
+                    UpdateTrades();
+                    ShopWindow.OpenShop(floorplan.Name, trades);
+                }
                 break;
             case "Tunnel":
                 //Aways draw a tunnel when drafting from tunnel
@@ -682,7 +755,6 @@ public static class EffectsManager
                 walkinClosetItemCount = 2;
                 for (int i = 0; i < walkinClosetItemCount; i++)
                     walkinClosetPool.PickRandom().Invoke().AddItemToFloorplan(floorplan);
-                
                 return;
             case "":
                 break;

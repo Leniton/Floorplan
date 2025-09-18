@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c2ec7ddf6ecb914e8686ca425ec3201, type: 3}
-  m_Name: Vault
+  m_Name: TradingPost
   m_EditorClassIdentifier: 
-  Name: Vault
-  Alias: Vault
-  Description: Contains 2 coins for each room in the house
-  Category: 16
-  Type: -2
-  Rarity: 2
-  keyCost: 1
+  Name: Trading Post
+  Alias: Trading Post
+  Description: Trade items
+  Category: 20
+  Type: 1
+  Rarity: 0
+  keyCost: 0
   basePoints: 1
   entranceId: 0
   connections: 
