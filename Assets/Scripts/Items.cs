@@ -177,7 +177,7 @@ public abstract class PlaceableItem : Item
 
     public override void Place(Floorplan floorplan)
     {
-        if(firstPlaced) PlaceOnFloorplan(floorplan);
+        if (firstPlaced) PlaceOnFloorplan(floorplan);
         base.Place(floorplan);
         firstPlaced = true;
     }
@@ -190,8 +190,11 @@ public abstract class PlaceableItem : Item
 
     public override void PickUp()
     {
+        bool wasPlaced = placed;
         currentFloorplan = null;
         Player.items.Add(this);
+        if (wasPlaced) return;
+        Debug.Log("check");
         base.PickUp();
     }
 
