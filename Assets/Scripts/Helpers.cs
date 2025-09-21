@@ -1,9 +1,7 @@
 using Lenix.NumberUtilities;
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 using Random = UnityEngine.Random;
 
 public static class Helpers
@@ -314,7 +312,7 @@ public static class Helpers
                 spareRoom.Description = "+3 coins";
                 break;
             case FloorCategory.StorageRoom:
-                spareRoom.Description = "+2 dices";
+                spareRoom.Description = "+2 items";
                 break;
             case FloorCategory.Hallway:
                 spareRoom.Description = "+2 keys";

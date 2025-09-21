@@ -582,7 +582,9 @@ public static class EffectsManager
                         new Coin(3).AddItemToFloorplan(floorplan);
                         break;
                     case FloorCategory.StorageRoom:
-                        new Dice(2).AddItemToFloorplan(floorplan);
+                        var spareroomPicker = floorplan.ItemPool();
+                        spareroomPicker.PickRandom().Invoke().AddItemToFloorplan(floorplan);
+                        spareroomPicker.PickRandom().Invoke().AddItemToFloorplan(floorplan);
                         break;
                     case FloorCategory.Hallway:
                         new Key(2).AddItemToFloorplan(floorplan);
