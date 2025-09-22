@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class ScrollPicker : MonoBehaviour, IEndDragHandler
 {
+    [SerializeField] private float lockSpeed = 800;
     [SerializeField] private ScrollRect scroll;
     [SerializeField] private Scrollbar scrollbar;
     
@@ -28,16 +29,25 @@ public class ScrollPicker : MonoBehaviour, IEndDragHandler
 
     private void PickOption()
     {
+        if (gameObject.activeInHierarchy)
+        {
+            StartCoroutine(ScrollToOption());
+            return;
+        }
+
         float currentPosition = Mathf.Clamp01(scrollbar.value);
         currentOption = Mathf.RoundToInt(currentPosition / amountPerOption);
-        if (gameObject.activeInHierarchy) 
-            StartCoroutine(ScrollToOption());
-        else
-            scrollbar.value = amountPerOption * currentOption;
+        scrollbar.value = amountPerOption * currentOption;
     }
 
     private IEnumerator ScrollToOption()
     {
+        //wait until
+        while (Mathf.Abs(scroll.velocity.sqrMagnitude) > Mathf.Pow(lockSpeed, 2))
+            yield return null;
+
+        float currentPosition = Mathf.Clamp01(scrollbar.value);
+        currentOption = Mathf.RoundToInt(currentPosition / amountPerOption);
         float current = scrollbar.value;
         float goal = amountPerOption * currentOption;
 
@@ -50,5 +60,6 @@ public class ScrollPicker : MonoBehaviour, IEndDragHandler
             yield return null;
             time += Time.deltaTime;
         }
+        scrollbar.value = goal;
     }
 }

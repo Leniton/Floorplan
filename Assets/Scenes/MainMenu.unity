@@ -1862,6 +1862,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b6701a4a8901c144aa62d639ce81da4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lockSpeed: 800
   scroll: {fileID: 2021621832}
   scrollbar: {fileID: 808533308}
 --- !u!1660057539 &9223372036854775807
