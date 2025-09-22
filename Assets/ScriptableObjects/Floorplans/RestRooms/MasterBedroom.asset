@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Master Bedroom
   Alias: M. Bedroom
-  Description: Your <b>Rest Rooms</b> gains +2 points for each bedroom in the house
-  Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
+  Description: Your <b>Rest Rooms</b> gains +2 points for each <b>Rest Rooms</b> 
+    in the house
   Category: 1
   Type: 1
   Rarity: 3
