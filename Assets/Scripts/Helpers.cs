@@ -309,7 +309,7 @@ public static class Helpers
                 spareRoom.Description = $"The first time you enter this floorplan, gain {15 - (3 * spareRoom.DoorCount)} steps";
                 break;
             case FloorCategory.Shop:
-                spareRoom.Description = $"{15 - (3 * spareRoom.DoorCount)} coins";
+                spareRoom.Description = $"{12 - (2 * spareRoom.DoorCount)} coins";
                 break;
             case FloorCategory.StorageRoom:
                 spareRoom.Description = $"{6 - spareRoom.DoorCount} items";
