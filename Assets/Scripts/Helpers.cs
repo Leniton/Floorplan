@@ -298,27 +298,27 @@ public static class Helpers
         switch (spareRoom.Category)
         {
             case FloorCategory.FancyRoom:
-                spareRoom.basePoints = 10;
+                spareRoom.basePoints = 25 - (5 * spareRoom.DoorCount);
                 spareRoom.Description = "-";
                 break;
             case FloorCategory.CursedRoom:
-                spareRoom.basePoints = 15;
-                spareRoom.Description = "When you draft this floorplan, lose 3 steps";
+                spareRoom.basePoints = 35 - (5 * spareRoom.DoorCount);
+                spareRoom.Description = $"When you draft this floorplan, lose {11 - (2 * spareRoom.DoorCount)} steps";
                 break;
             case FloorCategory.RestRoom:
-                spareRoom.Description = "The first time you enter this floorplan, gain 5 steps";
+                spareRoom.Description = $"The first time you enter this floorplan, gain {15 - (3 * spareRoom.DoorCount)} steps";
                 break;
             case FloorCategory.Shop:
-                spareRoom.Description = "+3 coins";
+                spareRoom.Description = $"{15 - (3 * spareRoom.DoorCount)} coins";
                 break;
             case FloorCategory.StorageRoom:
-                spareRoom.Description = "+2 items";
+                spareRoom.Description = $"{6 - spareRoom.DoorCount} items";
                 break;
             case FloorCategory.Hallway:
-                spareRoom.Description = "+2 keys";
+                spareRoom.Description = $"{5 - spareRoom.DoorCount} keys";
                 break;
             case FloorCategory.MysteryRoom:
-                spareRoom.Description = "This floorplan is <b>Powered</b>";
+                spareRoom.Description = $"Multiply this floorplan points by {6 - spareRoom.DoorCount}";
                 break;
         }
         return spareRoom;

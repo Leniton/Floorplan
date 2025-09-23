@@ -570,27 +570,30 @@ public static class EffectsManager
                     items.PickRandom().Invoke().AddItemToFloorplan(floorplan);
                 return;
             case "Spare Room":
+                int doorCount = floorplan.original.DoorCount;
                 switch (floorplan.Category)
                 {
                     case FloorCategory.CursedRoom:
-                        floorplan.TheFirstTime().FloorplanIsDrafted().ChangePlayerSteps(-3);
+                        floorplan.TheFirstTime().FloorplanIsDrafted().ChangePlayerSteps(-(11 - (2 * doorCount)));
                         break;
                     case FloorCategory.RestRoom:
-                        floorplan.TheFirstTime().PlayerEnterFloorplan().ChangePlayerSteps(5);
+                        floorplan.TheFirstTime().PlayerEnterFloorplan().ChangePlayerSteps(15 - (3 * doorCount));
                         break;
                     case FloorCategory.Shop:
-                        new Coin(3).AddItemToFloorplan(floorplan);
+                        new Coin(12 - (2 * doorCount)).AddItemToFloorplan(floorplan);
                         break;
                     case FloorCategory.StorageRoom:
+                        int spareroomItems = 6 - doorCount;
                         var spareroomPicker = floorplan.ItemPool();
-                        spareroomPicker.PickRandom().Invoke().AddItemToFloorplan(floorplan);
-                        spareroomPicker.PickRandom().Invoke().AddItemToFloorplan(floorplan);
+                        for (int i = 0; i < spareroomItems; i++)
+                            spareroomPicker.PickRandom().Invoke().AddItemToFloorplan(floorplan);
                         break;
                     case FloorCategory.Hallway:
-                        new Key(2).AddItemToFloorplan(floorplan);
+                        new Key(5 - doorCount).AddItemToFloorplan(floorplan);
                         break;
                     case FloorCategory.MysteryRoom:
-                        floorplan.TheFirstTime().FloorplanIsDrafted().PowerFloorplan();
+                        floorplan.TheFirstTime().FloorplanIsDrafted().Do(_
+                            => floorplan.AddMultiplier(floorplan.Alias, () => 6 - doorCount));
                         break;
                 }
                 break;
