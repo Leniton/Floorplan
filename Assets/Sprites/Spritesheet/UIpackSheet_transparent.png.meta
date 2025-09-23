@@ -1651,13 +1651,13 @@ TextureImporter:
       name: UIpackSheet_transparent_591
       rect:
         serializedVersion: 2
-        x: 18
-        y: 162
-        width: 16
-        height: 16
+        x: 21
+        y: 163
+        width: 10
+        height: 14
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 2, y: 2, z: 2, w: 4}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -3651,7 +3651,7 @@ TextureImporter:
         width: 17
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 2, y: 2, z: 2, w: 2}
       outline: []
       physicsShape: []
@@ -3659,6 +3659,90 @@ TextureImporter:
       bones: []
       spriteID: f65d50f058c8be449a72640cebd55cac
       internalID: 1933616165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIpackSheet_transparent_1
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 87
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1bc303351683c204dbaa307937c38200
+      internalID: 832279760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIpackSheet_transparent_2
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 87
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 209d93e11fc4c104582bef53743759f1
+      internalID: -1040699640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIpackSheet_transparent_3
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 69
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17e5ae8c0f197c34f9d54b22fd2efa2c
+      internalID: -1560656408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIpackSheet_transparent_4
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 69
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 857e74dd96f300e4b972240e93c32a67
+      internalID: -1855182631
       vertices: []
       indices: 
       edges: []
