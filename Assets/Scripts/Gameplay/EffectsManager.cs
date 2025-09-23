@@ -285,11 +285,11 @@ public static class EffectsManager
                 //extra points for each connected rest room
                 floorplan.EveryTime().FloorplanConnected().
                     Where(IsOfCategory(FloorCategory.RestRoom)).
-                    AddPointsToFloorplan(gBedroomBonus);
+                    AddPointsToThatFloorplan(gBedroomBonus);
                 floorplan.EveryTime().AnyFloorplanChangeCategory().
                     Where(IsConnectedToFloorplan(floorplan)).
                     Where(GainedCategory(FloorCategory.RestRoom)).
-                    AddPointsToFloorplan(gBedroomBonus);
+                    AddPointsToThatFloorplan(gBedroomBonus);
                 break;
             case "Hallway Closet":
                 int hallwayClosetItemCount = 2;
