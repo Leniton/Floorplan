@@ -125,6 +125,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64883cec80e0cf54bacd738d1baf5f82
+    m_Address: TheaterRoom
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 64e7515438f46724e9989245ec18fdf7
     m_Address: BoilerRoom
     m_ReadOnly: 0
