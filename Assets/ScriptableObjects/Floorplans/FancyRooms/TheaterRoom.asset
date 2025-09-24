@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Theater Room
   Alias: Theater
-  Description: 
+  Description: '-'
   Category: 8
   Type: 1
-  Rarity: 1
+  Rarity: 0
   keyCost: 0
-  basePoints: 10
+  basePoints: 15
   entranceId: 0
   connections: 
   connectedFloorplans: []

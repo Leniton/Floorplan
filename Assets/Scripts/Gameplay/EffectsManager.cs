@@ -262,10 +262,9 @@ public static class EffectsManager
             case "Great Hall":
                 //extra points for each different type of room connected
                 FloorCategory connectedCategories = 0;
-                floorplan.AddBonus(floorplan.Alias, 
-                    () => NumberUtil.SeparateBits((int)connectedCategories).Length * 2);
                 floorplan.EveryTime().FloorplanConnected()
-                    .Do(AddToConnectedCategories);
+                    .Do(AddToConnectedCategories).
+                    AddPointBonusToThatFloorplan(() => NumberUtil.SeparateBits((int)connectedCategories).Length * 2);
                 floorplan.EveryTime().AnyFloorplanChangeCategory().
                     Where(IsConnectedToFloorplan(floorplan)).
                     Do(AddToConnectedCategories);
@@ -383,6 +382,19 @@ public static class EffectsManager
                 kitchenList.Add(kitchenPicker.PickRandom());
                 floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.Name, kitchenList);
                 break;
+            case "Laundry Room":
+                floorplan.EveryTime().FloorplanIsDrafted().AddPointBonusToFloorplan(() =>
+                    NumberUtil.SeparateBits((int)floorplan.Category).Length * 2);
+
+                floorplan.EveryTime().FloorplanConnected().Do(evt =>
+                {
+                    var categories = NumberUtil.SeparateBits((int)evt.Floorplan.Category);
+                    for (int i = 0; i < categories.Length; i++)
+                        floorplan.AddCategory((FloorCategory)categories[i]);
+                });
+                floorplan.EveryTime().AnyFloorplanChangeCategory().Where(IsConnectedToFloorplan(floorplan))
+                    .Where(IsNot(floorplan)).Do(evt => floorplan.AddCategory(evt.category));
+                break;
             case "Library":
                 floorplan.EveryTime().ModifiedDraw().Where(DraftedFromHere).Do(evt =>
                 {
@@ -498,20 +510,7 @@ public static class EffectsManager
                 new Food().AddItemToFloorplan(floorplan);
                 break;
             case "Pump Room":
-                floorplan.EveryTime().FloorplanConnected().Do(evt =>
-                {
-                    evt.connectedFloorplan.AddBonus(floorplan.Alias, () =>
-                    {
-                        int bonus = 0;
-                        for (int i = 0; i < floorplan.connectedFloorplans.Count; i++)
-                        {
-                            var current = floorplan.connectedFloorplans[i];
-                            if(ReferenceEquals(current, evt.connectedFloorplan)) continue;
-                            bonus += current.basePoints;
-                        }
-                        return bonus;
-                    });
-                });
+                floorplan.EveryTime().FloorplanConnected().AddPointBonusToThatFloorplan(() => floorplan.basePoints);
                 break;
             case "Secret Passage":
                 //add connection to drafted floorplans
@@ -935,6 +934,9 @@ public static class EffectsManager
             listener.conditions.Add(check[i]);
         return listener;
     }
+
+    public static Func<T, bool> Not<T>(Func<T, bool> condition) where T : Event => 
+        evt => !condition.Invoke(evt);
     public static Func<FloorplanEvent, bool> IsOfCategory(FloorCategory type) =>
         evt => NumberUtil.ContainsBytes((int)evt.Floorplan.Category, (int)type);
     public static Func<FloorplanEvent, bool> MatchCategoryWith(Floorplan floorplan)

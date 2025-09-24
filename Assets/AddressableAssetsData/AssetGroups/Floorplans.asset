@@ -77,6 +77,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3d83f56d1463d524b95fb64c1799835b
+    m_Address: LaundryRoom
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 416bf249ba885e74cb3e48b71ca0fba9
     m_Address: Conservatory
     m_ReadOnly: 0
@@ -157,6 +163,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6e4e98353bf837f4987bf277ed62e761
     m_Address: Locksmith
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7224c71fdcfcccc42abb76a41aca6e7b
+    m_Address: TrophyRoom
     m_ReadOnly: 0
     m_SerializedLabels:
     - BaseFloorplan
@@ -253,6 +265,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c92d5eca8311e504a9d8a80afbef9bfb
     m_Address: DiningRoom
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cdcef507f97c04d4e8aa3cf7a60a8687
+    m_Address: MeetingRoom
     m_ReadOnly: 0
     m_SerializedLabels:
     - BaseFloorplan

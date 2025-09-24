@@ -15,12 +15,11 @@ MonoBehaviour:
   Name: Throne Room
   Alias: Throne Room
   Description: '-'
-  Color: {r: 1, g: 1, b: 1, a: 1}
   Category: 8
   Type: 3
   Rarity: 3
   keyCost: 3
-  basePoints: 20
+  basePoints: 50
   entranceId: 0
   connections: 
   connectedFloorplans: []

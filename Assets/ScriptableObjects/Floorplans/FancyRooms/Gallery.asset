@@ -15,11 +15,10 @@ MonoBehaviour:
   Name: Gallery
   Alias: Gallery
   Description: When you enter this room, lose a coin to gain +1 point
-  Color: {r: 1, g: 1, b: 1, a: 1}
   Category: 24
   Type: 2
-  Rarity: 2
-  keyCost: 2
+  Rarity: 1
+  keyCost: 0
   basePoints: 0
   entranceId: 0
   connections: 

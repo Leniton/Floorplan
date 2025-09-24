@@ -212,7 +212,7 @@ public class Floorplan : ScriptableObject
 
     public void AddCategory(FloorCategory category)
     {
-        if(NumberUtil.ContainsBytes((int)Category, (int)category)) return;
+        if(this.IsOfCategory(category)) return;
         Category |= category;
         OnChanged?.Invoke();
         onCategoryChanged?.Invoke(new(category, coordinate, this));

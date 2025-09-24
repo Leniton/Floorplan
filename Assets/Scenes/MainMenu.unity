@@ -1572,6 +1572,7 @@ MonoBehaviour:
   colors: {fileID: 11400000, guid: 139d542d9e1404c4dad7eececcad478a, type: 2}
   deckPicker: {fileID: 2021621835}
   possibleDecks:
+  - {fileID: 11400000, guid: 98b3010f94982a644a9f5c661ddb8d63, type: 2}
   - {fileID: 11400000, guid: ca5b5a2b64fc9334aa0c01147a119a14, type: 2}
   - {fileID: 11400000, guid: 6606e56e8fcd2ee4abb3d884cee461cd, type: 2}
   - {fileID: 11400000, guid: db9488c7da36b07429acd1a2ec786aff, type: 2}

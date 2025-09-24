@@ -10,16 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c2ec7ddf6ecb914e8686ca425ec3201, type: 3}
-  m_Name: PumpRoom
+  m_Name: LaundryRoom
   m_EditorClassIdentifier: 
-  Name: Pump Room
-  Alias: Pump Room
-  Description: <b>Connected</b> rooms gain points equal to this room base points
-  Category: 10
+  Name: Laundry Room
+  Alias: Laundry Room
+  Description: Copy the categories of connected rooms. +2 points for each category
+    this room has
+  Category: 8
   Type: -2
   Rarity: 1
   keyCost: 1
-  basePoints: 2
+  basePoints: 3
   entranceId: 0
   connections: 
   connectedFloorplans: []
