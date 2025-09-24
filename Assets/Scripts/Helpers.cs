@@ -298,11 +298,11 @@ public static class Helpers
         switch (spareRoom.Category)
         {
             case FloorCategory.FancyRoom:
-                spareRoom.basePoints = 25 - (5 * spareRoom.DoorCount);
+                spareRoom.basePoints = 15 - (3 * spareRoom.DoorCount);
                 spareRoom.Description = "-";
                 break;
             case FloorCategory.CursedRoom:
-                spareRoom.basePoints = 35 - (5 * spareRoom.DoorCount);
+                spareRoom.basePoints = 25 - (5 * spareRoom.DoorCount);
                 spareRoom.Description = $"When you draft this floorplan, lose {11 - (2 * spareRoom.DoorCount)} steps";
                 break;
             case FloorCategory.RestRoom:
