@@ -188,12 +188,12 @@ public static class EffectsManager
                 //when you connect a rest room, add a snack to this room
                 floorplan.EveryTime().FloorplanConnected().
                     Where(IsOfCategory(FloorCategory.RestRoom)).
-                    Do(evt => ItemUtilities.Snack().
+                    Do(evt => ItemUtilities.Orange.
                         AddItemToFloorplan(evt.Floorplan));
                 floorplan.EveryTime().AnyFloorplanChangeCategory().
                     Where(GainedCategory(FloorCategory.RestRoom)).
                     Where(IsConnectedToFloorplan(floorplan)).
-                    Do(evt => ItemUtilities.Snack().
+                    Do(evt => ItemUtilities.Orange.
                         AddItemToFloorplan(evt.Floorplan));
                 break;
             case "Drawing Room":
@@ -440,14 +440,16 @@ public static class EffectsManager
             case "Master Bedroom":
                 //buffs all rest room for each rest room
                 int otherBonus = 0;
-                floorplan.ForEveryFloorplan(IsOfCategory(FloorCategory.RestRoom), evt =>
+                floorplan.ForEveryFloorplan(IsOfCategory(FloorCategory.RestRoom), MBedroomBonus);
+                floorplan.EveryTime().AnyFloorplanChangeCategory().
+                    Where(GainedCategory(FloorCategory.RestRoom)).
+                    Do(MBedroomBonus);
+
+                void MBedroomBonus(FloorplanEvent evt)
                 {
                     otherBonus += 2;
                     evt.Floorplan.AddBonus(floorplan.Alias, () => otherBonus);
-                });
-                floorplan.EveryTime().AnyFloorplanChangeCategory().
-                    Where(GainedCategory(FloorCategory.RestRoom)).
-                    AddPointBonusToThatFloorplan(() => otherBonus);
+                }
                 break;
             case "Mail Room":
                 const int draftsNeeded = 3;
