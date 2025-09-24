@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Guest Bedroom
   Alias: G. Bedroom
-  Description: When you enter this room gain +2 steps. +5 steps for each <b>Connected
-    Rest Room</b>
-  Color: {r: 0.73069656, g: 0.4009434, b: 1, a: 1}
+  Description: When you enter this room gain +2 steps. <b>Connected Rest Room</b>
+    gain +5 points
   Category: 1
   Type: -2
   Rarity: 0
