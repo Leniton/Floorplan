@@ -181,10 +181,6 @@ public static class EffectsManager
                 floorplan.EveryTime().ItemCollected().Where(evt => evt.item is Food).Do(evt => stepsFromFood += (evt.item as Food).stepsAmount);
                 break;
             case "Dormitory":
-                //gains extra points for each restRoom in the house
-                int selfBonus = 0;
-                floorplan.ForEveryFloorplan(IsOfCategory(FloorCategory.RestRoom), _ => selfBonus += 2);
-                floorplan.AddBonus(floorplan.Alias, () => selfBonus);
                 //when you connect a rest room, add a snack to this room
                 floorplan.EveryTime().FloorplanConnected().
                     Where(IsOfCategory(FloorCategory.RestRoom)).
@@ -460,6 +456,9 @@ public static class EffectsManager
                     if (count < draftsNeeded) return;
                     MessageWindow.ShowMessage("Your package has been delivered!!");
                     var picker = floorplan.ItemPool();
+                    //add common item
+                    picker.ChangeRarities(1, 0, 0, 0);
+                    picker.PickRandom().Invoke().AddItemToFloorplan(floorplan);
                     //add uncommon item
                     picker.ChangeRarities(0, 1, 0, 0);
                     picker.PickRandom().Invoke().AddItemToFloorplan(floorplan);

@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Mail Room
   Alias: Mail Room
-  Description: After drafting 3 other rooms, add an uncommon and rare item to this
-    room
-  Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
+  Description: After drafting 3 other rooms, add a common, uncommon and rare item
+    to this room
   Category: 36
   Type: 1
   Rarity: 0
