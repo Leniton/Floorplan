@@ -1714,13 +1714,13 @@ TextureImporter:
       name: UIpackSheet_transparent_594
       rect:
         serializedVersion: 2
-        x: 72
-        y: 162
-        width: 16
-        height: 16
+        x: 75
+        y: 163
+        width: 10
+        height: 14
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 2, y: 2, z: 2, w: 4}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1777,13 +1777,13 @@ TextureImporter:
       name: UIpackSheet_transparent_597
       rect:
         serializedVersion: 2
-        x: 126
-        y: 162
-        width: 16
-        height: 16
+        x: 129
+        y: 163
+        width: 10
+        height: 14
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 2, y: 2, z: 2, w: 4}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1840,13 +1840,13 @@ TextureImporter:
       name: UIpackSheet_transparent_600
       rect:
         serializedVersion: 2
-        x: 180
-        y: 162
-        width: 16
-        height: 16
+        x: 183
+        y: 163
+        width: 10
+        height: 14
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 2, y: 2, z: 2, w: 4}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -3672,7 +3672,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3693,7 +3693,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3714,7 +3714,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -3735,7 +3735,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
