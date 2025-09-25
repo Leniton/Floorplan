@@ -16,6 +16,8 @@ public class FloorplanDetails : MonoBehaviour
 
     [FormerlySerializedAs("floorplan")] public Floorplan currentFloorplan;
 
+    public FloorplanUI FloorplanUI => floorplanUI;
+
     private void Awake()
     {
         button.onClick.AddListener(FloorplanPick);

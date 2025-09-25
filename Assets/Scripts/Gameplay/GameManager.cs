@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button finishButton;
     [SerializeField] private HoverMenu hoverMenu;
 
+    private static Dictionary<Floorplan, FloorplanUI> UIFloorplans;
     public static Dictionary<Vector2Int, Floorplan> floorplanDict;
     public static Floorplan EntranceHall;
 
@@ -24,7 +25,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        movement.OnDirectionChanged += UpdateMovementDirection;
         Player.ResetPlayer();
+        UIFloorplans = new();
         floorplanDict = new();
         movement.OnMove += OnMoveSlot;
         draftManager.OnDraftFloorplan += PlaceFloorplan;
@@ -81,6 +84,8 @@ public class GameManager : MonoBehaviour
     private void Setup()
     {
         draftManager.CloseWindow();
+        gridManager.onClick += InspectCurrentFloorplan;
+        gridManager.SetInteractive(false);
         //add entrance hall
         GridManager.instance = gridManager;
         currentDraftPosition = gridManager.currentPosition;
@@ -88,6 +93,17 @@ public class GameManager : MonoBehaviour
         PlaceFloorplan(EntranceHall);
         MessageWindow.ShowMessage($"Current objective:\n\n <b>{PointsManager.currentRequirement} points", 
             () => GameEvent.onGameStart?.Invoke(new()));
+    }
+
+    private void InspectCurrentFloorplan(Vector2Int coordinate)
+    {
+        UIManager.ShowCurrentFloorplan();
+    }
+
+    private void UpdateMovementDirection(Vector2Int direction)
+    {
+        FloorplanUI floorplan = UIFloorplans[Helpers.CurrentFloorplan()];
+        floorplan.HighlightDirection(direction);
     }
 
     private void OnMoveSlot(Vector2Int direction)
@@ -155,8 +171,9 @@ public class GameManager : MonoBehaviour
         Player.ChangeKeys(-floorplan.keyCost);
         draftManager.RemoveFloorplanFromPool(floorplan);
         
-        FloorplanUI instance = Instantiate(floorplanPrefab, gridManager.GetSlot(currentDraftPosition));
+        FloorplanUI instance = Instantiate(floorplanPrefab, gridManager.GetSlotRect(currentDraftPosition));
         instance.Setup(floorplan);
+        UIFloorplans[floorplan] = instance;
         RectTransform floorplanRect = (RectTransform)instance.transform;
         floorplanRect.anchoredPosition = Vector2.zero;
         floorplanRect.anchorMin = Vector2.zero;
@@ -191,6 +208,7 @@ public class GameManager : MonoBehaviour
     private void TriggerFloorplanExitEvent(Vector2Int origin, Vector2Int goal)
     {
         //Debug.Log($"exit {floorplanDict[origin]}");
+        gridManager.GetSlot(origin).interactable = false;
         Player.ChangeSteps(-1);
         Floorplan floorplan = floorplanDict[origin];
         floorplan.onExit?.Invoke(new());
@@ -199,6 +217,7 @@ public class GameManager : MonoBehaviour
 
     private void TriggerFloorplanEnterEvent(Vector2Int coordinate)
     {
+        gridManager.GetSlot(coordinate).interactable = true;
         Floorplan floorplan = floorplanDict[coordinate];
         //Debug.Log($"entered {floorplan.Name}({coordinate})\n{GridManager.instance.currentPosition}");
         floorplan.onEnter?.Invoke(new());

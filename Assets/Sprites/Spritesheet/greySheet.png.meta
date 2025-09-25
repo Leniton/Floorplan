@@ -941,6 +941,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: greySheet_39
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 239
+        width: 28
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 4, y: 5, z: 4, w: 12}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f9b4178536618b4280fad12e4e20c85
+      internalID: 362577508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -985,6 +1006,7 @@ TextureImporter:
       greySheet_36: 1336204703
       greySheet_37: -941704883
       greySheet_38: 1446879695
+      greySheet_39: 362577508
       greySheet_4: 1274160121
       greySheet_5: -741722476
       greySheet_6: 901942764

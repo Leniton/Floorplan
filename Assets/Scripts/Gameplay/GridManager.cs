@@ -16,7 +16,7 @@ public class GridManager : SetupComponent
     private GameObject slotPrefab;
     private Vector2Int lastCoordinate;
     private Vector2Int coordinate;
-    private GameObject[] slots;
+    private Button[] slots;
     private RectTransform rectTransform;
 
     private Coroutine moveCoroutine;
@@ -24,6 +24,7 @@ public class GridManager : SetupComponent
     public Vector2Int currentPosition => coordinate;
     private bool moving => moveCoroutine != null;
 
+    public event Action<Vector2Int> onClick; 
     public event Action<Vector2Int, Vector2Int> OnStartMove;
     public event Action<Vector2Int> OnMove;
 
@@ -33,14 +34,18 @@ public class GridManager : SetupComponent
     {
         grid ??= gameObject.GetComponent<GridLayoutGroup>();
         rectTransform = (RectTransform)grid.transform;
+        slots = new Button[xSize * ySize];
         Addressables.LoadAssetAsync<GameObject>(prefabPath).Completed += operation =>
         {
             slotPrefab = operation.Result;
             for (int i = 0; i < slots.Length; i++)
-                slots[i] = Instantiate(slotPrefab, transform);
+            {
+                slots[i] = Instantiate(slotPrefab, transform).GetComponent<Button>();
+                slots[i].onClick.AddListener(() => onClick?.Invoke(new(i / xSize, i % xSize)));
+            }
+
             onDoneLoading?.Invoke();
         };
-        slots = new GameObject[xSize * ySize];
 
         coordinate = new((xSize / 2), 0);
         UpdatePosition(false);
@@ -82,10 +87,10 @@ public class GridManager : SetupComponent
         return position;
     }
 
-    public RectTransform GetSlot(Vector2Int coordinate)
-    {
-        return (RectTransform)slots[coordinate.x + (xSize * coordinate.y)].transform;
-    }
+    public RectTransform GetSlotRect(Vector2Int coordinate) =>
+        (RectTransform)slots[coordinate.x + (xSize * coordinate.y)].transform;
+    
+    public Button GetSlot(Vector2Int coordinate) => slots[coordinate.x + (xSize * coordinate.y)];
 
     private IEnumerator MoveToPosition()
     {
@@ -109,5 +114,11 @@ public class GridManager : SetupComponent
             OnMove?.Invoke(targetCoordinate);
         }
         moveCoroutine = null;
+    }
+
+    public void SetInteractive(bool value)
+    {
+        for (int i = 0; i < slots.Length; i++)
+            slots[i].interactable = value;
     }
 }

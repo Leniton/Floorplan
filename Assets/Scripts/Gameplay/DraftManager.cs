@@ -133,7 +133,8 @@ public class DraftManager : MonoBehaviour
 
     public void DraftFloorplan(Vector2Int direction = default, List<Vector2Int> possibleSlots = null, int draftHeight = 0)
     {
-        if (direction.sqrMagnitude <= 0) direction = Vector2Int.up;
+        bool choseDirection = direction.sqrMagnitude > 0;
+        if (!choseDirection) direction = Vector2Int.up;
         //if there's no possible slots, all of them is possible
         if (possibleSlots is not { Count: > 0 })
         {
@@ -226,6 +227,7 @@ public class DraftManager : MonoBehaviour
             CorrectFloorplanRotation(floorplan, possibleSlots);
             FloorplanDetails instance = draftList[i];
             instance.Setup(floorplan);
+            instance.FloorplanUI.HighlightDirection(choseDirection ? -direction : Vector2Int.zero);
         }
 
         background?.SetActive(true);

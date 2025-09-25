@@ -85,7 +85,7 @@ public class MinimapManager : MonoBehaviour
 
     private void SetupFloorplan(Floorplan floorplan)
     {
-        Button slotButton = minimapGrid.GetSlot(floorplan.coordinate).GetComponent<Button>();
+        Button slotButton = minimapGrid.GetSlot(floorplan.coordinate);
         FloorplanUI instance = Instantiate(floorplanPrefab, slotButton.transform);
         instance.Setup(floorplan);
         RectTransform floorplanRect = (RectTransform)instance.transform;
@@ -110,7 +110,7 @@ public class MinimapManager : MonoBehaviour
     private IEnumerator DelayedUpdate()
     {
         yield return null;
-        playerPosition.anchoredPosition = minimapGrid.GetSlot(gameGrid.currentPosition).anchoredPosition;
+        playerPosition.anchoredPosition = minimapGrid.GetSlotRect(gameGrid.currentPosition).anchoredPosition;
     }
 
     public void CloseMinimap()

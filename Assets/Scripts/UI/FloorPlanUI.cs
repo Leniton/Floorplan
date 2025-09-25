@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Lenix.NumberUtilities;
@@ -10,7 +11,7 @@ public class FloorplanUI : MonoBehaviour
     [SerializeField] private Image image;
     [SerializeField] private Image pattern;
     [SerializeField] private TMP_Text text;
-    [SerializeField] private GameObject[] entrances;
+    [SerializeField] private RectTransform[] entrances;
     [SerializeField] private Transform colorsContainer;
     
     [Header("External References")]
@@ -19,6 +20,13 @@ public class FloorplanUI : MonoBehaviour
     private Floorplan currentFloorplan;
 
     private List<FloorplanColorMask> colors = new();
+
+    private Vector2 entranceDimensions;
+
+    private void Awake()
+    {
+        entranceDimensions = entrances[0].sizeDelta;
+    }
 
     public void Setup(Floorplan floorplan)
     {
@@ -32,14 +40,14 @@ public class FloorplanUI : MonoBehaviour
     private void InternalSetup()
     {
         image.enabled = !ReferenceEquals(currentFloorplan, null);
+        if (ReferenceEquals(currentFloorplan, null)) return;
         text.text = currentFloorplan.Name;
 
         for (int i = 0; i < entrances.Length; i++)
-            entrances[i].SetActive(currentFloorplan.connections[i]);
+            entrances[i].gameObject.SetActive(currentFloorplan.connections[i]);
         SetupColors();
         pattern.gameObject.SetActive(currentFloorplan.renovation is not null and { overlayPattern: not null });
-        if (!pattern.gameObject.activeSelf) return;
-        pattern.sprite = currentFloorplan.renovation.overlayPattern;
+        pattern.sprite = currentFloorplan.renovation?.overlayPattern;
     }
 
     private void SetupColors()
@@ -59,5 +67,15 @@ public class FloorplanUI : MonoBehaviour
         var lastColor = colors[0];
         lastColor.SetColor(GameSettings.current.floorplanColors.GetColor((FloorCategory)categories[0]));
         lastColor.SetFillAmount(1);
+    }
+
+    public void HighlightDirection(Vector2Int direction)
+    {
+        int id = Floorplan.DirectionToID(direction);
+        for (int i = 0; i < entrances.Length; i++)
+        {
+            float scale = entranceDimensions.x * (i == id ? .8f : 0);
+            entrances[i].sizeDelta = entranceDimensions + (Vector2.right * scale);
+        }
     }
 }

@@ -8,15 +8,17 @@ public class MovementManager : MonoBehaviour
     [SerializeField] GameObject bg;
     [SerializeField] Transform verticalArrow;
     [SerializeField] Transform horizontalArrow;
-
-    public Vector2 currentDirection;
-
+    
     private int directionMultiplier = -1;
 
     private Pointer pointer => Pointer.current;
     private Vector2? startingSpot;
     private Vector2? direction;
 
+    private Vector2Int currentDirection;
+    private Vector2Int lastDirection;
+
+    public event Action<Vector2Int> OnDirectionChanged;
     public event Action<Vector2Int> OnMove;
 
     public bool canMove { get; set; }
@@ -73,6 +75,8 @@ public class MovementManager : MonoBehaviour
 
     private void Shift(Vector2Int direction)
     {
+        lastDirection = Vector2Int.zero;
+        OnDirectionChanged?.Invoke(lastDirection);
         OnMove?.Invoke(direction);
     }
 
@@ -85,9 +89,12 @@ public class MovementManager : MonoBehaviour
             if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y)) currentDirection = (new((int)Mathf.Sign(dir.x * directionMultiplier), 0));
             else currentDirection = (new(0, (int)Mathf.Sign(dir.y * directionMultiplier)));
         }
-        else currentDirection = Vector2.zero;
+        else currentDirection = Vector2Int.zero;
 
         verticalArrow.localScale = Vector2.one * currentDirection.y;
         horizontalArrow.localScale = Vector2.one * currentDirection.x;
+        if (currentDirection == lastDirection) return;
+        lastDirection = currentDirection;
+        OnDirectionChanged?.Invoke(lastDirection);
     }
 }
