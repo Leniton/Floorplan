@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image currentImage;
     [SerializeField] private Button finishButton;
     [SerializeField] private HoverMenu hoverMenu;
+    [SerializeField] private MinimapManager minimap;
 
     private static Dictionary<Floorplan, FloorplanUI> UIFloorplans;
     public static Dictionary<Vector2Int, Floorplan> floorplanDict;
@@ -91,6 +92,7 @@ public class GameManager : MonoBehaviour
         currentDraftPosition = gridManager.currentPosition;
         EntranceHall = entrance.CreateInstance(Vector2Int.left);
         PlaceFloorplan(EntranceHall);
+        minimap.OpenMinimap();
         MessageWindow.ShowMessage($"Current objective:\n\n <b>{PointsManager.currentRequirement} points", 
             () => GameEvent.onGameStart?.Invoke(new()));
     }

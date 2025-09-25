@@ -1166,6 +1166,7 @@ MonoBehaviour:
   currentImage: {fileID: 186562830}
   finishButton: {fileID: 1264867669}
   hoverMenu: {fileID: 143603897}
+  minimap: {fileID: 8485993730953232200}
 --- !u!4 &467979806
 Transform:
   m_ObjectHideFlags: 0
