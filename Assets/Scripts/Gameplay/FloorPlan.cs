@@ -7,11 +7,9 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "new Floorplan", menuName = "Floorplan/Floorplan")]
-public class Floorplan : ScriptableObject
+public class Floorplan : InfoReference
 {
-    public string Name;
     public string Alias;
-    [TextArea] public string Description;
 
     public FloorCategory Category;
 
