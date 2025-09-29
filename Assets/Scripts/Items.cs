@@ -33,7 +33,7 @@ public class Food : Item
             3 => "Apple",
             4 => "Banana",
             5 => "Orange",
-            _ => "Food",
+            _ => $"+{stepsAmount} Food",
         };
     }
 
