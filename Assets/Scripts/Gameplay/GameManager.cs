@@ -224,15 +224,6 @@ public class GameManager : MonoBehaviour
         //Debug.Log($"entered {floorplan.Name}({coordinate})\n{GridManager.instance.currentPosition}");
         floorplan.onEnter?.Invoke(new());
         GameEvent.OnEnterFloorplan?.Invoke(new(coordinate, floorplan));
-        StartCoroutine(CheckSteps());
-    }
-
-    private IEnumerator CheckSteps()
-    {
-        if(Player.steps > 0) yield break;
-
-        yield return null;
-        FinishRun();
     }
 
     private void FinishRun()
