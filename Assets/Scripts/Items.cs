@@ -14,10 +14,19 @@ public abstract class Item
 
 public class Food : Item
 {
+    private static RarityPicker<int> foodRarity;
     public int stepsAmount; //null equals random
     public Food(int? amountSteps = null) 
-    { 
-        stepsAmount = amountSteps ?? Random.Range(2, 6);
+    {
+        if (foodRarity == null)
+        {
+            foodRarity = new(.2f, .4f, .3f, .1f);
+            foodRarity.AddToPool(2, Rarity.Common);
+            foodRarity.AddToPool(3, Rarity.Uncommon);
+            foodRarity.AddToPool(4, Rarity.Rare);
+            foodRarity.AddToPool(5, Rarity.Legend);
+        }
+        stepsAmount = amountSteps ?? foodRarity.PickRandom();
         Name = stepsAmount switch
         {
             2 => "Cherry",
