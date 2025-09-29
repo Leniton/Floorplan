@@ -36,4 +36,74 @@ public static class PointsManager
 
         return finalValue;
     }
+
+    public static List<BonusData> GetHouseBonuses()
+    {
+        #region BonusFields
+        //rest room bonus
+        int restBonusId = -1;
+        bool restBonusActive = false;
+        //hallway bonus
+        int hallwayBonusId = -1;
+        #endregion
+        
+        List<BonusData> bonuses = new();
+        FullHouseBonus();
+        foreach (var pair in GameManager.floorplanDict)
+        {
+            RestBonus(pair);
+            HallwayBonus(pair);
+        }
+        
+        return bonuses;
+        
+        void FullHouseBonus()
+        {
+            int size = GridManager.xSize * GridManager.ySize;
+            for (int i = 0; i < size; i++)
+                if (!GameManager.floorplanDict.ContainsKey(new(i % GridManager.xSize, i / GridManager.xSize))) 
+                    return;
+            bonuses.Add(new("Full House", 10));
+        }
+
+        void RestBonus(KeyValuePair<Vector2Int, Floorplan> pair)
+        {
+            if(!pair.Value.IsOfCategory(FloorCategory.RestRoom)) return;
+            restBonusActive = !restBonusActive;
+            if (restBonusActive) return;
+            if (restBonusId < 0)
+            {
+                restBonusId = bonuses.Count;
+                bonuses.Add(new("Rest Bonus", 0));
+            }
+            bonuses[restBonusId].amount += 5;
+        }
+
+        void HallwayBonus(KeyValuePair<Vector2Int, Floorplan> pair)
+        {
+            if (hallwayBonusId < 0)
+            {
+                hallwayBonusId = bonuses.Count;
+                bonuses.Add(new("Hallway Bonus", 0));
+            }
+            var room = pair.Value;
+            for (int i = 0; i < room.connectedFloorplans.Count; i++)
+            {
+                if(!room.connectedFloorplans[i].IsOfCategory(FloorCategory.Hallway)) continue;
+                bonuses[hallwayBonusId].amount++;
+            }
+        }
+    }
+}
+
+public class BonusData
+{
+    public string name;
+    public int amount;
+
+    public BonusData(string _name, int _amount)
+    {
+        name = _name;
+        amount = _amount;
+    }
 }
