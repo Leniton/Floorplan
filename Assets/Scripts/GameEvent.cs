@@ -28,6 +28,8 @@ public static class GameEvent
     public static void ResetListeners()
     {
         onDrawFloorplans = null;
+        onDrawChange = null;
+        onModifyDraw = null;
         onDraftedFloorplan = null;
         onConnectFloorplans = null;
         OnExitFloorplan = null;
