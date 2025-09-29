@@ -65,7 +65,7 @@ public class MinimapManager : MonoBehaviour
                 buttonColor = buttonColor,
                 onPick = () => PeekAt(Vector2Int.right),
             },
-        }, () => PeekAt(Vector2Int.zero));
+        }, UIManager.ShowCurrentFloorplan);
 
         CloseMinimap();
     }
