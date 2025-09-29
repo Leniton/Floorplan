@@ -25,6 +25,10 @@ public static class GameEvent
     public static Action<ItemEvent> OnCollectItem;
     public static Action<CategoryChangeEvent> OnFloorplanCategoryChanged;
 
+    public static Action<ValueEvent> onStepsChanged;
+    public static Action<ValueEvent> onKeysChanged;
+    public static Action<ValueEvent> onCoinsChanged;
+
     public static void ResetListeners()
     {
         onDrawFloorplans = null;
@@ -39,6 +43,12 @@ public static class GameEvent
 }
 
 public class Event { }
+
+public class ValueEvent : Event
+{
+    public int amount;
+    public ValueEvent(int _amount) => amount = _amount;
+}
 public class CoordinateEvent : Event
 {
     public Vector2Int Coordinates;

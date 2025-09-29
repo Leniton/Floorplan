@@ -23,16 +23,19 @@ public class Player
     public static void ChangeSteps(int delta)
     {
         steps += delta;
+        GameEvent.onStepsChanged?.Invoke(new(delta));
     }
 
     public static void ChangeCoins(int delta)
     {
         coins += delta;
+        GameEvent.onCoinsChanged?.Invoke(new(delta));
     }
 
     public static void ChangeKeys(int delta)
     {
         keys += delta;
+        GameEvent.onKeysChanged?.Invoke(new(delta));
     }
 
     public static void ActivateSledgeHammer(SledgeHammer sledgeHammer)
