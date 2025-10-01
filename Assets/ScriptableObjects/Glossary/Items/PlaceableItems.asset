@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: PlaceableItems
   m_EditorClassIdentifier: 
   Name: Placeable Items
-  Description: Those items will give some bonus to the Room they are on. These items
-    are not considered placed when they are found, only when you manually place them.
-    You can always take those items back after placing them.
+  Description: Those items will give some bonus to the <b>Room</b> they are on. These
+    items are not considered placed when they are found, only when you manually place
+    them. You can always take those items back after placing them.
   references:
   - {fileID: 11400000, guid: f130b3dfc161c694f87551f7a1d5e064, type: 2}
   - {fileID: 11400000, guid: 3edcaf914aba01c46ac036a2c036a544, type: 2}

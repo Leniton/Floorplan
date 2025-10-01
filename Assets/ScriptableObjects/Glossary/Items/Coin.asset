@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Coin
   m_EditorClassIdentifier: 
   Name: Coin
-  Description: Used as currency in shops and packs on the Showroom.
+  Description: Used as currency in <b>Shops</b> and packs on the <b>Showroom</b>.
   references:
   - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}

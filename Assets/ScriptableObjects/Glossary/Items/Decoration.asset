@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Decoration
   m_EditorClassIdentifier: 
   Name: Decoration
-  Description: 'Add bonus points to the Room this is placed on.
+  Description: 'Add bonus points to the <b>Room</b> this is <b>Placed on</b>.
 
 
-    There''s a
-    variety of decorations, each giving a different bonuses:
+    There''s
+    a variety of decorations, each giving different bonuses:
 
     Shiny rock => +2
     points
@@ -32,4 +32,3 @@ MonoBehaviour:
     => +7 points'
   references:
   - {fileID: 11400000, guid: ed58eb9378275cc4c935c4b1d166abcc, type: 2}
-  - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}

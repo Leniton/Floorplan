@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9047baea0e3a1a64a8f2e115b5e36ccc, type: 3}
-  m_Name: Key
+  m_Name: Dice
   m_EditorClassIdentifier: 
-  Name: Key
-  Description: Requirement to <b>Draft</b> powerful<b> Rooms</b>.
+  Name: Dice
+  Description: Used to reroll <b>Drawn Rooms</b> on the house and on <b>Showroom</b>.
   references:
   - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}

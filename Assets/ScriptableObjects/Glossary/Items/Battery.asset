@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Battery
   m_EditorClassIdentifier: 
   Name: Battery
-  Description: 'Multiples the total Points of the room this is placed on.
+  Description: 'Multiples the total Points of the room this is <b>Placed</b> on.
 
 
     There''s
@@ -27,4 +27,3 @@ MonoBehaviour:
     4V Battery => 4x'
   references:
   - {fileID: 11400000, guid: ed58eb9378275cc4c935c4b1d166abcc, type: 2}
-  - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}

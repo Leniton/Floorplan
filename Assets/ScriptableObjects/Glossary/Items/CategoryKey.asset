@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9047baea0e3a1a64a8f2e115b5e36ccc, type: 3}
-  m_Name: Key
+  m_Name: CategoryKey
   m_EditorClassIdentifier: 
-  Name: Key
-  Description: Requirement to <b>Draft</b> powerful<b> Rooms</b>.
+  Name: Category Key
+  Description: While <bActive</b>, the <b>Rooms</b> you draw will be of the same
+    <b>Category</b> as this Item.
   references:
-  - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
+  - {fileID: 11400000, guid: 86e92e20dbb00ab4ba84738391f6d7f3, type: 2}
