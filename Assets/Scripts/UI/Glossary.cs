@@ -49,6 +49,7 @@ public class Glossary : MonoBehaviour
     [SerializeMethod]
     private void Open(InfoReference info = null)
     {
+        gameObject.SetActive(true);
         navigationPath.Push(info ?? mainGlossary);
         LoadInfo();
     }
