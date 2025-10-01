@@ -10,12 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9047baea0e3a1a64a8f2e115b5e36ccc, type: 3}
-  m_Name: Items
+  m_Name: ActivationItems
   m_EditorClassIdentifier: 
-  Name: Items
-  Description: Items are resources that can be found on Rooms, and can grant a variety
-    of benefits.
+  Name: Activation Items
+  Description: When used, those items will stay active until its effects are applied
+    or they are deactivated. Once its effects are applied, the item is destroyed.
   references:
-  - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}
-  - {fileID: 11400000, guid: 13449b95a1d6d6548b7f29bc560bcf8d, type: 2}
-  - {fileID: 11400000, guid: dd79799cd26cf434f8a31a012708af86, type: 2}
+  - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}

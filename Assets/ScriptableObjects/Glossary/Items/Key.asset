@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Key
   m_EditorClassIdentifier: 
   Name: Key
-  Description: 
-  references: []
+  Description: Requirement to Draft powerful Rooms.
+  references:
+  - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}

@@ -13,5 +13,29 @@ MonoBehaviour:
   m_Name: Food
   m_EditorClassIdentifier: 
   Name: Food
-  Description: 
-  references: []
+  Description: 'Gain Steps.
+
+
+    There''s a variety of foods, each giving a different
+    amount of steps:
+
+    Cherry => +2 Steps.
+
+    Apple => +3 Steps.
+
+    Banana
+    => +4 Steps.
+
+    Orange => +5 Steps.
+
+    Soda => +7 Steps.
+
+    Meal => +10
+    Steps.
+
+    Snack => +1 Step for each Room in the house.
+
+    Energy bar => +2
+    Steps for each Dead end in the house.'
+  references:
+  - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
