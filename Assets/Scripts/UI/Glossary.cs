@@ -57,7 +57,7 @@ public class Glossary : MonoBehaviour
     {
         InfoReference info = navigationPath.Peek();
         title.text = info.Name;
-        description.text = string.IsNullOrEmpty(info.Description) ? " " : info.Description;
+        description.text = info.Description;
         references.EnsureEnoughInstances(referencesPrefab, info.references.Count, container,
             glossaryButton =>
                 glossaryButton.button.onClick.AddListener(() => OnClickReference(references.IndexOf(glossaryButton))));

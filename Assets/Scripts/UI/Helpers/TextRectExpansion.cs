@@ -31,6 +31,12 @@ namespace UI.Components.Utility
 
         private void ExpandRect()
         {
+            if (string.IsNullOrEmpty(text.text))
+            {
+                rect.sizeDelta = minValue;
+                LayoutRebuilder.ForceRebuildLayoutImmediate(text.rectTransform);
+                return;
+            }
             var targetWidth = Mathf.Clamp(text.bounds.size.x + padding.x, minValue.x, maxValue.x);
             var targetHeight = Mathf.Clamp(text.bounds.size.y + padding.y, minValue.y, maxValue.y);
 
