@@ -112,7 +112,7 @@ public static class EffectsManager
                     amount = 2,
                     name = "Rock",
                     description = "Place on floorplans to add +2 points to it",
-                    OnBuy = () => ItemUtilities.Rock().PickUp()
+                    OnBuy = () => ItemUtilities.Rock(true).PickUp()
                 };
                 PurchaseData dice = new()
                 {
@@ -128,15 +128,15 @@ public static class EffectsManager
                     amount = 2,
                     name = "Toy",
                     description = "Place on floorplans to add +3 points to it",
-                    OnBuy = () => ItemUtilities.Toy().PickUp()
+                    OnBuy = () => ItemUtilities.Toy(true).PickUp()
                 };
                 PurchaseData battery = new()
                 {
                     cost = 15,
-                    amount = 1,
-                    name = "Battery",
-                    description = "Place on floorplans to <b>Power</b> them",
-                    OnBuy = () => new Dice(1).PickUp()
+                    amount = 3,
+                    name = "V2 Battery",
+                    description = "Place on floorplans to multiply their total points by 2",
+                    OnBuy = () => new Battery(activate: true).PickUp()
                 };
                 PurchaseData couch = new()
                 {
@@ -144,7 +144,7 @@ public static class EffectsManager
                     amount = 1,
                     name = "Couch",
                     description = "Place on floorplans to add +4 points to it",
-                    OnBuy = () =>ItemUtilities.Couch().PickUp()
+                    OnBuy = () =>ItemUtilities.Couch(true).PickUp()
                 };
 
                 RarityPicker<PurchaseData> picker = new();
@@ -209,6 +209,35 @@ public static class EffectsManager
                     startAmount += dice.diceAmount;
                 });
                 floorplan.EveryTime().PlayerExitFloorplan().Do(_ => Player.dices = Mathf.Min(startAmount, Player.dices));
+                break;
+            case "Energy Room":
+                PurchaseData v2Battery = new()
+                {
+                    cost = 15,
+                    amount = 3,
+                    name = "V2 Battery",
+                    description = "Place on floorplans to multiply their total points by 2",
+                    OnBuy = () => new Battery(activate: true).PickUp()
+                };
+                PurchaseData v3Battery = new()
+                {
+                    cost = 20,
+                    amount = 2,
+                    name = "V3 Battery",
+                    description = "Place on floorplans to multiply their total points by 3",
+                    OnBuy = () => new Battery(3, true).PickUp()
+                };
+                PurchaseData v4Battery = new()
+                {
+                    cost = 25,
+                    amount = 1,
+                    name = "V4 Battery",
+                    description = "Place on floorplans to multiply their total points by 4",
+                    OnBuy = () => new Battery(4, true).PickUp()
+                };
+                
+                List<PurchaseData> energyRoomList = new() { v2Battery, v3Battery, v4Battery };
+                floorplan.TheFirstTime().FloorplanIsDrafted().SetupFloorplanShop(floorplan.name, energyRoomList);
                 break;
             case "Gallery":
                 int visits = 0;

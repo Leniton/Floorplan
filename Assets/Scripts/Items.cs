@@ -275,9 +275,14 @@ public class Decoration : PlaceableItem
 
 public class Battery : PlaceableItem
 {
+    private int mult;
     private string multKey;
 
-    public Battery(bool activate = false) : base(activate) => Name = "Battery";
+    public Battery(int multiplier = 2, bool activate = false) : base(activate)
+    {
+        mult = multiplier;
+        Name = $"V{mult} Battery";
+    }
 
     protected override void PlaceOnFloorplan(Floorplan floorplan)
     {
@@ -292,5 +297,5 @@ public class Battery : PlaceableItem
         base.PickUp();
     }
 
-    private int Multiplier() => 2;
+    private int Multiplier() => mult;
 }

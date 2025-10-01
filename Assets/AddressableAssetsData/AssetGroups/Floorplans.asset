@@ -209,6 +209,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 97909c2dc08fcaf4080039917840cba9
+    m_Address: EnergyRoom
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9c82200fff695d84f8b8d3dfcc21fca6
     m_Address: TradingPost
     m_ReadOnly: 0
