@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9047baea0e3a1a64a8f2e115b5e36ccc, type: 3}
+  m_Name: Door
+  m_EditorClassIdentifier: 
+  Name: Door
+  Description: Each <b>Room</b> has 4 <b>Doors</b>, which can be open o closed. When
+    a <b>Door</b> is open, you can move towards it to either enter the adjacent connected
+    <b>Room</b> or <b>Draft</b> a new <b>Room</b> in the adjacent empty space.
+  references: []
