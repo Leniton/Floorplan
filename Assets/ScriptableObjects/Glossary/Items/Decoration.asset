@@ -10,14 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9047baea0e3a1a64a8f2e115b5e36ccc, type: 3}
-  m_Name: Items
+  m_Name: Decoration
   m_EditorClassIdentifier: 
-  Name: Items
-  Description: Items are resources that can be found on Rooms, and can grant a variety
-    of benefits.
+  Name: Decoration
+  Description: 'Add bonus points to the Room this is placed on.
+
+
+    There''s a
+    variety of decorations, each giving a different bonuses:
+
+    Shiny rock => +2
+    points
+
+    Toy => +3 points
+
+    Couch => +4 points
+
+    TV => +5 points
+
+    Statue
+    => +7 points'
   references:
-  - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}
-  - {fileID: 11400000, guid: 13449b95a1d6d6548b7f29bc560bcf8d, type: 2}
-  - {fileID: 11400000, guid: dd79799cd26cf434f8a31a012708af86, type: 2}
-  - {fileID: 11400000, guid: 86e92e20dbb00ab4ba84738391f6d7f3, type: 2}
   - {fileID: 11400000, guid: ed58eb9378275cc4c935c4b1d166abcc, type: 2}
+  - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}

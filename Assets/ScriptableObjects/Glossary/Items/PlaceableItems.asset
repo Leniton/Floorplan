@@ -17,4 +17,6 @@ MonoBehaviour:
     are not considered placed when they are found, only when you manually place them.
     You can always take those items back after placing them.
   references:
+  - {fileID: 11400000, guid: f130b3dfc161c694f87551f7a1d5e064, type: 2}
+  - {fileID: 11400000, guid: 3edcaf914aba01c46ac036a2c036a544, type: 2}
   - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
