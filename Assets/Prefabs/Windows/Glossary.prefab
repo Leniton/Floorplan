@@ -1048,6 +1048,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5043244232050660833, guid: e2cb498c1720f294598a6d0b29ea438c,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6475988893027482307, guid: e2cb498c1720f294598a6d0b29ea438c,
         type: 3}
       propertyPath: m_Name

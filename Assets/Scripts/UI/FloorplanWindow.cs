@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -16,6 +17,11 @@ public class FloorplanWindow : MonoBehaviour
     private Floorplan currentFloorplan;
     private List<TMP_Text> itemsTexts = new();
     private List<TMP_Text> pointsTexts = new();
+
+    private void Awake()
+    {
+        floorplanDetails.onPickedFloorplan += OnClickFloorplan;
+    }
 
     public void SetupWindow(Floorplan floorplan)
     {
@@ -57,5 +63,10 @@ public class FloorplanWindow : MonoBehaviour
             pointsTexts[id].text = $"{mult.Key} => {mult.Value.Invoke()}x";
             id++;
         }
+    }
+
+    private void OnClickFloorplan(Floorplan floorplan)
+    {
+        Glossary.OpenGlossary(floorplan);
     }
 }

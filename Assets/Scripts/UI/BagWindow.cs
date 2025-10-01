@@ -18,6 +18,7 @@ public class BagWindow : MonoBehaviour
 
     private void Awake()
     {
+        floorplanDetails.onPickedFloorplan += OnClickFloorplan;
         autoPickupToggle.onValueChanged.AddListener(on => GameSettings.current.autoCollectItems = on);
         openDetailsButton.onClick.AddListener(OpenDetails);
         CloseBag();
@@ -59,6 +60,11 @@ public class BagWindow : MonoBehaviour
             button.onClick += item.Activate;
             button.onClick += OpenBag;
         }
+    }
+
+    private void OnClickFloorplan(Floorplan floorplan)
+    {
+        Glossary.OpenGlossary(floorplan);
     }
 
     public void OpenBag()

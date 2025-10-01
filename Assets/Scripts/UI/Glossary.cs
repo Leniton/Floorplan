@@ -34,6 +34,7 @@ public class Glossary : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         backButton.onClick.AddListener(GoBack);
         exitButton.onClick.AddListener(Close);
+        Close();
     }
 
     public static void OpenGlossary(InfoReference info = null)
