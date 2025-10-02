@@ -16,4 +16,5 @@ MonoBehaviour:
   Description: While <bActive</b>, the next time you move towards a closed <b>Door</b>
     will open it.
   references:
+  - {fileID: 11400000, guid: 66d61c49fb2bd0c458ebc4a6c409ca0c, type: 2}
   - {fileID: 11400000, guid: 86e92e20dbb00ab4ba84738391f6d7f3, type: 2}

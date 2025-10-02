@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9047baea0e3a1a64a8f2e115b5e36ccc, type: 3}
-  m_Name: Draw
+  m_Name: Showroom
   m_EditorClassIdentifier: 
-  Name: Draw
-  Description: When you move towards a open <b>Door</b> that leads to a empty space,
-    you pick between a set of <b>Rooms</b> from your <b>Deck</b> to <b>Draft</b>.
+  Name: Showroom
+  Description: 'This is a special shop you encounter between houses. You can add
+    new <b>Rooms</b> to your <b>Deck</b>, buy <b>Renovations</b> and buy Supplies:
+    <b>Items</b> that wil appear on the <bEntrance hall</b> of your next hosue.'
   references:
-  - {fileID: 11400000, guid: 66d61c49fb2bd0c458ebc4a6c409ca0c, type: 2}
+  - {fileID: 11400000, guid: 2bd60a3edf5ce6b43867a4a13aef5039, type: 2}
   - {fileID: 11400000, guid: df14de97430c5e844b5175d2b8593986, type: 2}
-  - {fileID: 11400000, guid: f6f70527f61ac594b955e6061644d146, type: 2}
+  - {fileID: 11400000, guid: 0592fd1164e8f894c8ba4760b9093bc0, type: 2}

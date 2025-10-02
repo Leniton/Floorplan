@@ -31,4 +31,5 @@ MonoBehaviour:
     Statue
     => +7 points'
   references:
+  - {fileID: 11400000, guid: f12e0e2ca2b77ff47bdd6f9ca8976598, type: 2}
   - {fileID: 11400000, guid: ed58eb9378275cc4c935c4b1d166abcc, type: 2}

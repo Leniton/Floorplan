@@ -28,4 +28,5 @@ MonoBehaviour:
     Three doors.
 
     <b>Crossroad</b> All four doord.'
-  references: []
+  references:
+  - {fileID: 11400000, guid: 66d61c49fb2bd0c458ebc4a6c409ca0c, type: 2}

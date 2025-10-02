@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Power
   Description: Multiply the total points by 2.
-  references: []
+  references:
+  - {fileID: 11400000, guid: f12e0e2ca2b77ff47bdd6f9ca8976598, type: 2}
