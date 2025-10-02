@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9047baea0e3a1a64a8f2e115b5e36ccc, type: 3}
+  m_Name: HouseBonus
+  m_EditorClassIdentifier: 
+  Name: House bonus
+  Description: 'Your house gains bonus <b>Points</b> depending on what <b>Rooms</b>
+    it currently have.
+
+
+    <b>Rest rooms</b> gives +3 points for each pair.
+
+    <b>Hallways</b>
+    gives +1 point for each <b>Connected</b> room.
+
+    <b>Storage rooms</b> gives
+    +1 point for each <b>item</b> picked from it.
+
+    <b>Fancy rooms</b> give an
+    extra +2 points.
+
+    <b>Shops</b> give +1 point for each coin you gain/spend
+    on it.
+
+    <b>Mystery rooms</b> gives +2 points for each other <b>Category</b>
+    the room has.
+
+    <b>Cursed rooms</b> give an extra +5 points.'
+  references:
+  - {fileID: 11400000, guid: 232ac091f86288947b0ea571e9ba218e, type: 2}
+  - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
+  - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}
