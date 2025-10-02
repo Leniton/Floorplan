@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Door
   Description: Each <b>Room</b> has 4 <b>Doors</b>, which can be open o closed. When
-    a <b>Door</b> is open, you can move towards it to either enter the adjacent connected
-    <b>Room</b> or <b>Draft</b> a new <b>Room</b> in the adjacent empty space.
-  references: []
+    a <b>Door</b> is open, you can move towards it to either enter the adjacent <b>Connected
+    Room</b> or <b>Draft</b> a new <b>Room</b> in the adjacent empty space.
+  references:
+  - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}
+  - {fileID: 11400000, guid: 232ac091f86288947b0ea571e9ba218e, type: 2}
+  - {fileID: 11400000, guid: f6f70527f61ac594b955e6061644d146, type: 2}

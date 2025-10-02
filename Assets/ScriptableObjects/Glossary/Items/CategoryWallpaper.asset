@@ -16,4 +16,5 @@ MonoBehaviour:
   Description: When used, the <b>Room</b> you're currenty in gains the same <b>Category</b>
     as this Item. The Room will only maintain the <b>Category</b> during this house.
   references:
+  - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}
   - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}

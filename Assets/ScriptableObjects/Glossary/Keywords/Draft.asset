@@ -16,4 +16,5 @@ MonoBehaviour:
   Description: When you pick a <b>Room</b> you've <b>Drawn</b> in the house and place
     them in a empty space.
   references:
+  - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}
   - {fileID: 11400000, guid: 904fc32cddbf9b94295c6bd778a17c35, type: 2}

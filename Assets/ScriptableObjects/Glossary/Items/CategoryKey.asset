@@ -16,4 +16,5 @@ MonoBehaviour:
   Description: While <bActive</b>, the <b>Rooms</b> you draw will be of the same
     <b>Category</b> as this Item.
   references:
+  - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}
   - {fileID: 11400000, guid: 86e92e20dbb00ab4ba84738391f6d7f3, type: 2}

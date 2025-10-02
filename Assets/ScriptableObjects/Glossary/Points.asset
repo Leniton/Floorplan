@@ -17,4 +17,5 @@ MonoBehaviour:
     have enough points when you finish the house then the run ends. You gain points
     both with <b>Rooms</b> and <b>House bonuses</b>.
   references:
+  - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}
   - {fileID: 11400000, guid: fb27efadf69374f418e149d24b720fa4, type: 2}

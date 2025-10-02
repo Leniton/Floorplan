@@ -16,4 +16,5 @@ MonoBehaviour:
   Description: When two <b>Rooms</b> have open <b>Doors</b> pointed at each other,
     they are considered <b>Connected</b>.
   references:
+  - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}
   - {fileID: 11400000, guid: 66d61c49fb2bd0c458ebc4a6c409ca0c, type: 2}

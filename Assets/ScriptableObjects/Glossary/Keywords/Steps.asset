@@ -15,4 +15,5 @@ MonoBehaviour:
   Name: Steps
   Description: When you move between <b>Rooms</b>, you spend a step; when you run
     out of steps, you have no other choice but finish the house.
-  references: []
+  references:
+  - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}

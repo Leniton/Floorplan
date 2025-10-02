@@ -17,6 +17,7 @@ MonoBehaviour:
     new <b>Rooms</b> to your <b>Deck</b>, buy <b>Renovations</b> and buy Supplies:
     <b>Items</b> that wil appear on the <bEntrance hall</b> of your next hosue.'
   references:
+  - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}
   - {fileID: 11400000, guid: 2bd60a3edf5ce6b43867a4a13aef5039, type: 2}
   - {fileID: 11400000, guid: df14de97430c5e844b5175d2b8593986, type: 2}
   - {fileID: 11400000, guid: 0592fd1164e8f894c8ba4760b9093bc0, type: 2}

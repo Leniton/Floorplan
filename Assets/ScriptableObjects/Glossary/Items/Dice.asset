@@ -16,4 +16,5 @@ MonoBehaviour:
   Description: Used to reroll <b>Drawn Rooms</b> on the house and on <b>Showroom</b>.
   references:
   - {fileID: 11400000, guid: 904fc32cddbf9b94295c6bd778a17c35, type: 2}
+  - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}
   - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}

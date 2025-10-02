@@ -36,6 +36,7 @@ MonoBehaviour:
 
     <b>Cursed rooms</b> give an extra +5 points.'
   references:
+  - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}
   - {fileID: 11400000, guid: 232ac091f86288947b0ea571e9ba218e, type: 2}
   - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
   - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}

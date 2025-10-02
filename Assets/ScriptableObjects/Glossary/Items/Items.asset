@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Items
   m_EditorClassIdentifier: 
   Name: Items
-  Description: Items are resources that can be found on Rooms, and can grant a variety
-    of benefits.
+  Description: Items are resources that can be found on <b>Rooms</b>, and can grant
+    a variety of benefits.
   references:
+  - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}
   - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}
   - {fileID: 11400000, guid: 13449b95a1d6d6548b7f29bc560bcf8d, type: 2}
   - {fileID: 11400000, guid: dd79799cd26cf434f8a31a012708af86, type: 2}

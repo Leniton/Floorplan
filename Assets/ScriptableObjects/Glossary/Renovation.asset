@@ -15,4 +15,5 @@ MonoBehaviour:
   Name: Renovation
   Description: Renovations are upgrades to your <b>Rooms</b> that last for the entirety
     of the run. Some can be applied multiple times, others only once.
-  references: []
+  references:
+  - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}
