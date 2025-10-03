@@ -19,7 +19,7 @@ MonoBehaviour:
 
 
     The basic room
-    has 3 key features: its base <b>Points<b>, their open <b>Doors</b>, and its effect;
+    has 3 key features: its base <b>Points<b>, their open <b>Doors</b>, and its Category;
     all of which vary depending on the room.'
   references:
   - {fileID: 11400000, guid: df14de97430c5e844b5175d2b8593986, type: 2}
