@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: MailRoom
   m_EditorClassIdentifier: 
   Name: Mail Room
+  Description: After <b>Drafting</b> 3 other rooms, add a common, uncommon and rare
+    b>Item</b> to this room
+  references:
+  - {fileID: 11400000, guid: f6f70527f61ac594b955e6061644d146, type: 2}
+  - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
   Alias: Mail Room
-  Description: After drafting 3 other rooms, add a common, uncommon and rare item
-    to this room
   Category: 36
   Type: 1
   Rarity: 0

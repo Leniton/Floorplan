@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Pantry
   m_EditorClassIdentifier: 
   Name: Pantry
+  Description: Contains <b>Coins</b> and <b>Food
+  references:
+  - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}
+  - {fileID: 11400000, guid: 13449b95a1d6d6548b7f29bc560bcf8d, type: 2}
   Alias: Pantry
-  Description: Contains coins and food
-  Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
   Category: 4
   Type: -2
   Rarity: 0

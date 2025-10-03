@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Library
   m_EditorClassIdentifier: 
   Name: Library
+  Description: Floorplans <b>Drawn</b> from this room cost no <b>Keys
+  references:
+  - {fileID: 11400000, guid: 904fc32cddbf9b94295c6bd778a17c35, type: 2}
+  - {fileID: 11400000, guid: dd79799cd26cf434f8a31a012708af86, type: 2}
   Alias: Library
-  Description: Floorplans drafted from this room cost no keys
-  Color: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
   Category: 32
   Type: -2
   Rarity: 0

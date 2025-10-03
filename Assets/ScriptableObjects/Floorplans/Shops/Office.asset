@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Office
   m_EditorClassIdentifier: 
   Name: Office
+  Description: Rooms that share a <b>Category</b> with this room gain +2 <b>Coins
+  references:
+  - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}
   Alias: Office
-  Description: Floorplans that share a <b>Category</b> with this room gain +2 coins
   Category: 48
   Type: 1
   Rarity: 1

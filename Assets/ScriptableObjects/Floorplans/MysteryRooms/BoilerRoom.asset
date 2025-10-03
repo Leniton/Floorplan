@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: BoilerRoom
   m_EditorClassIdentifier: 
   Name: Boiler Room
+  Description: <b>Power Connected</b> rooms
+  references:
+  - {fileID: 11400000, guid: 0633b9f7af95fb34ebbe8924ef8826b1, type: 2}
+  - {fileID: 11400000, guid: 232ac091f86288947b0ea571e9ba218e, type: 2}
   Alias: Boiler Room
-  Description: <b>Power</b> connected rooms
-  Color: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
   Category: 32
   Type: 3
   Rarity: 1

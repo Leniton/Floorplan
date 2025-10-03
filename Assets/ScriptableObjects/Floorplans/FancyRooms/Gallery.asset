@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: Gallery
   m_EditorClassIdentifier: 
   Name: Gallery
+  Description: When you enter this room, lose a <b>Coin</b> to gain +1 <b>Point</b>
+  references:
+  - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}
+  - {fileID: 11400000, guid: f12e0e2ca2b77ff47bdd6f9ca8976598, type: 2}
   Alias: Gallery
-  Description: When you enter this room, lose a coin to gain +1 point
   Category: 24
   Type: 2
   Rarity: 1

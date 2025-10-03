@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: Dormitory
   m_EditorClassIdentifier: 
   Name: Dormitory
-  Alias: Dormitory
-  Description: When you connect a <b>Rest Room</b> to this room, add a <b>Orange</b>
+  Description: When you <b>Connect</b> a <b>Rest Room</b> to this room, add a <b>Orange</b>
     to the room
+  references:
+  - {fileID: 11400000, guid: 232ac091f86288947b0ea571e9ba218e, type: 2}
+  - {fileID: 11400000, guid: 13449b95a1d6d6548b7f29bc560bcf8d, type: 2}
+  Alias: Dormitory
   Category: 3
   Type: 3
   Rarity: 1

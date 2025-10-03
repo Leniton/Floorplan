@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: HallwayCloset
   m_EditorClassIdentifier: 
   Name: Hallway Closet
+  Description: 2 b>Items</b>. +rare b>Item</b> if <b>Drafted</b> from a <b>Hallway<b>
+  references:
+  - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
   Alias: Hallway Closet
-  Description: 2 items. +rare item if drafted from a <b>Hallway<b>
   Category: 4
   Type: 1
   Rarity: 0

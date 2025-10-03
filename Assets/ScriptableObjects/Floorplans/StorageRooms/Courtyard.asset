@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Courtyard
   m_EditorClassIdentifier: 
   Name: Courtyard
+  Description: Contains 3 <b>Keys
+  references:
+  - {fileID: 11400000, guid: dd79799cd26cf434f8a31a012708af86, type: 2}
   Alias: Courtyard
-  Description: Contains 3 keys
-  Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
   Category: 4
   Type: 3
   Rarity: 0

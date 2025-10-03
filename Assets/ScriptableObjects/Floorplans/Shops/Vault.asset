@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Vault
   m_EditorClassIdentifier: 
   Name: Vault
+  Description: Contains 2 <b>Coins</b> for each room in the house
+  references:
+  - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}
   Alias: Vault
-  Description: Contains 2 coins for each room in the house
   Category: 16
   Type: -2
   Rarity: 2

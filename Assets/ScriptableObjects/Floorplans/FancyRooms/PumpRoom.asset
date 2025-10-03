@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: PumpRoom
   m_EditorClassIdentifier: 
   Name: Pump Room
+  Description: <b>Connected</b> rooms gain points equal to this room base <b>Points</b>
+  references:
+  - {fileID: 11400000, guid: 232ac091f86288947b0ea571e9ba218e, type: 2}
+  - {fileID: 11400000, guid: f12e0e2ca2b77ff47bdd6f9ca8976598, type: 2}
   Alias: Pump Room
-  Description: <b>Connected</b> rooms gain points equal to this room base points
   Category: 10
   Type: -2
   Rarity: 1

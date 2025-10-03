@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Conservatory
   m_EditorClassIdentifier: 
   Name: Conservatory
+  Description: Contains a <b>Category key
+  references:
+  - {fileID: 11400000, guid: 4a87d5ced0866da4f82d5ddac09eff9b, type: 2}
   Alias: Conservatory
-  Description: Contains a color key
   Category: 36
   Type: -2
   Rarity: 1

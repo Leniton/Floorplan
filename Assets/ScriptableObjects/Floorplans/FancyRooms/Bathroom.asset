@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: Bathroom
   m_EditorClassIdentifier: 
   Name: Bathroom
+  Description: The first time you enter this room, round up your <b>Steps</b> (12
+    => 20). Multiply the <b>Points</b> in this room by steps gained
+  references:
+  - {fileID: 11400000, guid: fff1421c2572e5248b83f8e3493021ca, type: 2}
+  - {fileID: 11400000, guid: f12e0e2ca2b77ff47bdd6f9ca8976598, type: 2}
   Alias: Bathroom
-  Description: The first time you enter this room, round up your steps (12 => 20).
-    Multiply the points in this room by steps gained
   Category: 40
   Type: 1
   Rarity: 2

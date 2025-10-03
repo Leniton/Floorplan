@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Vestibule
   m_EditorClassIdentifier: 
   Name: Vestibule
+  Description: Rooms <b>Connected</b> to this room are also <b>Connected</b> to each
+    other
+  references:
+  - {fileID: 11400000, guid: 232ac091f86288947b0ea571e9ba218e, type: 2}
   Alias: Vestibule
-  Description: Rooms <b>Connected</b> to this room are also connected to each other
-  Color: {r: 0.7735849, g: 0.44513544, b: 0, a: 1}
   Category: 2
   Type: 3
   Rarity: 2

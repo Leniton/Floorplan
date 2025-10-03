@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: Cloister
   m_EditorClassIdentifier: 
   Name: Cloister
-  Alias: Cloister
-  Description: Contains a <b>Statue</b>. Gains +2 points for each <b>Decoration</b>
+  Description: Contains a <b>Statue</b>. Gains +2 <b>Points</b> for each <b>Decoration</b>
     in this room
-  Color: {r: 0.2980392, g: 0.7190104, b: 1, a: 1}
+  references:
+  - {fileID: 11400000, guid: f130b3dfc161c694f87551f7a1d5e064, type: 2}
+  - {fileID: 11400000, guid: f12e0e2ca2b77ff47bdd6f9ca8976598, type: 2}
+  Alias: Cloister
   Category: 4
   Type: 4
   Rarity: 2

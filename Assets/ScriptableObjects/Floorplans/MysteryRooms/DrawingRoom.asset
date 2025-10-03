@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: DrawingRoom
   m_EditorClassIdentifier: 
   Name: Drawing Room
+  Description: When you enter this room, gain 2 <b>Temporary Dices</b>
+  references:
+  - {fileID: 11400000, guid: c24c358571e845d46a1c64e8ca0071e1, type: 2}
+  - {fileID: 11400000, guid: 06058f0cc07b1ef4da5ca9b43df7152d, type: 2}
   Alias: Drawing Room
-  Description: When you enter this room, gain 2 <b>Temporary</b> dices
   Category: 32
   Type: 3
   Rarity: 1

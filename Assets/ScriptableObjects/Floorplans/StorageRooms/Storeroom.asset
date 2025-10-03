@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Storeroom
   m_EditorClassIdentifier: 
   Name: Storeroom
+  Description: 3 common b>Items</b>
+  references:
+  - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
   Alias: Storeroom
-  Description: 3 common items
   Category: 4
   Type: 1
   Rarity: 0

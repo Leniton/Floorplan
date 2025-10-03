@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Commissary
   m_EditorClassIdentifier: 
   Name: Commissary
+  Description: Spend <b>Coins</b> to buy <b>Items
+  references:
+  - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}
+  - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
   Alias: Commissary
-  Description: Spend money to buy items
-  Color: {r: 0.98101246, g: 1, b: 0, a: 1}
   Category: 16
   Type: -2
   Rarity: 0

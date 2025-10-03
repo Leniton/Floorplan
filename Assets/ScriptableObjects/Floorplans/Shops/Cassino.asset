@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Cassino
   m_EditorClassIdentifier: 
   Name: Cassino
+  Description: When you first enter this room, 50% to double or halve your <b>Coins
+  references:
+  - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}
   Alias: Cassino
-  Description: When you first enter this room, 50% to double or halve your money
-  Color: {r: 0.98101246, g: 1, b: 0, a: 1}
   Category: 16
   Type: 3
   Rarity: 0

@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: GuestBedroom
   m_EditorClassIdentifier: 
   Name: Guest Bedroom
+  Description: When you enter this room gain +2 <b>Steps</b>. <b>Connected Rest Room</b>
+    gain +5 <b>Points</b>
+  references:
+  - {fileID: 11400000, guid: fff1421c2572e5248b83f8e3493021ca, type: 2}
+  - {fileID: 11400000, guid: f12e0e2ca2b77ff47bdd6f9ca8976598, type: 2}
   Alias: G. Bedroom
-  Description: When you enter this room gain +2 steps. <b>Connected Rest Room</b>
-    gain +5 points
   Category: 1
   Type: -2
   Rarity: 0

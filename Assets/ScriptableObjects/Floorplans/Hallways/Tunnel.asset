@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Tunnel
   m_EditorClassIdentifier: 
   Name: Tunnel
+  Description: You always <b>Draw</b> a tunnel when <b>Drawing</b> from this room.
+    There might be some light at the end of it...
+  references:
+  - {fileID: 11400000, guid: 904fc32cddbf9b94295c6bd778a17c35, type: 2}
   Alias: Tunnel
-  Description: You always draw a tunnel when drafting from this room. There might
-    be some light at the end of it...
   Category: 2
   Type: 2
   Rarity: 1

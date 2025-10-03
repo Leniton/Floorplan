@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: 0d19e8767ca8e144ab18abf922619682
   m_SerializeEntries:
   - m_GUID: 0e9e7184794f1a249b5b2c3655048dc9
-    m_Address: Cloister 1
+    m_Address: Cloister
     m_ReadOnly: 0
     m_SerializedLabels:
     - BaseFloorplan

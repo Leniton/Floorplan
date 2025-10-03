@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Kitchen
   m_EditorClassIdentifier: 
   Name: Kitchen
+  Description: Spend <b>Coins</b> to buy <b>Food
+  references:
+  - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}
+  - {fileID: 11400000, guid: 13449b95a1d6d6548b7f29bc560bcf8d, type: 2}
   Alias: Kitchen
-  Description: Spend money to buy food
-  Color: {r: 0.98101246, g: 1, b: 0, a: 1}
   Category: 16
   Type: -2
   Rarity: 1

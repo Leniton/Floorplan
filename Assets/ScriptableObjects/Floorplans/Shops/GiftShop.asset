@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: GiftShop
   m_EditorClassIdentifier: 
   Name: Gift Shop
+  Description: Spend <b>Coins</b> to buy points
+  references:
+  - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}
+  - {fileID: 11400000, guid: f12e0e2ca2b77ff47bdd6f9ca8976598, type: 2}
   Alias: Gift Shop
-  Description: Spend money to buy points
-  Color: {r: 0.98101246, g: 1, b: 0, a: 1}
   Category: 16
   Type: 1
   Rarity: 1

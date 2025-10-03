@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: DiningRoom
   m_EditorClassIdentifier: 
   Name: Dining Room
+  Description: Contains <b>Meal</b>. Gain extra <b>Points</b> for each step from
+    food you gain.
+  references:
+  - {fileID: 11400000, guid: 13449b95a1d6d6548b7f29bc560bcf8d, type: 2}
+  - {fileID: 11400000, guid: f12e0e2ca2b77ff47bdd6f9ca8976598, type: 2}
   Alias: Dining Room
-  Description: Contains meal. Gain extra points for each step from food you gain.
-  Color: {r: 1, g: 1, b: 1, a: 1}
   Category: 9
   Type: 3
   Rarity: 2

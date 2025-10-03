@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: LaundryRoom
   m_EditorClassIdentifier: 
   Name: Laundry Room
+  Description: Copy the categories of <b>Connected</b> rooms. +2 <b>Points</b> for
+    each category this room has
+  references:
+  - {fileID: 11400000, guid: 232ac091f86288947b0ea571e9ba218e, type: 2}
+  - {fileID: 11400000, guid: f12e0e2ca2b77ff47bdd6f9ca8976598, type: 2}
   Alias: Laundry Room
-  Description: Copy the categories of connected rooms. +2 points for each category
-    this room has
   Category: 8
   Type: -2
   Rarity: 1

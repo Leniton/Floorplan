@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Den
   m_EditorClassIdentifier: 
   Name: Den
+  Description: Contains a <b>Key</b>
+  references:
+  - {fileID: 11400000, guid: dd79799cd26cf434f8a31a012708af86, type: 2}
   Alias: Den
-  Description: Contains a key
-  Color: {r: 1, g: 1, b: 1, a: 1}
   Category: 8
   Type: 3
   Rarity: 0

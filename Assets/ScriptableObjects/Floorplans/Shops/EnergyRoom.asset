@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: EnergyRoom
   m_EditorClassIdentifier: 
   Name: Energy Room
-  Description: Spend money to buy Batteries
-  references: []
+  Description: Spend <b>Coins</b> to buy <b>Batteries
+  references:
+  - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}
+  - {fileID: 11400000, guid: 3edcaf914aba01c46ac036a2c036a544, type: 2}
   Alias: Energy Room
   Category: 16
   Type: 1

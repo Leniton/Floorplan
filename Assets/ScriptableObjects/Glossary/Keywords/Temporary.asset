@@ -9,19 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c2ec7ddf6ecb914e8686ca425ec3201, type: 3}
-  m_Name: TradingPost
+  m_Script: {fileID: 11500000, guid: 9047baea0e3a1a64a8f2e115b5e36ccc, type: 3}
+  m_Name: Temporary
   m_EditorClassIdentifier: 
-  Name: Trading Post
-  Description: Trade <b>Items
+  Name: Temporary
+  Description: Temporary <b>Items</b> dissapear when you leave a <b>Room
   references:
   - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
-  Alias: Trading Post
-  Category: 20
-  Type: 1
-  Rarity: 0
-  keyCost: 0
-  basePoints: 1
-  entranceId: 0
-  connections: 
-  connectedFloorplans: []
+  - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}
