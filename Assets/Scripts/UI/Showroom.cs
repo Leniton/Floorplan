@@ -29,10 +29,10 @@ public class Showroom : MonoBehaviour
     {
         SetupSuppliesShop();
         SetupRenovationsShop();
-        pickFloorplan.Setup(5, RunData.playerDeck, pickFloorplan.CloseWindow);
+        pickFloorplan.Setup(5, RunData.playerDeck, _ => pickFloorplan.CloseWindow());
 
         GameEvent.onDrawFloorplans += DeckBias;
-        addFloorplan.Setup(3, RunData.allFloorplans, () => addFloorplan.DraftFloorplan());
+        addFloorplan.Setup(3, RunData.allFloorplans, _ => addFloorplan.DraftFloorplan());
         addFloorplan.OnDraftFloorplan += OnPickFloorplanToAdd;
         
         renovationPackButton.onClick.AddListener(OpenRenovationShop);

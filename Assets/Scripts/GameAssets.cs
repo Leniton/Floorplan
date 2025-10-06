@@ -7,6 +7,7 @@ using UnityEngine;
 public static class GameAssets
 {
     public static Sprite[] patterns;
+    public static Sprite[] books;
 
     public static void LoadAssets(Action onDone = null)
     {
@@ -31,6 +32,26 @@ public static class GameAssets
             {
                 patterns[id] = sprite;
                 patternChecklist.FinishStep();
+            }
+        }
+        //load book sprites
+        loadedAssets.AddStep();
+        Checklist booksChecklist = new(0);
+        booksChecklist.onCompleted += loadedAssets.FinishStep;
+        fileName = "books";
+        patternCount = 210;
+        books = new Sprite[patternCount];
+        for (int i = 0; i < patternCount; i++)
+        {
+            int id = i;
+            string path = $"{fileName}[{fileName}_{i}]";
+            booksChecklist.AddStep();
+            AAAsset<Sprite>.LoadAsset(path, AddLoadedSprite);
+
+            void AddLoadedSprite(Sprite sprite)
+            {
+                books[id] = sprite;
+                booksChecklist.FinishStep();
             }
         }
     }

@@ -55,6 +55,7 @@ public class Floorplan : InfoReference
         floorplan.Rarity = Rarity;
         floorplan.keyCost = keyCost;
         floorplan.basePoints = basePoints;
+        floorplan.references = references;
         if (connections is { Length: > 0 })
         {
             //instance floorplan; copy floorplan connections and determine its type

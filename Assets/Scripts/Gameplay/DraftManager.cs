@@ -40,7 +40,7 @@ public class DraftManager : MonoBehaviour
     private float rareGrowth;
     private float legendGrowth;
 
-    public void Setup(int draftOptions, PlayerDeck deck = null, Action onDone = null)
+    public void Setup(int draftOptions, PlayerDeck deck = null, Action<List<Floorplan>> onDone = null)
     {
         if (!ReferenceEquals(detailsPrefab, null)) LoadDraftPool();
         else
@@ -66,7 +66,7 @@ public class DraftManager : MonoBehaviour
                 draftPool = new(playerDeck.deck.Count);
                 for (int i = 0; i < draftPool.Capacity; i++)
                     draftPool.Add(playerDeck.deck[i].CreateInstance(Vector2Int.up));
-                onDone?.Invoke();
+                onDone?.Invoke(draftPool);
                 CheckPoolData();
                 return;
             }
@@ -74,7 +74,7 @@ public class DraftManager : MonoBehaviour
             Addressables.LoadAssetsAsync<Floorplan>("BaseFloorplan", floorplan =>
                 draftPool.Add(floorplan.CreateInstance(Vector2Int.up))).Completed += _ =>
                 {
-                    onDone?.Invoke();
+                    onDone?.Invoke(draftPool);
                     CheckPoolData();
                 };
         }

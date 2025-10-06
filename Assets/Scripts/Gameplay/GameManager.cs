@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private DraftManager draftManager;
     [SerializeField] private GridManager gridManager;
     [SerializeField] private MovementManager movement;
+    [SerializeField] private DeckView deckView;
     [SerializeField] private Floorplan entrance;
     [SerializeField] private Image currentImage;
     [SerializeField] private Button finishButton;
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     private static Dictionary<Floorplan, FloorplanUI> UIFloorplans;
     public static Dictionary<Vector2Int, Floorplan> floorplanDict;
+    public static List<Floorplan> DraftPool;
     public static Floorplan EntranceHall;
 
     private FloorplanUI floorplanPrefab;
@@ -55,7 +57,11 @@ public class GameManager : MonoBehaviour
                     color = new(.6f,.6f,.6f),
                     onPick = UIManager.ShowCurrentFloorplan
                 },
-                null,
+                new()
+                {
+                    icon = GameAssets.books[98],
+                    onPick = deckView.Open
+                },
                 null,
             });
         };
@@ -64,7 +70,11 @@ public class GameManager : MonoBehaviour
         loadedAssets.onCompleted += Setup;
 
         loadedAssets.AddStep();
-        draftManager.Setup(3, RunData.playerDeck, loadedAssets.FinishStep);
+        draftManager.Setup(3, RunData.playerDeck, pool =>
+        {
+            DraftPool = pool;
+            loadedAssets.FinishStep();
+        });
 
         loadedAssets.AddStep();
         gridManager.onDoneLoading += loadedAssets.FinishStep;
@@ -84,6 +94,7 @@ public class GameManager : MonoBehaviour
 
     private void Setup()
     {
+        deckView.Close();
         draftManager.CloseWindow();
         gridManager.onClick += InspectCurrentFloorplan;
         gridManager.SetInteractive(false);
