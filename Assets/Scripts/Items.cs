@@ -204,7 +204,6 @@ public abstract class PlaceableItem : Item
         currentFloorplan = null;
         Player.items.Add(this);
         if (wasPlaced) return;
-        Debug.Log("check");
         base.PickUp();
     }
 
