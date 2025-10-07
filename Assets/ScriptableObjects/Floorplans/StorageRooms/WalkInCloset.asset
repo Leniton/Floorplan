@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: WalkInCloset
   m_EditorClassIdentifier: 
   Name: Walk-In Closet
-  Description: 4 b>Items</b>. +2 uncommon b>Items</b> if <b>Drafted</b> from a <b>Rest
-    Room<b>
+  Description: 4 <b>Items</b>. +2 uncommon <b>Items</b> if <b>Drafted</b> from a
+    <b>Rest Room
   references:
   - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
   - {fileID: 11400000, guid: f6f70527f61ac594b955e6061644d146, type: 2}

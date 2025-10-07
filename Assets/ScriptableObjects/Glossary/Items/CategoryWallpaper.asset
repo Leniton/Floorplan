@@ -12,9 +12,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9047baea0e3a1a64a8f2e115b5e36ccc, type: 3}
   m_Name: CategoryWallpaper
   m_EditorClassIdentifier: 
-  Name: Category Key
-  Description: When used, the <b>Room</b> you're currenty in gains the same <b>Category</b>
+  Name: Category Decor
+  Description: 'When used, the <b>Room</b> you''re currenty in gains the same <b>Category</b>
     as this Item. The Room will only maintain the <b>Category</b> during this house.
+
+
+    Additionally,
+    the room gains a extra effect depending on the Category gained:
+
+
+    <b>Rest
+    Room</b>: When you exit this room, gain <b>Steps</b> equal to this room points.
+
+
+    <b>Hallway</b>:
+    <b>Connected Rooms</b> gain a extra <b>Point</b>.
+
+
+    <b>Storage Room</b>:
+    Adds a random <b>Item</b> to this room.
+
+
+    <b>Shop</b> Add <b>Coins</b> to
+    this room equal to its points.
+
+
+    <b>Fancy Room</b>: +3 extra base <b>Points</b>.
+
+
+    <b>Mystery
+    Room</b>: This room is <b>Powered</b>.
+
+
+    <b>Cursed Room</b> Lose 5 <b>Steps</b>;
+    this room gains +5 <b>Points</b>.'
   references:
   - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}
+  - {fileID: 11400000, guid: fff1421c2572e5248b83f8e3493021ca, type: 2}
+  - {fileID: 11400000, guid: 232ac091f86288947b0ea571e9ba218e, type: 2}
+  - {fileID: 11400000, guid: f12e0e2ca2b77ff47bdd6f9ca8976598, type: 2}
   - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
+  - {fileID: 11400000, guid: 1961d4e935107c14dab7d5cd85dab4cc, type: 2}
+  - {fileID: 11400000, guid: 0633b9f7af95fb34ebbe8924ef8826b1, type: 2}

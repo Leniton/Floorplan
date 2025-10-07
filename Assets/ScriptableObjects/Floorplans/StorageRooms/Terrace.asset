@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Terrace
   m_EditorClassIdentifier: 
   Name: Terrace
-  Description: Contains a uncommon b>Items</b>
+  Description: Contains a uncommon <b>Items</b>
   references:
   - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
   Alias: Terrace
