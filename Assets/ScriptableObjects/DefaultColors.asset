@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8711f4700f34f40b15532162e3c95a, type: 3}
   m_Name: DefaultColors
   m_EditorClassIdentifier: 
-  blankColor: {r: 0.77254903, g: 0, b: 0.5019608, a: 1}
+  blankColor: {r: 0.5764706, g: 0.5764706, b: 0.5764706, a: 1}
   restRoomColor: {r: 0.7294118, g: 0.4, b: 1, a: 1}
   hallwayColor: {r: 0.77254903, g: 0.44705883, b: 0, a: 1}
   storageRoomColor: {r: 0.29803923, g: 0.7176471, b: 1, a: 1}

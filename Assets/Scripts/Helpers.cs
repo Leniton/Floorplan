@@ -313,10 +313,11 @@ public static class Helpers
                 spareRoom.Description = $"{12 - (2 * spareRoom.DoorCount)} coins";
                 break;
             case FloorCategory.StorageRoom:
-                spareRoom.Description = $"{6 - spareRoom.DoorCount} items";
+                spareRoom.Description = $"{5 - spareRoom.DoorCount} items";
                 break;
             case FloorCategory.Hallway:
-                spareRoom.Description = $"{5 - spareRoom.DoorCount} keys";
+                int pointBonus = 5 - spareRoom.DoorCount;
+                spareRoom.Description = $"<b>Connected Rooms</b> gain {pointBonus} point{(pointBonus > 1 ? "s" : "")}";
                 break;
             case FloorCategory.MysteryRoom:
                 spareRoom.Description = $"Multiply this floorplan points by {6 - spareRoom.DoorCount}";

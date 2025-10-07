@@ -413,7 +413,7 @@ public static class EffectsManager
                 break;
             case "Laundry Room":
                 floorplan.EveryTime().FloorplanIsDrafted().AddPointBonusToFloorplan(() =>
-                    NumberUtil.SeparateBits((int)floorplan.Category).Length * 2);
+                    NumberUtil.SeparateBits((int)floorplan.Category).Length * 5);
 
                 floorplan.EveryTime().FloorplanConnected().Do(evt =>
                 {
@@ -612,13 +612,13 @@ public static class EffectsManager
                         new Coin(12 - (2 * doorCount)).AddItemToFloorplan(floorplan);
                         break;
                     case FloorCategory.StorageRoom:
-                        int spareroomItems = 6 - doorCount;
+                        int spareroomItems = 5 - doorCount;
                         var spareroomPicker = floorplan.ItemPool();
                         for (int i = 0; i < spareroomItems; i++)
                             spareroomPicker.PickRandom().Invoke().AddItemToFloorplan(floorplan);
-                        break;
+                        return;
                     case FloorCategory.Hallway:
-                        new Key(5 - doorCount).AddItemToFloorplan(floorplan);
+                        floorplan.EveryTime().FloorplanConnected().AddPointsToThatFloorplan(5 - doorCount);
                         break;
                     case FloorCategory.MysteryRoom:
                         floorplan.TheFirstTime().FloorplanIsDrafted().Do(_

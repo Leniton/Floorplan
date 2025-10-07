@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: GameRoom
   m_EditorClassIdentifier: 
   Name: Game Room
-  Alias: Game Room
   Description: '-'
-  Color: {r: 1, g: 1, b: 1, a: 1}
+  references: []
+  Alias: Game Room
   Category: 8
   Type: -2
   Rarity: 1
   keyCost: 0
-  basePoints: 8
+  basePoints: 10
   entranceId: 0
   connections: 
   connectedFloorplans: []

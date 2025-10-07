@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: MeetingRoom
   m_EditorClassIdentifier: 
   Name: Meeting Room
-  Alias: Meeting Room
   Description: '-'
+  references: []
+  Alias: Meeting Room
   Category: 8
   Type: 3
   Rarity: 0
   keyCost: 1
-  basePoints: 8
+  basePoints: 10
   entranceId: 0
   connections: 
   connectedFloorplans: []
