@@ -37,34 +37,21 @@ public class GameManager : MonoBehaviour
         gridManager.OnStartMove += TriggerFloorplanExitEvent;
         gridManager.OnMove += TriggerFloorplanEnterEvent;
         finishButton.onClick.AddListener(FinishRun);
-        Checklist hoverMenuIconLoad = new(0);
-        //details icon
-        hoverMenuIconLoad.AddStep();
-        Sprite detailsIcon = null;
-        AAAsset<Sprite>.LoadAsset("searchIcon", sprite =>
+        hoverMenu.SetupOptions(new()
         {
-            detailsIcon = sprite;
-            hoverMenuIconLoad.FinishStep();
-        });
-        
-        hoverMenuIconLoad.onCompleted += () =>
-        {
-            hoverMenu.SetupOptions(new()
+            new()
             {
-                new()
-                {
-                    icon = detailsIcon,
-                    color = new(.6f,.6f,.6f),
-                    onPick = UIManager.ShowCurrentFloorplan
-                },
-                new()
-                {
-                    icon = GameAssets.books[98],
-                    onPick = deckView.Open
-                },
-                null,
-            });
-        };
+                icon = GameAssets.books[18],
+                color = new(.6f, .6f, .6f),
+                onPick = () => Glossary.OpenGlossary()
+            },
+            new()
+            {
+                icon = GameAssets.books[98],
+                onPick = deckView.Open
+            },
+            null,
+        });
 
         Checklist loadedAssets = new(0);
         loadedAssets.onCompleted += Setup;
