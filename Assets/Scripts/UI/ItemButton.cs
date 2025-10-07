@@ -29,12 +29,14 @@ public class ItemButton : MonoBehaviour
         if (item is ToggleItem)
         {
             ToggleItem toggleItem = (ToggleItem)item;
+            itemName.text = $"({(toggleItem.active ? "A" : "a")}) {item.Name}";
             toggle.SetIsOnWithoutNotify(toggleItem.active);
             return;
         }
         if (item is PlaceableItem)
         {
             PlaceableItem placeableItem = (PlaceableItem)item;
+            itemName.text = $"({(placeableItem.placed ? "P" : "p")}) {item.Name}";
             toggle.SetIsOnWithoutNotify(placeableItem.placed);
             return;
         }

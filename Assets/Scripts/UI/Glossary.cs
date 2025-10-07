@@ -23,13 +23,6 @@ public class Glossary : MonoBehaviour
 
     private void Awake()
     {
-        if (ReferenceEquals(instance, this)) return;
-        if (!ReferenceEquals(instance, null))
-        {
-            Destroy(gameObject);
-            return;
-        }
-
         instance = this;
         DontDestroyOnLoad(gameObject);
         backButton.onClick.AddListener(GoBack);
