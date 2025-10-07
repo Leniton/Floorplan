@@ -15,7 +15,7 @@ public class Player
     public static int dices;
     public static bool activeSledgeHammer => currentSledgeHammer?.active ?? false;
     public static bool activeKey => currentKey != null;
-    public static List<Item> items;
+    public static List<Item> items = new();
     private static SledgeHammer currentSledgeHammer;
     public static ColorKey currentKey;
     #endregion

@@ -9,12 +9,16 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private FloorplanWindow details;
     [SerializeField] private BagWindow currentDetails;
+    [SerializeField] private Button playerItemsButton;
+    [SerializeField] private PlayerItemsView playerItemsView;
 
     private static UIManager instance;
 
     private void Awake()
     {
         instance = this;
+        playerItemsButton?.onClick.AddListener(playerItemsView.Open);
+        playerItemsView?.Close();
     }
 
     public static void ShowDetails(Floorplan floorplan)
