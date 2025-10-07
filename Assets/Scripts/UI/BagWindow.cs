@@ -18,6 +18,7 @@ public class BagWindow : MonoBehaviour
 
     private void Awake()
     {
+        GameEvent.OnCollectItem += _ => UpdateItems();
         floorplanDetails.onPickedFloorplan += OnClickFloorplan;
         autoPickupToggle.onValueChanged.AddListener(on => GameSettings.current.autoCollectItems = on);
         openDetailsButton.onClick.AddListener(OpenDetails);

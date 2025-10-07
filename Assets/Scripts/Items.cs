@@ -1,4 +1,5 @@
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public abstract class Item
 {
@@ -136,7 +137,7 @@ public class ColorKey : ToggleItem
     public ColorKey(FloorCategory? category = null)
     {
         floorCategory = category ?? Helpers.RandomCategory();//will be 8 with addition of red rooms
-        Name = $"{Helpers.CategoryName(floorCategory)} key";
+        Name = $"{Helpers.CategoryName(floorCategory).Replace(" Room", string.Empty)} key";
     }
 
     public override void Activate()
@@ -216,8 +217,8 @@ public class CategoryWallpaper : Item
 
     public CategoryWallpaper(FloorCategory? category = null)
     {
-        floorCategory = category ?? Helpers.RandomCategory();//will be 8 with addition of red rooms
-        Name = $"{Helpers.CategoryName(floorCategory)} Decor";
+        floorCategory = category ?? Helpers.RandomCategory();
+        Name = $"{Helpers.CategoryName(floorCategory).Replace(" Room", string.Empty)} Decor";
     }
 
     public override void PickUp()
@@ -235,6 +236,37 @@ public class CategoryWallpaper : Item
             return;
         }
         floorplan.AddCategory(floorCategory);
+        switch (floorCategory)
+        {
+            case FloorCategory.RestRoom:
+                floorplan.TheFirstTime().PlayerExitFloorplan().Do(_ => Player.ChangeSteps(floorplan.CalculatePoints()));
+                break;
+            case FloorCategory.Hallway:
+                for (int i = 0; i < floorplan.connectedFloorplans.Count; i++)
+                    floorplan.connectedFloorplans[i].AddBonus(floorplan.Alias, Bonus);
+                floorplan.EveryTime().FloorplanConnected().AddPointBonusToThatFloorplan(Bonus);
+                int Bonus() => 1;
+                break;
+            case FloorCategory.StorageRoom:
+                Helpers.AddFloorplanItems(floorplan, true);
+                break;
+            case FloorCategory.Shop:
+                int points = floorplan.CalculatePoints();
+                if(points <= 0) return;
+                new Coin(points).AddItemToFloorplan(floorplan);
+                break;
+            case FloorCategory.FancyRoom:
+                floorplan.basePoints += 3;
+                floorplan.OnChanged?.Invoke();
+                break;
+            case FloorCategory.MysteryRoom:
+                floorplan.AddMultiplier(Name, ()=>2);
+                break;
+            case FloorCategory.CursedRoom:
+                Player.ChangeSteps(-5);
+                floorplan.AddBonus(Name, () => 5);
+                break;
+        }
         Player.items.Remove(this);
     }
 }

@@ -21,6 +21,7 @@ public class FloorplanWindow : MonoBehaviour
     private void Awake()
     {
         floorplanDetails.onPickedFloorplan += OnClickFloorplan;
+        GameEvent.OnCollectItem += _ => SetupItems();
     }
 
     public void SetupWindow(Floorplan floorplan)

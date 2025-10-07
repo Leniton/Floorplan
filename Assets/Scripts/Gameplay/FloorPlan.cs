@@ -163,8 +163,8 @@ public class Floorplan : InfoReference
     public void PickupItem(Item item)
     {
         if(!items.Contains(item)) return;
-        item.PickUp();
         items.Remove(item);
+        item.PickUp();
     }
 
     public string AddBonus(string name, Func<int> bonus)
