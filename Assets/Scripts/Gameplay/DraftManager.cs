@@ -139,6 +139,8 @@ public class DraftManager : MonoBehaviour
         Vector2Int slot = targetSlot ?? Vector2Int.zero;
         List<FloorType> possibleTypes =
             Helpers.GetPossibleFloorType(slot, out var possibleSlots);
+        if (!possibleSlots.Contains(direction))
+            possibleTypes.Remove(FloorType.Straw);
 
         //StringBuilder sb = new();
         //for (int i = 0; i < possibleTypes.Count; i++)

@@ -547,23 +547,26 @@ public static class EffectsManager
                 
                 floorplan.TheFirstTime().PlayerEnterFloorplan().Do(evt =>
                 {
-                    Helpers.GetHouseData(out var occupied, out var empty);
-                    if (empty is { Count: > 0 })
+                    MessageWindow.ShowMessage("There's a <b>Treasure</b> in the house!!!", () =>
                     {
-                        //Draft on empty space
-                        Vector2Int coordinate = empty[Random.Range(0, empty.Count)];
-                        var types = Helpers.GetPossibleFloorType(coordinate, out var slots);
-                        var entrance = slots[Random.Range(0, slots.Count)];
-                        treasure = Helpers.CreateFloorplan(treasureName, treasureDescription, treasurePoints,
-                            types[Random.Range(0, types.Count)], FloorCategory.StorageRoom, alias: treasureAlias,
-                            entrance: entrance, onDraftEffect: OnDraftTreasure);
-                        treasure.CorrectRotation(slots);
-                        GameManager.PlaceFloorplan(treasure, coordinate);
-                    }
-                    else if (occupied is { Count: > 0 })
-                    {
-                        //Turn another room into it
-                    }
+                        Helpers.GetHouseData(out var occupied, out var empty);
+                        if (empty is { Count: > 0 })
+                        {
+                            //Draft on empty space
+                            Vector2Int coordinate = empty[Random.Range(0, empty.Count)];
+                            var types = Helpers.GetPossibleFloorType(coordinate, out var slots);
+                            var entrance = slots[Random.Range(0, slots.Count)];
+                            treasure = Helpers.CreateFloorplan(treasureName, treasureDescription, treasurePoints,
+                                types[Random.Range(0, types.Count)], FloorCategory.StorageRoom, alias: treasureAlias,
+                                entrance: entrance, onDraftEffect: OnDraftTreasure);
+                            treasure.CorrectRotation(slots);
+                            GameManager.PlaceFloorplan(treasure, coordinate);
+                        }
+                        else if (occupied is { Count: > 0 })
+                        {
+                            //Turn another room into it
+                        }
+                    });
                 });
 
                 void OnDraftTreasure(CoordinateEvent evt)
@@ -831,7 +834,7 @@ public static class EffectsManager
                     walkinClosetPool.PickRandom().Invoke().AddItemToFloorplan(floorplan);
                 return;
             case "":
-                break;
+                return;
         }
         Helpers.AddFloorplanItems(floorplan);
         bool DraftedFromHere<T>(T evt) where T : Event => Helpers.CurrentFloorplan() == floorplan;

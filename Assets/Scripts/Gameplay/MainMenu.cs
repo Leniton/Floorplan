@@ -14,8 +14,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button startButton;
     [SerializeField] private Button settingsutton;
     [SerializeField] private Button glossaryButton;
-    [Header("Windows")]
-    [SerializeField] private GameObject deckPickWindow;
     [Header("Other")]
     [SerializeField] private PlayerDeck currentDeck;
     [SerializeField] private FloorplanColors colors;
