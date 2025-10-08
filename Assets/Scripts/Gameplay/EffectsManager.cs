@@ -565,6 +565,16 @@ public static class EffectsManager
                         else if (occupied is { Count: > 0 })
                         {
                             //Turn another room into it
+                            Vector2Int coordinate = occupied[Random.Range(0, occupied.Count)];
+                            while (coordinate == floorplan.coordinate)
+                                coordinate = occupied[Random.Range(0, occupied.Count)];
+
+                            treasure = GameManager.floorplanDict[coordinate];
+                            treasure.Name = $"{treasureAlias} {treasure.Alias}";
+                            treasure.Description = $"{treasure.Description}\nI have treasure!!";
+                            treasure.AddCategory(FloorCategory.StorageRoom);
+                            OnDraftTreasure(new(coordinate));
+                            treasure.OnChanged?.Invoke();
                         }
                     });
                 });
