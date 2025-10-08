@@ -51,6 +51,12 @@ public class GridManager : SetupComponent
         UpdatePosition(false);
     }
 
+    private void OnDestroy()
+    {
+        if (!ReferenceEquals(instance, this)) return;
+        instance = null;
+    }
+
     public void ShiftSelection(Vector2Int direction)
     {
         Vector2Int newCoordinate = coordinate + direction;

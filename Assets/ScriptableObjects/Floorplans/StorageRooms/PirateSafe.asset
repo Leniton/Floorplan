@@ -10,17 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c2ec7ddf6ecb914e8686ca425ec3201, type: 3}
-  m_Name: HallwayCloset
+  m_Name: PirateSafe
   m_EditorClassIdentifier: 
-  Name: Hallway Closet
-  Description: 2 <b>Items</b>. +rare <b>Item</b> if <b>Drafted</b> from a <b>Hallway<b>
-  references:
-  - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
-  Alias: Hallway Closet
+  Name: Pirate Safe
+  Description: The first time you enter this room, <b>Draft</b>  a <b>Treasure Room</b>
+    in a random empty space. If there's no empty space, a random Room becomes a <b>Treasure
+    Room</b>.
+  references: []
+  Alias: Pirate Safe
   Category: 4
   Type: 1
-  Rarity: 0
-  keyCost: 0
+  Rarity: 2
+  keyCost: 1
   basePoints: 1
   entranceId: 0
   connections: 

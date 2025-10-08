@@ -28,7 +28,7 @@ public class DraftManager : MonoBehaviour
     private TMP_Text rerollCount;
     private Vector2Int lastDraftDirection;
     private int lastDraftHeight;
-    private List<Vector2Int> lastPossibleSlots;
+    private Vector2Int lastTargetSlot;
 
     private const float commonRate = .7f;
     private const float uncommonRate = .27f;
@@ -131,34 +131,14 @@ public class DraftManager : MonoBehaviour
         Debug.LogWarning(sb.ToString());
     }
 
-    public void DraftFloorplan(Vector2Int direction = default, List<Vector2Int> possibleSlots = null, int draftHeight = 0)
+    public void DraftFloorplan(Vector2Int direction = default, Vector2Int? targetSlot = null, int draftHeight = 0)
     {
         bool choseDirection = direction.sqrMagnitude > 0;
         if (!choseDirection) direction = Vector2Int.up;
-        //if there's no possible slots, all of them is possible
-        if (possibleSlots is not { Count: > 0 })
-        {
-            possibleSlots = new()
-            {
-                Vector2Int.up,
-                Vector2Int.down,
-                Vector2Int.left,
-                Vector2Int.right
-            };
-        }
-        List<FloorType> possibleTypes = new()
-        {
-            FloorType.DeadEnd,
-            FloorType.Ankle,
-            FloorType.Straw,
-            FloorType.TPiece,
-            FloorType.Crossroad,
-        };
 
-        if (possibleSlots.Count < 4) possibleTypes.Remove(FloorType.Crossroad);
-        if (possibleSlots.Count < 3) possibleTypes.Remove(FloorType.TPiece);
-        if (possibleSlots.Count < 2) possibleTypes.Remove(FloorType.Ankle);
-        if (!possibleSlots.Contains(direction)) possibleTypes.Remove(FloorType.Straw);
+        Vector2Int slot = targetSlot ?? Vector2Int.zero;
+        List<FloorType> possibleTypes =
+            Helpers.GetPossibleFloorType(slot, out var possibleSlots);
 
         //StringBuilder sb = new();
         //for (int i = 0; i < possibleTypes.Count; i++)
@@ -186,7 +166,7 @@ public class DraftManager : MonoBehaviour
 
         lastDraftDirection = direction;
         lastDraftHeight = draftHeight;
-        lastPossibleSlots = possibleSlots;
+        lastTargetSlot = slot;
         rerollButton.gameObject.SetActive(Player.dices > 0);
         rerollCount?.SetText($"{Player.dices}");
 
@@ -224,7 +204,7 @@ public class DraftManager : MonoBehaviour
             if (i == 0 && removeCost) floorplan.keyCost = 0;
             int randomRotation = Random.Range(0, 3);
             for (int j = 0; j < randomRotation; j++) floorplan.Rotate();
-            CorrectFloorplanRotation(floorplan, possibleSlots);
+            floorplan.CorrectRotation(possibleSlots);
             FloorplanDetails instance = draftList[i];
             instance.Setup(floorplan);
             instance.FloorplanUI.HighlightDirection(choseDirection ? -direction : Vector2Int.zero);
@@ -244,25 +224,6 @@ public class DraftManager : MonoBehaviour
         //Debug.Log($"floor {height}:\n{rarityPicker.commonRate}\n{rarityPicker.uncommonRate}\n{rarityPicker.rareRate}\n{rarityPicker.legendRate}");
 
         return rarityPicker;
-    }
-
-    public void CorrectFloorplanRotation(Floorplan floorplan, List<Vector2Int> possibleSlots)
-    {
-        if (floorplan.Type != FloorType.Ankle && floorplan.Type != FloorType.TPiece) return;
-
-        bool invalidConnection;
-        do
-        {
-            invalidConnection = false;
-            for (int i = 0; i < floorplan.connections.Length; i++)
-            {
-                if (!floorplan.connections[i]) continue;
-                if (possibleSlots.Contains(Floorplan.IDToDirection(i))) continue;
-                invalidConnection = true;
-                break;
-            }
-            if (invalidConnection) floorplan.Rotate();
-        } while (invalidConnection);
     }
 
     public void PickFloorplan(Floorplan floorplan)
@@ -288,7 +249,7 @@ public class DraftManager : MonoBehaviour
     public void RedrawFloorplans()
     {
         Player.dices--;
-        DraftFloorplan(lastDraftDirection, lastPossibleSlots, lastDraftHeight);
+        DraftFloorplan(lastDraftDirection, lastTargetSlot, lastDraftHeight);
     }
 
     public void CloseWindow()

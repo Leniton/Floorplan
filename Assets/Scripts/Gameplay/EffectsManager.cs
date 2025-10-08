@@ -538,6 +538,46 @@ public static class EffectsManager
                 new Coin().AddItemToFloorplan(floorplan);
                 new Food().AddItemToFloorplan(floorplan);
                 break;
+            case "Pirate Safe":
+                Floorplan treasure = null;
+                string treasureName = "Treasure Room";
+                string treasureAlias = "Treasure";
+                string treasureDescription = "Contains 3 <b>Treasures</b>.";
+                int treasurePoints = 0;
+                
+                floorplan.TheFirstTime().PlayerEnterFloorplan().Do(evt =>
+                {
+                    Helpers.GetHouseData(out var occupied, out var empty);
+                    if (empty is { Count: > 0 })
+                    {
+                        //Draft on empty space
+                        Vector2Int coordinate = empty[Random.Range(0, empty.Count)];
+                        var types = Helpers.GetPossibleFloorType(coordinate, out var slots);
+                        var entrance = slots[Random.Range(0, slots.Count)];
+                        treasure = Helpers.CreateFloorplan(treasureName, treasureDescription, treasurePoints,
+                            types[Random.Range(0, types.Count)], FloorCategory.StorageRoom, alias: treasureAlias,
+                            entrance: entrance, onDraftEffect: OnDraftTreasure);
+                        treasure.CorrectRotation(slots);
+                        GameManager.PlaceFloorplan(treasure, coordinate);
+                    }
+                    else if (occupied is { Count: > 0 })
+                    {
+                        //Turn another room into it
+                    }
+                });
+
+                void OnDraftTreasure(CoordinateEvent evt)
+                {
+                    //add treasures
+                    new Coin(30).AddItemToFloorplan(treasure);
+                    new Key(20).AddItemToFloorplan(treasure);
+                    new Dice(10).AddItemToFloorplan(treasure);
+                    new Food(){Name = "Stamina Potion", stepsAmount = 20}.AddItemToFloorplan(treasure);
+                    ItemUtilities.Treasure().AddItemToFloorplan(treasure);
+                    new SledgeHammer().AddItemToFloorplan(treasure);
+                    new Battery(4).AddItemToFloorplan(treasure);
+                }
+                break;
             case "Pump Room":
                 floorplan.EveryTime().FloorplanConnected().AddPointBonusToThatFloorplan(() => floorplan.basePoints);
                 break;

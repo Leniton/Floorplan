@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     public static List<Floorplan> DraftPool;
     public static Floorplan EntranceHall;
 
-    private FloorplanUI floorplanPrefab;
+    private static FloorplanUI floorplanPrefab;
     private Vector2Int currentDraftPosition;
 
     private void Start()
@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
         UIFloorplans = new();
         floorplanDict = new();
         movement.OnMove += OnMoveSlot;
-        draftManager.OnDraftFloorplan += PlaceFloorplan;
+        draftManager.OnDraftFloorplan += OnChooseFloorplan;
         gridManager.OnStartMove += TriggerFloorplanExitEvent;
         gridManager.OnMove += TriggerFloorplanEnterEvent;
         finishButton.onClick.AddListener(FinishRun);
@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
         GridManager.instance = gridManager;
         currentDraftPosition = gridManager.currentPosition;
         EntranceHall = entrance.CreateInstance(Vector2Int.left);
-        PlaceFloorplan(EntranceHall);
+        OnChooseFloorplan(EntranceHall);
         minimap.OpenMinimap();
         MessageWindow.ShowMessage($"Current objective:\n\n <b>{PointsManager.currentRequirement} points", 
             () => GameEvent.onGameStart?.Invoke(new()));
@@ -137,30 +137,14 @@ public class GameManager : MonoBehaviour
             //slot enter event
             gridManager.ShiftSelection(direction);
         }
-        else
+        else //Draft a Floorplan
         {
-            //get possible sides
-            List<Vector2Int> possibleSlots = new();
-            //up
-            Vector2Int targetCoordinate = targetedSlot + Vector2Int.up;
-            if (gridManager.ValidCoordinate(targetCoordinate)) possibleSlots.Add(Vector2Int.up);
-            //down
-            targetCoordinate = targetedSlot + Vector2Int.down;
-            if (gridManager.ValidCoordinate(targetCoordinate)) possibleSlots.Add(Vector2Int.down);
-            //left
-            targetCoordinate = targetedSlot + Vector2Int.left;
-            if (gridManager.ValidCoordinate(targetCoordinate)) possibleSlots.Add(Vector2Int.left);
-            //right
-            targetCoordinate = targetedSlot + Vector2Int.right;
-            if (gridManager.ValidCoordinate(targetCoordinate)) possibleSlots.Add(Vector2Int.right);
-
-            //draft plan?
             currentDraftPosition = targetedSlot;
-            draftManager.DraftFloorplan(direction, possibleSlots, (GridManager.instance.currentPosition + direction).y);
+            draftManager.DraftFloorplan(direction, currentDraftPosition, (GridManager.instance.currentPosition + direction).y);
         }
     }
 
-    private void PlaceFloorplan(Floorplan floorplan)
+    private void OnChooseFloorplan(Floorplan floorplan)
     {
         if (Player.keys < floorplan.keyCost)
         {
@@ -170,8 +154,13 @@ public class GameManager : MonoBehaviour
         draftManager.CloseWindow();
         Player.ChangeKeys(-floorplan.keyCost);
         draftManager.RemoveFloorplanFromPool(floorplan);
-        
-        FloorplanUI instance = Instantiate(floorplanPrefab, gridManager.GetSlotRect(currentDraftPosition));
+
+        PlaceFloorplan(floorplan, currentDraftPosition);
+    }
+
+    public static void PlaceFloorplan(Floorplan floorplan, Vector2Int coordinate)
+    {
+        FloorplanUI instance = Instantiate(floorplanPrefab, GridManager.instance.GetSlotRect(coordinate));
         instance.Setup(floorplan);
         UIFloorplans[floorplan] = instance;
         RectTransform floorplanRect = (RectTransform)instance.transform;
@@ -184,23 +173,23 @@ public class GameManager : MonoBehaviour
         EffectsManager.AddFloorplanEffect(floorplan);
         //Apply renovation effect
         floorplan.renovation?.activationEffect?.Invoke(floorplan);
-        floorplanDict[currentDraftPosition] = floorplan;
-        floorplan.coordinate = currentDraftPosition;
-        floorplan.onDrafted?.Invoke(new(currentDraftPosition));
-        GameEvent.onDraftedFloorplan?.Invoke(new(currentDraftPosition, floorplan));
-        
+        floorplanDict[coordinate] = floorplan;
+        floorplan.coordinate = coordinate;
+        floorplan.onDrafted?.Invoke(new(coordinate));
+        GameEvent.onDraftedFloorplan?.Invoke(new(coordinate, floorplan));
+
         //connect floorplan
         for (int i = 0; i < floorplan.connections.Length; i++)
         {
-            if(!floorplan.connections[i]) continue;
+            if (!floorplan.connections[i]) continue;
             Vector2Int direction = Floorplan.IDToDirection(i);
-            Vector2Int slot = currentDraftPosition + direction;
+            Vector2Int slot = coordinate + direction;
             //Debug.Log($"{floorplan.Name} is open at {direction}[{slot}]");
             if (!floorplanDict.TryGetValue(slot, out var targetFloorplan)) continue;
             //Debug.Log($"there's a floorplan on {slot}({targetFloorplan.Name})");
             if (!targetFloorplan.connections[Floorplan.DirectionToID(-direction)]) continue;
             //Debug.Log($"{floorplan.Name} is connected to {targetFloorplan.Name}");
-            
+
             Helpers.ConnectFloorplans(targetFloorplan, floorplan);
         }
     }

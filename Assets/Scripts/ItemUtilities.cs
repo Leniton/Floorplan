@@ -103,5 +103,6 @@ public static class ItemUtilities
     /// +7 points
     /// </summary>
     public static Decoration Statue(bool placed = false) => new(activate: placed) { Name = "Statue", bonus = 7 };
+    public static Decoration Treasure(bool placed = false) => new(activate: placed) { Name = "Treasure", bonus = 30 };
     #endregion
 }

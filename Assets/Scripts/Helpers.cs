@@ -1,6 +1,7 @@
 using Lenix.NumberUtilities;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -324,6 +325,100 @@ public static class Helpers
                 break;
         }
         return spareRoom;
+    }
+
+    public static Floorplan CreateFloorplan(string name, string description, int basePoints, 
+        FloorType type, FloorCategory category, int keyCost = 0,
+        string alias = null, Rarity rarity = Rarity.Common, Vector2Int? entrance = null,
+        Action<CoordinateEvent> onDraftEffect = null)
+    {
+        var original = ScriptableObject.CreateInstance<Floorplan>();
+        original.name = name.Replace(" ", "");
+        original.Name = name;
+        original.Description = description;
+        original.Type = type;
+        original.Category = category;
+        original.basePoints = basePoints;
+        original.keyCost = keyCost;
+        
+        original.Alias = alias ?? name;
+        original.Rarity = rarity;
+
+        var instance = original.CreateInstance(entrance ?? Vector2Int.up);
+        if (onDraftEffect != null) instance.EveryTime().FloorplanIsDrafted().Do(onDraftEffect);
+        return instance;
+    }
+
+    public static List<FloorType> GetPossibleFloorType(Vector2Int coordinate, out List<Vector2Int> possibleSlots)
+    {
+        //get possible sides
+        possibleSlots = new();
+        //up
+        Vector2Int targetCoordinate = coordinate + Vector2Int.up;
+        if (GridManager.instance?.ValidCoordinate(targetCoordinate) ?? true) possibleSlots.Add(Vector2Int.up);
+        //down
+        targetCoordinate = coordinate + Vector2Int.down;
+        if (GridManager.instance?.ValidCoordinate(targetCoordinate) ?? true) possibleSlots.Add(Vector2Int.down);
+        //left
+        targetCoordinate = coordinate + Vector2Int.left;
+        if (GridManager.instance?.ValidCoordinate(targetCoordinate) ?? true) possibleSlots.Add(Vector2Int.left);
+        //right
+        targetCoordinate = coordinate + Vector2Int.right;
+        if (GridManager.instance?.ValidCoordinate(targetCoordinate) ?? true) possibleSlots.Add(Vector2Int.right);
+        
+        List<FloorType> possibleTypes = new()
+        {
+            FloorType.DeadEnd,
+            FloorType.Ankle,
+            FloorType.Straw,
+            FloorType.TPiece,
+            FloorType.Crossroad,
+        };
+
+        if (possibleSlots.Count < 4) possibleTypes.Remove(FloorType.Crossroad);
+        if (possibleSlots.Count < 3) possibleTypes.Remove(FloorType.TPiece);
+        if (possibleSlots.Count == 2)
+        {
+            if (!possibleSlots.Contains(-possibleSlots[0]))
+                possibleTypes.Remove(FloorType.Straw);
+        }
+        else possibleTypes.Remove(FloorType.Ankle);
+
+        return possibleTypes;
+    }
+    public static void CorrectRotation(this Floorplan floorplan, List<Vector2Int> possibleSlots)
+    {
+        if (floorplan.Type != FloorType.Ankle && floorplan.Type != FloorType.TPiece) return;
+
+        bool invalidConnection;
+        do
+        {
+            invalidConnection = false;
+            for (int i = 0; i < floorplan.connections.Length; i++)
+            {
+                if (!floorplan.connections[i]) continue;
+                if (possibleSlots.Contains(Floorplan.IDToDirection(i))) continue;
+                invalidConnection = true;
+                break;
+            }
+            if (invalidConnection) floorplan.Rotate();
+        } while (invalidConnection);
+    }
+
+    public static void GetHouseData(out List<Vector2Int> occupied, out List<Vector2Int> empty)
+    {
+        occupied = new();
+        empty = new();
+        int houseSize = GridManager.xSize * GridManager.ySize;
+        for (int i = 0; i < houseSize; i++)
+        {
+            int x = i % GridManager.xSize;
+            int y = i / GridManager.xSize;
+            Vector2Int coordinate = new(x, y);
+            if (!GridManager.instance?.ValidCoordinate(coordinate) ?? true) continue;
+            if (GameManager.floorplanDict.ContainsKey(coordinate)) occupied.Add(coordinate);
+            else empty.Add(coordinate);
+        }
     }
     #endregion
 }

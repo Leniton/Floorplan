@@ -305,6 +305,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb9df1d403be1574bb7109a8d6cb49ac
+    m_Address: PirateSafe
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fc7351df4849f36419a06ea6a22e0444
     m_Address: Passageway
     m_ReadOnly: 0
