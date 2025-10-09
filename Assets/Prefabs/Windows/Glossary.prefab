@@ -1245,7 +1245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7d56c06bc6f40342a06375bc8d3ddf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainGlossary: {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
+  mainGlossary: {fileID: 11400000, guid: fb27efadf69374f418e149d24b720fa4, type: 2}
   referencesPrefab: {fileID: 3626272392146165702, guid: 0ee6edb717e3f364b8702657dd92a886,
     type: 3}
   container: {fileID: 1504737768925973572}
