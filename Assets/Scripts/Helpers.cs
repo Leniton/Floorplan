@@ -32,7 +32,7 @@ public static class Helpers
     #region Floorplan helpers
 
     /// <returns>Random room category</returns>
-    public static FloorCategory RandomCategory() => (FloorCategory)Mathf.Pow(2, Random.Range(0, 8));
+    public static FloorCategory RandomCategory() => (FloorCategory)Mathf.Pow(2, Random.Range(0, 7));
     public static string CategoryName(FloorCategory category) => category switch
     {
         FloorCategory.RestRoom => "Rest Room",
