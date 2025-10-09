@@ -85,6 +85,7 @@ public class MinimapManager : MonoBehaviour
 
     private void SetupFloorplan(Floorplan floorplan)
     {
+        floorplan.OnChanged += CalculatePoints;
         Button slotButton = minimapGrid.GetSlot(floorplan.coordinate);
         FloorplanUI instance = Instantiate(floorplanPrefab, slotButton.transform);
         instance.Setup(floorplan);
@@ -100,11 +101,16 @@ public class MinimapManager : MonoBehaviour
     public void OpenMinimap()
     {
         minimapContainer.SetActive(true);
+        CalculatePoints();
+        StartCoroutine(DelayedUpdate());
+    }
+
+    private void CalculatePoints()
+    {
         int currentPoints = PointsManager.GetTotalPoints();
         totalPointsSlider.maxValue = PointsManager.currentRequirement;
         totalPointsSlider.value = currentPoints;
         totalPoints.text = $"{currentPoints}/{PointsManager.currentRequirement}";
-        StartCoroutine(DelayedUpdate());
     }
 
     private IEnumerator DelayedUpdate()

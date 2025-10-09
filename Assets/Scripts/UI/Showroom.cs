@@ -134,6 +134,24 @@ public class Showroom : MonoBehaviour
             amount = 1,
             OnBuy = () => UseRenovation(RenovationUtils.NewDoor())
         }, Rarity.Common);
+        renovation = RenovationUtils.Demolition();
+        possibleRenovations.AddToPool(new()
+        {
+            name = renovation.name,
+            description = renovation.description,
+            cost = 3,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.Demolition())
+        }, Rarity.Common);
+        renovation = RenovationUtils.SealedDoor();
+        possibleRenovations.AddToPool(new()
+        {
+            name = renovation.name,
+            description = renovation.description,
+            cost = 3,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.SealedDoor())
+        }, Rarity.Common);
         
         List<PurchaseData> renovations = new(3);
         for (int i = 0; i < renovations.Capacity; i++)

@@ -174,20 +174,19 @@ public static class Helpers
         ConnectFloorplans(floorplan, targetFloorplan);
     }
 
-    public static void CloseConnection(this Floorplan floorplan, int connectionID)
+    public static void CloseConnection(this Floorplan floorplan, int connectionID = -1)
     {
+        if(floorplan.Type == FloorType.DeadEnd) return;
+        if (connectionID < 0)
+        {
+            //close first found open connection
+            for (connectionID = 0; connectionID < floorplan.connections.Length-1; connectionID++)
+                if (floorplan.connections[connectionID]) break;
+        }
         if (!floorplan.connections[connectionID]) return;//already closed
         floorplan.connections[connectionID] = false;
         floorplan.UpdateFloorplanType();
         floorplan.OnChanged?.Invoke();
-        
-        return;
-        //WIP remove conections
-        if (!GameManager.floorplanDict.TryGetValue
-                (floorplan.coordinate + Floorplan.IDToDirection(connectionID), 
-                    out var targetFloorplan)) return;
-        while (floorplan.connectedFloorplans.Contains(targetFloorplan))
-            floorplan.connectedFloorplans.Remove(targetFloorplan);
     }
 
     private static void UpdateFloorplanType(this Floorplan floorplan)

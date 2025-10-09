@@ -107,6 +107,32 @@ public static class RenovationUtils
         condition = floorplan => floorplan.Type != FloorType.Crossroad,
         activationEffect = floorplan => floorplan.OpenConnection()
     };
+    /// <summary>
+    /// Remove floorplan from deck.
+    /// </summary>
+    /// <returns></returns>
+    public static Renovation Demolition() => new()
+    {
+        name = "Demolition",
+        description = "Remove floorplan from deck.",
+        activationEffect = floorplan => RunData.playerDeck.deck.Remove(floorplan.FindOriginal(RunData.playerDeck.deck))
+    };
+
+    /// <summary>
+    /// Close a door. remove key cost.
+    /// </summary>
+    /// <returns></returns>
+    public static Renovation SealedDoor() => new()
+    {
+        name = "Sealed Door",
+        description = "Close a door. remove key cost.",
+        condition = floorplan => floorplan.Type != FloorType.DeadEnd,
+        activationEffect = floorplan =>
+        {
+            floorplan.CloseConnection();
+            floorplan.keyCost = 0;
+        }
+    };
 }
 
 public class Renovation
