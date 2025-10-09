@@ -16,7 +16,8 @@ MonoBehaviour:
   Description: The first time you enter this room, <b>Draft</b>  a <b>Treasure Room</b>
     in a random empty space. If there's no empty space, a random Room becomes a <b>Treasure
     Room</b>.
-  references: []
+  references:
+  - {fileID: 11400000, guid: f6f70527f61ac594b955e6061644d146, type: 2}
   Alias: Pirate Safe
   Category: 4
   Type: 1
