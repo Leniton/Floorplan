@@ -13,37 +13,37 @@ public class BagWindow : MonoBehaviour
     [SerializeField] private Transform floorplanContainer;
     [SerializeField] private Transform playerContainer;
 
-    private List<ItemButton> floorplanItems = new();
+    private List<ItemButton> roomItems = new();
     private List<ItemButton> playerItems = new();
 
     private void Awake()
     {
-        GameEvent.OnCollectItem += _ => UpdateItems();
-        floorplanDetails.onPickedFloorplan += OnClickFloorplan;
+        GameEvent.onCollectItem += _ => UpdateItems();
+        floorplanDetails.onPickedFloorplan += OnClickRoom;
         autoPickupToggle.onValueChanged.AddListener(on => GameSettings.current.autoCollectItems = on);
         openDetailsButton.onClick.AddListener(OpenDetails);
         CloseBag();
     }
 
-    private void OpenDetails() => UIManager.ShowDetails(Helpers.CurrentFloorplan());
+    private void OpenDetails() => UIManager.ShowDetails(Helpers.CurrentRoom());
 
     private void UpdateItems()
     {
-        SetupFloorplanItems(Helpers.CurrentFloorplan());
+        SetupFloorplanItems(Helpers.CurrentRoom());
         SetupPlayerItems();
     }
 
-    private void SetupFloorplanItems(Floorplan floorplan)
+    private void SetupFloorplanItems(Room room)
     {
-        int requiredItems = floorplan.items.Count;
-        floorplanItems.EnsureEnoughInstances(itemPrefab, requiredItems, floorplanContainer);
+        int requiredItems = room.items.Count;
+        roomItems.EnsureEnoughInstances(itemPrefab, requiredItems, floorplanContainer);
         for (int i = 0; i < requiredItems; i++)
         {
-            Item item = floorplan.items[i];
-            ItemButton button = floorplanItems[i];
+            Item item = room.items[i];
+            ItemButton button = roomItems[i];
             button.onClick = null;
             button.Setup(item);
-            button.onClick += () => floorplan.PickupItem(item);
+            button.onClick += () => room.PickupItem(item);
             button.onClick += OpenBag;
         }
     }
@@ -63,16 +63,16 @@ public class BagWindow : MonoBehaviour
         }
     }
 
-    private void OnClickFloorplan(Floorplan floorplan)
+    private void OnClickRoom(Room room)
     {
-        Glossary.OpenGlossary(floorplan);
+        Glossary.OpenGlossary(room);
     }
 
     public void OpenBag()
     {
         gameObject.SetActive(true);
-        Floorplan floorplan = Helpers.CurrentFloorplan();
-        floorplanDetails.Setup(floorplan);
+        Room room = Helpers.CurrentRoom();
+        floorplanDetails.Setup(room);
         autoPickupToggle.isOn = GameSettings.current.autoCollectItems;
         UpdateItems();
     }

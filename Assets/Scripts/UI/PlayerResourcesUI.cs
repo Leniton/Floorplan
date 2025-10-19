@@ -29,6 +29,6 @@ public class PlayerResourcesUI : MonoBehaviour
         colorKey.gameObject.SetActive(Player.activeKey);
         itemsContainer.SetActive(dices.activeSelf || sledgeHammer.activeSelf || colorKey.gameObject.activeSelf);
         if (!colorKey.gameObject.activeSelf) return;
-        colorKey.color = GameSettings.current.floorplanColors.GetColor(Player.currentKey.floorCategory);
+        colorKey.color = GameSettings.current.roomColors.GetColor(Player.currentKey.floorCategory);
     }
 }

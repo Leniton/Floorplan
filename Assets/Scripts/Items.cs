@@ -5,11 +5,11 @@ public abstract class Item
 {
     public string Name;
 
-    public virtual void Place(Floorplan floorplan) 
+    public virtual void Place(Room room) 
     {
-        floorplan.AddItem(this);
+        room.AddItem(this);
     }
-    public virtual void PickUp() => GameEvent.OnCollectItem?.Invoke(new(this));
+    public virtual void PickUp() => GameEvent.onCollectItem?.Invoke(new(this));
     public abstract void Activate();
 }
 
@@ -132,9 +132,9 @@ public abstract class ToggleItem : Item
 
 public class ColorKey : ToggleItem
 {
-    public FloorCategory floorCategory { get; protected set; }
+    public RoomCategory floorCategory { get; protected set; }
 
-    public ColorKey(FloorCategory? category = null)
+    public ColorKey(RoomCategory? category = null)
     {
         floorCategory = category ?? Helpers.RandomCategory();//will be 8 with addition of red rooms
         Name = $"{Helpers.CategoryName(floorCategory).Replace(" Room", string.Empty)} key";
@@ -145,22 +145,22 @@ public class ColorKey : ToggleItem
         if (active != Player.activeKey) return;
         active = !active;
         Player.currentKey = active ? this : null;
-        if (active) GameEvent.onDrawFloorplans += GuaranteeCategory;
-        else GameEvent.onDrawFloorplans -= GuaranteeCategory;
+        if (active) GameEvent.onDrawRooms += GuaranteeCategory;
+        else GameEvent.onDrawRooms -= GuaranteeCategory;
     }
 
-    private void GuaranteeCategory(DrawFloorplanEvent evt)
+    private void GuaranteeCategory(DrawRoomEvent evt)
     {
         evt.IncreaseChanceOfDrawing(CheckCategory, 1, Helpers.CategorySpareRoom(floorCategory));
-        new Effect(null, 1).AnyFloorplanIsDrafted().Do(_ =>
+        new Effect(null, 1).AnyRoomIsDrafted().Do(_ =>
         {
-            GameEvent.onDrawFloorplans -= GuaranteeCategory;
+            GameEvent.onDrawRooms -= GuaranteeCategory;
             Player.currentKey = null;
             Player.items.Remove(this);
         });
     }
 
-    private bool CheckCategory(Floorplan floorplan) => floorplan.IsOfCategory(floorCategory);
+    private bool CheckCategory(Room floorplan) => floorplan.IsOfCategory(floorCategory);
 }
 
 public class SledgeHammer : ToggleItem
@@ -179,45 +179,45 @@ public class SledgeHammer : ToggleItem
 
 public abstract class PlaceableItem : Item
 {
-    public bool placed => !ReferenceEquals(currentFloorplan, null);
+    public bool placed => !ReferenceEquals(currentRoom, null);
     protected bool firstPlaced;
-    protected Floorplan currentFloorplan;
+    protected Room currentRoom;
 
     public PlaceableItem(bool alreadyCanPlace = false) => firstPlaced = alreadyCanPlace;
 
-    public override void Place(Floorplan floorplan)
+    public override void Place(Room room)
     {
-        if (firstPlaced) PlaceOnFloorplan(floorplan);
-        base.Place(floorplan);
+        if (firstPlaced) PlaceOnRoom(room);
+        base.Place(room);
         firstPlaced = true;
     }
 
-    protected virtual void PlaceOnFloorplan(Floorplan floorplan)
+    protected virtual void PlaceOnRoom(Room room)
     {
-        currentFloorplan = floorplan;
+        currentRoom = room;
         Player.items.Remove(this);
     }
 
     public override void PickUp()
     {
         bool wasPlaced = placed;
-        currentFloorplan = null;
+        currentRoom = null;
         Player.items.Add(this);
         if (wasPlaced) return;
         base.PickUp();
     }
 
-    public override void Activate() => Place(Helpers.CurrentFloorplan());
+    public override void Activate() => Place(Helpers.CurrentRoom());
 }
 
 public class CategoryWallpaper : Item
 {
-    public FloorCategory floorCategory { get; protected set; }
+    public RoomCategory roomCategory { get; protected set; }
 
-    public CategoryWallpaper(FloorCategory? category = null)
+    public CategoryWallpaper(RoomCategory? category = null)
     {
-        floorCategory = category ?? Helpers.RandomCategory();
-        Name = $"{Helpers.CategoryName(floorCategory).Replace(" Room", string.Empty)} Decor";
+        roomCategory = category ?? Helpers.RandomCategory();
+        Name = $"{Helpers.CategoryName(roomCategory).Replace(" Room", string.Empty)} Decor";
     }
 
     public override void PickUp()
@@ -228,42 +228,42 @@ public class CategoryWallpaper : Item
 
     public override void Activate()
     {
-        var floorplan = Helpers.CurrentFloorplan();
-        if (floorplan.IsOfCategory(floorCategory))
+        var room = Helpers.CurrentRoom();
+        if (room.IsOfCategory(roomCategory))
         {
-            MessageWindow.ShowMessage($"Floorplan is already a {Helpers.CategoryName(floorCategory)}!");
+            MessageWindow.ShowMessage($"Floorplan is already a {Helpers.CategoryName(roomCategory)}!");
             return;
         }
-        floorplan.AddCategory(floorCategory);
-        switch (floorCategory)
+        room.AddCategory(roomCategory);
+        switch (roomCategory)
         {
-            case FloorCategory.RestRoom:
-                floorplan.TheFirstTime().PlayerExitFloorplan().Do(_ => Player.ChangeSteps(floorplan.CalculatePoints()));
+            case RoomCategory.RestRoom:
+                room.TheFirstTime().PlayerExitRoom().Do(_ => Player.ChangeSteps(room.CalculatePoints()));
                 break;
-            case FloorCategory.Hallway:
-                for (int i = 0; i < floorplan.connectedFloorplans.Count; i++)
-                    floorplan.connectedFloorplans[i].AddBonus(floorplan.Alias, Bonus);
-                floorplan.EveryTime().FloorplanConnected().AddPointBonusToThatFloorplan(Bonus);
+            case RoomCategory.Hallway:
+                for (int i = 0; i < room.connectedRooms.Count; i++)
+                    room.connectedRooms[i].AddBonus(room.Alias, Bonus);
+                room.EveryTime().RoomConnected().AddPointBonusToThatRoom(Bonus);
                 int Bonus() => 1;
                 break;
-            case FloorCategory.StorageRoom:
-                Helpers.AddFloorplanItems(floorplan, true);
+            case RoomCategory.StorageRoom:
+                Helpers.AddRoomItems(room, true);
                 break;
-            case FloorCategory.Shop:
-                int points = floorplan.CalculatePoints();
+            case RoomCategory.Shop:
+                int points = room.CalculatePoints();
                 if(points <= 0) return;
-                new Coin(points).AddItemToFloorplan(floorplan);
+                new Coin(points).AddItemToRoom(room);
                 break;
-            case FloorCategory.FancyRoom:
-                floorplan.basePoints += 3;
-                floorplan.OnChanged?.Invoke();
+            case RoomCategory.FancyRoom:
+                room.basePoints += 3;
+                room.OnChanged?.Invoke();
                 break;
-            case FloorCategory.MysteryRoom:
-                floorplan.AddMultiplier(Name, ()=>2);
+            case RoomCategory.MysteryRoom:
+                room.AddMultiplier(Name, ()=>2);
                 break;
-            case FloorCategory.CursedRoom:
+            case RoomCategory.CursedRoom:
                 Player.ChangeSteps(-5);
-                floorplan.AddBonus(Name, () => 5);
+                room.AddBonus(Name, () => 5);
                 break;
         }
         Player.items.Remove(this);
@@ -288,16 +288,16 @@ public class Decoration : PlaceableItem
         };
     }
 
-    protected override void PlaceOnFloorplan(Floorplan floorplan)
+    protected override void PlaceOnRoom(Room room)
     {
         if (placed) PickUp();
-        base.PlaceOnFloorplan(floorplan);
-        bonusKey = currentFloorplan.AddBonus(Name, PointBonus);
+        base.PlaceOnRoom(room);
+        bonusKey = currentRoom.AddBonus(Name, PointBonus);
     }
 
     public override void PickUp()
     {
-        currentFloorplan?.RemoveBonus(bonusKey);
+        currentRoom?.RemoveBonus(bonusKey);
         base.PickUp();
     }
 
@@ -315,16 +315,16 @@ public class Battery : PlaceableItem
         Name = $"V{mult} Battery";
     }
 
-    protected override void PlaceOnFloorplan(Floorplan floorplan)
+    protected override void PlaceOnRoom(Room floorplan)
     {
         if (placed) PickUp();
-        base.PlaceOnFloorplan(floorplan);
-        multKey = currentFloorplan.AddMultiplier(Name, Multiplier);
+        base.PlaceOnRoom(floorplan);
+        multKey = currentRoom.AddMultiplier(Name, Multiplier);
     }
 
     public override void PickUp()
     {
-        currentFloorplan?.RemoveMultiplier(multKey);
+        currentRoom?.RemoveMultiplier(multKey);
         base.PickUp();
     }
 

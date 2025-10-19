@@ -27,7 +27,7 @@ public static class PointsManager
     public static int GetTotalPoints()
     {
         int finalValue = 0;
-        foreach (var pair in GameManager.floorplanDict)
+        foreach (var pair in GameManager.roomDict)
         {
             var floorplan = pair.Value;
             if (!GridManager.instance.ValidCoordinate(pair.Key)) continue;
@@ -49,7 +49,7 @@ public static class PointsManager
         
         List<BonusData> bonuses = new();
         FullHouseBonus();
-        foreach (var pair in GameManager.floorplanDict)
+        foreach (var pair in GameManager.roomDict)
         {
             RestBonus(pair);
             HallwayBonus(pair);
@@ -61,14 +61,14 @@ public static class PointsManager
         {
             int size = GridManager.xSize * GridManager.ySize;
             for (int i = 0; i < size; i++)
-                if (!GameManager.floorplanDict.ContainsKey(new(i % GridManager.xSize, i / GridManager.xSize))) 
+                if (!GameManager.roomDict.ContainsKey(new(i % GridManager.xSize, i / GridManager.xSize))) 
                     return;
             bonuses.Add(new("Full House", 10));
         }
 
-        void RestBonus(KeyValuePair<Vector2Int, Floorplan> pair)
+        void RestBonus(KeyValuePair<Vector2Int, Room> pair)
         {
-            if(!pair.Value.IsOfCategory(FloorCategory.RestRoom)) return;
+            if(!pair.Value.IsOfCategory(RoomCategory.RestRoom)) return;
             restBonusActive = !restBonusActive;
             if (restBonusActive) return;
             if (restBonusId < 0)
@@ -79,7 +79,7 @@ public static class PointsManager
             bonuses[restBonusId].amount += 5;
         }
 
-        void HallwayBonus(KeyValuePair<Vector2Int, Floorplan> pair)
+        void HallwayBonus(KeyValuePair<Vector2Int, Room> pair)
         {
             if (hallwayBonusId < 0)
             {
@@ -87,9 +87,9 @@ public static class PointsManager
                 bonuses.Add(new("Hallway Bonus", 0));
             }
             var room = pair.Value;
-            for (int i = 0; i < room.connectedFloorplans.Count; i++)
+            for (int i = 0; i < room.connectedRooms.Count; i++)
             {
-                if(!room.connectedFloorplans[i].IsOfCategory(FloorCategory.Hallway)) continue;
+                if(!room.connectedRooms[i].IsOfCategory(RoomCategory.Hallway)) continue;
                 bonuses[hallwayBonusId].amount++;
             }
         }

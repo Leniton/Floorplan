@@ -21,9 +21,9 @@ public class DraftManager : MonoBehaviour
     private int amountDrafted = 3;
     private PlayerDeck playerDeck;
     private List<FloorplanDetails> draftList = new();
-    private List<Floorplan> draftPool;
+    private List<Room> draftPool;
 
-    public event Action<Floorplan> OnDraftFloorplan;
+    public event Action<Room> OnDraftRoom;
 
     private TMP_Text rerollCount;
     private Vector2Int lastDraftDirection;
@@ -40,7 +40,7 @@ public class DraftManager : MonoBehaviour
     private float rareGrowth;
     private float legendGrowth;
 
-    public void Setup(int draftOptions, PlayerDeck deck = null, Action<List<Floorplan>> onDone = null)
+    public void Setup(int draftOptions, PlayerDeck deck = null, Action<List<Room>> onDone = null)
     {
         if (!ReferenceEquals(detailsPrefab, null)) LoadDraftPool();
         else
@@ -55,10 +55,10 @@ public class DraftManager : MonoBehaviour
         void LoadDraftPool()
         {
             amountDrafted = draftOptions;
-            draftList.EnsureEnoughInstances(detailsPrefab, amountDrafted, floorplansContainer, i => i.onPickedFloorplan += PickFloorplan);
+            draftList.EnsureEnoughInstances(detailsPrefab, amountDrafted, floorplansContainer, i => i.onPickedFloorplan += PickRoom);
             playerDeck = deck;
 
-            rerollButton.onClick.AddListener(RedrawFloorplans);
+            rerollButton.onClick.AddListener(RedrawRooms);
             rerollCount = rerollButton.GetComponentInChildren<TMP_Text>();
 
             if (!ReferenceEquals(playerDeck, null))
@@ -71,7 +71,7 @@ public class DraftManager : MonoBehaviour
                 return;
             }
             draftPool = new();
-            Addressables.LoadAssetsAsync<Floorplan>("BaseFloorplan", floorplan =>
+            Addressables.LoadAssetsAsync<Room>("BaseFloorplan", floorplan =>
                 draftPool.Add(floorplan.CreateInstance(Vector2Int.up))).Completed += _ =>
                 {
                     onDone?.Invoke(draftPool);
@@ -95,7 +95,7 @@ public class DraftManager : MonoBehaviour
 
         int[] rarityCount = new int[4];
         int[] costCount = new int[5];
-        Dictionary<FloorType, int> typesCount = new();
+        Dictionary<RoomType, int> typesCount = new();
         Dictionary<int, int> pointsCount = new();
         for (int i = 0; i < draftPool.Count; i++)
         {
@@ -131,16 +131,16 @@ public class DraftManager : MonoBehaviour
         Debug.LogWarning(sb.ToString());
     }
 
-    public void DraftFloorplan(Vector2Int direction = default, Vector2Int? targetSlot = null, int draftHeight = 0)
+    public void DraftRoom(Vector2Int direction = default, Vector2Int? targetSlot = null, int draftHeight = 0)
     {
         bool choseDirection = direction.sqrMagnitude > 0;
         if (!choseDirection) direction = Vector2Int.up;
 
         Vector2Int slot = targetSlot ?? Vector2Int.zero;
-        List<FloorType> possibleTypes =
-            Helpers.GetPossibleFloorType(slot, out var possibleSlots);
+        List<RoomType> possibleTypes =
+            Helpers.GetPossibleRoomTypes(slot, out var possibleSlots);
         if (!possibleSlots.Contains(direction))
-            possibleTypes.Remove(FloorType.Straw);
+            possibleTypes.Remove(RoomType.Straw);
 
         //StringBuilder sb = new();
         //for (int i = 0; i < possibleTypes.Count; i++)
@@ -148,22 +148,22 @@ public class DraftManager : MonoBehaviour
         //Debug.Log(sb.ToString());
 
         //pick possible ones
-        List<Floorplan> possibleFloorplans = new();
-        RarityPicker<Floorplan> floorplanPicker = GetRarityPicker(draftHeight);
+        List<Room> possibleRooms = new();
+        RarityPicker<Room> roomPicker = GetRarityPicker(draftHeight);
         for (int i = 0; i < draftPool.Count; i++)
         {
             if (!possibleTypes.Contains(draftPool[i].Type)) continue;
-            Floorplan floorplan = draftPool[i];
-            possibleFloorplans.Add(floorplan);
-            floorplanPicker.AddToPool(floorplan, floorplan.Rarity);
+            Room floorplan = draftPool[i];
+            possibleRooms.Add(floorplan);
+            roomPicker.AddToPool(floorplan, floorplan.Rarity);
         }
 
-        int missingFloorplans = amountDrafted - possibleFloorplans.Count;
-        for (int i = 0; i < missingFloorplans; i++)
+        int missingRoom = amountDrafted - possibleRooms.Count;
+        for (int i = 0; i < missingRoom; i++)
         {
             var spareRoom = Helpers.CreateSpareRoom(possibleTypes: possibleTypes);
-            possibleFloorplans.Add(spareRoom);
-            floorplanPicker.AddToPool(spareRoom, spareRoom.Rarity);
+            possibleRooms.Add(spareRoom);
+            roomPicker.AddToPool(spareRoom, spareRoom.Rarity);
         }
 
         lastDraftDirection = direction;
@@ -172,37 +172,37 @@ public class DraftManager : MonoBehaviour
         rerollButton.gameObject.SetActive(Player.dices > 0);
         rerollCount?.SetText($"{Player.dices}");
 
-        DrawFloorplanEvent evt = new();
+        DrawRoomEvent evt = new();
         evt.targetCoordinate = (GridManager.instance?.currentPosition ?? Vector2Int.zero) + direction;
-        evt.drawnFloorplans = new Floorplan[amountDrafted];
+        evt.drawnRooms = new Room[amountDrafted];
         evt.possibleFloorTypes = possibleTypes;
-        evt.possibleFloorplans = possibleFloorplans;
-        evt.floorplanPicker = floorplanPicker;
+        evt.possibleRooms = possibleRooms;
+        evt.roomPicker = roomPicker;
 
         for (int i = 0; i < amountDrafted - 1; i++) AddToDraftList(i);
         //last one is rarer
-        AddToDraftList(amountDrafted - 1, floorplanPicker.commonRate);
-        GameEvent.onDrawFloorplans?.Invoke(evt);
+        AddToDraftList(amountDrafted - 1, roomPicker.commonRate);
+        GameEvent.onDrawRooms?.Invoke(evt);
         GameEvent.onDrawChange?.Invoke(evt);
         GameEvent.onModifyDraw?.Invoke(evt);
 
         void AddToDraftList(int id, float rarityOffset = 0)
         {
-            Floorplan floorplan = floorplanPicker.PickRandom(rarityOffset, true);
-            evt.drawnFloorplans[id] = floorplan;
+            Room floorplan = roomPicker.PickRandom(rarityOffset, true);
+            evt.drawnRooms[id] = floorplan;
         }
 
-        int keysRequiredFloorplans = 0;
+        int keysRequiredRoom = 0;
         for (int i = 0; i < amountDrafted; i++)
         {
-            if(evt.drawnFloorplans[i].keyCost <= 0) continue;
-            keysRequiredFloorplans++;
+            if(evt.drawnRooms[i].keyCost <= 0) continue;
+            keysRequiredRoom++;
         }
 
-        bool removeCost = keysRequiredFloorplans >= amountDrafted;
+        bool removeCost = keysRequiredRoom >= amountDrafted;
         for (int i = 0; i < amountDrafted; i++)
         {
-            Floorplan floorplan = evt.drawnFloorplans[i].CreateInstance(-direction);
+            Room floorplan = evt.drawnRooms[i].CreateInstance(-direction);
             if (i == 0 && removeCost) floorplan.keyCost = 0;
             int randomRotation = Random.Range(0, 3);
             for (int j = 0; j < randomRotation; j++) floorplan.Rotate();
@@ -216,9 +216,9 @@ public class DraftManager : MonoBehaviour
         draftScreen.SetActive(true);
     }
 
-    private RarityPicker<Floorplan> GetRarityPicker(int height)
+    private RarityPicker<Room> GetRarityPicker(int height)
     {
-        RarityPicker<Floorplan> rarityPicker = new(
+        RarityPicker<Room> rarityPicker = new(
             commonRate + commonGrowth * height,
             uncommonRate + uncommonGrowth * height,
             rareRate + rareGrowth * height,
@@ -228,30 +228,30 @@ public class DraftManager : MonoBehaviour
         return rarityPicker;
     }
 
-    public void PickFloorplan(Floorplan floorplan)
+    public void PickRoom(Room room)
     {
-        OnDraftFloorplan?.Invoke(floorplan);
+        OnDraftRoom?.Invoke(room);
     }
 
-    public void RemoveFloorplanFromPool(Floorplan floorplan)
+    public void RemoveRoomFromPool(Room room)
     {
-        Floorplan originalFloorplan = floorplan.FindOriginal(draftPool);
-        draftPool.Remove(originalFloorplan);
+        Room originalRoom = room.FindOriginal(draftPool);
+        draftPool.Remove(originalRoom);
     }
 
     [SerializeMethod]
-    public void RotateFloorplans()
+    public void RotateRooms()
     {
         for (int i = 0; i < draftList.Count; i++)
         {
-            draftList[i].currentFloorplan.Rotate();
+            draftList[i].currentRoom.Rotate();
         }
     }
 
-    public void RedrawFloorplans()
+    public void RedrawRooms()
     {
         Player.dices--;
-        DraftFloorplan(lastDraftDirection, lastTargetSlot, lastDraftHeight);
+        DraftRoom(lastDraftDirection, lastTargetSlot, lastDraftHeight);
     }
 
     public void CloseWindow()
@@ -261,11 +261,11 @@ public class DraftManager : MonoBehaviour
     }
 }
 
-public class DrawFloorplanEvent : Event
+public class DrawRoomEvent : Event
 {
     public Vector2Int targetCoordinate;
-    public Floorplan[] drawnFloorplans;
-    public List<Floorplan> possibleFloorplans;
-    public List<FloorType> possibleFloorTypes;
-    public RarityPicker<Floorplan> floorplanPicker;
+    public Room[] drawnRooms;
+    public List<Room> possibleRooms;
+    public List<RoomType> possibleFloorTypes;
+    public RarityPicker<Room> roomPicker;
 }

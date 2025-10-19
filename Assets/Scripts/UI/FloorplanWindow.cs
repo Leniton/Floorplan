@@ -14,60 +14,60 @@ public class FloorplanWindow : MonoBehaviour
     [SerializeField] private TMP_Text basePointsText;
     [SerializeField] private RectTransform pointsContent;
 
-    private Floorplan currentFloorplan;
+    private Room currentRoom;
     private List<TMP_Text> itemsTexts = new();
     private List<TMP_Text> pointsTexts = new();
 
     private void Awake()
     {
         floorplanDetails.onPickedFloorplan += OnClickFloorplan;
-        GameEvent.OnCollectItem += _ => SetupItems();
+        GameEvent.onCollectItem += _ => SetupItems();
     }
 
-    public void SetupWindow(Floorplan floorplan)
+    public void SetupWindow(Room room)
     {
-        currentFloorplan = floorplan;
+        currentRoom = room;
         SetupData();
     }
 
     private void SetupData()
     {
-        floorplanDetails.Setup(currentFloorplan);
+        floorplanDetails.Setup(currentRoom);
         SetupItems();
         SetupPoints();
     }
 
     private void SetupItems()
     {
-        int requiredTexts = currentFloorplan.items.Count;
+        int requiredTexts = currentRoom.items.Count;
         itemsTexts.EnsureEnoughInstances(textPrefab, requiredTexts, itemsContent);
 
         for (int i = 0;i < requiredTexts; i++)
-            itemsTexts[i].text = $"{currentFloorplan.items[i].Name}";
+            itemsTexts[i].text = $"{currentRoom.items[i].Name}";
     }
 
     private void SetupPoints()
     {
-        basePointsText.text = $"Base: {currentFloorplan.basePoints}";
-        int requiredTexts = currentFloorplan.pointBonus.Count + currentFloorplan.multBonus.Count;
+        basePointsText.text = $"Base: {currentRoom.basePoints}";
+        int requiredTexts = currentRoom.pointBonus.Count + currentRoom.multBonus.Count;
         pointsTexts.EnsureEnoughInstances(textPrefab , requiredTexts, pointsContent);
 
         int id = 0;
-        foreach (var bonus in currentFloorplan.pointBonus)
+        foreach (var bonus in currentRoom.pointBonus)
         {
             int points = bonus.Value.Invoke();
             pointsTexts[id].text = $"{bonus.Key} => {(points > 0 ? "+" : string.Empty) + $"{points}"}";
             id++;
         }
-        foreach (var mult in currentFloorplan.multBonus)
+        foreach (var mult in currentRoom.multBonus)
         {
             pointsTexts[id].text = $"{mult.Key} => {mult.Value.Invoke()}x";
             id++;
         }
     }
 
-    private void OnClickFloorplan(Floorplan floorplan)
+    private void OnClickFloorplan(Room room)
     {
-        Glossary.OpenGlossary(floorplan);
+        Glossary.OpenGlossary(room);
     }
 }

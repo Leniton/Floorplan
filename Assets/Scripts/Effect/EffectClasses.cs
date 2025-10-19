@@ -7,11 +7,11 @@ public class Effect
 {
     public int triggers = 0;//0 = everytime
     public int triggerCount = 0;
-    public Floorplan floorplan;
+    public Room room;
 
-    public Effect(Floorplan _floorplan, int retriggerAmount = 0)
+    public Effect(Room _room, int retriggerAmount = 0)
     {
-        floorplan = _floorplan;
+        room = _room;
         triggers = retriggerAmount;
     }
 

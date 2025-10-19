@@ -12,30 +12,30 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GridManager gridManager;
     [SerializeField] private MovementManager movement;
     [SerializeField] private DeckView deckView;
-    [SerializeField] private Floorplan entrance;
+    [SerializeField] private Room entrance;
     [SerializeField] private Image currentImage;
     [SerializeField] private Button finishButton;
     [SerializeField] private HoverMenu hoverMenu;
     [SerializeField] private MinimapManager minimap;
 
-    private static Dictionary<Floorplan, FloorplanUI> UIFloorplans;
-    public static Dictionary<Vector2Int, Floorplan> floorplanDict;
-    public static List<Floorplan> DraftPool;
-    public static Floorplan EntranceHall;
+    private static Dictionary<Room, FloorplanUI> UIRooms;
+    public static Dictionary<Vector2Int, Room> roomDict;
+    public static List<Room> DraftPool;
+    public static Room EntranceHall;
 
-    private static FloorplanUI floorplanPrefab;
+    private static FloorplanUI roomPrefab;
     private Vector2Int currentDraftPosition;
 
     private void Start()
     {
         movement.OnDirectionChanged += UpdateMovementDirection;
         Player.ResetPlayer();
-        UIFloorplans = new();
-        floorplanDict = new();
+        UIRooms = new();
+        roomDict = new();
         movement.OnMove += OnMoveSlot;
-        draftManager.OnDraftFloorplan += OnChooseFloorplan;
-        gridManager.OnStartMove += TriggerFloorplanExitEvent;
-        gridManager.OnMove += TriggerFloorplanEnterEvent;
+        draftManager.OnDraftRoom += OnChooseRoom;
+        gridManager.OnStartMove += TriggerRoomExitEvent;
+        gridManager.OnMove += TriggerRoomEnterEvent;
         finishButton.onClick.AddListener(FinishRun);
         hoverMenu.SetupOptions(new()
         {
@@ -68,13 +68,13 @@ public class GameManager : MonoBehaviour
         loadedAssets.AddStep();
         AAComponent<FloorplanUI>.LoadComponent("FloorplanUI", prefab =>
         {
-            floorplanPrefab = prefab;
+            roomPrefab = prefab;
             loadedAssets.FinishStep();
         });
         loadedAssets.AddStep();
         AAAsset<FloorplanColors>.LoadAsset("DefaultFloorplanColors", colors =>
         {
-            GameSettings.current.floorplanColors = colors;
+            GameSettings.current.roomColors = colors;
             loadedAssets.FinishStep();
         });
     }
@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
         GridManager.instance = gridManager;
         currentDraftPosition = gridManager.currentPosition;
         EntranceHall = entrance.CreateInstance(Vector2Int.left);
-        OnChooseFloorplan(EntranceHall);
+        OnChooseRoom(EntranceHall);
         minimap.OpenMinimap();
         MessageWindow.ShowMessage($"Current objective:\n\n <b>{PointsManager.currentRequirement} points", 
             () => GameEvent.onGameStart?.Invoke(new()));
@@ -102,35 +102,35 @@ public class GameManager : MonoBehaviour
 
     private void UpdateMovementDirection(Vector2Int direction)
     {
-        FloorplanUI floorplan = UIFloorplans[Helpers.CurrentFloorplan()];
+        FloorplanUI floorplan = UIRooms[Helpers.CurrentRoom()];
         floorplan.HighlightDirection(direction);
     }
 
     private void OnMoveSlot(Vector2Int direction)
     {
         bool forceEntrance = Player.activeSledgeHammer;
-        Floorplan current = Helpers.CurrentFloorplan();
+        Room current = Helpers.CurrentRoom();
         Vector2Int targetedSlot = gridManager.currentPosition + direction;
         if (!gridManager.ValidCoordinate(targetedSlot)) return;
 
-        if (!current.connections[Floorplan.DirectionToID(direction)] && !forceEntrance) return;
-        if (!current.connections[Floorplan.DirectionToID(direction)] && forceEntrance)
+        if (!current.connections[Room.DirectionToID(direction)] && !forceEntrance) return;
+        if (!current.connections[Room.DirectionToID(direction)] && forceEntrance)
         {
             //add connection
-            current.OpenConnection(Floorplan.DirectionToID(direction));
+            current.OpenConnection(Room.DirectionToID(direction));
             if (Player.activeSledgeHammer) Player.ConsumeSledgeHammer();
         }
 
-        if (floorplanDict.TryGetValue(targetedSlot, out var targetFloorplan))
+        if (roomDict.TryGetValue(targetedSlot, out var targetFloorplan))
         {
             if (Player.steps <= 0) return;
             //check if floorplan is connected to this one
-            if (!targetFloorplan.connections[Floorplan.DirectionToID(-direction)])
+            if (!targetFloorplan.connections[Room.DirectionToID(-direction)])
             {
 
                 if (!Player.activeSledgeHammer && !forceEntrance) return;
                 //Add connection to other floorplans
-                targetFloorplan.OpenConnection(Floorplan.DirectionToID(-direction));
+                targetFloorplan.OpenConnection(Room.DirectionToID(-direction));
                 if (Player.activeSledgeHammer) Player.ConsumeSledgeHammer();
             }
 
@@ -140,77 +140,77 @@ public class GameManager : MonoBehaviour
         else //Draft a Floorplan
         {
             currentDraftPosition = targetedSlot;
-            draftManager.DraftFloorplan(direction, currentDraftPosition, (GridManager.instance.currentPosition + direction).y);
+            draftManager.DraftRoom(direction, currentDraftPosition, (GridManager.instance.currentPosition + direction).y);
         }
     }
 
-    private void OnChooseFloorplan(Floorplan floorplan)
+    private void OnChooseRoom(Room room)
     {
-        if (Player.keys < floorplan.keyCost)
+        if (Player.keys < room.keyCost)
         {
             MessageWindow.ShowMessage("You don't have enough keys!!");
             return;
         }
         draftManager.CloseWindow();
-        Player.ChangeKeys(-floorplan.keyCost);
-        draftManager.RemoveFloorplanFromPool(floorplan);
+        Player.ChangeKeys(-room.keyCost);
+        draftManager.RemoveRoomFromPool(room);
 
-        PlaceFloorplan(floorplan, currentDraftPosition);
+        PlaceRoom(room, currentDraftPosition);
     }
 
-    public static void PlaceFloorplan(Floorplan floorplan, Vector2Int coordinate)
+    public static void PlaceRoom(Room room, Vector2Int coordinate)
     {
-        FloorplanUI instance = Instantiate(floorplanPrefab, GridManager.instance.GetSlotRect(coordinate));
-        instance.Setup(floorplan);
-        UIFloorplans[floorplan] = instance;
-        RectTransform floorplanRect = (RectTransform)instance.transform;
-        floorplanRect.anchoredPosition = Vector2.zero;
-        floorplanRect.anchorMin = Vector2.zero;
-        floorplanRect.anchorMax = Vector2.one;
-        floorplanRect.sizeDelta = Vector2.zero;
+        FloorplanUI instance = Instantiate(roomPrefab, GridManager.instance.GetSlotRect(coordinate));
+        instance.Setup(room);
+        UIRooms[room] = instance;
+        RectTransform roomRect = (RectTransform)instance.transform;
+        roomRect.anchoredPosition = Vector2.zero;
+        roomRect.anchorMin = Vector2.zero;
+        roomRect.anchorMax = Vector2.one;
+        roomRect.sizeDelta = Vector2.zero;
 
         //Apply floorplan effect
-        EffectsManager.AddFloorplanEffect(floorplan);
+        EffectsManager.AddRoomEffect(room);
         //Apply renovation effect
-        floorplan.renovation?.activationEffect?.Invoke(floorplan);
-        floorplanDict[coordinate] = floorplan;
-        floorplan.coordinate = coordinate;
-        floorplan.onDrafted?.Invoke(new(coordinate));
-        GameEvent.onDraftedFloorplan?.Invoke(new(coordinate, floorplan));
+        room.renovation?.activationEffect?.Invoke(room);
+        roomDict[coordinate] = room;
+        room.coordinate = coordinate;
+        room.onDrafted?.Invoke(new(coordinate));
+        GameEvent.onDraftedRoom?.Invoke(new(coordinate, room));
 
         //connect floorplan
-        for (int i = 0; i < floorplan.connections.Length; i++)
+        for (int i = 0; i < room.connections.Length; i++)
         {
-            if (!floorplan.connections[i]) continue;
-            Vector2Int direction = Floorplan.IDToDirection(i);
+            if (!room.connections[i]) continue;
+            Vector2Int direction = Room.IDToDirection(i);
             Vector2Int slot = coordinate + direction;
             //Debug.Log($"{floorplan.Name} is open at {direction}[{slot}]");
-            if (!floorplanDict.TryGetValue(slot, out var targetFloorplan)) continue;
+            if (!roomDict.TryGetValue(slot, out var targetRoom)) continue;
             //Debug.Log($"there's a floorplan on {slot}({targetFloorplan.Name})");
-            if (!targetFloorplan.connections[Floorplan.DirectionToID(-direction)]) continue;
+            if (!targetRoom.connections[Room.DirectionToID(-direction)]) continue;
             //Debug.Log($"{floorplan.Name} is connected to {targetFloorplan.Name}");
 
-            Helpers.ConnectFloorplans(targetFloorplan, floorplan);
+            Helpers.ConnectRooms(targetRoom, room);
         }
     }
 
-    private void TriggerFloorplanExitEvent(Vector2Int origin, Vector2Int goal)
+    private void TriggerRoomExitEvent(Vector2Int origin, Vector2Int goal)
     {
         //Debug.Log($"exit {floorplanDict[origin]}");
         gridManager.GetSlot(origin).interactable = false;
         Player.ChangeSteps(-1);
-        Floorplan floorplan = floorplanDict[origin];
-        floorplan.onExit?.Invoke(new());
-        GameEvent.OnExitFloorplan?.Invoke(new(origin, floorplan));
+        Room room = roomDict[origin];
+        room.onExit?.Invoke(new());
+        GameEvent.onExitRoom?.Invoke(new(origin, room));
     }
 
-    private void TriggerFloorplanEnterEvent(Vector2Int coordinate)
+    private void TriggerRoomEnterEvent(Vector2Int coordinate)
     {
         gridManager.GetSlot(coordinate).interactable = true;
-        Floorplan floorplan = floorplanDict[coordinate];
+        Room room = roomDict[coordinate];
         //Debug.Log($"entered {floorplan.Name}({coordinate})\n{GridManager.instance.currentPosition}");
-        floorplan.onEnter?.Invoke(new());
-        GameEvent.OnEnterFloorplan?.Invoke(new(coordinate, floorplan));
+        room.onEnter?.Invoke(new());
+        GameEvent.onEnterRoom?.Invoke(new(coordinate, room));
     }
 
     private void FinishRun()
@@ -228,7 +228,7 @@ public class GameManager : MonoBehaviour
             PointsManager.Reset();
             targetScene = 0;
         }
-        floorplanDict.Clear();
+        roomDict.Clear();
         GameEvent.ResetListeners();
         SceneManager.LoadScene(targetScene);
     }

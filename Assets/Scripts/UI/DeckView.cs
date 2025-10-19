@@ -30,12 +30,12 @@ public class DeckView : MonoBehaviour
 
     private void LoadView()
     {
-        List<Floorplan> floorplanList = undraftedToggle.isOn ? GameManager.DraftPool: RunData.playerDeck.deck;
+        List<Room> roomList = undraftedToggle.isOn ? GameManager.DraftPool: RunData.playerDeck.deck;
         
-        detailsList.EnsureEnoughInstances(detailsPrefab, floorplanList.Count, content, 
+        detailsList.EnsureEnoughInstances(detailsPrefab, roomList.Count, content, 
             details => details.onPickedFloorplan += Glossary.OpenGlossary);
-        for (int i = 0; i < floorplanList.Count; i++)
-            detailsList[i].Setup(floorplanList[i]);
+        for (int i = 0; i < roomList.Count; i++)
+            detailsList[i].Setup(roomList[i]);
     }
     
     public void Close()

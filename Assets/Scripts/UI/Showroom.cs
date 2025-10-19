@@ -31,16 +31,16 @@ public class Showroom : MonoBehaviour
         SetupRenovationsShop();
         pickFloorplan.Setup(5, RunData.playerDeck, _ => pickFloorplan.CloseWindow());
 
-        GameEvent.onDrawFloorplans += DeckBias;
-        addFloorplan.Setup(3, RunData.allFloorplans, _ => addFloorplan.DraftFloorplan());
-        addFloorplan.OnDraftFloorplan += OnPickFloorplanToAdd;
+        GameEvent.onDrawRooms += DeckBias;
+        addFloorplan.Setup(3, RunData.allRooms, _ => addFloorplan.DraftRoom());
+        addFloorplan.OnDraftRoom += OnPickFloorplanToAdd;
         
         renovationPackButton.onClick.AddListener(OpenRenovationShop);
         suppliesPackButton.onClick.AddListener(OpenSuppliesShop);
         continueButton.onClick.AddListener(ContinueGame);
     }
 
-    private void DeckBias(DrawFloorplanEvent evt)
+    private void DeckBias(DrawRoomEvent evt)
     {
         if(RunData.playerDeck.preferredCategory == 0) return;
         evt.IncreaseChanceOfDrawing(floorplan => 
@@ -48,7 +48,7 @@ public class Showroom : MonoBehaviour
             .2f);
     }
 
-    private void OnPickFloorplanToAdd(Floorplan floorplan)
+    private void OnPickFloorplanToAdd(Room floorplan)
     {
         addFloorplan.CloseWindow();
         RunData.playerDeck.deck.Add(floorplan);
@@ -106,7 +106,7 @@ public class Showroom : MonoBehaviour
             amount = 1,
             OnBuy = () => UseRenovation(RenovationUtils.Wallpaper())
         }, Rarity.Common);
-        FloorCategory paintCategory = Helpers.RandomCategory();
+        RoomCategory paintCategory = Helpers.RandomCategory();
         Renovation paint = RenovationUtils.Paint(paintCategory);
         possibleRenovations.AddToPool(new()
         {
@@ -243,25 +243,25 @@ public class Showroom : MonoBehaviour
 
     private void UseRenovation(Renovation renovation)
     {
-        GameEvent.onDrawFloorplans -= DeckBias;
+        GameEvent.onDrawRooms -= DeckBias;
         renovationPick.text = renovation.description;
         if (renovation.condition != null)
-            GameEvent.onDrawFloorplans += CheckCondition;
-        pickFloorplan.DraftFloorplan();
-        pickFloorplan.OnDraftFloorplan += ApplyRenovation;
+            GameEvent.onDrawRooms += CheckCondition;
+        pickFloorplan.DraftRoom();
+        pickFloorplan.OnDraftRoom += ApplyRenovation;
 
-        void ApplyRenovation(Floorplan floorplan)
+        void ApplyRenovation(Room floorplan)
         {
-            GameEvent.onDrawFloorplans += DeckBias;
+            GameEvent.onDrawRooms += DeckBias;
             pickFloorplan.CloseWindow();
-            pickFloorplan.OnDraftFloorplan -= ApplyRenovation;
+            pickFloorplan.OnDraftRoom -= ApplyRenovation;
 
             var original = floorplan.FindOriginal(RunData.playerDeck.deck);
             if (original != null) renovation.Activate(original);
-            GameEvent.onDrawFloorplans -= CheckCondition;
+            GameEvent.onDrawRooms -= CheckCondition;
         }
 
-        void CheckCondition(DrawFloorplanEvent evt)
+        void CheckCondition(DrawRoomEvent evt)
         {
             evt.IncreaseChanceOfDrawing(renovation.condition, 1);
         }
@@ -273,14 +273,14 @@ public class Showroom : MonoBehaviour
 
         void AddItemToEntranceHall(Event evt)
         {
-            item.AddItemToFloorplan(GameManager.EntranceHall);
+            item.AddItemToRoom(GameManager.EntranceHall);
             GameEvent.onGameStart -= AddItemToEntranceHall;
         }
     }
 
     private void ContinueGame()
     {
-        GameEvent.onDrawFloorplans -= DeckBias;
+        GameEvent.onDrawRooms -= DeckBias;
         SceneManager.LoadScene(1);
     }
 }

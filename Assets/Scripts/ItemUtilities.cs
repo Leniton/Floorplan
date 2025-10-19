@@ -30,21 +30,21 @@ public static class ItemUtilities
     /// </summary>
     public static Food Meal() => new() { Name = "Meal", stepsAmount = 10 };
     /// <summary>
-    /// +1 step for each floorplan drafted
+    /// +1 step for each room drafted
     /// </summary>
     public static Food Snack()
     {
-        Food snack = new() { Name = "Snack", stepsAmount = GameManager.floorplanDict.Count };
+        Food snack = new() { Name = "Snack", stepsAmount = GameManager.roomDict.Count };
 
-        GameEvent.onDraftedFloorplan += AddPoint;
-        GameEvent.OnCollectItem += OnConsume;
+        GameEvent.onDraftedRoom += AddPoint;
+        GameEvent.onCollectItem += OnConsume;
 
-        void AddPoint(FloorplanEvent evt) => snack.stepsAmount++;
+        void AddPoint(RoomEvent evt) => snack.stepsAmount++;
         void OnConsume(ItemEvent evt)
         {
             if (evt.item != snack) return;
-            GameEvent.onDraftedFloorplan -= AddPoint;
-            GameEvent.OnCollectItem -= OnConsume;
+            GameEvent.onDraftedRoom -= AddPoint;
+            GameEvent.onCollectItem -= OnConsume;
         }
 
         return snack;
@@ -56,17 +56,17 @@ public static class ItemUtilities
     {
         Food snack = new() { Name = "Energy bar", stepsAmount = 0 };
 
-        foreach (var floorplan in GameManager.floorplanDict.Values)
+        foreach (var room in GameManager.roomDict.Values)
         {
-            if (floorplan.Type != FloorType.DeadEnd) continue;
+            if (room.Type != RoomType.DeadEnd) continue;
             snack.stepsAmount += 2;
         }
 
-        GameEvent.onDraftedFloorplan += AddPoint;
-        GameEvent.OnCollectItem += OnConsume;
+        GameEvent.onDraftedRoom += AddPoint;
+        GameEvent.onCollectItem += OnConsume;
 
-        bool IsDeadEnd(FloorplanEvent evt) => evt.Floorplan.Type == FloorType.DeadEnd;
-        void AddPoint(FloorplanEvent evt)
+        bool IsDeadEnd(RoomEvent evt) => evt.Room.Type == RoomType.DeadEnd;
+        void AddPoint(RoomEvent evt)
         {
             if (!IsDeadEnd(evt)) return;
             snack.stepsAmount += 2;
@@ -74,8 +74,8 @@ public static class ItemUtilities
         void OnConsume(ItemEvent evt)
         {
             if (evt.item != snack) return;
-            GameEvent.onDraftedFloorplan -= AddPoint;
-            GameEvent.OnCollectItem -= OnConsume;
+            GameEvent.onDraftedRoom -= AddPoint;
+            GameEvent.onCollectItem -= OnConsume;
         }
 
         return snack;

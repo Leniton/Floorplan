@@ -14,9 +14,9 @@ public static class RenovationUtils
         {
             persistent = true,
             name = "Key Holder",
-            description = "Add 2 keys to floorplan",
+            description = "Add 2 keys to room",
             overlayPattern = GameAssets.patterns[9],
-            activationEffect = new Key(2).AddItemToFloorplan
+            activationEffect = new Key(2).AddItemToRoom
         };
     }
     /// <summary>
@@ -28,9 +28,9 @@ public static class RenovationUtils
         {
             persistent = true,
             name = "Secret Vault",
-            description = "Add 5 coins to floorplan",
+            description = "Add 5 coins to room",
             overlayPattern = GameAssets.patterns[73],
-            activationEffect = new Coin(5).AddItemToFloorplan
+            activationEffect = new Coin(5).AddItemToRoom
         };
     }
     /// <summary>
@@ -42,9 +42,9 @@ public static class RenovationUtils
         {
             persistent = true,
             name = "Mini-Fridge",
-            description = "Add a <b>Soda</b> to floorplan",
+            description = "Add a <b>Soda</b> to room",
             overlayPattern = GameAssets.patterns[54],
-            activationEffect = ItemUtilities.Soda.AddItemToFloorplan
+            activationEffect = ItemUtilities.Soda.AddItemToRoom
         };
     }
     /// <summary>
@@ -56,9 +56,9 @@ public static class RenovationUtils
         {
             persistent = true,
             name = "Play table",
-            description = "Add 2 dices to floorplan",
+            description = "Add 2 dices to room",
             overlayPattern = GameAssets.patterns[14],
-            activationEffect = new Dice(2).AddItemToFloorplan
+            activationEffect = new Dice(2).AddItemToRoom
         };
     }
     /// <summary>
@@ -70,22 +70,22 @@ public static class RenovationUtils
         {
             name = "Wallpaper",
             description = "+5 base points",
-            activationEffect = floorplan => floorplan.basePoints += 5
+            activationEffect = room => room.basePoints += 5
         };
     }
     /// <summary>
     /// Add category to floorplan
     /// </summary>
-    public static Renovation Paint(FloorCategory? category = null)
+    public static Renovation Paint(RoomCategory? category = null)
     {
-        var floorCategory = category ?? Helpers.RandomCategory();
-        var categoryName = Helpers.CategoryName(floorCategory);
+        var roomCategory = category ?? Helpers.RandomCategory();
+        var categoryName = Helpers.CategoryName(roomCategory);
         return new()
         {
             name = $"{categoryName} Paint",
-            description = $"Floorplan is also a {categoryName}",
-            condition = floorplan => !floorplan.IsOfCategory(floorCategory),
-            activationEffect = floorplan => floorplan.AddCategory(floorCategory)
+            description = $"Room is also a {categoryName}",
+            condition = room => !room.IsOfCategory(roomCategory),
+            activationEffect = room => room.AddCategory(roomCategory)
         };
     }
     /// <summary>
@@ -94,8 +94,8 @@ public static class RenovationUtils
     public static Renovation WallMirror() => new()
     {
         name = "Wall Mirror",
-        description = "Add a copy of the floorplan to the draft pool",
-        activationEffect = floorplan => RunData.playerDeck.deck.Add(floorplan.CreateInstance(Vector2Int.up))
+        description = "Add a copy of the room to the draft pool",
+        activationEffect = room => RunData.playerDeck.deck.Add(room.CreateInstance(Vector2Int.up))
     };
     /// <summary>
     /// Adds an opening to floorplan
@@ -103,9 +103,9 @@ public static class RenovationUtils
     public static Renovation NewDoor() => new()
     {
         name = "New Door",
-        description = "Adds an opening to floorplan",
-        condition = floorplan => floorplan.Type != FloorType.Crossroad,
-        activationEffect = floorplan => floorplan.OpenConnection()
+        description = "Adds an opening to room",
+        condition = floorplan => floorplan.Type != RoomType.Crossroad,
+        activationEffect = room => room.OpenConnection()
     };
     /// <summary>
     /// Remove floorplan from deck.
@@ -114,8 +114,8 @@ public static class RenovationUtils
     public static Renovation Demolition() => new()
     {
         name = "Demolition",
-        description = "Remove floorplan from deck.",
-        activationEffect = floorplan => RunData.playerDeck.deck.Remove(floorplan.FindOriginal(RunData.playerDeck.deck))
+        description = "Remove room from deck.",
+        activationEffect = room => RunData.playerDeck.deck.Remove(room.FindOriginal(RunData.playerDeck.deck))
     };
 
     /// <summary>
@@ -126,11 +126,11 @@ public static class RenovationUtils
     {
         name = "Sealed Door",
         description = "Close a door. remove key cost.",
-        condition = floorplan => floorplan.Type != FloorType.DeadEnd,
-        activationEffect = floorplan =>
+        condition = room => room.Type != RoomType.DeadEnd,
+        activationEffect = room =>
         {
-            floorplan.CloseConnection();
-            floorplan.keyCost = 0;
+            room.CloseConnection();
+            room.keyCost = 0;
         }
     };
 }
@@ -140,25 +140,25 @@ public class Renovation
     public string name;
     public string description;
     public Sprite overlayPattern;
-    public Action<Floorplan> activationEffect;
+    public Action<Room> activationEffect;
     public bool persistent;
-    public Func<Floorplan, bool> condition;
+    public Func<Room, bool> condition;
 
     public Renovation()
     {
         if (persistent) condition = NoRenovations;
     }
 
-    private static bool NoRenovations(Floorplan floorplan) => floorplan.renovation != null;
+    private static bool NoRenovations(Room room) => room.renovation != null;
 
-    public void Activate(Floorplan floorplan)
+    public void Activate(Room flooroomplan)
     {
         if (!persistent)
         {
-            activationEffect?.Invoke(floorplan);
+            activationEffect?.Invoke(flooroomplan);
             return;
         }
 
-        floorplan.renovation = this;
+        flooroomplan.renovation = this;
     }
 }

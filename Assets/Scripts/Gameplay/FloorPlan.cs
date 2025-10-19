@@ -6,14 +6,14 @@ using Lenix.NumberUtilities;
 using UnityEngine;
 using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "new Floorplan", menuName = "Floorplan/Floorplan")]
-public class Floorplan : InfoReference
+[CreateAssetMenu(fileName = "new Room", menuName = "Floorplan/Room")]
+public class Room : InfoReference
 {
     public string Alias;
 
-    public FloorCategory Category;
+    public RoomCategory Category;
 
-    public FloorType Type = FloorType.DeadEnd;
+    public RoomType Type = RoomType.DeadEnd;
     public Rarity Rarity;
     public int keyCost = 0;
     public int basePoints = 1;
@@ -25,41 +25,41 @@ public class Floorplan : InfoReference
     public Vector2Int coordinate { get; set; }
     public List<Item> items { get; set; } = new();
 
-    public Floorplan original { get; private set; }
+    public Room original { get; private set; }
 
     public Action OnChanged;
     
     //Renovation parameters
     public Renovation renovation;
 
-    [HideInInspector] public List<Floorplan> connectedFloorplans;
+    [HideInInspector] public List<Room> connectedRooms;
     public Dictionary<string, Func<int>> pointBonus = new();
     public Dictionary<string, Func<int>> multBonus = new();
 
     public Action<CoordinateEvent> onDrafted = null;
-    public Action<FloorplanConnectedEvent> onConnectToFloorplan = null;
+    public Action<RoomConnectedEvent> onConnectToRoom = null;
     public Action<Event> onEnter = null;
     public Action<Event> onExit = null;
     public Action<CategoryChangeEvent> onCategoryChanged = null;
 
-    public Floorplan CreateInstance(Vector2Int entranceDirection)
+    public Room CreateInstance(Vector2Int entranceDirection)
     {
-        Floorplan floorplan = CreateInstance<Floorplan>();
-        floorplan.original = this;
-        floorplan.name = name;
-        floorplan.Name = Name;
-        floorplan.Alias = Alias;
-        floorplan.Description = Description;
-        floorplan.Category = Category;
-        floorplan.Type = Type;
-        floorplan.Rarity = Rarity;
-        floorplan.keyCost = keyCost;
-        floorplan.basePoints = basePoints;
-        floorplan.references = references;
+        Room room = CreateInstance<Room>();
+        room.original = this;
+        room.name = name;
+        room.Name = Name;
+        room.Alias = Alias;
+        room.Description = Description;
+        room.Category = Category;
+        room.Type = Type;
+        room.Rarity = Rarity;
+        room.keyCost = keyCost;
+        room.basePoints = basePoints;
+        room.references = references;
         if (connections is { Length: > 0 })
         {
             //instance floorplan; copy floorplan connections and determine its type
-            floorplan.connections = new[]
+            room.connections = new[]
             {
                 connections[0],
                 connections[1],
@@ -70,25 +70,25 @@ public class Floorplan : InfoReference
         else
         {
             //default floorplan; connections based on type
-            floorplan.connections = new[]
+            room.connections = new[]
             {
                 true,
-                Type != FloorType.DeadEnd && Type != FloorType.Straw,
-                Type != FloorType.DeadEnd && Type != FloorType.Ankle,
-                Type == FloorType.Crossroad,
+                Type != RoomType.DeadEnd && Type != RoomType.Straw,
+                Type != RoomType.DeadEnd && Type != RoomType.Ankle,
+                Type == RoomType.Crossroad,
             };
         }
-        floorplan.connectedFloorplans = new(Mathf.Abs((int)floorplan.Type));
-        floorplan.ChangeEntrance(entranceDirection);
-        floorplan.Setup();
-        floorplan.renovation = renovation;
+        room.connectedRooms = new(Mathf.Abs((int)room.Type));
+        room.ChangeEntrance(entranceDirection);
+        room.Setup();
+        room.renovation = renovation;
         
-        return floorplan;
+        return room;
     }
 
     private void Setup()
     {
-        connectedFloorplans = new(Mathf.Abs((int)Type));
+        connectedRooms = new(Mathf.Abs((int)Type));
 
         //StringBuilder sb = new();
         //for (int i = 0; i < floorplan.connections.Length; i++)
@@ -129,7 +129,7 @@ public class Floorplan : InfoReference
 
     public void Rotate()
     {
-        if (Type != FloorType.TPiece && Type != FloorType.Ankle) return;
+        if (Type != RoomType.TPiece && Type != RoomType.Ankle) return;
         InternalRotation();
         OnChanged?.Invoke();
     }
@@ -141,7 +141,7 @@ public class Floorplan : InfoReference
     public void AddItem(Item item)
     {
         items.Add(item);
-        if (Helpers.CurrentFloorplan() != this ||
+        if (Helpers.CurrentRoom() != this ||
             !GameSettings.current.autoCollectItems ||
             item is PlaceableItem and { placed: true }) return;
         MessageWindow.ShowMessage($"found {item.Name}", () => PickupItem(item));
@@ -209,13 +209,13 @@ public class Floorplan : InfoReference
         return finalValue;
     }
 
-    public void AddCategory(FloorCategory category)
+    public void AddCategory(RoomCategory category)
     {
         if(this.IsOfCategory(category)) return;
         Category |= category;
         OnChanged?.Invoke();
         onCategoryChanged?.Invoke(new(category, coordinate, this));
-        GameEvent.OnFloorplanCategoryChanged?.Invoke(new(category, coordinate, this));
+        GameEvent.onRoomCategoryChanged?.Invoke(new(category, coordinate, this));
     }
 
     public static int DirectionToID(Vector2Int direction)
@@ -246,7 +246,7 @@ public class Floorplan : InfoReference
     }
 }
 
-public enum FloorType
+public enum RoomType
 {
     DeadEnd = 1,
     Straw = 2,
@@ -256,7 +256,7 @@ public enum FloorType
 }
 
 [Flags]
-public enum FloorCategory
+public enum RoomCategory
 {
     RestRoom = 1,
     Hallway = 2,
@@ -268,11 +268,11 @@ public enum FloorCategory
     Blank = 128 //added so Aquarium doesn't break Great Hall
 }
 
-public class CategoryChangeEvent : FloorplanEvent
+public class CategoryChangeEvent : RoomEvent
 {
-    public FloorCategory category;
+    public RoomCategory category;
 
-    public CategoryChangeEvent(FloorCategory newCategory, Vector2Int coordinates, Floorplan floorplan) : base(
+    public CategoryChangeEvent(RoomCategory newCategory, Vector2Int coordinates, Room floorplan) : base(
         coordinates, floorplan)
     {
         category = newCategory;

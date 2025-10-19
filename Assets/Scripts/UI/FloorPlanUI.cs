@@ -17,7 +17,7 @@ public class FloorplanUI : MonoBehaviour
     [Header("External References")]
     [SerializeField] private FloorplanColorMask colorMaskPrefab;
 
-    private Floorplan currentFloorplan;
+    private Room currentRoom;
 
     private List<FloorplanColorMask> colors = new();
 
@@ -28,50 +28,50 @@ public class FloorplanUI : MonoBehaviour
         entranceDimensions = entrances[0].sizeDelta;
     }
 
-    public void Setup(Floorplan floorplan)
+    public void Setup(Room room)
     {
-        if (currentFloorplan != null)
-            currentFloorplan.OnChanged -= InternalSetup;
-        currentFloorplan = floorplan;
-        currentFloorplan.OnChanged += InternalSetup;
+        if (currentRoom != null)
+            currentRoom.OnChanged -= InternalSetup;
+        currentRoom = room;
+        currentRoom.OnChanged += InternalSetup;
         InternalSetup();
     }
 
     private void InternalSetup()
     {
-        image.enabled = !ReferenceEquals(currentFloorplan, null);
-        if (ReferenceEquals(currentFloorplan, null)) return;
-        text.text = currentFloorplan.Name;
+        image.enabled = !ReferenceEquals(currentRoom, null);
+        if (ReferenceEquals(currentRoom, null)) return;
+        text.text = currentRoom.Name;
 
         for (int i = 0; i < entrances.Length; i++)
-            entrances[i].gameObject.SetActive(currentFloorplan.connections[i]);
+            entrances[i].gameObject.SetActive(currentRoom.connections[i]);
         SetupColors();
-        pattern.gameObject.SetActive(currentFloorplan.renovation is not null and { overlayPattern: not null });
-        pattern.sprite = currentFloorplan.renovation?.overlayPattern;
+        pattern.gameObject.SetActive(currentRoom.renovation is not null and { overlayPattern: not null });
+        pattern.sprite = currentRoom.renovation?.overlayPattern;
     }
 
     private void SetupColors()
     {
         image.color = default;
-        int[] categories = NumberUtil.SeparateBits((int)currentFloorplan.Category);
+        int[] categories = NumberUtil.SeparateBits((int)currentRoom.Category);
         colors.EnsureEnoughInstances(colorMaskPrefab, categories.Length, colorsContainer);
-        if (categories is { Length: <= 0 }) categories = new[] { (int)FloorCategory.Blank };
+        if (categories is { Length: <= 0 }) categories = new[] { (int)RoomCategory.Blank };
         float fillSlice = 1f / categories.Length;
         for (int i = categories.Length - 1; i > 0; i--)
         {
             var currentColor = colors[i];
-            currentColor.SetColor(GameSettings.current.floorplanColors.GetColor((FloorCategory)categories[i]));
+            currentColor.SetColor(GameSettings.current.roomColors.GetColor((RoomCategory)categories[i]));
             currentColor.SetFillAmount(fillSlice * (categories.Length - i));
         }
 
         var lastColor = colors[0];
-        lastColor.SetColor(GameSettings.current.floorplanColors.GetColor((FloorCategory)categories[0]));
+        lastColor.SetColor(GameSettings.current.roomColors.GetColor((RoomCategory)categories[0]));
         lastColor.SetFillAmount(1);
     }
 
     public void HighlightDirection(Vector2Int direction)
     {
-        int id = Floorplan.DirectionToID(direction);
+        int id = Room.DirectionToID(direction);
         for (int i = 0; i < entrances.Length; i++)
         {
             float scale = entranceDimensions.x * (i == id ? .8f : 0);

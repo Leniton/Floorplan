@@ -14,17 +14,17 @@ public class FloorplanColors : ScriptableObject
     public Color mysteryRoomColor;
     public Color cursedRoomColor;
 
-    public Color GetColor(FloorCategory category)
+    public Color GetColor(RoomCategory category)
     {
         return category switch
         {
-            FloorCategory.RestRoom => restRoomColor,
-            FloorCategory.Hallway => hallwayColor,
-            FloorCategory.StorageRoom => storageRoomColor,
-            FloorCategory.FancyRoom => fancyRoomColor,
-            FloorCategory.Shop => shopColor,
-            FloorCategory.MysteryRoom => mysteryRoomColor,
-            FloorCategory.CursedRoom => cursedRoomColor,
+            RoomCategory.RestRoom => restRoomColor,
+            RoomCategory.Hallway => hallwayColor,
+            RoomCategory.StorageRoom => storageRoomColor,
+            RoomCategory.FancyRoom => fancyRoomColor,
+            RoomCategory.Shop => shopColor,
+            RoomCategory.MysteryRoom => mysteryRoomColor,
+            RoomCategory.CursedRoom => cursedRoomColor,
             _ => blankColor
         };
     }

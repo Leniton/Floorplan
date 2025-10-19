@@ -28,9 +28,9 @@ public class MinimapManager : MonoBehaviour
 
     private void SetupGridMirror()
     {
-        foreach (var floorplan in GameManager.floorplanDict.Values)
-            SetupFloorplan(floorplan);
-        GameEvent.onDraftedFloorplan += PlaceFloorplan;
+        foreach (var floorplan in GameManager.roomDict.Values)
+            SetupRoom(floorplan);
+        GameEvent.onDraftedRoom += PlaceRoom;
     }
 
     private void Start()
@@ -74,28 +74,28 @@ public class MinimapManager : MonoBehaviour
     {
         Vector2Int coordinates = gameGrid.currentPosition + direction;
         if (!gameGrid.ValidCoordinate(coordinates)) return;
-        if (!GameManager.floorplanDict.TryGetValue(coordinates, out var floorplan)) return;
-        UIManager.ShowDetails(floorplan);
+        if (!GameManager.roomDict.TryGetValue(coordinates, out var room)) return;
+        UIManager.ShowDetails(room);
     }
 
-    private void PlaceFloorplan(FloorplanEvent evt)
+    private void PlaceRoom(RoomEvent evt)
     {
-        SetupFloorplan(evt.Floorplan);
+        SetupRoom(evt.Room);
     }
 
-    private void SetupFloorplan(Floorplan floorplan)
+    private void SetupRoom(Room room)
     {
-        floorplan.OnChanged += CalculatePoints;
-        Button slotButton = minimapGrid.GetSlot(floorplan.coordinate);
+        room.OnChanged += CalculatePoints;
+        Button slotButton = minimapGrid.GetSlot(room.coordinate);
         FloorplanUI instance = Instantiate(floorplanPrefab, slotButton.transform);
-        instance.Setup(floorplan);
-        RectTransform floorplanRect = (RectTransform)instance.transform;
-        floorplanRect.anchoredPosition = Vector2.zero;
-        floorplanRect.anchorMin = Vector2.zero;
-        floorplanRect.anchorMax = Vector2.one;
-        floorplanRect.sizeDelta = Vector2.zero;
+        instance.Setup(room);
+        RectTransform roomRect = (RectTransform)instance.transform;
+        roomRect.anchoredPosition = Vector2.zero;
+        roomRect.anchorMin = Vector2.zero;
+        roomRect.anchorMax = Vector2.one;
+        roomRect.sizeDelta = Vector2.zero;
 
-        slotButton.onClick.AddListener(() => UIManager.ShowDetails(floorplan));
+        slotButton.onClick.AddListener(() => UIManager.ShowDetails(room));
     }
 
     public void OpenMinimap()

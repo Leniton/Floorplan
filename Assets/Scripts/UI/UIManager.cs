@@ -21,9 +21,9 @@ public class UIManager : MonoBehaviour
         playerItemsView?.Close();
     }
 
-    public static void ShowDetails(Floorplan floorplan)
+    public static void ShowDetails(Room room)
     {
-        instance.details.SetupWindow(floorplan);
+        instance.details.SetupWindow(room);
         instance.details.gameObject.SetActive(true);
     }
 

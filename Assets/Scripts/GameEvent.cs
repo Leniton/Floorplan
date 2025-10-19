@@ -9,21 +9,21 @@ public static class GameEvent
     /// <summary>
     /// Initial draw
     /// </summary>
-    public static Action<DrawFloorplanEvent> onDrawFloorplans;
+    public static Action<DrawRoomEvent> onDrawRooms;
     /// <summary>
     /// Changed drawn
     /// </summary>
-    public static Action<DrawFloorplanEvent> onDrawChange;
+    public static Action<DrawRoomEvent> onDrawChange;
     /// <summary>
     /// Modifies drawn
     /// </summary>
-    public static Action<DrawFloorplanEvent> onModifyDraw;
-    public static Action<FloorplanEvent> onDraftedFloorplan;
-    public static Action<FloorplanConnectedEvent> onConnectFloorplans;
-    public static Action<FloorplanEvent> OnExitFloorplan;
-    public static Action<FloorplanEvent> OnEnterFloorplan;
-    public static Action<ItemEvent> OnCollectItem;
-    public static Action<CategoryChangeEvent> OnFloorplanCategoryChanged;
+    public static Action<DrawRoomEvent> onModifyDraw;
+    public static Action<RoomEvent> onDraftedRoom;
+    public static Action<RoomConnectedEvent> onConnectRooms;
+    public static Action<RoomEvent> onExitRoom;
+    public static Action<RoomEvent> onEnterRoom;
+    public static Action<ItemEvent> onCollectItem;
+    public static Action<CategoryChangeEvent> onRoomCategoryChanged;
 
     public static Action<ValueEvent> onStepsChanged;
     public static Action<ValueEvent> onKeysChanged;
@@ -31,14 +31,15 @@ public static class GameEvent
 
     public static void ResetListeners()
     {
-        onDrawFloorplans = null;
+        onDrawRooms = null;
         onDrawChange = null;
         onModifyDraw = null;
-        onDraftedFloorplan = null;
-        onConnectFloorplans = null;
-        OnExitFloorplan = null;
-        OnEnterFloorplan = null;
-        OnCollectItem = null;
+        onDraftedRoom = null;
+        onConnectRooms = null;
+        onExitRoom = null;
+        onEnterRoom = null;
+        onCollectItem = null;
+        onRoomCategoryChanged = null;
     }
 }
 
@@ -54,24 +55,24 @@ public class CoordinateEvent : Event
     public Vector2Int Coordinates;
     public CoordinateEvent(Vector2Int coordinates) => Coordinates = coordinates;
 }
-public class FloorplanEvent : CoordinateEvent
+public class RoomEvent : CoordinateEvent
 {
-    public Floorplan Floorplan;
+    public Room Room;
 
-    public FloorplanEvent(Vector2Int coordinates, Floorplan floorplan) : base(coordinates)
+    public RoomEvent(Vector2Int coordinates, Room room) : base(coordinates)
     {
-        Floorplan = floorplan;
+        Room = room;
     }
 }
-public class FloorplanConnectedEvent : FloorplanEvent
+public class RoomConnectedEvent : RoomEvent
 {
-    public Floorplan baseFloorplan;
-    public Floorplan connectedFloorplan => Floorplan;
+    public Room baseRoom;
+    public Room connectedRoom => Room;
 
-    public FloorplanConnectedEvent(Floorplan baseFloorplan, Floorplan connectedFloorplan, Vector2Int connectedCoordinates) :
-        base(connectedCoordinates, connectedFloorplan)
+    public RoomConnectedEvent(Room baseRoom, Room connectedRoom, Vector2Int connectedCoordinates) :
+        base(connectedCoordinates, connectedRoom)
     {
-        this.baseFloorplan = baseFloorplan;
+        this.baseRoom = baseRoom;
     }
 }
 public class ItemEvent : Event

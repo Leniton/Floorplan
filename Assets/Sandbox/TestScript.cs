@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class TestScript : MonoBehaviour
 {
     public FloorplanUI floorplanUI;
-    public Floorplan floorplan;
+    public Room floorplan;
 
     private void Awake()
     {

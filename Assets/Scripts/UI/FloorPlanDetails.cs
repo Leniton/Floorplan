@@ -12,9 +12,9 @@ public class FloorplanDetails : MonoBehaviour
     [SerializeField] private TMP_Text description;
     [SerializeField] private Button button;
 
-    public event Action<Floorplan> onPickedFloorplan;
+    public event Action<Room> onPickedFloorplan;
 
-    [FormerlySerializedAs("floorplan")] public Floorplan currentFloorplan;
+    public Room currentRoom;
 
     public FloorplanUI FloorplanUI => floorplanUI;
 
@@ -25,25 +25,25 @@ public class FloorplanDetails : MonoBehaviour
 
     private void FloorplanPick()
     {
-        onPickedFloorplan?.Invoke(currentFloorplan);
+        onPickedFloorplan?.Invoke(currentRoom);
     }
 
-    public void Setup(Floorplan floorplan)
+    public void Setup(Room room)
     {
-        if (currentFloorplan != null)
-            currentFloorplan.OnChanged -= InternalSetup;
-        currentFloorplan = floorplan;
-        currentFloorplan.OnChanged += InternalSetup;
+        if (currentRoom != null)
+            currentRoom.OnChanged -= InternalSetup;
+        currentRoom = room;
+        currentRoom.OnChanged += InternalSetup;
         InternalSetup();
     }
 
     private void InternalSetup()
     {
-        floorplanUI.Setup(currentFloorplan);
-        int currentPoints = currentFloorplan.CalculatePoints();
+        floorplanUI.Setup(currentRoom);
+        int currentPoints = currentRoom.CalculatePoints();
         points.text = (currentPoints > 0 ? "+" : string.Empty) + $"{currentPoints}";
-        cost.gameObject.SetActive(currentFloorplan.keyCost > 0);
-        cost.text = currentFloorplan.keyCost.ToString();
-        description.text = currentFloorplan.Description;
+        cost.gameObject.SetActive(currentRoom.keyCost > 0);
+        cost.text = currentRoom.keyCost.ToString();
+        description.text = currentRoom.Description;
     }
 }
