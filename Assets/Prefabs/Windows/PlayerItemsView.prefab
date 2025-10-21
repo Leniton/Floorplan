@@ -293,7 +293,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -805,11 +805,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7757956411773068632, guid: e2cb498c1720f294598a6d0b29ea438c,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1540529086385070407}
+      addedObject: {fileID: 7604473132787917219}
     - targetCorrespondingSourceObject: {fileID: 7757956411773068632, guid: e2cb498c1720f294598a6d0b29ea438c,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7604473132787917219}
+      addedObject: {fileID: 1540529086385070407}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6475988893027482307, guid: e2cb498c1720f294598a6d0b29ea438c,
         type: 3}
