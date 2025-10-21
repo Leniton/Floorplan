@@ -87,46 +87,37 @@ public static class Helpers
     {
         RarityPicker<Func<Item>> possibleItems = new(.25f, .1f, .05f, 0);
         var categories = NumberUtil.SeparateBits((int)floorplan.Category);
+        
+        possibleItems.AddToPool(() => new Coin(), Rarity.Common);
+        possibleItems.AddToPool(() => new Food(), Rarity.Common);
+        possibleItems.AddToPool(() => new Key(), Rarity.Common);
         for (int i = 0; i < categories.Length; i++)
         {
             var category = (RoomCategory)categories[i];
             switch (category)
             {
                 case RoomCategory.Shop:
-                    possibleItems.AddToPool(() => new Coin(), Rarity.Common);
                     possibleItems.AddToPool(() => new Coin(5), Rarity.Uncommon);
                     possibleItems.AddToPool(() => new Decoration(), Rarity.Uncommon);
                     break;
                 case RoomCategory.Hallway:
-                    possibleItems.AddToPool(() => new Coin(), Rarity.Common);
-                    possibleItems.AddToPool(() => new Key(), Rarity.Common);
                     possibleItems.AddToPool(() => new Dice(), Rarity.Uncommon);
                     possibleItems.AddToPool(() => new Decoration(), Rarity.Uncommon);
                     break;
                 case RoomCategory.RestRoom:
-                    possibleItems.AddToPool(() => new Food(), Rarity.Common);
-                    possibleItems.AddToPool(() => new Key(), Rarity.Common);
                     possibleItems.AddToPool(() => new Dice(), Rarity.Uncommon);
                     break;
                 case RoomCategory.MysteryRoom:
-                    possibleItems.AddToPool(() => new Key(), Rarity.Common);
                     possibleItems.AddToPool(() => new Dice(), Rarity.Uncommon);
                     possibleItems.AddToPool(() => new CategoryWallpaper(), Rarity.Uncommon);
                     possibleItems.AddToPool(() => new SledgeHammer(), Rarity.Rare);
                     possibleItems.AddToPool(() => new Battery(), Rarity.Rare);
                     break;
                 case RoomCategory.FancyRoom:
-                    possibleItems.AddToPool(() => new Food(), Rarity.Common);
-                    possibleItems.AddToPool(() => new Key(), Rarity.Common);
-                    possibleItems.AddToPool(() => new Dice(), Rarity.Uncommon);
                     break;
                 default: //storage rooms
-                    possibleItems.AddToPool(() => new Coin(), Rarity.Common);
-                    possibleItems.AddToPool(() => new Food(), Rarity.Common);
-                    possibleItems.AddToPool(() => new Key(), Rarity.Common);
                     possibleItems.AddToPool(() => new Decoration(), Rarity.Common);
                     possibleItems.AddToPool(() => new Dice(), Rarity.Uncommon);
-                    possibleItems.AddToPool(() => ItemUtilities.Soda, Rarity.Uncommon);
                     possibleItems.AddToPool(() => new ColorKey(), Rarity.Uncommon);
                     possibleItems.AddToPool(() => new SledgeHammer(), Rarity.Rare);
                     possibleItems.AddToPool(() => new Battery(), Rarity.Rare);
