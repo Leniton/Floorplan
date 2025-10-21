@@ -178,7 +178,7 @@ public static class EffectsManager
                 int stepsFromFood = 0;
                 ItemUtilities.Meal().AddItemToRoom(room);
                 room.AddBonus(room.Alias, () => stepsFromFood);
-                room.EveryTime().ItemCollected().Where(evt => evt.item is Food).Do(evt => stepsFromFood += (evt.item as Food).stepsAmount);
+                room.EveryTime().ItemCollected().Where(evt => evt.item is Food).Do(evt => stepsFromFood += (evt.item as Food).stepGain);
                 break;
             case "Dormitory":
                 //when you connect a rest room, add a snack to this room
@@ -585,7 +585,7 @@ public static class EffectsManager
                     new Coin(30).AddItemToRoom(treasure);
                     new Key(20).AddItemToRoom(treasure);
                     new Dice(10).AddItemToRoom(treasure);
-                    new Food(){Name = "Stamina Potion", stepsAmount = 20}.AddItemToRoom(treasure);
+                    new Food(20){Name = "Stamina Potion"}.AddItemToRoom(treasure);
                     ItemUtilities.Treasure().AddItemToRoom(treasure);
                     new SledgeHammer().AddItemToRoom(treasure);
                     new Battery(4).AddItemToRoom(treasure);
@@ -804,15 +804,14 @@ public static class EffectsManager
                 Coin coins = new(GameManager.roomDict.Count * 2);
                 room.EveryTime().AnyRoomIsDrafted().Do(_ =>
                 {
-                    coins.coinsAmount += 2;
-                    coins.Name = $"Coins ({coins.coinsAmount})";
+                    coins.amount += 2;
                     if(canCollect) return;
                     coins.AddItemToRoom(room);
                     canCollect = true;
                 });
                 room.EveryTime().ItemCollected().Where(evt => evt.item == coins).Do(_ =>
                 {
-                    coins.coinsAmount = 0;
+                    coins.amount = 0;
                     canCollect = false;
                 });
                 break;

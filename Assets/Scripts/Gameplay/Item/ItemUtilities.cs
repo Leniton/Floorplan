@@ -24,17 +24,17 @@ public static class ItemUtilities
     /// <summary>
     /// +7 steps
     /// </summary>
-    public static Food Soda => new() { Name = "Soda", stepsAmount = 7 };
+    public static Food Soda => new(7) { Name = "Soda" };
     /// <summary>
     /// +10 steps
     /// </summary>
-    public static Food Meal() => new() { Name = "Meal", stepsAmount = 10 };
+    public static Food Meal() => new(10) { Name = "Meal" };
     /// <summary>
     /// +1 step for each room drafted
     /// </summary>
     public static Food Snack()
     {
-        Food snack = new() { Name = "Snack", stepsAmount = GameManager.roomDict.Count };
+        Food snack = new(GameManager.roomDict.Count) { Name = "Snack" };
 
         GameEvent.onDraftedRoom += AddPoint;
         GameEvent.onCollectItem += OnConsume;
@@ -54,7 +54,7 @@ public static class ItemUtilities
     /// </summary>
     public static Food EnergyBar()
     {
-        Food snack = new() { Name = "Energy bar", stepsAmount = 0 };
+        Food snack = new(0) { Name = "Energy bar" };
 
         foreach (var room in GameManager.roomDict.Values)
         {

@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public abstract class Item
 {
-    public string Name;
+    public virtual string Name { get; set; }
 
     public virtual void Place(Room room) 
     {
@@ -13,10 +14,24 @@ public abstract class Item
     public abstract void Activate();
 }
 
-public class Food : Item
+public abstract class StackableItem : Item
 {
+    public int amount = 1;
+    public string itemName;
+    
+    public override string Name
+    {
+        get => $"{itemName}{(amount > 1 ? $"s ({amount})" : string.Empty)}";
+        set => itemName = value;
+    }
+}
+
+public class Food : StackableItem
+{
+    public override string Name => $"{itemName}{(amount > 1 ? $" ({amount})" : string.Empty)}";
     private static RarityPicker<int> foodRarity;
-    public int stepsAmount; //null equals random
+    public int stepsAmount;
+    public int stepGain => stepsAmount * amount;
     public Food(int? amountSteps = null) 
     {
         if (foodRarity == null)
@@ -34,7 +49,7 @@ public class Food : Item
             3 => "Apple",
             4 => "Banana",
             5 => "Orange",
-            _ => $"+{stepsAmount} Food",
+            _ => $"+{stepGain} Food",
         };
     }
 
@@ -47,17 +62,17 @@ public class Food : Item
     public override void Activate()
     {
         //UIManager.ShowMessage($"found {Name}!!\n+{amount} steps"
-        Player.ChangeSteps(stepsAmount);
+        Player.ChangeSteps(stepGain);
     }
 }
 
-public class Coin : Item
+public class Coin : StackableItem
 {
-    public int coinsAmount; //null equals random
-    public Coin(int? amount = null)
+    public int coinsAmount => amount;
+    public Coin(int? _amount = null)
     {
-        coinsAmount = amount ?? Random.Range(1, 4);
-        Name = coinsAmount > 1 ? $"Coins ({coinsAmount})" : "Coin";
+        Name = "Coin";
+        amount = _amount ?? Random.Range(1, 4);
     }
 
     public override void PickUp()
@@ -73,13 +88,13 @@ public class Coin : Item
     }
 }
 
-public class Key : Item
+public class Key : StackableItem
 {
-    public int keyAmount; //null equals random
-    public Key(int? amount = null)
+    public int keyAmount => amount;
+    public Key(int? _amount = null)
     {
-        keyAmount = amount ?? Random.Range(1, 3);
-        Name = keyAmount > 1 ? $"Keys ({keyAmount})" : "Key";
+        Name = "Key";
+        amount = _amount ?? Random.Range(1, 3);
     }
 
     public override void PickUp()
@@ -95,13 +110,13 @@ public class Key : Item
     }
 }
 
-public class Dice : Item
+public class Dice : StackableItem
 {
-    public int diceAmount; //null equals random
-    public Dice(int? amount = null)
+    public int diceAmount => amount;
+    public Dice(int? _amount = null)
     {
-        diceAmount = amount ?? Random.Range(1, 3);
-        Name = diceAmount > 1 ? $"Dices ({diceAmount})" : "Dice";
+        Name = "Dice";
+        amount = _amount ?? Random.Range(1, 3);
     }
 
     public override void PickUp()

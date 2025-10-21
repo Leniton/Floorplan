@@ -164,8 +164,8 @@ public class Showroom : MonoBehaviour
     private void SetupSuppliesShop()
     {
         List<PurchaseData> possibleSupplies = new();
-        int amountApple = 0;
-        var apple = new Food(0);
+        var apple = ItemUtilities.Apple;
+        apple.amount = 0;
         possibleSupplies.Add(new()
         {
             name = "Apple",
@@ -174,10 +174,8 @@ public class Showroom : MonoBehaviour
             amount = 10,
             OnBuy = () =>
             {
-                apple.stepsAmount += 3;
-                amountApple++;
-                apple.Name = $"Apple({amountApple})";
-                if (amountApple > 1) return;
+                apple.amount++;
+                if (apple.amount > 1) return;
                 AddSupply(apple);
             }
         });
@@ -190,8 +188,7 @@ public class Showroom : MonoBehaviour
             amount = 10,
             OnBuy = () =>
             {
-                key.keyAmount++;
-                key.Name = $"Key({key.keyAmount})";
+                key.amount++;
                 if (key.keyAmount > 1) return;
                 AddSupply(key);
             }
@@ -205,8 +202,7 @@ public class Showroom : MonoBehaviour
             amount = 5,
             OnBuy = () =>
             {
-                dice.diceAmount++;
-                dice.Name = $"Dice({dice.diceAmount})";
+                dice.amount++;
                 if (dice.diceAmount > 1) return;
                 AddSupply(dice);
             }

@@ -11,7 +11,7 @@ public class Player
     #region Resources
     public static int steps;
     public static int keys;
-    public static int coins;
+    public static int coins = 500;
     public static int dices;
     public static bool activeSledgeHammer => currentSledgeHammer?.active ?? false;
     public static bool activeKey => currentKey != null;
