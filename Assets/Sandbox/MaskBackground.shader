@@ -2,32 +2,63 @@ Shader "UI/StencilMaskWriter"
 {
     Properties
     {
-        _Color ("Color", Color) = (1,1,1,1)
-        _MainTex ("Texture", 2D) = "white" {}
+        [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
+        _Color ("Tint", Color) = (1,1,1,1)
+
+        _StencilComp ("Stencil Comparison", Float) = 8
+        _Stencil ("Stencil ID", Float) = 0
+        _StencilOp ("Stencil Operation", Float) = 0
+        _StencilWriteMask ("Stencil Write Mask", Float) = 255
+        _StencilReadMask ("Stencil Read Mask", Float) = 255
+
+        _ColorMask ("Color Mask", Float) = 15
+
+        [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
+        
+        _AlphaOffset ("Alpha Offset", Float) = 0
     }
+
     SubShader
     {
-        Tags { "Queue" = "Overlay" "IgnoreProjector" = "True" "RenderType" = "Transparent" "PreviewType"="Plane" }
-        LOD 100
+        Tags
+        {
+            "Queue"="Transparent"
+            "IgnoreProjector"="True"
+            "RenderType"="Transparent"
+            "PreviewType"="Plane"
+            "CanUseSpriteAtlas"="True"
+        }
 
         Stencil
         {
             Ref 1         // Reference value
             Comp Always   // Always pass
             Pass Replace  // Replace stencil value with Ref
+            ReadMask [_StencilReadMask]
+            WriteMask [_StencilWriteMask]
         }
 
         Cull Off
         Lighting Off
         ZWrite Off
-        Blend SrcAlpha OneMinusSrcAlpha
+        ZTest [unity_GUIZTestMode]
+        Blend One OneMinusSrcAlpha
+        ColorMask [_ColorMask]
 
         Pass
         {
-            CGPROGRAM
+            Name "Default"
+        CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma target 2.0
+
             #include "UnityCG.cginc"
+            #include "UnityUI.cginc"
+
+            #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
+            #pragma multi_compile_local _ UNITY_UI_ALPHACLIP
+
 
             struct appdata_t
             {
@@ -55,6 +86,7 @@ Shader "UI/StencilMaskWriter"
             float _UIMaskSoftnessX;
             float _UIMaskSoftnessY;
             int _UIVertexColorAlwaysGammaSpace;
+            float _AlphaOffset;
 
             v2f vert(appdata_t v)
             {
@@ -73,17 +105,45 @@ Shader "UI/StencilMaskWriter"
                 OUT.texcoord = TRANSFORM_TEX(v.texcoord.xy, _MainTex);
                 OUT.mask = float4(v.vertex.xy * 2 - clampedRect.xy - clampedRect.zw, 0.25 / (0.25 * half2(_UIMaskSoftnessX, _UIMaskSoftnessY) + abs(pixelSize.xy)));
 
+                if (_UIVertexColorAlwaysGammaSpace)
+                {
+                    if(!IsGammaSpace())
+                    {
+                        v.color.rgb = UIGammaToLinear(v.color.rgb);
+                    }
+                }
+
                 OUT.color = v.color * _Color;
                 return OUT;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            fixed4 frag(v2f IN) : SV_Target
             {
-                fixed4 col = tex2D(_MainTex, i.texcoord) * _Color;
-                clip (col.a - 0.001);
-                return col;
+                //Round up the alpha color coming from the interpolator (to 1.0/256.0 steps)
+                //The incoming alpha could have numerical instability, which makes it very sensible to
+                //HDR color transparency blend, when it blends with the world's texture.
+                const half alphaPrecision = half(0xff);
+                const half invAlphaPrecision = half(1.0/alphaPrecision);
+                IN.color.a = round(IN.color.a * alphaPrecision)*invAlphaPrecision;
+
+                half4 color = IN.color * (tex2D(_MainTex, IN.texcoord) + _TextureSampleAdd);
+
+                if(color.a < _AlphaOffset)
+                    discard;
+
+                #ifdef UNITY_UI_CLIP_RECT
+                half2 m = saturate((_ClipRect.zw - _ClipRect.xy - abs(IN.mask.xy)) * IN.mask.zw);
+                color.a *= m.x * m.y;
+                #endif
+                
+                #ifdef UNITY_UI_ALPHACLIP
+                clip (color.a - 0.001);
+                #endif
+                color.rgb *= color.a;
+
+                return color;
             }
-            ENDCG
+        ENDCG
         }
     }
 }
