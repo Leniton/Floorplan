@@ -10,7 +10,7 @@ public class PointSlider : MonoBehaviour
     [SerializeField] private Slider totalPointsSlider;
 
     [Header("Animation Parameters")] 
-    [SerializeField] private float baseSpeed = .5f;
+    [SerializeField] private float animationDuration = .5f;
     [SerializeField] private AnimationCurve curve = AnimationCurve.Linear(0, 0, 1, 1);
 
     private int currentPoints;
@@ -22,7 +22,7 @@ public class PointSlider : MonoBehaviour
         StartCoroutine(SliderChangeEffect(points));
     }
 
-    private void UpdatePoints(int points)
+    public void SetPoints(int points)
     {
         UpdateSlider(points);
         UpdateText(points);
@@ -41,7 +41,7 @@ public class PointSlider : MonoBehaviour
     private IEnumerator SliderChangeEffect(int finalValue)
     {
         int current = currentPoints;
-        float durationPerStep = baseSpeed / totalPointsSlider.maxValue;
+        float durationPerStep = animationDuration / totalPointsSlider.maxValue;
         float duration = durationPerStep * Mathf.Abs(finalValue - currentPoints);
         yield return ScriptAnimations.Animate(
             t =>
