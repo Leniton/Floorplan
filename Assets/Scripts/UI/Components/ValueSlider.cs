@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PointSlider : MonoBehaviour
+public class ValueSlider : MonoBehaviour
 {
     [SerializeField] private TMP_Text totalPoints;
     [SerializeField] private Slider totalPointsSlider;
@@ -16,9 +16,11 @@ public class PointSlider : MonoBehaviour
     private int currentPoints;
 
     [SerializeMethod]
+    public void UpdateMaxValue(int maxValue) => totalPointsSlider.maxValue = maxValue;
+
+    [SerializeMethod]
     public void ChangePoints(int points)
     {
-        totalPointsSlider.maxValue = PointsManager.currentRequirement;
         StartCoroutine(SliderChangeEffect(points));
     }
 
