@@ -1,17 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HouseStatsWindow : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private ValueSlider valueSlider;
+    [SerializeField] private ValueCounter coinsGained;
+    [SerializeField] private ScrollRect scroll;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
         
     }
