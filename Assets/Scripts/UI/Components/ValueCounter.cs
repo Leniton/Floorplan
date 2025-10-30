@@ -6,6 +6,7 @@ using SerializableMethods;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Util.Extensions;
 
 public class ValueCounter : MonoBehaviour
 {
@@ -51,6 +52,15 @@ public class ValueCounter : MonoBehaviour
         text.SetText(sb.ToString());
     }
 
+    public ISequence CountAnimationSequence(int value, AnimationCurve curve, float duration)
+    {
+        return new CoroutineSequence(new(CountAnimation(value, curve, duration), () =>
+        {
+            currentValue = value;
+            UpdateText(currentValue);
+        }), this);
+    }
+
     private IEnumerator CountAnimation(int finalValue, AnimationCurve curve, float duration)
     {
         int current = currentValue;
@@ -60,6 +70,7 @@ public class ValueCounter : MonoBehaviour
             curve, duration);
 
         currentValue = finalValue;
+        UpdateText(currentValue);
     }
 
     private void Reset()

@@ -3,6 +3,7 @@ using SerializableMethods;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Util.Extensions;
 
 public class ValueSlider : MonoBehaviour
 {
@@ -13,21 +14,27 @@ public class ValueSlider : MonoBehaviour
     [SerializeField] private float animationDuration = .5f;
     [SerializeField] private AnimationCurve curve = AnimationCurve.Linear(0, 0, 1, 1);
 
-    private int currentPoints;
+    private int currentValue;
 
     [SerializeMethod]
-    public void UpdateMaxValue(int maxValue) => totalPointsSlider.maxValue = maxValue;
-
-    [SerializeMethod]
-    public void ChangePoints(int points)
+    public void UpdateMaxValue(int maxValue)
     {
-        StartCoroutine(SliderChangeEffect(points));
+        totalPointsSlider.maxValue = maxValue;
+        SetValue(currentValue);
     }
 
-    public void SetPoints(int points)
+    [SerializeMethod]
+    public void ChangeValue(int deltaValue) =>
+        ChangeValueSequence(currentValue + deltaValue).Begin();
+
+    [SerializeMethod]
+    public void ChangeToValue(int value) => ChangeValueSequence(value).Begin();
+
+    public void SetValue(int value)
     {
-        UpdateSlider(points);
-        UpdateText(points);
+        currentValue = value;
+        UpdateSlider(value);
+        UpdateText(value);
     }
 
     private void UpdateSlider(float value)
@@ -40,11 +47,19 @@ public class ValueSlider : MonoBehaviour
         totalPoints.text = $"{points}/{totalPointsSlider.maxValue}";
     }
 
+    public ISequence ChangeValueSequence(int value)
+    {
+        var finalValue = (int)Mathf.Clamp(value,
+            totalPointsSlider.minValue, totalPointsSlider.maxValue);
+        return new CoroutineSequence(new(
+            SliderChangeEffect(finalValue), () => SetValue(finalValue)), this);
+    }
+
     private IEnumerator SliderChangeEffect(int finalValue)
     {
-        int current = currentPoints;
+        int current = currentValue;
         float durationPerStep = animationDuration / totalPointsSlider.maxValue;
-        float duration = durationPerStep * Mathf.Abs(finalValue - currentPoints);
+        float duration = durationPerStep * Mathf.Abs(finalValue - currentValue);
         yield return ScriptAnimations.Animate(
             t =>
             {
@@ -52,6 +67,8 @@ public class ValueSlider : MonoBehaviour
                 UpdateSlider(value);
                 UpdateText(Mathf.RoundToInt(value));
             }, curve, duration);
-        currentPoints = finalValue;
+        currentValue = finalValue;
+        UpdateSlider(currentValue);
+        UpdateText(currentValue);
     }
 }
