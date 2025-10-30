@@ -20,6 +20,8 @@ public static class CoroutineExtensions
             }
         }
 
+        public static MonoBehaviour CoroutineHolder => Holder;
+
         public static void StartCoroutine(IEnumerator coroutine)
         {
             Holder.StartCoroutine(coroutine);
@@ -105,6 +107,13 @@ public static class CoroutineExtensions
         private ExpandedCoroutine expandedCoroutine;
         private MonoBehaviour monoBehaviour;
         public event Action OnFinished;
+
+        public CoroutineSequence(ExpandedCoroutine coroutine)
+        {
+            monoBehaviour = CoroutineExtensions.CoroutineHolder;
+            expandedCoroutine = coroutine;
+            expandedCoroutine.onEndCoroutine += OnCoroutineFinished;
+        }
 
         public CoroutineSequence(ExpandedCoroutine coroutine, MonoBehaviour target)
         {
