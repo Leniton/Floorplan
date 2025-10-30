@@ -23,26 +23,18 @@ public class ValueCounter : MonoBehaviour
     private int currentValue;
 
     [SerializeMethod]
-    public void ChangeValue(int delta)
-    {
-        StartCoroutine(CountAnimation(currentValue + delta, curve, animationDuration));
-    }
+    public void ChangeValue(int delta) =>
+        CountAnimationSequence(currentValue + delta, curve, animationDuration).Begin();
 
-    public void ChangeValue(int delta, float customDuration, AnimationCurve customCurve)
-    {
-        StartCoroutine(CountAnimation(currentValue + delta, customCurve, customDuration));
-    }
-    
+    public void ChangeValue(int delta, float customDuration, AnimationCurve customCurve) =>
+        CountAnimationSequence(currentValue + delta, customCurve, customDuration).Begin();
+
     [SerializeMethod]
-    public void ChangeToValue(int value)
-    {
-        StartCoroutine(CountAnimation(value, curve, animationDuration));
-    }
+    public void ChangeToValue(int value) =>
+        CountAnimationSequence(value, curve, animationDuration).Begin();
 
-    public void ChangeToValue(int value, float customDuration, AnimationCurve customCurve)
-    {
-        StartCoroutine(CountAnimation(value, customCurve, customDuration));
-    }
+    public void ChangeToValue(int value, float customDuration, AnimationCurve customCurve) =>
+        CountAnimationSequence(value, customCurve, customDuration).Begin();
 
     public void UpdateText(int newValue)
     {
