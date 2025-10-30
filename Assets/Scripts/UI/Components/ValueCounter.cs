@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using JetBrains.Annotations;
 using SerializableMethods;
 using TMPro;
 using UnityEngine;
@@ -23,18 +24,25 @@ public class ValueCounter : MonoBehaviour
     private int currentValue;
 
     [SerializeMethod]
-    public void ChangeValue(int delta) =>
-        CountAnimationSequence(currentValue + delta, curve, animationDuration).Begin();
+    public void ChangeValue(int delta) => ChangeValueSequence(delta).Begin();
+
+    public ISequence ChangeValueSequence(int delta,
+        float? customDuration = null, AnimationCurve customCurve = null) =>
+        CountAnimationSequence(currentValue + delta,
+            customCurve ?? curve, customDuration ?? animationDuration);
 
     public void ChangeValue(int delta, float customDuration, AnimationCurve customCurve) =>
-        CountAnimationSequence(currentValue + delta, customCurve, customDuration).Begin();
+        ChangeValueSequence(delta, customDuration, customCurve).Begin();
 
     [SerializeMethod]
-    public void ChangeToValue(int value) =>
-        CountAnimationSequence(value, curve, animationDuration).Begin();
+    public void ChangeToValue(int value) => ChangeToValueSequence(value).Begin();
+    
+    public ISequence ChangeToValueSequence(int value,
+        float? customDuration = null, AnimationCurve customCurve = null) => 
+        CountAnimationSequence(value, customCurve ?? curve, customDuration ?? animationDuration);
 
     public void ChangeToValue(int value, float customDuration, AnimationCurve customCurve) =>
-        CountAnimationSequence(value, customCurve, customDuration).Begin();
+        ChangeToValueSequence(value, customDuration, customCurve).Begin();
 
     public void UpdateText(int newValue)
     {

@@ -157,6 +157,12 @@ namespace Util.Extensions
         private int sequencesLeft;
         private bool running => sequencesLeft > 0;
 
+        public ParallelSequences(params ISequence[] sequences)
+        {
+            for (int i = 0; i < sequences.Length; i++)
+                Add(sequences[i]);
+        }
+
         /// <summary>
         /// Adds a sequence to be executed in parallel with others.
         /// </summary>

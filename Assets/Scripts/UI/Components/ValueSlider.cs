@@ -25,10 +25,10 @@ public class ValueSlider : MonoBehaviour
 
     [SerializeMethod]
     public void ChangeValue(int deltaValue) =>
-        ChangeValueSequence(currentValue + deltaValue).Begin();
+        ChangeToValueSequence(currentValue + deltaValue).Begin();
 
     [SerializeMethod]
-    public void ChangeToValue(int value) => ChangeValueSequence(value).Begin();
+    public void ChangeToValue(int value) => ChangeToValueSequence(value).Begin();
 
     public void SetValue(int value)
     {
@@ -47,7 +47,9 @@ public class ValueSlider : MonoBehaviour
         totalPoints.text = $"{points}/{totalPointsSlider.maxValue}";
     }
 
-    public ISequence ChangeValueSequence(int value)
+    public ISequence ChangeValueSequence(int delta) => ChangeToValueSequence(currentValue + delta);
+
+    public ISequence ChangeToValueSequence(int value)
     {
         var finalValue = (int)Mathf.Clamp(value,
             totalPointsSlider.minValue, totalPointsSlider.maxValue);

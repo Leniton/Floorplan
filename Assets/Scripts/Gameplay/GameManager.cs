@@ -1,6 +1,4 @@
 using AddressableAsyncInstances;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button finishButton;
     [SerializeField] private HoverMenu hoverMenu;
     [SerializeField] private MinimapManager minimap;
+    [SerializeField] private HouseStatsWindow houseStats;
 
     private static Dictionary<Room, FloorplanUI> UIRooms;
     public static Dictionary<Vector2Int, Room> roomDict;
@@ -215,21 +214,6 @@ public class GameManager : MonoBehaviour
 
     private void FinishRun()
     {
-        int finalPoints = PointsManager.GetTotalPoints();
-        int targetScene = 2;
-        if (finalPoints >= PointsManager.currentRequirement)
-        {
-            //win, progress
-            PointsManager.Progress();
-        }
-        else
-        {
-            //lose, reset
-            PointsManager.Reset();
-            targetScene = 0;
-        }
-        roomDict.Clear();
-        GameEvent.ResetListeners();
-        SceneManager.LoadScene(targetScene);
+        houseStats.ShowStatsAndEnd();
     }
 }
