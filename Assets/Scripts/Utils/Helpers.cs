@@ -367,12 +367,9 @@ public static class Helpers
 
         if (possibleSlots.Count < 4) possibleTypes.Remove(RoomType.Crossroad);
         if (possibleSlots.Count < 3) possibleTypes.Remove(RoomType.TPiece);
-        if (possibleSlots.Count == 2)
-        {
-            if (!possibleSlots.Contains(-possibleSlots[0]))
-                possibleTypes.Remove(RoomType.Straw);
-        }
-        else possibleTypes.Remove(RoomType.Ankle);
+        if (possibleSlots.Count == 2 && !possibleSlots.Contains(-possibleSlots[0]))
+            possibleTypes.Remove(RoomType.Straw);
+        else if(possibleSlots.Count <= 1) possibleTypes.Remove(RoomType.Ankle);
 
         return possibleTypes;
     }
