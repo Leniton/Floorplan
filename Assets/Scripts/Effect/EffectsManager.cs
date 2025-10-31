@@ -484,7 +484,7 @@ public static class EffectsManager
 
                 void MBedroomBonus(RoomEvent evt)
                 {
-                    otherBonus += 2;
+                    otherBonus += 1;
                     evt.Room.AddBonus(room.Alias, () => otherBonus);
                 }
                 break;
