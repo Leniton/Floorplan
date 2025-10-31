@@ -229,7 +229,7 @@ public class Showroom : MonoBehaviour
 
     private void OpenRenovationShop()
     {
-        ShopWindow.OpenShop("Renovations", renovationPack);
+        ShopWindow.OpenShop("Renovations\n<size=50%>(Refreshed on use)", renovationPack);
     }
 
     private void OpenSuppliesShop()
@@ -255,6 +255,8 @@ public class Showroom : MonoBehaviour
             var original = floorplan.FindOriginal(RunData.playerDeck.deck);
             if (original != null) renovation.Activate(original);
             GameEvent.onDrawRooms -= CheckCondition;
+            SetupRenovationsShop();
+            shopWindow.Close();
         }
 
         void CheckCondition(DrawRoomEvent evt)
