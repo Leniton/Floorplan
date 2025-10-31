@@ -57,7 +57,6 @@ public class ValueSlider : MonoBehaviour
 
         void BeginWrapper()
         {
-            Debug.Log($"changing {delta}");
             sequence = ChangeToValueSequence(currentValue + delta);
             sequence.OnFinished += wrapper.FinishSequence;
             sequence.Begin();
@@ -66,8 +65,7 @@ public class ValueSlider : MonoBehaviour
 
     public ISequence ChangeToValueSequence(int value)
     {
-        var finalValue = (int)Mathf.Clamp(value,
-            totalPointsSlider.minValue, totalPointsSlider.maxValue);
+        var finalValue = (int)Mathf.Max(value, totalPointsSlider.minValue);
         return new CoroutineSequence(new(
             SliderChangeEffect(finalValue), () => SetValue(finalValue)), this);
     }

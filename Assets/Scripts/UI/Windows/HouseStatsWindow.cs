@@ -71,11 +71,10 @@ public class HouseStatsWindow : MonoBehaviour
     private void MultiplierBonus()
     {
         int currentCheck = 2;
-        int currentBonus = 10;
-        while (currentCheck < 10)
+        int currentBonus = 5;
+        while (currentCheck < 11)
         {
             if (PointsManager.currentRequirement * currentCheck > finalPoints) break;
-            Debug.Log($"{finalPoints} ({finalPoints / currentCheck})");
             int bonus = currentBonus;
             var sequence = coinsGained.ChangeValueSequence(bonus);
             sequence.OnFinished += () => Player.ChangeCoins(bonus);

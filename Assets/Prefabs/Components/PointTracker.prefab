@@ -218,7 +218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   totalPoints: {fileID: 6514001433608661719}
   totalPointsSlider: {fileID: 6395075974820972387}
-  baseSpeed: 0.5
+  animationDuration: 0.4
   curve:
     serializedVersion: 2
     m_Curve:
