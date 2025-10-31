@@ -62,7 +62,7 @@ public class Showroom : MonoBehaviour
         {
             name = renovation.name,
             description = renovation.description,
-            cost = 3,
+            cost = 4,
             amount = 1,
             OnBuy = () => UseRenovation(RenovationUtils.KeyHolder()),
             pattern = renovation.overlayPattern
@@ -72,29 +72,9 @@ public class Showroom : MonoBehaviour
         {
             name = renovation.name,
             description = renovation.description,
-            cost = 3,
+            cost = 5,
             amount = 1,
             OnBuy = () => UseRenovation(RenovationUtils.SecretVault()),
-            pattern = renovation.overlayPattern
-        }, Rarity.Common);
-        renovation = RenovationUtils.MiniFridge();
-        possibleRenovations.AddToPool(new()
-        {
-            name = renovation.name,
-            description = renovation.description,
-            cost = 3,
-            amount = 1,
-            OnBuy = () => UseRenovation(RenovationUtils.MiniFridge()),
-            pattern = renovation.overlayPattern
-        }, Rarity.Common);
-        renovation = RenovationUtils.PlayTable();
-        possibleRenovations.AddToPool(new()
-        {
-            name = renovation.name,
-            description = renovation.description,
-            cost = 3,
-            amount = 1,
-            OnBuy = () => UseRenovation(RenovationUtils.PlayTable()),
             pattern = renovation.overlayPattern
         }, Rarity.Common);
         renovation = RenovationUtils.Wallpaper();
@@ -106,6 +86,26 @@ public class Showroom : MonoBehaviour
             amount = 1,
             OnBuy = () => UseRenovation(RenovationUtils.Wallpaper())
         }, Rarity.Common);
+        renovation = RenovationUtils.MiniFridge();
+        possibleRenovations.AddToPool(new()
+        {
+            name = renovation.name,
+            description = renovation.description,
+            cost = 7,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.MiniFridge()),
+            pattern = renovation.overlayPattern
+        }, Rarity.Uncommon);
+        renovation = RenovationUtils.PlayTable();
+        possibleRenovations.AddToPool(new()
+        {
+            name = renovation.name,
+            description = renovation.description,
+            cost = 8,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.PlayTable()),
+            pattern = renovation.overlayPattern
+        }, Rarity.Uncommon);
         RoomCategory paintCategory = Helpers.RandomCategory();
         Renovation paint = RenovationUtils.Paint(paintCategory);
         possibleRenovations.AddToPool(new()
@@ -115,43 +115,43 @@ public class Showroom : MonoBehaviour
             cost = 3,
             amount = 1,
             OnBuy = () => UseRenovation(RenovationUtils.Paint(paintCategory))
-        }, Rarity.Common);
-        renovation = RenovationUtils.WallMirror();
-        possibleRenovations.AddToPool(new()
-        {
-            name = renovation.name,
-            description = renovation.description,
-            cost = 3,
-            amount = 1,
-            OnBuy = () => UseRenovation(RenovationUtils.WallMirror())
-        }, Rarity.Common);
-        renovation = RenovationUtils.NewDoor();
-        possibleRenovations.AddToPool(new()
-        {
-            name = renovation.name,
-            description = renovation.description,
-            cost = 3,
-            amount = 1,
-            OnBuy = () => UseRenovation(RenovationUtils.NewDoor())
-        }, Rarity.Common);
-        renovation = RenovationUtils.Demolition();
-        possibleRenovations.AddToPool(new()
-        {
-            name = renovation.name,
-            description = renovation.description,
-            cost = 3,
-            amount = 1,
-            OnBuy = () => UseRenovation(RenovationUtils.Demolition())
-        }, Rarity.Common);
+        }, Rarity.Uncommon);
         renovation = RenovationUtils.SealedDoor();
         possibleRenovations.AddToPool(new()
         {
             name = renovation.name,
             description = renovation.description,
-            cost = 3,
+            cost = 6,
             amount = 1,
             OnBuy = () => UseRenovation(RenovationUtils.SealedDoor())
-        }, Rarity.Common);
+        }, Rarity.Uncommon);
+        renovation = RenovationUtils.WallMirror();
+        possibleRenovations.AddToPool(new()
+        {
+            name = renovation.name,
+            description = renovation.description,
+            cost = 10,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.WallMirror())
+        }, Rarity.Rare);
+        renovation = RenovationUtils.NewDoor();
+        possibleRenovations.AddToPool(new()
+        {
+            name = renovation.name,
+            description = renovation.description,
+            cost = 8,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.NewDoor())
+        }, Rarity.Rare);
+        renovation = RenovationUtils.Demolition();
+        possibleRenovations.AddToPool(new()
+        {
+            name = renovation.name,
+            description = renovation.description,
+            cost = 8,
+            amount = 1,
+            OnBuy = () => UseRenovation(RenovationUtils.Demolition())
+        }, Rarity.Rare);
         
         List<PurchaseData> renovations = new(3);
         for (int i = 0; i < renovations.Capacity; i++)
