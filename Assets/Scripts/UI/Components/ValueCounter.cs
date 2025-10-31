@@ -21,15 +21,28 @@ public class ValueCounter : MonoBehaviour
     [SerializeField] private float animationDuration = .5f;
     [SerializeField] private AnimationCurve curve = AnimationCurve.Linear(0, 0, 1, 1);
 
-    private int currentValue;
+    public int currentValue { get; private set; }
 
     [SerializeMethod]
     public void ChangeValue(int delta) => ChangeValueSequence(delta).Begin();
 
     public ISequence ChangeValueSequence(int delta,
-        float? customDuration = null, AnimationCurve customCurve = null) =>
-        CountAnimationSequence(currentValue + delta,
-            customCurve ?? curve, customDuration ?? animationDuration);
+        float? customDuration = null, AnimationCurve customCurve = null)
+    {
+        ISequence sequence = CustomSequence.EmptySequence();
+        var wrapper = CustomSequence.EmptySequence();
+        wrapper = new CustomSequence(BeginWrapper, sequence.End);
+        sequence.OnFinished += wrapper.FinishSequence;
+        return wrapper;
+
+        void BeginWrapper()
+        {
+            sequence = CountAnimationSequence(currentValue + delta,
+                customCurve ?? curve, customDuration ?? animationDuration);
+            sequence.OnFinished += wrapper.FinishSequence;
+            sequence.Begin();
+        }
+    }
 
     public void ChangeValue(int delta, float customDuration, AnimationCurve customCurve) =>
         ChangeValueSequence(delta, customDuration, customCurve).Begin();

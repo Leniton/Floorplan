@@ -14,7 +14,7 @@ public class ValueSlider : MonoBehaviour
     [SerializeField] private float animationDuration = .5f;
     [SerializeField] private AnimationCurve curve = AnimationCurve.Linear(0, 0, 1, 1);
 
-    private int currentValue;
+    public int currentValue { get; private set; }
 
     [SerializeMethod]
     public void UpdateMaxValue(int maxValue)
@@ -47,7 +47,22 @@ public class ValueSlider : MonoBehaviour
         totalPoints.text = $"{points}/{totalPointsSlider.maxValue}";
     }
 
-    public ISequence ChangeValueSequence(int delta) => ChangeToValueSequence(currentValue + delta);
+    public ISequence ChangeValueSequence(int delta)
+    {
+        ISequence sequence = CustomSequence.EmptySequence();
+        var wrapper = CustomSequence.EmptySequence();
+        wrapper = new CustomSequence(BeginWrapper, sequence.End);
+        sequence.OnFinished += wrapper.FinishSequence;
+        return wrapper;
+
+        void BeginWrapper()
+        {
+            Debug.Log($"changing {delta}");
+            sequence = ChangeToValueSequence(currentValue + delta);
+            sequence.OnFinished += wrapper.FinishSequence;
+            sequence.Begin();
+        }
+    }
 
     public ISequence ChangeToValueSequence(int value)
     {

@@ -15,8 +15,8 @@ public class HouseStatsWindow : MonoBehaviour
 
     private int finalPoints;
     
-    private WaitForSeconds delay = new(1.2f);
-    private ISequence delaySequence;
+    private WaitForSeconds delay = new(.5f);
+    private ISequence delaySequence => new CoroutineSequence(new(Delay()));
     private SequenceManager queue;
 
     public void SkipCurrentAnimation()
@@ -31,7 +31,6 @@ public class HouseStatsWindow : MonoBehaviour
         valueSlider.UpdateMaxValue(PointsManager.currentRequirement);
         valueSlider.SetValue(0);
         finalPoints = PointsManager.GetTotalPoints();
-        delaySequence = new CoroutineSequence(new(Delay()));
         queue = new();
         queue.OnFinished += FinishHouse;
         
@@ -54,14 +53,9 @@ public class HouseStatsWindow : MonoBehaviour
                     i % GridManager.xSize, i / GridManager.xSize)))
                 return;
         int bonusValue = Mathf.FloorToInt(PointsManager.currentRequirement / 2f);
-        ISequence sequence = CustomSequence.EmptySequence();
-        var sequenceWrapper = new CustomSequence(() =>
-        {
-            sequence = valueSlider.ChangeValueSequence(bonusValue);
-            sequence.Begin();
-        }, sequence.End);
-        sequenceWrapper.OnFinished += () => finalPoints += bonusValue;
-        queue.Add(new ParallelSequences(sequenceWrapper, BonusTextSequence("Full House!")));
+        ISequence sequence = valueSlider.ChangeValueSequence(bonusValue);
+        sequence.OnFinished += () => finalPoints += bonusValue;
+        queue.Add(new ParallelSequences(sequence, BonusTextSequence("Full House! (+50% points)")));
         queue.Add(delaySequence);
     }
 
@@ -70,7 +64,7 @@ public class HouseStatsWindow : MonoBehaviour
         int stepsLeft = Player.steps;
         var sequence = coinsGained.ChangeValueSequence(stepsLeft);
         sequence.OnFinished += () => Player.ChangeCoins(stepsLeft);
-        queue.Add(new ParallelSequences(sequence, BonusTextSequence($"Steps left ({stepsLeft})")));
+        queue.Add(new ParallelSequences(sequence, BonusTextSequence($"Steps left (+{stepsLeft})")));
         queue.Add(delaySequence);
     }
 
@@ -80,7 +74,7 @@ public class HouseStatsWindow : MonoBehaviour
         int currentBonus = 10;
         while (currentCheck < 10)
         {
-            if (finalPoints / currentCheck <= 0) break;
+            if (PointsManager.currentRequirement * currentCheck > finalPoints) break;
             Debug.Log($"{finalPoints} ({finalPoints / currentCheck})");
             int bonus = currentBonus;
             var sequence = coinsGained.ChangeValueSequence(bonus);

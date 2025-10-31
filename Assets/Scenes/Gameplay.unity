@@ -1276,8 +1276,8 @@ RectTransform:
   - {fileID: 1640794321}
   - {fileID: 125311812}
   - {fileID: 26167817}
-  - {fileID: 372406244}
   - {fileID: 1529802360}
+  - {fileID: 372406244}
   - {fileID: 638142706}
   - {fileID: 784568329}
   - {fileID: 1496901577}
@@ -4594,12 +4594,12 @@ PrefabInstance:
     - target: {fileID: 3947935191990441795, guid: 4bad80005d5f19545a6be592d4734dfa,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.80076635
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3947935191990441795, guid: 4bad80005d5f19545a6be592d4734dfa,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.80076635
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4758089127752141416, guid: 4bad80005d5f19545a6be592d4734dfa,
         type: 3}
@@ -4614,12 +4614,12 @@ PrefabInstance:
     - target: {fileID: 8230182400006727843, guid: 4bad80005d5f19545a6be592d4734dfa,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.80076635
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8230182400006727843, guid: 4bad80005d5f19545a6be592d4734dfa,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.80076635
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8326405481397828259, guid: 4bad80005d5f19545a6be592d4734dfa,
         type: 3}

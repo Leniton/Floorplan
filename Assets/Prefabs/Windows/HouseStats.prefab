@@ -852,7 +852,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 9080694056834892497}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1313,7 +1313,7 @@ PrefabInstance:
     - target: {fileID: 6475988893027482307, guid: e2cb498c1720f294598a6d0b29ea438c,
         type: 3}
       propertyPath: m_Name
-      value: HouseStats Variant
+      value: HouseStats
       objectReference: {fileID: 0}
     - target: {fileID: 7757956411773068632, guid: e2cb498c1720f294598a6d0b29ea438c,
         type: 3}
