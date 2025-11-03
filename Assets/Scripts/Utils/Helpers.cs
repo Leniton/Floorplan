@@ -102,7 +102,6 @@ public static class Helpers
                     break;
                 case RoomCategory.Hallway:
                     possibleItems.AddToPool(() => new Dice(), Rarity.Uncommon);
-                    possibleItems.AddToPool(() => new Decoration(), Rarity.Uncommon);
                     break;
                 case RoomCategory.RestRoom:
                     possibleItems.AddToPool(() => new Dice(), Rarity.Uncommon);
@@ -113,9 +112,7 @@ public static class Helpers
                     possibleItems.AddToPool(() => new SledgeHammer(), Rarity.Rare);
                     possibleItems.AddToPool(() => new Battery(), Rarity.Rare);
                     break;
-                case RoomCategory.FancyRoom:
-                    break;
-                default: //storage rooms
+                case RoomCategory.StorageRoom:
                     possibleItems.AddToPool(() => new Decoration(), Rarity.Common);
                     possibleItems.AddToPool(() => new Dice(), Rarity.Uncommon);
                     possibleItems.AddToPool(() => new ColorKey(), Rarity.Uncommon);
