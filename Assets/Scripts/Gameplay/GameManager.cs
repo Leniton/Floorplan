@@ -40,14 +40,14 @@ public class GameManager : MonoBehaviour
         {
             new()
             {
-                icon = GameAssets.books[18],
-                color = new(.6f, .6f, .6f),
-                onPick = () => Glossary.OpenGlossary()
+                icon = GameAssets.books[98],
+                onPick = deckView.Open
             },
             new()
             {
-                icon = GameAssets.books[98],
-                onPick = deckView.Open
+                icon = GameAssets.books[18],
+                color = new(.6f, .6f, .6f),
+                onPick = () => Glossary.OpenGlossary()
             },
             null,
         });
