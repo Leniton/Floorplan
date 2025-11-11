@@ -1757,7 +1757,7 @@ MonoBehaviour:
   startButton: {fileID: 524390585}
   settingsutton: {fileID: 1165319873}
   glossaryButton: {fileID: 77579876}
-  currentDeck: {fileID: 0}
+  currentDeck: {fileID: 11400000, guid: 5cf318c240fdbfc458dc1a80c7bbfc44, type: 2}
   colors: {fileID: 11400000, guid: 139d542d9e1404c4dad7eececcad478a, type: 2}
   deckPicker: {fileID: 2021621835}
   possibleDecks:

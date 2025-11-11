@@ -89,6 +89,9 @@ public static class EffectsManager
                     return bonus;
                 }
                 break;
+            case "Chapel":
+                room.EveryTime().PlayerEnterRoom().ChangePlayerCoins(-1);
+                break;
             case "Commissary":
                 PurchaseData bananaCommissary = new()
                 {
@@ -137,6 +140,18 @@ public static class EffectsManager
                 break;
             case "Courtyard":
                 new Key(3).AddItemToRoom(room);
+                break;
+            case "Dark Room":
+                room.EveryTime().ModifiedDraw().Where(DraftedFromHere).Do(evt =>
+                {
+                    for (int i = 0; i < evt.drawnRooms.Length; i++)
+                    {
+                        var drawnRoom = evt.drawnRooms[i];
+                        drawnRoom.Name = $"Dark {drawnRoom.Name}";
+                        drawnRoom.Description = "-";
+                        drawnRoom.AddCategory(RoomCategory.MysteryRoom);
+                    }
+                });
                 break;
             case "Den":
                 room.TheFirstTime().RoomIsDrafted().AddItemToRoom(new Key(1));

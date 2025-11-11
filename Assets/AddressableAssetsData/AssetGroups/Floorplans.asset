@@ -65,6 +65,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3845c8c9ea9c17f41a23c68815384db5
+    m_Address: Chapel
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 38623d48a51608740abe84c3cee7c704
     m_Address: Attic
     m_ReadOnly: 0
@@ -163,6 +169,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6e4e98353bf837f4987bf277ed62e761
     m_Address: Locksmith
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7044307a11e6a444a88c5d8eb200780d
+    m_Address: DarkRoom
     m_ReadOnly: 0
     m_SerializedLabels:
     - BaseFloorplan
