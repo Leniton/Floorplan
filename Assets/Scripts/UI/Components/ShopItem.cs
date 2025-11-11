@@ -32,7 +32,7 @@ public class ShopItem : MonoBehaviour
 
     private void TryBuyItem()
     {
-        if (Player.coins < data.cost)
+        if ((Player.coins - data.cost) < Player.minCoins)
         {
             MessageWindow.ShowMessage($"You don't have enough money to buy this item");
             return;

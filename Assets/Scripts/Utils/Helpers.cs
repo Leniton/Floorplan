@@ -27,6 +27,8 @@ public static class Helpers
         for (int i = 0; i < list.Count; i++)
             list[i].gameObject.SetActive(i < requiredInstances);
     }
+
+    public static string SignedValue(this int value) => $"{(value > 0 ? "+" : string.Empty)}{value}";
     #endregion
 
     #region Floorplan helpers

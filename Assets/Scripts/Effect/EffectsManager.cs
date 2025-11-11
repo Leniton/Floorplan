@@ -209,7 +209,7 @@ public static class EffectsManager
             case "Gallery":
                 int visits = 0;
                 room.AddBonus(room.Alias, () => visits);
-                room.EveryTime().PlayerEnterRoom().Where(_ => Player.coins > 0).Do(_ =>
+                room.EveryTime().PlayerEnterRoom().Where(_ => Player.coins > Player.minCoins).Do(_ =>
                 {
                     Player.ChangeCoins(-1);
                     visits++;

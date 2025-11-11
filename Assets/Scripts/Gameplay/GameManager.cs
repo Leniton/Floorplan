@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
 
         if (roomDict.TryGetValue(targetedSlot, out var targetFloorplan))
         {
-            if (Player.steps <= 0) return;
+            if (Player.steps <= Player.minSteps) return;
             //check if floorplan is connected to this one
             if (!targetFloorplan.connections[Room.DirectionToID(-direction)])
             {
@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour
 
     private void OnChooseRoom(Room room)
     {
-        if (Player.keys < room.keyCost)
+        if ((Player.keys - room.keyCost) < Player.minKeys)
         {
             MessageWindow.ShowMessage("You don't have enough keys!!");
             return;

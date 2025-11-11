@@ -1,12 +1,13 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Player
 {
     private static Player player = new();
+
+    public static int minSteps;
+    public static int minCoins;
+    public static int minKeys;
 
     #region Resources
     public static int steps;
@@ -22,19 +23,19 @@ public class Player
 
     public static void ChangeSteps(int delta)
     {
-        steps += delta;
+        steps = Mathf.Max(steps + delta, minSteps);
         GameEvent.onStepsChanged?.Invoke(new(delta));
     }
 
     public static void ChangeCoins(int delta)
     {
-        coins += delta;
+        coins += Mathf.Max(coins + delta, minCoins);
         GameEvent.onCoinsChanged?.Invoke(new(delta));
     }
 
     public static void ChangeKeys(int delta)
     {
-        keys += delta;
+        keys = Mathf.Max(keys + delta, minKeys);
         GameEvent.onKeysChanged?.Invoke(new(delta));
     }
 
@@ -53,6 +54,9 @@ public class Player
 
     public static void ResetPlayer()
     {
+        minSteps = 0;
+        minKeys = 0;
+        minCoins = 0;
         items = new();
         steps = 20;
         keys = 2;

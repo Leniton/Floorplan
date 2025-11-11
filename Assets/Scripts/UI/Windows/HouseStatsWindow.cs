@@ -64,7 +64,7 @@ public class HouseStatsWindow : MonoBehaviour
         int stepsLeft = Player.steps;
         var sequence = coinsGained.ChangeValueSequence(stepsLeft);
         sequence.OnFinished += () => Player.ChangeCoins(stepsLeft);
-        queue.Add(new ParallelSequences(sequence, BonusTextSequence($"Steps left (+{stepsLeft})")));
+        queue.Add(new ParallelSequences(sequence, BonusTextSequence($"Steps left ({stepsLeft.SignedValue()})")));
         queue.Add(delaySequence);
     }
 
@@ -79,7 +79,7 @@ public class HouseStatsWindow : MonoBehaviour
             var sequence = coinsGained.ChangeValueSequence(bonus);
             sequence.OnFinished += () => Player.ChangeCoins(bonus);
             queue.Add(new ParallelSequences(sequence,
-                BonusTextSequence($"x{currentCheck} bonus (+{bonus})")));
+                BonusTextSequence($"x{currentCheck} bonus ({bonus.SignedValue()})")));
             queue.Add(delaySequence);
             currentCheck++;
             currentBonus += 5;
