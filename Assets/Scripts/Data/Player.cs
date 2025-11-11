@@ -29,7 +29,7 @@ public class Player
 
     public static void ChangeCoins(int delta)
     {
-        coins += Mathf.Max(coins + delta, minCoins);
+        coins = Mathf.Max(coins + delta, minCoins);
         GameEvent.onCoinsChanged?.Invoke(new(delta));
     }
 
