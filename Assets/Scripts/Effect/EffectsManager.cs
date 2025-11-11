@@ -93,7 +93,7 @@ public static class EffectsManager
                 PurchaseData bananaCommissary = new()
                 {
                     cost = 3,
-                    amount = 3,
+                    amount = 10,
                     name = "Banana",
                     description = "Gain +4 steps",
                     OnBuy = () => ItemUtilities.Banana.PickUp()
@@ -101,68 +101,35 @@ public static class EffectsManager
                 PurchaseData keyCommissary = new()
                 {
                     cost = 5,
-                    amount = 3,
+                    amount = 5,
                     name = "Key",
                     description = "Used to draft powerful floorplans",
                     OnBuy = () => new Key(1).PickUp()
                 };
-                PurchaseData rock = new()
-                {
-                    cost = 2,
-                    amount = 2,
-                    name = "Rock",
-                    description = "Place on floorplans to add +2 points to it",
-                    OnBuy = () => ItemUtilities.Rock(true).PickUp()
-                };
                 PurchaseData dice = new()
                 {
                     cost = 8,
-                    amount = 2,
+                    amount = 5,
                     name = "Dice",
                     description = "Used to reroll drawn floorplans",
                     OnBuy = () => new Dice(1).PickUp()
                 };
-                PurchaseData toy = new()
-                {
-                    cost = 6,
-                    amount = 2,
-                    name = "Toy",
-                    description = "Place on floorplans to add +3 points to it",
-                    OnBuy = () => ItemUtilities.Toy(true).PickUp()
-                };
-                PurchaseData battery = new()
-                {
-                    cost = 15,
-                    amount = 3,
-                    name = "V2 Battery",
-                    description = "Place on floorplans to multiply their total points by 2",
-                    OnBuy = () => new Battery(activate: true).PickUp()
-                };
-                PurchaseData couch = new()
+                PurchaseData sledgeHammerCommissary = new()
                 {
                     cost = 10,
                     amount = 1,
-                    name = "Couch",
-                    description = "Place on floorplans to add +4 points to it",
-                    OnBuy = () =>ItemUtilities.Couch(true).PickUp()
+                    name = "Sledge Hammer",
+                    description = "While <b>Active</b>, the next time you move towards a closed <b>Door</b> will open it.",
+                    OnBuy = () => new SledgeHammer().PickUp()
                 };
 
-                RarityPicker<PurchaseData> picker = new();
-                picker.AddToPool(bananaCommissary, Rarity.Common);
-                picker.AddToPool(keyCommissary, Rarity.Common);
-                picker.AddToPool(rock, Rarity.Common);
-                picker.AddToPool(dice, Rarity.Uncommon);
-                picker.AddToPool(toy, Rarity.Uncommon);
-                picker.AddToPool(battery, Rarity.Rare);
-                picker.AddToPool(couch, Rarity.Rare);
-
-                List<PurchaseData> commissaryList = new(3);
-                picker.ChangeRarities(1, 0, 0, 0);
-                commissaryList.Add(picker.PickRandom());
-                picker.ChangeRarities(0, 1, 0, 0);
-                commissaryList.Add(picker.PickRandom());
-                picker.ChangeRarities(0, 0, 1, 0);
-                commissaryList.Add(picker.PickRandom());
+                List<PurchaseData> commissaryList = new(3)
+                {
+                    bananaCommissary,
+                    keyCommissary,
+                    dice,
+                    sledgeHammerCommissary
+                };
                 room.TheFirstTime().RoomIsDrafted().SetupRoomShop(room.Name, commissaryList);
                 break;
             case "Conservatory":
