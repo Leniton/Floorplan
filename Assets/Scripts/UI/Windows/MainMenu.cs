@@ -49,21 +49,15 @@ public class MainMenu : MonoBehaviour
     private void StartRun()
     {
         PlayerDeck pickedDeck = currentDeck ?? possibleDecks[deckPicker.currentOption];
-        List<Room> draftPool = new();
-        //Load all floorplans
-        Addressables.LoadAssetsAsync<Room>("BaseFloorplan", floorplan =>
-            draftPool.Add(floorplan.CreateInstance(Vector2Int.up))).Completed += _ => StartGame();
-        void StartGame()
-        {
-            List<Room> deckReference = ReferenceEquals(pickedDeck, null) ? draftPool : pickedDeck.deck;
-            List<Room> playedDeck = new(deckReference.Count);
-            for (int i = 0; i < playedDeck.Capacity; i++)
-                playedDeck.Add(deckReference[i].CreateInstance(Vector2Int.up));
-            RunData.playerDeck.deck = playedDeck;
-            RunData.playerDeck.preferredCategory = currentDeck?.preferredCategory ?? 0;
-            RunData.allRooms.deck = draftPool;
+        List<Room> draftPool = GameAssets.GetAllRooms();
+        List<Room> deckReference = ReferenceEquals(pickedDeck, null) ? draftPool : pickedDeck.deck;
+        List<Room> playedDeck = new(deckReference.Count);
+        for (int i = 0; i < playedDeck.Capacity; i++)
+            playedDeck.Add(deckReference[i].CreateInstance(Vector2Int.up));
+        RunData.playerDeck.deck = playedDeck;
+        RunData.playerDeck.preferredCategory = currentDeck?.preferredCategory ?? 0;
+        RunData.allRooms.deck = draftPool;
 
-            SceneManager.LoadScene(1);
-        }
+        SceneManager.LoadScene(1);
     }
 }

@@ -3,11 +3,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public static class GameAssets
 {
     public static Sprite[] patterns;
     public static Sprite[] books;
+
+    private static List<Room> roomsList;
 
     public static void LoadAssets(Action onDone = null)
     {
@@ -54,5 +57,18 @@ public static class GameAssets
                 booksChecklist.FinishStep();
             }
         }
+
+        loadedAssets.AddStep();
+        roomsList = new();
+        //Load all floorplans
+        Addressables.LoadAssetsAsync<Room>("BaseFloorplan", floorplan => roomsList.Add(floorplan)).Completed += _ => loadedAssets.FinishStep(); ;
+    }
+
+    public static List<Room> GetAllRooms()
+    {
+        List<Room> allRooms = new(roomsList.Count);
+        for (int i = 0;i < roomsList.Count; i++)
+            allRooms.Add(roomsList[i].CreateInstance(Vector2Int.up));
+        return allRooms;
     }
 }
