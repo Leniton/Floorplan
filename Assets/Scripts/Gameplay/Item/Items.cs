@@ -266,15 +266,15 @@ public class CategoryWallpaper : Item
                 break;
             case RoomCategory.Shop:
                 int points = room.CalculatePoints();
-                if(points <= 0) return;
-                new Coin(points).AddItemToRoom(room);
+                if (points > 0)
+                    new Coin(points).AddItemToRoom(room);
                 break;
             case RoomCategory.FancyRoom:
                 room.basePoints += 3;
                 room.OnChanged?.Invoke();
                 break;
             case RoomCategory.MysteryRoom:
-                room.AddMultiplier(Name, ()=>2);
+                room.AddMultiplier(Name, () => 2);
                 break;
             case RoomCategory.CursedRoom:
                 Player.ChangeSteps(-5);
