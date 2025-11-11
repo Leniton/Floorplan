@@ -432,7 +432,7 @@ public static class EffectsManager
                 PurchaseData sledgeHammer = new()
                 {
                     cost = 10,
-                    amount = 1,
+                    amount = 3,
                     name = "SledgeHammer",
                     description = "Move towards an closed connection to open it.",
                     OnBuy = () => new SledgeHammer().PickUp()
