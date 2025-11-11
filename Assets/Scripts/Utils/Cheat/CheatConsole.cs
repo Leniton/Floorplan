@@ -128,20 +128,12 @@ namespace Cheat
             {
                 OpenCommandWindow();
             }
-            //if (Keyboard.current.anyKey.wasPressedThisFrame)
-            //{
-            //    if (Keyboard.current.allKeys is { Count: <= 0 }) return;
-            //    for (int i = 0; i < Keyboard.current.allKeys.Count; i++)
-            //    {
-            //        if (!Keyboard.current.allKeys[i].wasPressedThisFrame) continue;
-            //        Debug.Log($"{Keyboard.current.allKeys[i]} pressed");
-            //    }
-            //}
         }
 
         private void OpenCommandWindow()
         {
             if (input.isFocused) return;
+            Debug.Log("Opened command input");
             input.text = string.Empty;
             input.ActivateInputField();
         }
