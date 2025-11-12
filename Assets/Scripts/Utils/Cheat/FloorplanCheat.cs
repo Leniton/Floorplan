@@ -113,6 +113,13 @@ namespace Floorplan.Cheat
                 item += () => new CategoryWallpaper(category);
                 ValueMethod(amount, GiveItem);
             }
+            else if (type.StartsWith("key"))
+            {
+                string[] keyParam = type.Split('-');
+                var category = ParseCategory(keyParam.GetParam(1));
+                item += () => new ColorKey(category);
+                ValueMethod(amount, GiveItem);
+            }
             else if(type == "hammer")
             {
                 item += () => new SledgeHammer();
