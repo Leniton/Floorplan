@@ -28,6 +28,7 @@ public class MovementManager : MonoBehaviour
         HandleDragMovement();
         DisplayDirection();
 #if UNITY_EDITOR
+        if (!Keyboard.current.spaceKey.isPressed) return;
         directionMultiplier = 1;
         if (Keyboard.current.aKey.wasPressedThisFrame) Shift(Vector2Int.left);
         if (Keyboard.current.dKey.wasPressedThisFrame) Shift(Vector2Int.right);
