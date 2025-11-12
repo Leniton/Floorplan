@@ -113,6 +113,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50d680d80dcccf7448ff84efee483785
+    m_Address: HauntedRoom
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 55a593b5b43607d459b31cf02a80b020
     m_Address: Corridor
     m_ReadOnly: 0
@@ -313,6 +319,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f8dfc0bc76f339d41b44a41394b5c367
     m_Address: GreatHall
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa1453f2bcd49df4b95feecca6ed4091
+    m_Address: Cemetery
     m_ReadOnly: 0
     m_SerializedLabels:
     - BaseFloorplan

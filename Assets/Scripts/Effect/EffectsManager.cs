@@ -72,6 +72,14 @@ public static class EffectsManager
                     }
                 });
                 break;
+            case "Cemetery":
+                room.EveryTime().RoomsAreDrawn().Where(DraftedFromHere).Do(evt =>
+                    evt.IncreaseChanceOfDrawing(target => target.Type == RoomType.DeadEnd,.6f, _ =>
+                        Helpers.CreateSpareRoom(possibleTypes: new List<RoomType>() { RoomType.DeadEnd })));
+                break;
+            case "Chapel":
+                room.EveryTime().PlayerEnterRoom().ChangePlayerCoins(-1);
+                break;
             case "Cloister":
                 //contains a placed statue
                 ItemUtilities.Statue(true).AddItemToRoom(room);
@@ -88,9 +96,6 @@ public static class EffectsManager
                     }
                     return bonus;
                 }
-                break;
-            case "Chapel":
-                room.EveryTime().PlayerEnterRoom().ChangePlayerCoins(-1);
                 break;
             case "Commissary":
                 PurchaseData bananaCommissary = new()
@@ -308,6 +313,24 @@ public static class EffectsManager
                 hallwayClosetPool.ChangeRarities(0,0,1,0);
                 hallwayClosetPool.PickRandom().Invoke().AddItemToRoom(room);
                 return;
+            case "Haunted Room":
+                Room haunted = null;
+                var evtListener = room.EveryTime().DrawnRoomChange();
+                evtListener.AddAction(HauntDraft);
+                room.EveryTime().AnyRoomIsDrafted().Do(evt =>
+                {
+                    if (evt.Room.original != haunted) return;
+                    evtListener.RemoveAction(HauntDraft);
+                });
+                void HauntDraft(DrawRoomEvent evt)
+                {
+                    haunted = room.CreateInstance(Room.IDToDirection(room.entranceId));
+
+                    //Add to pool
+                    int id = Random.Range(0, evt.drawnRooms.Length - 1);
+                    evt.drawnRooms[id] = haunted;
+                }
+                break;
             case "Hovel":
                 //buff rest rooms
                 room.ForEveryRoom(IsOfCategory(RoomCategory.RestRoom), 
