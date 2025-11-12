@@ -846,6 +846,15 @@ public static class EffectsManager
                 for (int i = 0; i < walkinClosetItemCount; i++)
                     walkinClosetPool.PickRandom().Invoke().AddItemToRoom(room);
                 return;
+            case "Weight Room":
+                room.TheFirstTime().RoomIsDrafted().AddItemToRoom(ItemUtilities.EnergyBar());
+                room.TheFirstTime().PlayerExitRoom().Do(_ =>
+                {
+                    int halfStep = Player.steps / 2;
+                    Player.ChangeSteps(-halfStep);
+                    room.AddBonus(room.Alias, () => halfStep);
+                });
+                break;
             case "":
                 return;
         }
