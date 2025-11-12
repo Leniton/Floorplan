@@ -83,6 +83,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b382eec6ad7c02439837eaa4f6587c9
+    m_Address: SimpleRoom
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3d83f56d1463d524b95fb64c1799835b
     m_Address: LaundryRoom
     m_ReadOnly: 0
@@ -266,7 +272,8 @@ MonoBehaviour:
   - m_GUID: b2eb652f31ba9354a9ab7a110a5dd6b9
     m_Address: Gymnasium
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b2f1b82b6daee2643a919960d80de869
     m_Address: SecretPassage

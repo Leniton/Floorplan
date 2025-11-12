@@ -651,6 +651,16 @@ public static class EffectsManager
                     }
                 });
                 break;
+            case "Simple Room":
+                room.EveryTime().ModifiedDraw().Where(DraftedFromHere).Do(evt =>
+                {
+                    for (int i = 0; i < evt.drawnRooms.Length; i++)
+                    {
+                        var original = evt.drawnRooms[i];
+                        evt.drawnRooms[i] = Helpers.CreateSpareRoom(new List<RoomCategory>() { original.Category}, new List<RoomType>() { original.Type });
+                    }
+                });
+                break;
             case "Storeroom":
                 int storeroomItemCount = 3;
                 var items = room.ItemPool();
