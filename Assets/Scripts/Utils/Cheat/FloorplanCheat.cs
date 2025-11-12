@@ -117,7 +117,7 @@ namespace Floorplan.Cheat
             {
                 string[] keyParam = type.Split('-');
                 var category = ParseCategory(keyParam.GetParam(1));
-                item += () => new ColorKey(category);
+                item += () => new CategoryKey(category);
                 ValueMethod(amount, GiveItem);
             }
             else if(type == "hammer")

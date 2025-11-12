@@ -145,11 +145,11 @@ public abstract class ToggleItem : Item
     public virtual void Toggle() => active = !active;
 }
 
-public class ColorKey : ToggleItem
+public class CategoryKey : ToggleItem
 {
     public RoomCategory floorCategory { get; protected set; }
 
-    public ColorKey(RoomCategory? category = null)
+    public CategoryKey(RoomCategory? category = null)
     {
         floorCategory = category ?? Helpers.RandomCategory();//will be 8 with addition of red rooms
         Name = $"{Helpers.CategoryName(floorCategory).Replace(" Room", string.Empty)} key";

@@ -34,7 +34,7 @@ public static class EffectsManager
                 room.EveryTime().RoomConnected().PowerThatRoom();
                 break;
             case "Boudoir":
-                room.TheFirstTime().RoomIsDrafted().AddItemToRoom(new ColorKey(RoomCategory.RestRoom));
+                room.TheFirstTime().RoomIsDrafted().AddItemToRoom(new CategoryKey(RoomCategory.RestRoom));
                 break;
             case "Bunk Room":
                 //double draft
@@ -140,7 +140,7 @@ public static class EffectsManager
                 room.TheFirstTime().RoomIsDrafted().SetupRoomShop(room.Name, commissaryList);
                 break;
             case "Conservatory":
-                new ColorKey().AddItemToRoom(room);
+                new CategoryKey().AddItemToRoom(room);
                 break;
             case "Courtyard":
                 new Key(3).AddItemToRoom(room);
@@ -460,14 +460,14 @@ public static class EffectsManager
                     description = "A 3 key bundle",
                     OnBuy = () => new Key(3).PickUp()
                 };
-                ColorKey keyColor = new();
+                CategoryKey keyColor = new();
                 PurchaseData colorKey = new()
                 {
                     cost = 8,
                     amount = 1,
                     name = keyColor.Name,
                     description = "Guarantee you draw rooms of the same category",
-                    OnBuy = () => new ColorKey(keyColor.floorCategory).PickUp()
+                    OnBuy = () => new CategoryKey(keyColor.floorCategory).PickUp()
                 };
                 PurchaseData sledgeHammer = new()
                 {

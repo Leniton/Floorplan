@@ -207,14 +207,14 @@ public class Showroom : MonoBehaviour
                 AddSupply(dice);
             }
         });
-        ColorKey colorKey = new();
+        CategoryKey colorKey = new();
         possibleSupplies.Add(new()
         {
             cost = 8,
             amount = 2,
             name = colorKey.Name,
             description = $"Guarantee you draw {Helpers.CategoryName(colorKey.floorCategory)}s",
-            OnBuy = () => AddSupply(new ColorKey(colorKey.floorCategory))
+            OnBuy = () => AddSupply(new CategoryKey(colorKey.floorCategory))
         });
         possibleSupplies.Add(new()
         {

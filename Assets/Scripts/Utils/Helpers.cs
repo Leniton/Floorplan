@@ -117,7 +117,7 @@ public static class Helpers
                 case RoomCategory.StorageRoom:
                     possibleItems.AddToPool(() => new Decoration(), Rarity.Common);
                     possibleItems.AddToPool(() => new Dice(), Rarity.Uncommon);
-                    possibleItems.AddToPool(() => new ColorKey(), Rarity.Uncommon);
+                    possibleItems.AddToPool(() => new CategoryKey(), Rarity.Uncommon);
                     possibleItems.AddToPool(() => new SledgeHammer(), Rarity.Rare);
                     possibleItems.AddToPool(() => new Battery(), Rarity.Rare);
                     break;

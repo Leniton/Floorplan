@@ -18,7 +18,7 @@ public class Player
     public static bool activeKey => currentKey != null;
     public static List<Item> items = new();
     private static SledgeHammer currentSledgeHammer;
-    public static ColorKey currentKey;
+    public static CategoryKey currentKey;
     #endregion
 
     public static void ChangeSteps(int delta)
