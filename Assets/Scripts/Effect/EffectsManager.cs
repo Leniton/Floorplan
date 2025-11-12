@@ -301,6 +301,9 @@ public static class EffectsManager
                     Where(GainedCategory(RoomCategory.RestRoom)).
                     AddPointsToThatRoom(gBedroomBonus);
                 break;
+            case "Gymnasium":
+                room.EveryTime().PlayerEnterRoom().ChangePlayerSteps(-2);
+                break;
             case "Hallway Closet":
                 int hallwayClosetItemCount = 2;
                 for (int i = 0; i < hallwayClosetItemCount; i++)

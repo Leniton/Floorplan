@@ -263,6 +263,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b2eb652f31ba9354a9ab7a110a5dd6b9
+    m_Address: Gymnasium
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b2f1b82b6daee2643a919960d80de869
     m_Address: SecretPassage
     m_ReadOnly: 0
