@@ -137,6 +137,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - BaseFloorplan
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5cf318c240fdbfc458dc1a80c7bbfc44
+    m_Address: TestDeck
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseFloorplan
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5d812612dfa613b4f9bb26afea2e2b3e
     m_Address: Cloister
     m_ReadOnly: 0
