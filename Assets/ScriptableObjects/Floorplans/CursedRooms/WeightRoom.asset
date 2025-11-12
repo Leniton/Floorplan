@@ -24,7 +24,7 @@ MonoBehaviour:
   Type: 1
   Rarity: 2
   keyCost: 0
-  basePoints: 20
+  basePoints: 1
   entranceId: 0
   connections: 
   connectedRooms: []
