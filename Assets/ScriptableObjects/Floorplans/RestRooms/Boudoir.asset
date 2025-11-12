@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Boudoir
   m_EditorClassIdentifier: 
   Name: Boudoir
-  Description: Bigger chance to <b>Draw Rest Rooms</b> from this room
+  Description: Contains a <b>Rest Key
   references:
-  - {fileID: 11400000, guid: 904fc32cddbf9b94295c6bd778a17c35, type: 2}
+  - {fileID: 11400000, guid: 4a87d5ced0866da4f82d5ddac09eff9b, type: 2}
   Alias: Boudoir
   Category: 1
   Type: -2
@@ -24,4 +24,4 @@ MonoBehaviour:
   basePoints: 1
   entranceId: 0
   connections: 
-  connectedFloorplans: []
+  connectedRooms: []

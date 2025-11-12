@@ -34,8 +34,7 @@ public static class EffectsManager
                 room.EveryTime().RoomConnected().PowerThatRoom();
                 break;
             case "Boudoir":
-                room.EveryTime().RoomsAreDrawn().Where(DraftedFromHere).Do(evt =>
-                    evt.IncreaseChanceOfDrawing(target => target.IsOfCategory(RoomCategory.RestRoom)));
+                room.TheFirstTime().RoomIsDrafted().AddItemToRoom(new ColorKey(RoomCategory.RestRoom));
                 break;
             case "Bunk Room":
                 //double draft
