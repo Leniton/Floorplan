@@ -41,6 +41,9 @@ namespace Floorplan.Cheat
                 case "copy":
                     CopyRoomCommand(commandParams.GetParam(1), commandParams.GetParam(2));
                     break;
+                case "item":
+                    ItemCommand(commandParams[1], commandParams.GetParam(2));
+                    break;
             }
         }
 
@@ -80,7 +83,6 @@ namespace Floorplan.Cheat
                     break;
             }
         }
-
         private static void CopyRoomCommand(string type, string amount)
         {
             if (string.IsNullOrEmpty(type)) type = "this";
@@ -100,6 +102,30 @@ namespace Floorplan.Cheat
                     GameManager.DraftPool?.Add(targetRoom.CreateInstance(Vector2Int.up));
             }
         }
+        private static void ItemCommand(string type, string amount)
+        {
+            if (string.IsNullOrEmpty(amount)) amount = "1";
+            Func<Item> item = null;
+            if (type.StartsWith("wall"))
+            {
+                string[] wallParam = type.Split('-');
+                var category = ParseCategory(wallParam.GetParam(1));
+                item += () => new CategoryWallpaper(category);
+                ValueMethod(amount, GiveItem);
+            }
+            else if(type == "hammer")
+            {
+                item += () => new SledgeHammer();
+                ValueMethod(amount, GiveItem);
+            }
+
+            void GiveItem(int quantity)
+            {
+                if(item == null) return;
+                for (int i = 0; i < quantity; i++)
+                    item.Invoke().PickUp();
+            }
+        }
 
         private static string GetParam(this string[] collection, int id)
         {
@@ -112,6 +138,22 @@ namespace Floorplan.Cheat
         {
             if (!int.TryParse(valueString, out var amount)) return;
             giveAction?.Invoke(amount);
+        }
+        
+        private static RoomCategory? ParseCategory(string category)
+        {
+            switch (category)
+            {
+                case "curse": return RoomCategory.CursedRoom;
+                case "fancy": return RoomCategory.FancyRoom;
+                case "rest": return RoomCategory.RestRoom;
+                case "hall": return RoomCategory.Hallway;
+                case "item": return RoomCategory.StorageRoom;
+                case "shop": return RoomCategory.Shop;
+                case "myst": return RoomCategory.MysteryRoom;
+                case "blank": return RoomCategory.Blank;
+            }
+            return null;
         }
     }
 }
