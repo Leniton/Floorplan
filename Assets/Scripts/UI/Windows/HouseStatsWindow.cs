@@ -28,6 +28,7 @@ public class HouseStatsWindow : MonoBehaviour
     public void ShowStatsAndEnd()
     {
         gameObject.SetActive(true);
+        coinsGained.UpdateText(0);
         valueSlider.UpdateMaxValue(PointsManager.currentRequirement);
         valueSlider.SetValue(0);
         finalPoints = PointsManager.GetTotalPoints();
