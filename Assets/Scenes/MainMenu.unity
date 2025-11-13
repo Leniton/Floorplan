@@ -1757,7 +1757,7 @@ MonoBehaviour:
   startButton: {fileID: 524390585}
   settingsutton: {fileID: 1165319873}
   glossaryButton: {fileID: 77579876}
-  currentDeck: {fileID: 11400000, guid: 5cf318c240fdbfc458dc1a80c7bbfc44, type: 2}
+  currentDeck: {fileID: 0}
   colors: {fileID: 11400000, guid: 139d542d9e1404c4dad7eececcad478a, type: 2}
   deckPicker: {fileID: 2021621835}
   possibleDecks:
@@ -1766,6 +1766,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ca5b5a2b64fc9334aa0c01147a119a14, type: 2}
   - {fileID: 11400000, guid: 6606e56e8fcd2ee4abb3d884cee461cd, type: 2}
   - {fileID: 11400000, guid: db9488c7da36b07429acd1a2ec786aff, type: 2}
+  - {fileID: 11400000, guid: 690f1174334f31848a1775348e93ae09, type: 2}
   - {fileID: 11400000, guid: a4bc785f61ec8134bbd110605e6fba0f, type: 2}
 --- !u!1 &1640180106
 GameObject:

@@ -20,7 +20,7 @@ MonoBehaviour:
   Category: 64
   Type: 1
   Rarity: 1
-  keyCost: 0
+  keyCost: 1
   basePoints: 20
   entranceId: 0
   connections: 
