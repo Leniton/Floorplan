@@ -5,6 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "new Deck", menuName = "Floorplan/Player Deck")]
 public class PlayerDeck : ScriptableObject
 {
-    public RoomCategory preferredCategory = 0;
+    public RoomCategory preferredCategory = RoomCategory.FancyRoom;
     public List<Room> deck = new();
 }
