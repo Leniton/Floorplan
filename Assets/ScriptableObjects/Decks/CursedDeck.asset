@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4b2809f45ed370439b72fd0b28398f9, type: 3}
   m_Name: CursedDeck
   m_EditorClassIdentifier: 
-  preferredCategory: 0
+  preferredCategory: 64
   deck:
   - {fileID: 11400000, guid: fa1453f2bcd49df4b95feecca6ed4091, type: 2}
   - {fileID: 11400000, guid: fa1453f2bcd49df4b95feecca6ed4091, type: 2}
