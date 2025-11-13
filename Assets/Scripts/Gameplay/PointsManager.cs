@@ -7,7 +7,7 @@ public static class PointsManager
     //average: 25/35
     private const int baseRequirement = 40;
     private const int requirementGrowth = 20;
-    public static int currentRequirement { get; private set; } = 20;
+    public static int currentRequirement { get; private set; }
 
     public static void ChangeRequirement(int newRequirement)
     {

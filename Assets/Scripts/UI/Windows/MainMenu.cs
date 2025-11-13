@@ -57,7 +57,7 @@ public class MainMenu : MonoBehaviour
         RunData.playerDeck.deck = playedDeck;
         RunData.playerDeck.preferredCategory = currentDeck?.preferredCategory ?? 0;
         RunData.allRooms.deck = draftPool;
-
+        PointsManager.Reset();
         SceneManager.LoadScene(1);
     }
 }
