@@ -6,7 +6,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Cheat
 {
@@ -40,6 +39,7 @@ namespace Cheat
         }
         private static TMP_InputField CreateInputField()
         {
+
             TMP_InputField input = CanvasObject("Input", out var inputRect).AddComponent<TMP_InputField>();
 
             CanvasObject("TextArea", out var textArea);
@@ -48,6 +48,15 @@ namespace Cheat
             textArea.anchorMin = Vector2.zero;
             textArea.anchorMax = Vector2.one;
             textArea.sizeDelta = Vector2.zero;
+
+            Image bg = CanvasObject("BG", out var bgRect).AddComponent<Image>();
+            Color color = Color.black;
+            color.a = .7f;
+            bg.color = color;
+            bgRect.SetParent(textArea, false);
+            bgRect.anchorMin = Vector2.zero;
+            bgRect.anchorMax = Vector2.one;
+            bgRect.sizeDelta = Vector2.zero;
 
             TextMeshProUGUI text = CanvasObject("Text", out var textRect).AddComponent<TextMeshProUGUI>();
             textRect.SetParent(textArea.transform);
@@ -112,6 +121,7 @@ namespace Cheat
         #endregion
 
         public static event Action<string> OnCommandSubmit;
+        private static Dictionary<string, Action<string[]>> knownCommands = new();
 
         private TMP_InputField input;
 
@@ -120,6 +130,7 @@ namespace Cheat
             input.onSubmit.AddListener(SubmitCommand);
             input.onEndEdit.AddListener(CloseCommandWindow);
             OnSetupDone?.Invoke();
+            CloseCommandWindow();
         }
 
         private void Update()
@@ -133,13 +144,14 @@ namespace Cheat
         private void OpenCommandWindow()
         {
             if (input.isFocused) return;
-            Debug.Log("Opened command input");
+            input.gameObject.SetActive(true);
             input.text = string.Empty;
             input.ActivateInputField();
         }
 
         private void CloseCommandWindow(string text = "")
         {
+            input.gameObject.SetActive(false);
             input.text = string.Empty;
         }
 
@@ -147,6 +159,18 @@ namespace Cheat
         {
             Debug.Log($"Submit: {text}");
             OnCommandSubmit?.Invoke(text);
+            var splitText = text.Split(' ');
+            if (!knownCommands.ContainsKey(splitText[0])) return;
+            var parameters = new string[splitText.Length - 1];
+            for (int i = 0; i < parameters.Length; i++)
+                parameters[i] = splitText[i + 1];
+            knownCommands[splitText[0]]?.Invoke(parameters);
+        }
+
+        public static void RegisterCommand(string command, Action<string[]> callback)
+        {
+            if (!knownCommands.ContainsKey(command)) knownCommands.Add(command, null);
+            knownCommands[command] += callback;
         }
     }
 

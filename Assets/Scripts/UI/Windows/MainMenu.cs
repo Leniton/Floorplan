@@ -46,7 +46,7 @@ public class MainMenu : MonoBehaviour
         deckPicker.SetupPicker(possibleDecks);
     }
 
-    private void StartRun()
+    public void StartRun()
     {
         PlayerDeck pickedDeck = currentDeck ?? possibleDecks[deckPicker.currentOption];
         List<Room> draftPool = GameAssets.GetAllRooms();

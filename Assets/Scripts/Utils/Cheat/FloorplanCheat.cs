@@ -17,134 +17,147 @@ namespace Floorplan.Cheat
 
         private static void Setup()
         {
-            CheatConsole.OnCommandSubmit += ParseCommand;
+            //CheatConsole.OnCommandSubmit += ParseCommand;
+            CheatConsole.RegisterCommand("p", _ => GameObject.FindObjectOfType<MainMenu>()?.StartRun());
+            CheatConsole.RegisterCommand("set", OnSetCommand);
+            CheatConsole.RegisterCommand("give", OnGiveCommand);
+            CheatConsole.RegisterCommand("copy", OnCopyCommand);
         }
 
-        /// <summary>
-        /// Commands are separated in:
-        /// Command code
-        /// Parameters
-        /// </summary>
-        private static void ParseCommand(string command)
+        private static List<string> setTypes = new()
         {
-            string[] commandParams = command.Split(' ');
-            switch (commandParams[0])
+            "key",
+            "coin",
+            "step",
+            "dice",
+        };
+
+        private static List<string> giveTypes = new() 
+        {
+            "key",
+            "coin",
+            "step",
+            "dice",
+            "wall",
+            "ckey",
+            "hammer",
+        };
+
+        private static List<string> copyTypes = new()
+        {
+            "this",
+            "up",
+            "down",
+            "left",
+            "right",
+        };
+
+        private static void OnSetCommand(string[] parameters)
+        {
+            GetKeyValuePair(parameters, setTypes, out var type, out var amount);
+            if (string.IsNullOrEmpty(type)) return;
+            SetCommand(type, amount);
+        }
+        private static void SetCommand(string type, int? setAmount)
+        {
+            int amount = setAmount ?? 0;
+            switch (type)
             {
-                case "give":
-                    if (commandParams.Length < 3) return;
-                    GiveCommand(commandParams[1], commandParams[2]);
+                case "key":
+                    Player.ChangeKeys(amount - Player.keys);
                     break;
-                case "set":
-                    if (commandParams.Length < 3) return;
-                    SetCommand(commandParams[1], commandParams[2]);
+                case "coin":
+                    Player.ChangeCoins(amount - Player.coins);
                     break;
-                case "copy":
-                    CopyRoomCommand(commandParams.GetParam(1), commandParams.GetParam(2));
+                case "step":
+                    Player.ChangeSteps(amount - Player.steps);
                     break;
-                case "item":
-                    ItemCommand(commandParams[1], commandParams.GetParam(2));
+                case "dice":
+                    Player.dices = amount;
                     break;
             }
         }
 
-        private static void GiveCommand(string type, string amount)
+        private static void OnGiveCommand(string[] parameters)
+        {
+            GetKeyValuePair(parameters, giveTypes, out var type, out var amount);
+            if (string.IsNullOrEmpty(type)) return;
+            RoomCategory? category = null;
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                if (category.HasValue) break;
+                category = ParseCategory(parameters[i]);
+            }
+            GiveCommand(type, amount ?? 1, category);
+        }
+
+        private static void GiveCommand(string type, int amount, RoomCategory? category)
         {
             switch (type)
             {
                 case "key":
-                    ValueMethod(amount, Player.ChangeKeys);
+                    Player.ChangeKeys(amount);
                     break;
                 case "coin":
-                    ValueMethod(amount, Player.ChangeCoins);
+                    Player.ChangeCoins(amount);
                     break;
                 case "step":
-                    ValueMethod(amount, Player.ChangeSteps);
+                    Player.ChangeSteps(amount);
                     break;
                 case "dice":
-                    ValueMethod(amount, d => Player.dices += d);
+                    Player.dices += amount;
+                    break;
+                case "wall":
+                    for (int i = 0; i < amount; i++)
+                        new CategoryWallpaper(category).PickUp();
+                    break;
+                case "ckey":
+                    for (int i = 0; i < amount; i++)
+                        new CategoryKey(category).PickUp();
+                    break;
+                case "hammer":
+                    for (int i = 0; i < amount; i++)
+                        new SledgeHammer().PickUp();
                     break;
             }
         }
-        private static void SetCommand(string type, string amount)
+
+        private static void OnCopyCommand(string[] parameters)
         {
-            switch (type)
-            {
-                case "key":
-                    ValueMethod(amount, d => Player.keys = d);
-                    break;
-                case "coin":
-                    ValueMethod(amount, d => Player.coins = d);
-                    break;
-                case "step":
-                    ValueMethod(amount, d => Player.steps = d);
-                    break;
-                case "dice":
-                    ValueMethod(amount, d => Player.dices = d);
-                    break;
-            }
-        }
-        private static void CopyRoomCommand(string type, string amount)
-        {
+            GetKeyValuePair(parameters, copyTypes, out var type, out var amount);
             if (string.IsNullOrEmpty(type)) type = "this";
-            if (string.IsNullOrEmpty(amount)) amount = "1";
-            Room targetRoom = null;
+            CopyRoomCommand(type, amount ?? 1);
+        }
+        private static void CopyRoomCommand(string type, int amount)
+        {
             switch (type)
             {
                 case "this":
-                    targetRoom = Helpers.CurrentRoom();
-                    ValueMethod(amount,CreateCopies);
+                    CreateCopies(Helpers.CurrentRoom());
+                    break;
+                case "up":
+                    GameManager.roomDict.TryGetValue(GridManager.instance.currentPosition + Vector2Int.up, out var room);
+                    CreateCopies(room);
+                    break;
+                case "down":
+                    GameManager.roomDict.TryGetValue(GridManager.instance.currentPosition + Vector2Int.down, out room);
+                    CreateCopies(room);
+                    break;
+                case "left":
+                    GameManager.roomDict.TryGetValue(GridManager.instance.currentPosition + Vector2Int.left, out room);
+                    CreateCopies(room);
+                    break;
+                case "right":
+                    GameManager.roomDict.TryGetValue(GridManager.instance.currentPosition + Vector2Int.right, out room);
+                    CreateCopies(room);
                     break;
             }
-            void CreateCopies(int amount)
+            void CreateCopies(Room room)
             {
-                if (targetRoom == null) return;
+                if (room == null) return;
                 for (int i = 0; i < amount; i++)
-                    GameManager.DraftPool?.Add(targetRoom.CreateInstance(Vector2Int.up));
+                    GameManager.DraftPool?.Add(room.CreateInstance(Vector2Int.up));
             }
-        }
-        private static void ItemCommand(string type, string amount)
-        {
-            if (string.IsNullOrEmpty(amount)) amount = "1";
-            Func<Item> item = null;
-            if (type.StartsWith("wall"))
-            {
-                string[] wallParam = type.Split('-');
-                var category = ParseCategory(wallParam.GetParam(1));
-                item += () => new CategoryWallpaper(category);
-                ValueMethod(amount, GiveItem);
-            }
-            else if (type.StartsWith("key"))
-            {
-                string[] keyParam = type.Split('-');
-                var category = ParseCategory(keyParam.GetParam(1));
-                item += () => new CategoryKey(category);
-                ValueMethod(amount, GiveItem);
-            }
-            else if(type == "hammer")
-            {
-                item += () => new SledgeHammer();
-                ValueMethod(amount, GiveItem);
-            }
-
-            void GiveItem(int quantity)
-            {
-                if(item == null) return;
-                for (int i = 0; i < quantity; i++)
-                    item.Invoke().PickUp();
-            }
-        }
-
-        private static string GetParam(this string[] collection, int id)
-        {
-            if (collection is { Length: 0 }) return string.Empty;
-            if (id < 0 || id >= collection.Length) return string.Empty;
-            return collection[id];
-        }
-
-        private static void ValueMethod(string valueString, Action<int> giveAction)
-        {
-            if (!int.TryParse(valueString, out var amount)) return;
-            giveAction?.Invoke(amount);
         }
         
         private static RoomCategory? ParseCategory(string category)
@@ -161,6 +174,19 @@ namespace Floorplan.Cheat
                 case "blank": return RoomCategory.Blank;
             }
             return null;
+        }
+
+        private static void GetKeyValuePair(string[] parameters, List<string> keyLookUp, out string key, out int? value)
+        {
+            key = string.Empty;
+            value = null;
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                if (!value.HasValue && int.TryParse(parameters[i], out var result))
+                    value = result;
+                else if (string.IsNullOrEmpty(key) && keyLookUp.Contains(parameters[i]))
+                    key = parameters[i];
+            }
         }
     }
 }
