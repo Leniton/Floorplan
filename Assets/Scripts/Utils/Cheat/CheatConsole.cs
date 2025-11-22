@@ -120,7 +120,6 @@ namespace Cheat
         }
         #endregion
 
-        public static event Action<string> OnCommandSubmit;
         private static Dictionary<string, Action<string[]>> knownCommands = new();
 
         private TMP_InputField input;
@@ -157,10 +156,9 @@ namespace Cheat
 
         private void SubmitCommand(string text)
         {
-            Debug.Log($"Submit: {text}");
-            OnCommandSubmit?.Invoke(text);
             var splitText = text.Split(' ');
             if (!knownCommands.ContainsKey(splitText[0])) return;
+            Debug.Log($"Submit: {text}");
             var parameters = new string[splitText.Length - 1];
             for (int i = 0; i < parameters.Length; i++)
                 parameters[i] = splitText[i + 1];

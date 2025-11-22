@@ -17,7 +17,6 @@ namespace Floorplan.Cheat
 
         private static void Setup()
         {
-            //CheatConsole.OnCommandSubmit += ParseCommand;
             CheatConsole.RegisterCommand("p", _ => GameObject.FindObjectOfType<MainMenu>()?.StartRun());
             CheatConsole.RegisterCommand("set", OnSetCommand);
             CheatConsole.RegisterCommand("give", OnGiveCommand);
