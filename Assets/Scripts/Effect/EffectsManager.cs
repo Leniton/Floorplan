@@ -150,7 +150,8 @@ public static class EffectsManager
                 {
                     for (int i = 0; i < evt.drawnRooms.Length; i++)
                     {
-                        var drawnRoom = evt.drawnRooms[i];
+                        var drawnRoom = evt.drawnRooms[i]
+                            .CreateInstance(Room.IDToDirection(evt.drawnRooms[i].entranceId));
                         drawnRoom.Name = $"Dark {drawnRoom.Name}";
                         drawnRoom.Description = "-";
                         drawnRoom.AddCategory(RoomCategory.MysteryRoom);
