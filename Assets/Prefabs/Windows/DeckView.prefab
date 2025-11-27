@@ -640,7 +640,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000076293945, y: -188}
+  m_AnchoredPosition: {x: 0, y: 85}
   m_SizeDelta: {x: 800, y: 1367}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7335330306907766362
@@ -838,7 +838,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00048065, y: 568.17}
+  m_AnchoredPosition: {x: 0.00048065, y: -690}
   m_SizeDelta: {x: 761.2, y: 91.2527}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &521371620418286260
@@ -979,7 +979,7 @@ PrefabInstance:
     - target: {fileID: 6475988893027482307, guid: e2cb498c1720f294598a6d0b29ea438c,
         type: 3}
       propertyPath: m_Name
-      value: DeckView Variant
+      value: DeckView
       objectReference: {fileID: 0}
     - target: {fileID: 7757956411773068632, guid: e2cb498c1720f294598a6d0b29ea438c,
         type: 3}
