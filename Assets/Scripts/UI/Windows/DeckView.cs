@@ -15,6 +15,7 @@ public class DeckView : MonoBehaviour
     private void Awake()
     {
         undraftedToggle.onValueChanged.AddListener(OnToggleValueChanged);
+        Close();
     }
 
     private void OnToggleValueChanged(bool on)

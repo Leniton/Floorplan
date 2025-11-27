@@ -80,7 +80,6 @@ public class GameManager : MonoBehaviour
 
     private void Setup()
     {
-        deckView.Close();
         draftManager.CloseWindow();
         gridManager.onClick += InspectCurrentFloorplan;
         gridManager.SetInteractive(false);
