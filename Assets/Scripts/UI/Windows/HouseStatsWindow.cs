@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -16,13 +17,18 @@ public class HouseStatsWindow : MonoBehaviour
     private int finalPoints;
     
     private WaitForSeconds delay = new(.5f);
-    private ISequence delaySequence => new CoroutineSequence(new(Delay()));
     private SequenceManager queue;
+
+    private static HouseStatsWindow house;
+    public static ISequence delaySequence => new CoroutineSequence(new(house.Delay()));
+    public static event Action<SequenceManager> OnCheckBonus;
+
+    private void Awake() => house = this;
 
     public void SkipCurrentAnimation()
     {
-        if (queue.running)
-            queue?.EndCurrent();
+        if (!queue.running) return;
+        queue?.EndCurrent();
     }
 
     public void ShowStatsAndEnd()
@@ -39,6 +45,7 @@ public class HouseStatsWindow : MonoBehaviour
         queue.Add(delaySequence);
         FullHouseBonus();
         StepsLeftBonus();
+        OnCheckBonus?.Invoke(queue);
         MultiplierBonus();
 
         //buffer to need to skip to end
@@ -56,8 +63,10 @@ public class HouseStatsWindow : MonoBehaviour
         int bonusValue = Mathf.FloorToInt(PointsManager.currentRequirement / 2f);
         ISequence sequence = valueSlider.ChangeValueSequence(bonusValue);
         sequence.OnFinished += () => finalPoints += bonusValue;
-        queue.Add(new ParallelSequences(sequence, BonusTextSequence("Full House! (+50% points)")));
-        queue.Add(delaySequence);
+        SequenceManager manager = new();
+        manager.Add(new ParallelSequences(sequence, BonusTextSequence("Full House! (+50% points)")));
+        manager.Add(delaySequence);
+        queue.Add(manager);
     }
 
     private void StepsLeftBonus()
@@ -65,8 +74,10 @@ public class HouseStatsWindow : MonoBehaviour
         int stepsLeft = Player.steps;
         var sequence = coinsGained.ChangeValueSequence(stepsLeft);
         sequence.OnFinished += () => Player.ChangeCoins(stepsLeft);
-        queue.Add(new ParallelSequences(sequence, BonusTextSequence($"Steps left ({stepsLeft.SignedValue()})")));
-        queue.Add(delaySequence);
+        SequenceManager manager = new();
+        manager.Add(new ParallelSequences(sequence, BonusTextSequence($"Steps left ({stepsLeft.SignedValue()})")));
+        manager.Add(delaySequence);
+        queue.Add(manager);
     }
 
     private void MultiplierBonus()
@@ -79,9 +90,11 @@ public class HouseStatsWindow : MonoBehaviour
             int bonus = currentBonus;
             var sequence = coinsGained.ChangeValueSequence(bonus);
             sequence.OnFinished += () => Player.ChangeCoins(bonus);
-            queue.Add(new ParallelSequences(sequence,
+            SequenceManager manager = new();
+            manager.Add(new ParallelSequences(sequence,
                 BonusTextSequence($"x{currentCheck} bonus ({bonus.SignedValue()})")));
-            queue.Add(delaySequence);
+            manager.Add(delaySequence);
+            queue.Add(manager);
             currentCheck++;
             currentBonus += 5;
         }
@@ -89,6 +102,7 @@ public class HouseStatsWindow : MonoBehaviour
     
     private void FinishHouse()
     {
+        OnCheckBonus = null;
         int targetScene = 2;
         if (finalPoints >= PointsManager.currentRequirement)
         {
@@ -101,6 +115,7 @@ public class HouseStatsWindow : MonoBehaviour
             PointsManager.Reset();
             targetScene = 0;
         }
+        PointsManager.ResetBonus();
         GameManager.roomDict.Clear();
         GameEvent.ResetListeners();
         SceneManager.LoadScene(targetScene);
@@ -116,5 +131,18 @@ public class HouseStatsWindow : MonoBehaviour
             instance.color = Color.white;
             instance.text = text;
         });
+    }
+
+    public static ISequence PointBonusSequence(string name, int amount)
+    {
+        ISequence sequence = house.valueSlider.ChangeValueSequence(amount);
+        sequence.OnFinished += () => house.finalPoints += amount;
+        return new ParallelSequences(sequence, house.BonusTextSequence($"{name} ({amount.SignedValue()} points)"));
+    }
+    public static ISequence CoinBonusSequence(string name, int amount)
+    {
+        ISequence sequence = house.valueSlider.ChangeValueSequence(amount);
+        sequence.OnFinished += () => Player.ChangeCoins(amount);
+        return new ParallelSequences(sequence, house.BonusTextSequence($"{name} ({amount.SignedValue()} coins)"));
     }
 }

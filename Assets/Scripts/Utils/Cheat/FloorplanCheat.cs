@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Util;
 
 namespace Floorplan.Cheat
 {
@@ -21,6 +22,8 @@ namespace Floorplan.Cheat
             CheatConsole.RegisterCommand("set", OnSetCommand);
             CheatConsole.RegisterCommand("give", OnGiveCommand);
             CheatConsole.RegisterCommand("copy", OnCopyCommand);
+            CheatConsole.RegisterCommand("point", OnPointCommand);
+            CheatConsole.RegisterCommand("house", OnHouseCommand);
         }
 
         private static List<string> setTypes = new()
@@ -49,6 +52,12 @@ namespace Floorplan.Cheat
             "down",
             "left",
             "right",
+        };
+        
+        private static List<string> houseTypes = new()
+        {
+            "point",
+            "coin",
         };
 
         private static void OnSetCommand(string[] parameters)
@@ -157,6 +166,40 @@ namespace Floorplan.Cheat
                 for (int i = 0; i < amount; i++)
                     GameManager.DraftPool?.Add(room.CreateInstance(Vector2Int.up));
             }
+        }
+
+        private static void OnPointCommand(string[] parameters)
+        {
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                if (!int.TryParse(parameters[i], out var result)) continue;
+                PointsManager.AddPoints(result);
+                return;
+            }
+        }
+        
+        private static void OnHouseCommand(string[] parameters)
+        {
+            GetKeyValuePair(parameters, houseTypes, out var type, out var amount);
+            if (string.IsNullOrEmpty(type)) type = houseTypes[0];
+            int value = amount ?? 1;
+            switch (type)
+            {
+                case "point":
+                    HouseStatsWindow.OnCheckBonus += PointBonus;
+                    break;
+                case "coin":
+                    HouseStatsWindow.OnCheckBonus += CoinBonus;
+                    break;
+            }
+            return;
+
+            void PointBonus(SequenceManager sequence) =>
+                sequence.Add(new SequenceManager().Add(HouseStatsWindow.PointBonusSequence("Cheat", value))
+                    .Add(HouseStatsWindow.delaySequence));
+            void CoinBonus(SequenceManager sequence) =>
+                sequence.Add(new SequenceManager().Add(HouseStatsWindow.CoinBonusSequence("Cheat", value))
+                    .Add(HouseStatsWindow.delaySequence));
         }
         
         private static RoomCategory? ParseCategory(string category)
