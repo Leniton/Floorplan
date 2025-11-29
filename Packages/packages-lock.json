@@ -8,11 +8,11 @@
       "hash": "d2a51f13ea08bd3e73c01457c9f191c02a1316ee"
     },
     "com.lenix.serialized-method": {
-      "version": "https://github.com/LenixSO/SerializedMethod.git",
+      "version": "https://github.com/LenixSO/SerializedMethod.git#upm",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "1ac6f9b2ac1c8eaa2b6ee2ceb578ed58eff3d058"
+      "hash": "e9b2e41aa7de4653691980194db395ec118e236a"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
