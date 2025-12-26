@@ -15,6 +15,7 @@ public class MinimapManager : MonoBehaviour
     [Header("points")]
     [SerializeField] private TMP_Text totalPoints;
     [SerializeField] private Slider totalPointsSlider;
+    [SerializeField] private ValueSlider totalPointsValue;
     [Header("PeekFloorplan")]
     [SerializeField] private HoverMenu peekButtons;
     [SerializeField] private Sprite arrowIcon;
@@ -28,6 +29,8 @@ public class MinimapManager : MonoBehaviour
 
     private void SetupGridMirror()
     {
+        totalPointsValue.UpdateMaxValue(PointsManager.currentRequirement);
+        totalPointsValue.SetValue(0);
         foreach (var floorplan in GameManager.roomDict.Values)
             SetupRoom(floorplan);
         GameEvent.onDraftedRoom += PlaceRoom;
@@ -108,9 +111,10 @@ public class MinimapManager : MonoBehaviour
     private void CalculatePoints()
     {
         int currentPoints = PointsManager.GetTotalPoints();
-        totalPointsSlider.maxValue = PointsManager.currentRequirement;
-        totalPointsSlider.value = currentPoints;
-        totalPoints.text = $"{currentPoints}/{PointsManager.currentRequirement}";
+        totalPointsValue.ChangeToValue(currentPoints);
+        //totalPointsSlider.maxValue = PointsManager.currentRequirement;
+        //totalPointsSlider.value = currentPoints;
+        //totalPoints.text = $"{currentPoints}/{PointsManager.currentRequirement}";
     }
 
     private IEnumerator DelayedUpdate()
