@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Util.Extensions
 {
@@ -351,6 +350,48 @@ namespace Util.Extensions
             sequence.OnFinished -= OnMainSequenceFinished;
             OnFinished?.Invoke();
             followUp.Begin();
+        }
+    }
+    
+    /// <summary>
+    /// Extension methods for ISequence classes
+    /// </summary>
+    public static class SequenceExtensions
+    {
+        /// <summary>
+        /// Ends the sequence with a callback for when the sequence is finished
+        /// </summary>
+        /// <param name="sequence">Sequence to be finished</param>
+        /// <param name="onEnd">Callback for when the sequence finishes</param>
+        public static void EndThen(this ISequence sequence, Action onEnd)
+        {
+            sequence.OnFinished += OneShotAction;
+            sequence.End();
+            return;
+            void OneShotAction()
+            {
+                onEnd?.Invoke();
+                sequence.OnFinished -= OneShotAction;
+            }
+        }
+
+        /// <summary>
+        /// Begins a sequence and returns itself, allowing for method chaining
+        /// </summary>
+        public static T BeginChained<T>(this T sequence) where T : ISequence
+        {
+            sequence.Begin();
+            return sequence;
+        }
+
+        /// <summary>
+        /// Add a listener for the OnFinished event and returns itself, allowing for method chaining
+        /// </summary>
+        /// <param name="callback"></param>
+        public static T AddFinishedCallback<T>(this T sequence, Action callback) where T : ISequence
+        {
+            sequence.OnFinished += callback;
+            return sequence;
         }
     }
 }
