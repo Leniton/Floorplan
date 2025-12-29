@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -43,7 +42,7 @@ namespace Cheat
             TMP_InputField input = CanvasObject("Input", out var inputRect).AddComponent<TMP_InputField>();
 
             CanvasObject("TextArea", out var textArea);
-            textArea.AddComponent<RectMask2D>();
+            textArea.gameObject.AddComponent<RectMask2D>();
             textArea.SetParent(inputRect);
             textArea.anchorMin = Vector2.zero;
             textArea.anchorMax = Vector2.one;
