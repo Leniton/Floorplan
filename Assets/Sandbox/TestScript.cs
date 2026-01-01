@@ -6,17 +6,11 @@ using UnityEngine.InputSystem;
 
 public class TestScript : MonoBehaviour
 {
-    public FloorplanUI floorplanUI;
-    public Room floorplan;
-
-    private void Awake()
-    {
-        floorplanUI.Setup(floorplan.CreateInstance(Vector2Int.down));
-    }
-
     private void Update()
     {
-        if(Keyboard.current.spaceKey.wasPressedThisFrame) 
-            floorplanUI.Setup(floorplan.CreateInstance(Vector2Int.down));
+        if (Keyboard.current.zKey.wasPressedThisFrame)
+            HandMode.ChangeHandMode(HandModeType.Right);
+        if (Keyboard.current.xKey.wasPressedThisFrame)
+            HandMode.ChangeHandMode(HandModeType.Left);
     }
 }
