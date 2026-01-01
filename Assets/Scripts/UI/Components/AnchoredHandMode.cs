@@ -33,7 +33,6 @@ public class AnchoredHandMode : HandModeCallback
         Vector2 newAnchorMax = defaultAnchorMax;
         Vector2 newPivot = defaultPivot;
         Vector2 newAnchoredPosition = defaultAnchoredPosition;
-        Vector2 newSize = defaultSize;
 
         if (mode == HandModeType.Left)
         {
