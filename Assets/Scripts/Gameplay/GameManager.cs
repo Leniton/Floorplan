@@ -49,7 +49,10 @@ public class GameManager : MonoBehaviour
                 color = new(.6f, .6f, .6f),
                 onPick = () => Glossary.OpenGlossary()
             },
-            null,
+            new()
+            {
+                onPick = HandMode.ToggleHandMode
+            },
         });
 
         Checklist loadedAssets = new(0);
