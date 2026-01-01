@@ -18,13 +18,13 @@ public class AnchoredHandMode : HandModeCallback
 
     protected override void Awake()
     {
-        base.Awake();
         rectTransform = GetComponent<RectTransform>();
         defaultAnchorMin = rectTransform.anchorMin;
         defaultAnchorMax = rectTransform.anchorMax;
         defaultPivot = rectTransform.pivot;
         defaultAnchoredPosition = rectTransform.anchoredPosition;
         defaultSize = rectTransform.sizeDelta;
+        base.Awake();
     }
 
     public override void OnHandModeChanged(HandModeType mode)

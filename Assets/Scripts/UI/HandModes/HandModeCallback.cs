@@ -8,6 +8,7 @@ public abstract class HandModeCallback : MonoBehaviour
     protected virtual void Awake()
     {
         HandMode.OnHandModeChanged += OnHandModeChanged;
+        OnHandModeChanged(HandMode.currentHandModeType);
     }
     
     public abstract void OnHandModeChanged(HandModeType mode);
