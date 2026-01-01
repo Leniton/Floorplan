@@ -1,18 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandMode : MonoBehaviour
+public static class HandMode
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private static HandModeType currentHandModeType = HandModeType.Right;
+    public static event Action<HandModeType> OnHandModeChanged;
 
-    // Update is called once per frame
-    void Update()
+    public static void ChangeHandMode(HandModeType mode)
     {
-        
+        if (currentHandModeType == mode) return;
+        currentHandModeType = mode;
+        OnHandModeChanged?.Invoke(currentHandModeType);
     }
+}
+
+public enum HandModeType
+{
+    Right = 0,
+    Left = 1,
 }

@@ -1,18 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandModeCallback : MonoBehaviour
+public abstract class HandModeCallback : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    protected virtual void Awake()
     {
-        
+        HandMode.OnHandModeChanged += OnHandModeChanged;
     }
+    
+    public abstract void OnHandModeChanged(HandModeType mode);
 
-    // Update is called once per frame
-    void Update()
+    protected virtual void OnDestroy()
     {
-        
+        HandMode.OnHandModeChanged -= OnHandModeChanged;
     }
 }
