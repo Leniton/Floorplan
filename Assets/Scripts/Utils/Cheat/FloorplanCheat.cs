@@ -2,6 +2,7 @@ using Cheat;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AddressableAsyncInstances;
 using UnityEngine;
 using Util;
 
@@ -24,6 +25,7 @@ namespace Floorplan.Cheat
             CheatConsole.RegisterCommand("copy", OnCopyCommand);
             CheatConsole.RegisterCommand("point", OnPointCommand);
             CheatConsole.RegisterCommand("house", OnHouseCommand);
+            CheatConsole.RegisterCommand("create", OnCreateCommand);
         }
 
         private static List<string> setTypes = new()
@@ -200,6 +202,36 @@ namespace Floorplan.Cheat
             void CoinBonus(SequenceManager sequence) =>
                 sequence.Add(new SequenceManager().Add(HouseStatsWindow.CoinBonusSequence("Cheat", value))
                     .Add(HouseStatsWindow.delaySequence));
+        }
+
+        private static void OnCreateCommand(string[] parameters)
+        {
+            var key = string.Empty;
+            int? paramValue = null;
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                if (!paramValue.HasValue && int.TryParse(parameters[i], out var result))
+                    paramValue = result;
+                else if (string.IsNullOrEmpty(key))
+                    key = parameters[i];
+            }
+
+            int amount = paramValue ?? 1;
+            if (string.IsNullOrEmpty(key))
+            {
+                CreateRoom(Helpers.CreateSpareRoom());
+                return;
+            }
+
+            Debug.Log($"looking for room: {key}");
+            try { AAAsset<Room>.LoadAsset(key, CreateRoom); }
+            catch (Exception e) { Debug.LogWarning($"Room not found\n\n{e.Message}"); }
+            void CreateRoom(Room room)
+            {
+                if (room == null) return;
+                for (int i = 0; i < amount; i++)
+                    GameManager.DraftPool?.Add(room.CreateInstance(Vector2Int.up));
+            }
         }
         
         private static RoomCategory? ParseCategory(string category)

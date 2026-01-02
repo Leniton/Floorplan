@@ -281,38 +281,50 @@ public static class Helpers
         spareOriginal.Name = "Spare Room";
         spareOriginal.Alias = "Spare Room";
         spareOriginal.Rarity = Rarity.Common;
-        spareOriginal.basePoints = 1;
+        spareOriginal.basePoints = 0;
         spareOriginal.Type = possibleTypes[Random.Range(0, possibleTypes.Count)];
         spareOriginal.Category = possibleCategories[Random.Range(0, possibleCategories.Count)];
 
         var spareRoom = spareOriginal.CreateInstance(Vector2Int.up);
-        switch (spareRoom.Category)
+        spareRoom.ForEachCategory(category =>
         {
-            case RoomCategory.FancyRoom:
-                spareRoom.basePoints = 15 - (3 * spareRoom.DoorCount);
-                spareRoom.Description = "-";
-                break;
-            case RoomCategory.CursedRoom:
-                spareRoom.basePoints = 25 - (5 * spareRoom.DoorCount);
-                spareRoom.Description = $"When you draft this floorplan, lose {11 - (2 * spareRoom.DoorCount)} steps";
-                break;
-            case RoomCategory.RestRoom:
-                spareRoom.Description = $"The first time you enter this floorplan, gain {15 - (3 * spareRoom.DoorCount)} steps";
-                break;
-            case RoomCategory.Shop:
-                spareRoom.Description = $"{12 - (2 * spareRoom.DoorCount)} coins";
-                break;
-            case RoomCategory.StorageRoom:
-                spareRoom.Description = $"{5 - spareRoom.DoorCount} items";
-                break;
-            case RoomCategory.Hallway:
-                int pointBonus = 5 - spareRoom.DoorCount;
-                spareRoom.Description = $"<b>Connected Rooms</b> gain {pointBonus} point{(pointBonus > 1 ? "s" : "")}";
-                break;
-            case RoomCategory.MysteryRoom:
-                spareRoom.Description = $"Multiply this floorplan points by {6 - spareRoom.DoorCount}";
-                break;
-        }
+            switch (category)
+            {
+                case RoomCategory.FancyRoom:
+                    spareRoom.basePoints = 15 - (3 * spareRoom.DoorCount);
+                    break;
+                case RoomCategory.CursedRoom:
+                    spareRoom.basePoints = 25 - (5 * spareRoom.DoorCount);
+                    spareRoom.Description +=
+                        $"When you draft this floorplan, lose {11 - (2 * spareRoom.DoorCount)} steps\n";
+                    break;
+                case RoomCategory.RestRoom:
+                    spareRoom.basePoints += 1;
+                    spareRoom.Description +=
+                        $"The first time you enter this floorplan, gain {15 - (3 * spareRoom.DoorCount)} steps\n";
+                    break;
+                case RoomCategory.Shop:
+                    spareRoom.basePoints += 1;
+                    spareRoom.Description += $"{12 - (2 * spareRoom.DoorCount)} coins\n";
+                    break;
+                case RoomCategory.StorageRoom:
+                    spareRoom.basePoints += 1;
+                    spareRoom.Description += $"{5 - spareRoom.DoorCount} items\n";
+                    break;
+                case RoomCategory.Hallway:
+                    spareRoom.basePoints += 1;
+                    int pointBonus = 5 - spareRoom.DoorCount;
+                    spareRoom.Description +=
+                        $"<b>Connected Rooms</b> gain {pointBonus} point{(pointBonus > 1 ? "s" : "")}\n";
+                    break;
+                case RoomCategory.MysteryRoom:
+                    spareRoom.basePoints += 1;
+                    spareRoom.Description += $"Multiply this floorplan points by {6 - spareRoom.DoorCount}\n";
+                    break;
+            }
+        });
+        if(string.IsNullOrEmpty(spareRoom.Description))
+            spareRoom.Description = "-";
         return spareRoom;
     }
 
@@ -405,6 +417,12 @@ public static class Helpers
             if (GameManager.roomDict.ContainsKey(coordinate)) occupied.Add(coordinate);
             else empty.Add(coordinate);
         }
+    }
+
+    public static void ForEachCategory(this Room room, Action<RoomCategory> action)
+    {
+        var categories = NumberUtil.SeparateBits((int)room.Category);
+        for (int i = 0; i < categories.Length; i++) action?.Invoke((RoomCategory)categories[i]);
     }
     #endregion
 }

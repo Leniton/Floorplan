@@ -19,6 +19,11 @@ namespace AddressableAsyncInstances
 
         private void EmptyQueue(AsyncOperationHandle<T> handle)
         {
+            if (handle.Status != AsyncOperationStatus.Succeeded)
+            {
+                Debug.LogError("Error loading asset: " + handle.Status);
+                return;
+            }
             component = handle.Result;
             while (actionQueue.Count > 0)
             {

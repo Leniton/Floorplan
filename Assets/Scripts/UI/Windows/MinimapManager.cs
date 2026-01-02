@@ -105,6 +105,7 @@ public class MinimapManager : MonoBehaviour
     {
         minimapContainer.SetActive(true);
         CalculatePoints();
+        if (!gameObject.activeInHierarchy) return;
         StartCoroutine(DelayedUpdate());
     }
 

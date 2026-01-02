@@ -155,6 +155,7 @@ public static class EffectsManager
                         drawnRoom.Name = $"Dark {drawnRoom.Name}";
                         drawnRoom.Description = "-";
                         drawnRoom.AddCategory(RoomCategory.MysteryRoom);
+                        evt.drawnRooms[i] = drawnRoom;
                     }
                 });
                 break;
@@ -671,31 +672,34 @@ public static class EffectsManager
                 return;
             case "Spare Room":
                 int doorCount = room.original.DoorCount;
-                switch (room.Category)
+                room.ForEachCategory(category =>
                 {
-                    case RoomCategory.CursedRoom:
-                        room.TheFirstTime().RoomIsDrafted().ChangePlayerSteps(-(11 - (2 * doorCount)));
-                        break;
-                    case RoomCategory.RestRoom:
-                        room.TheFirstTime().PlayerEnterRoom().ChangePlayerSteps(15 - (3 * doorCount));
-                        break;
-                    case RoomCategory.Shop:
-                        new Coin(12 - (2 * doorCount)).AddItemToRoom(room);
-                        break;
-                    case RoomCategory.StorageRoom:
-                        int spareroomItems = 5 - doorCount;
-                        var spareroomPicker = room.ItemPool();
-                        for (int i = 0; i < spareroomItems; i++)
-                            spareroomPicker.PickRandom().Invoke().AddItemToRoom(room);
-                        return;
-                    case RoomCategory.Hallway:
-                        room.EveryTime().RoomConnected().AddPointsToThatRoom(5 - doorCount);
-                        break;
-                    case RoomCategory.MysteryRoom:
-                        room.TheFirstTime().RoomIsDrafted().Do(_
-                            => room.AddMultiplier(room.Alias, () => 6 - doorCount));
-                        break;
-                }
+                    switch (category)
+                    {
+                        case RoomCategory.CursedRoom:
+                            room.TheFirstTime().RoomIsDrafted().ChangePlayerSteps(-(11 - (2 * doorCount)));
+                            break;
+                        case RoomCategory.RestRoom:
+                            room.TheFirstTime().PlayerEnterRoom().ChangePlayerSteps(15 - (3 * doorCount));
+                            break;
+                        case RoomCategory.Shop:
+                            new Coin(12 - (2 * doorCount)).AddItemToRoom(room);
+                            break;
+                        case RoomCategory.StorageRoom:
+                            int spareroomItems = 5 - doorCount;
+                            var spareroomPicker = room.ItemPool();
+                            for (int i = 0; i < spareroomItems; i++)
+                                spareroomPicker.PickRandom().Invoke().AddItemToRoom(room);
+                            return;
+                        case RoomCategory.Hallway:
+                            room.EveryTime().RoomConnected().AddPointsToThatRoom(5 - doorCount);
+                            break;
+                        case RoomCategory.MysteryRoom:
+                            room.TheFirstTime().RoomIsDrafted().Do(_
+                                => room.AddMultiplier(room.Alias, () => 6 - doorCount));
+                            break;
+                    }
+                });
                 break;
             case "Terrace":
                 RarityPicker<Func<Item>> terraceItems = room.ItemPool();
