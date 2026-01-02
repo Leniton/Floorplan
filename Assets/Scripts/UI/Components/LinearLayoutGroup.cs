@@ -6,6 +6,18 @@ public class LinearLayoutGroup : LenixSOLayoutGroup
 {
     [Tooltip("direction in witch the elements will expand to")] public Vector2 direction;
 
+    public float xDirection
+    {
+        get => direction.x;
+        set => direction.x = value;
+    }
+
+    public float yDirection
+    {
+        get => direction.y;
+        set => direction.y = value;
+    }
+
     public override void AdjustElements()
     {
         RectTransform[] elements = GetEnabledElements();
