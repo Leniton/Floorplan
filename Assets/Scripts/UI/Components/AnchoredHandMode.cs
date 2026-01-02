@@ -8,9 +8,9 @@ public class AnchoredHandMode : HandModeCallback
 {
     private RectTransform rectTransform;
     /// <summary>
-    /// anchoredPosition on rightHandMode
+    /// position on rightHandMode
     /// </summary>
-    private Vector2 defaultAnchoredPosition;
+    private Vector2 defaultPosition;
     private Vector2 defaultAnchorMin;
     private Vector2 defaultAnchorMax;
     private Vector2 defaultPivot;
@@ -22,7 +22,7 @@ public class AnchoredHandMode : HandModeCallback
         defaultAnchorMin = rectTransform.anchorMin;
         defaultAnchorMax = rectTransform.anchorMax;
         defaultPivot = rectTransform.pivot;
-        defaultAnchoredPosition = rectTransform.anchoredPosition;
+        defaultPosition = rectTransform.localPosition;
         defaultSize = rectTransform.sizeDelta;
         base.Awake();
     }
@@ -32,7 +32,7 @@ public class AnchoredHandMode : HandModeCallback
         Vector2 newAnchorMin = defaultAnchorMin;
         Vector2 newAnchorMax = defaultAnchorMax;
         Vector2 newPivot = defaultPivot;
-        Vector2 newAnchoredPosition = defaultAnchoredPosition;
+        Vector2 newPosition = defaultPosition;
 
         if (mode == HandModeType.Left)
         {
@@ -43,13 +43,13 @@ public class AnchoredHandMode : HandModeCallback
             }
 
             newPivot.x = 1 - newPivot.x;
-            newAnchoredPosition.x = -defaultAnchoredPosition.x;
+            newPosition.x = -defaultPosition.x;
         }
         
         rectTransform.anchorMin = newAnchorMin;
         rectTransform.anchorMax = newAnchorMax;
         rectTransform.pivot = newPivot;
-        rectTransform.anchoredPosition = newAnchoredPosition;
+        rectTransform.localPosition = newPosition;
         //rectTransform.sizeDelta = newSize;
     }
 }
