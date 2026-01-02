@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 2696792970045166519}
   - component: {fileID: 1202554938026965246}
   - component: {fileID: 9053522078949309428}
+  - component: {fileID: 6726677373969080748}
   m_Layer: 5
   m_Name: ShowDetails
   m_TagString: Untagged
@@ -198,6 +199,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6726677373969080748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885862468780117013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1b3208a8c366a24cbd7fbc24f2812c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1849706192549627348
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,6 +222,7 @@ GameObject:
   - component: {fileID: 8380416283791561857}
   - component: {fileID: 3741752361697591358}
   - component: {fileID: 6442333388407159844}
+  - component: {fileID: 8768163444675996585}
   m_Layer: 5
   m_Name: PlayerItems
   m_TagString: Untagged
@@ -274,6 +288,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.19
+--- !u!114 &8768163444675996585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1849706192549627348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1b3208a8c366a24cbd7fbc24f2812c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1855493042906065194
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,6 +309,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5196139560555316142}
+  - component: {fileID: 7171790020063954406}
   m_Layer: 5
   m_Name: Arrows
   m_TagString: Untagged
@@ -311,6 +338,18 @@ RectTransform:
   m_AnchoredPosition: {x: -117.92, y: -144.71}
   m_SizeDelta: {x: 699.14, y: 129.43}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7171790020063954406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855493042906065194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1b3208a8c366a24cbd7fbc24f2812c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2104453716162935051
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,6 +754,7 @@ GameObject:
   - component: {fileID: 8089730871749410982}
   - component: {fileID: 3978593513148998664}
   - component: {fileID: 6018601167010840761}
+  - component: {fileID: 6312192258277359373}
   m_Layer: 5
   m_Name: AutoCollectToggle
   m_TagString: Untagged
@@ -829,6 +869,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!114 &6312192258277359373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4538922311665800287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1b3208a8c366a24cbd7fbc24f2812c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6727636557420325398
 GameObject:
   m_ObjectHideFlags: 0
@@ -840,6 +892,7 @@ GameObject:
   - component: {fileID: 2278574795740655093}
   - component: {fileID: 8737865935102562081}
   - component: {fileID: 3729975217709691706}
+  - component: {fileID: 3850405063570282276}
   m_Layer: 5
   m_Name: FloorplanItems
   m_TagString: Untagged
@@ -905,6 +958,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.19
+--- !u!114 &3850405063570282276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6727636557420325398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1b3208a8c366a24cbd7fbc24f2812c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7101596580037880629
 GameObject:
   m_ObjectHideFlags: 0
