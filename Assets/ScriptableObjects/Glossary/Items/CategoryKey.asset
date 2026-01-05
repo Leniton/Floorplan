@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CategoryKey
   m_EditorClassIdentifier: 
   Name: Category Key
-  Description: While <bActive</b>, the <b>Rooms</b> you draw will be of the same
+  Description: While <b>Active</b>, the <b>Rooms</b> you draw will be of the same
     <b>Category</b> as this Item.
   references:
   - {fileID: 11400000, guid: ed707b3395bcd7541af34abadafecc53, type: 2}

@@ -17,3 +17,5 @@ MonoBehaviour:
     or they are deactivated. Once its effects are applied, the item is destroyed.
   references:
   - {fileID: 11400000, guid: 8a4ac44fdfde20c4fbd9bbc54f3094fe, type: 2}
+  - {fileID: 11400000, guid: 4a87d5ced0866da4f82d5ddac09eff9b, type: 2}
+  - {fileID: 11400000, guid: 4e83d2dbcdc9e5f4ba7e08e09fb79c28, type: 2}

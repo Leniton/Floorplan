@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SledgeHammer
   m_EditorClassIdentifier: 
   Name: SledgeHammer
-  Description: While <bActive</b>, the next time you move towards a closed <b>Door</b>
+  Description: While <b>Active</b>, the next time you move towards a closed <b>Door</b>
     will open it.
   references:
   - {fileID: 11400000, guid: 66d61c49fb2bd0c458ebc4a6c409ca0c, type: 2}
