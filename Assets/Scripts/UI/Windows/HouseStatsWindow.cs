@@ -112,6 +112,7 @@ public class HouseStatsWindow : MonoBehaviour
         else
         {
             //lose, reset
+            Player.Reset();
             PointsManager.Reset();
             targetScene = 0;
         }
