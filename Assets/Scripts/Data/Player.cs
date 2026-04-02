@@ -10,6 +10,7 @@ public class Player
     public static int minKeys;
 
     #region Resources
+
     public static int steps;
     public static int keys;
     public static int coins;
@@ -19,6 +20,7 @@ public class Player
     public static List<Item> items = new();
     private static SledgeHammer currentSledgeHammer;
     public static CategoryKey currentKey;
+
     #endregion
 
     public static void ChangeSteps(int delta)
@@ -41,8 +43,8 @@ public class Player
 
     public static void ActivateSledgeHammer(SledgeHammer sledgeHammer)
     {
-        if(sledgeHammer == null) return;
-        if(!items.Contains(sledgeHammer)) items.Add(sledgeHammer);
+        if (sledgeHammer == null) return;
+        if (!items.Contains(sledgeHammer)) items.Add(sledgeHammer);
         currentSledgeHammer = sledgeHammer;
     }
 
@@ -58,9 +60,16 @@ public class Player
         minKeys = 0;
         minCoins = 0;
         items = new();
-        steps = 20;
         keys = 2;
+        steps = 20;
         currentSledgeHammer = null;
         currentKey = null;
+    }
+
+    public static void Reset()
+    {
+        ResetPlayer();
+        dices = 0;
+        coins = 0;
     }
 }
