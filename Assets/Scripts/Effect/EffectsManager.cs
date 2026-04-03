@@ -874,7 +874,8 @@ public static class EffectsManager
                 });
                 break;
             case "":
-                return;
+                break;
+            default: return;
         }
         Helpers.AddRoomItems(room);
         bool DraftedFromHere<T>(T evt) where T : Event => Helpers.CurrentRoom() == room;
