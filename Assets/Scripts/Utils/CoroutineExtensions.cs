@@ -96,8 +96,10 @@ public static class CoroutineExtensions
             if(!running) return;
             running = false;
             currentCoroutine = null;
-            onEndCoroutine?.Invoke();
+            TriggerEndCallback();
         }
+        
+        public void TriggerEndCallback() => onEndCoroutine?.Invoke();
     }
 
     internal class CoroutineHolder : MonoBehaviour { }
@@ -122,7 +124,11 @@ public static class CoroutineExtensions
             expandedCoroutine.onEndCoroutine += OnCoroutineFinished;
         }
 
-        public void Begin() => monoBehaviour.BeginCoroutine(expandedCoroutine);
+        public void Begin()
+        {
+            if (!monoBehaviour.gameObject.activeInHierarchy) expandedCoroutine.TriggerEndCallback();
+            else monoBehaviour.BeginCoroutine(expandedCoroutine);
+        }
 
         public void End() => monoBehaviour.EndCoroutine(expandedCoroutine);
 
