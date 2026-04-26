@@ -166,7 +166,7 @@ namespace Cheat
 
         public static void RegisterCommand(string command, Action<string[]> callback)
         {
-            if (!knownCommands.ContainsKey(command)) knownCommands.Add(command, null);
+            knownCommands.TryAdd(command, null);
             knownCommands[command] += callback;
         }
     }
