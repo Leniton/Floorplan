@@ -216,6 +216,7 @@ public class GameManager : MonoBehaviour
 
     private void FinishRun()
     {
+        TriggerRoomExitEvent(gridManager.currentPosition, gridManager.currentPosition);
         houseStats.ShowStatsAndEnd();
     }
 }
