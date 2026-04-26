@@ -88,7 +88,6 @@ public class MinimapManager : MonoBehaviour
 
     private void SetupRoom(Room room)
     {
-        room.OnChanged += CalculatePoints;
         Button slotButton = minimapGrid.GetSlot(room.coordinate);
         FloorplanUI instance = Instantiate(floorplanPrefab, slotButton.transform);
         instance.Setup(room);
