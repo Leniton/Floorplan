@@ -10,7 +10,7 @@ public static class EffectsManager
     {
         if (room.Name == "Entrance Hall") return;
         Room draftedRoom = Helpers.CurrentRoom();
-        switch (room.Name)
+        switch (room.name)
         {
             case "Attic":
                 int atticItemCount = 6;
@@ -30,13 +30,13 @@ public static class EffectsManager
                 room.TheFirstTime().PlayerExitRoom()
                     .Do(_ => Player.ChangeSteps(room.CalculatePoints()));
                 break;
-            case "Boiler Room":
+            case "BoilerRoom":
                 room.EveryTime().RoomConnected().PowerThatRoom();
                 break;
             case "Boudoir":
                 room.TheFirstTime().RoomIsDrafted().AddItemToRoom(new CategoryKey(RoomCategory.RestRoom));
                 break;
-            case "Bunk Room":
+            case "BunkRoom":
                 //double draft
                 room.TheFirstTime().
                     RoomIsDrafted().Do(evt =>
@@ -145,7 +145,7 @@ public static class EffectsManager
             case "Courtyard":
                 new Key(3).AddItemToRoom(room);
                 break;
-            case "Dark Room":
+            case "DarkRoom":
                 room.EveryTime().ModifiedDraw().Where(DraftedFromHere).Do(evt =>
                 {
                     for (int i = 0; i < evt.drawnRooms.Length; i++)
@@ -153,6 +153,7 @@ public static class EffectsManager
                         var drawnRoom = evt.drawnRooms[i]
                             .CreateInstance(Room.IDToDirection(evt.drawnRooms[i].entranceId));
                         drawnRoom.Name = $"Dark {drawnRoom.Name}";
+                        drawnRoom.name = drawnRoom.Name;
                         drawnRoom.Description = "-";
                         drawnRoom.AddCategory(RoomCategory.MysteryRoom);
                         evt.drawnRooms[i] = drawnRoom;
@@ -162,7 +163,7 @@ public static class EffectsManager
             case "Den":
                 room.TheFirstTime().RoomIsDrafted().AddItemToRoom(new Key(1));
                 break;
-            case "Dining Room":
+            case "DiningRoom":
                 int stepsFromFood = 0;
                 ItemUtilities.Meal().AddItemToRoom(room);
                 room.AddBonus(room.Alias, () => stepsFromFood);
@@ -180,7 +181,7 @@ public static class EffectsManager
                     Do(evt => ItemUtilities.Orange.
                         AddItemToRoom(evt.Room));
                 break;
-            case "Drawing Room":
+            case "DrawingRoom":
                 int startAmount = 0;
                 room.EveryTime().PlayerEnterRoom().Do(_ =>
                 {
@@ -198,7 +199,7 @@ public static class EffectsManager
                 });
                 room.EveryTime().PlayerExitRoom().Do(_ => Player.dices = Mathf.Min(startAmount, Player.dices));
                 break;
-            case "Energy Room":
+            case "EnergyRoom":
                 PurchaseData v2Battery = new()
                 {
                     cost = 15,
@@ -236,7 +237,7 @@ public static class EffectsManager
                     visits++;
                 });
                 break;
-            case "Gift Shop":
+            case "GiftShop":
                 int bonusPoints = 0;
                 PurchaseData one = new()
                 {
@@ -276,7 +277,7 @@ public static class EffectsManager
                 List<PurchaseData> giftList = new () { one, three, five, ten };
                 room.TheFirstTime().RoomIsDrafted().SetupRoomShop(room.Name, giftList);
                 break;
-            case "Great Hall":
+            case "GreatHall":
                 //extra points for each different type of room connected
                 RoomCategory connectedCategories = 0;
                 room.EveryTime().RoomConnected()
@@ -289,7 +290,7 @@ public static class EffectsManager
                 void AddToConnectedCategories(RoomEvent evt) =>
                     connectedCategories |= evt.Room.Category;
                 break;
-            case "Guest Bedroom":
+            case "GuestBedroom":
                 //essentialy free to move in
                 room.EveryTime().PlayerEnterRoom().ChangePlayerSteps(2);
 
@@ -306,7 +307,7 @@ public static class EffectsManager
             case "Gymnasium":
                 room.EveryTime().PlayerEnterRoom().ChangePlayerSteps(-2);
                 break;
-            case "Hallway Closet":
+            case "HallwayCloset":
                 int hallwayClosetItemCount = 2;
                 for (int i = 0; i < hallwayClosetItemCount; i++)
                     Helpers.AddRoomItems(room, true);
@@ -317,7 +318,7 @@ public static class EffectsManager
                 hallwayClosetPool.ChangeRarities(0,0,1,0);
                 hallwayClosetPool.PickRandom().Invoke().AddItemToRoom(room);
                 return;
-            case "Haunted Room":
+            case "HauntedRoom":
                 Room haunted = null;
                 var evtListener = room.EveryTime().DrawnRoomChange();
                 evtListener.AddAction(HauntDraft);
@@ -420,7 +421,7 @@ public static class EffectsManager
                 kitchenList.Add(kitchenPicker.PickRandom());
                 room.TheFirstTime().RoomIsDrafted().SetupRoomShop(room.Name, kitchenList);
                 break;
-            case "Laundry Room":
+            case "LaundryRoom":
                 room.EveryTime().RoomIsDrafted().AddPointBonusToRoom(() =>
                     NumberUtil.SeparateBits((int)room.Category).Length * 5);
 
@@ -483,7 +484,7 @@ public static class EffectsManager
                 List<PurchaseData> locksmithList = new() { key, keyBundle, colorKey, sledgeHammer };
                 room.TheFirstTime().RoomIsDrafted().SetupRoomShop(room.Name, locksmithList);
                 break;
-            case "Master Bedroom":
+            case "MasterBedroom":
                 //buffs all rest room for each rest room
                 int otherBonus = 0;
                 room.ForEveryRoom(IsOfCategory(RoomCategory.RestRoom), MBedroomBonus);
@@ -497,7 +498,7 @@ public static class EffectsManager
                     evt.Room.AddBonus(room.Alias, () => otherBonus);
                 }
                 break;
-            case "Mail Room":
+            case "MailRoom":
                 const int draftsNeeded = 3;
                 int count = 0;
                 room.TheNext_Times(draftsNeeded).AnyRoomIsDrafted().Where(IsNot(room)).Do(_ =>
@@ -600,10 +601,10 @@ public static class EffectsManager
                     new Battery(4).AddItemToRoom(treasure);
                 }
                 break;
-            case "Pump Room":
+            case "PumpRoom":
                 room.EveryTime().RoomConnected().AddPointBonusToThatRoom(() => room.basePoints);
                 break;
-            case "Secret Passage":
+            case "SecretPassage":
                 //add connection to drafted floorplans
                 room.EveryTime().RoomsAreDrawn().Where(DraftedFromHere).Do(evt =>
                 {
@@ -653,7 +654,7 @@ public static class EffectsManager
                     }
                 });
                 break;
-            case "Simple Room":
+            case "SimpleRoom":
                 room.EveryTime().ModifiedDraw().Where(DraftedFromHere).Do(evt =>
                 {
                     for (int i = 0; i < evt.drawnRooms.Length; i++)
@@ -670,7 +671,7 @@ public static class EffectsManager
                 for (int i = 0; i < storeroomItemCount; i++)
                     items.PickRandom().Invoke().AddItemToRoom(room);
                 return;
-            case "Spare Room":
+            case "SpareRoom":
                 int doorCount = room.original.DoorCount;
                 room.ForEachCategory(category =>
                 {
@@ -706,7 +707,7 @@ public static class EffectsManager
                 terraceItems.ChangeRarities(0,1,0,0);
                 terraceItems.PickRandom().Invoke().AddItemToRoom(room);
                 break;
-            case "Trading Post":
+            case "TradingPost":
                 List<PurchaseData> trades = new();
                 room.EveryTime().PlayerEnterRoom().Do(_ => UpdateTrades());
                 room.TheFirstTime().RoomIsDrafted().SetupRoomShop(room.Name, trades);
@@ -796,7 +797,7 @@ public static class EffectsManager
                 room.TheFirstTime().RoomIsDrafted().
                     Where(_ => room.Type == RoomType.DeadEnd).AddItemToRoom(new Key(5));
                 break;
-            case "Utility Closet":
+            case "UtilityCloset":
                 //power all rooms of the same category
                 room.ForEveryRoom(MatchCategoryWith(room),
                     evt => evt.Room.AddMultiplier(room.Alias, () => 2));
@@ -851,7 +852,7 @@ public static class EffectsManager
                         }
                     });
                 break;
-            case "Walk-In Closet":
+            case "WalkInCloset":
                 int walkinClosetItemCount = 4;
                 for (int i = 0; i < walkinClosetItemCount; i++)
                     Helpers.AddRoomItems(room, true);
@@ -864,7 +865,7 @@ public static class EffectsManager
                 for (int i = 0; i < walkinClosetItemCount; i++)
                     walkinClosetPool.PickRandom().Invoke().AddItemToRoom(room);
                 return;
-            case "Weight Room":
+            case "WeightRoom":
                 room.TheFirstTime().RoomIsDrafted().AddItemToRoom(ItemUtilities.EnergyBar());
                 room.TheFirstTime().PlayerExitRoom().Do(_ =>
                 {
