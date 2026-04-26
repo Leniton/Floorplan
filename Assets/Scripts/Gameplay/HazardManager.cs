@@ -16,7 +16,7 @@ namespace Gameplay
         private static void TestHazard(Event evt)
         {
             Room hazardRoom = null;
-            hazardRoom = Helpers.CreateRoom("Hazard Room", "-20 points, +30 points when a room connects to this roomw", -20, 
+            hazardRoom = Helpers.CreateRoom("Hazard Room", "-20 points, +30 points when a room connects to this room", -20, 
                 RoomType.DeadEnd, RoomCategory.Blank,
                 entrance: Vector2Int.up, onDraftEffect: RoomEffect);
             hazardRoom.Rotate();
