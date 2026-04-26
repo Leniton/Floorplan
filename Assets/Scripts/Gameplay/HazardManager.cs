@@ -30,6 +30,45 @@ namespace Gameplay
 
         private static void RelicTest(Event evt)
         {
+            GameEvent.onDrawRooms += EnsureLastModify;
+            void EnsureLastModify(DrawRoomEvent evt)
+            {
+                GameEvent.onModifyDraw += HideRooms;
+            }
+            
+            void HideRooms(DrawRoomEvent data)
+            {
+                Debug.Log("relic effect");
+                GameEvent.onModifyDraw -= HideRooms;
+                GameEvent.onDraftedRoom += ResetEffect;
+                for (int i = 0; i < data.drawnRooms.Length; i++)
+                {
+                    var room = data.drawnRooms[i];
+                    room = room.CreateInstance(Room.IDToDirection(room.entranceId));
+                    room.Name = "?????";
+                    room.basePoints = 0;
+                    room.Description = "?????";
+                    room.Category = RoomCategory.Blank;
+                    data.drawnRooms[i] = room;
+                }
+            }
+
+            void ResetEffect(RoomEvent evt)
+            {
+                Debug.Log("revert relic effect");
+                GameEvent.onDraftedRoom -= ResetEffect;
+                var room = evt.Room;
+                var original = room.original;
+                while (original.Name == "?????") original = original.original;
+                room.Name = original.Name;
+                room.basePoints = original.basePoints;
+                room.Description = original.Description;
+                room.Category = original.Category;
+                room.OnChanged?.Invoke();
+            }
+            
+            return;
+            //bonus for room drafted test
             Room relicRoom = null;
             int value = 0;
             HouseStatsWindow.OnCheckBonus += PointBonus;
