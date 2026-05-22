@@ -8,13 +8,15 @@ namespace AddressableAsyncInstances
 {
     public class AAAsset<T>
     {
-        private T component;
+        private T asset;
         private Queue<Action<T>> actionQueue;
 
-        public AAAsset(string address)
+        public AAAsset(string address, bool releaseOnCompletion = true)
         {
             actionQueue = new();
-            Addressables.LoadAssetAsync<T>(address).Completed += EmptyQueue;
+            var operation = Addressables.LoadAssetAsync<T>(address);
+            if (releaseOnCompletion) operation.ReleaseHandleOnCompletion();
+            operation.Completed += EmptyQueue;
         }
 
         private void EmptyQueue(AsyncOperationHandle<T> handle)
@@ -24,11 +26,11 @@ namespace AddressableAsyncInstances
                 Debug.LogError("Error loading asset: " + handle.Status);
                 return;
             }
-            component = handle.Result;
+            asset = handle.Result;
             while (actionQueue.Count > 0)
             {
                 Action<T> current = actionQueue.Dequeue();
-                current?.Invoke(component);
+                current?.Invoke(asset);
                 if (current == DestroyAsyncObject)
                 {
                     Debug.LogWarning("object destroyed, canceling further actions");
@@ -38,10 +40,10 @@ namespace AddressableAsyncInstances
         }
         public void QueueAction(Action<T> action)
         {
-            if (component == null)
+            if (asset == null)
                 actionQueue.Enqueue(action);
             else
-                action?.Invoke(component);
+                action?.Invoke(asset);
         }
 
         public void Destroy()
@@ -51,11 +53,11 @@ namespace AddressableAsyncInstances
 
         private void DestroyAsyncObject(T _component)
         {
-            Addressables.Release(component);
+            Addressables.Release(asset);
             actionQueue.Clear();
         }
 
-        public static void LoadAsset(string address, Action<T> onLoaded) =>
-            new AAAsset<T>(address).QueueAction(onLoaded);
+        public static void LoadAsset(string address, Action<T> onLoaded, bool releaseOnCompletion = true) =>
+            new AAAsset<T>(address, releaseOnCompletion).QueueAction(onLoaded);
     }
 }

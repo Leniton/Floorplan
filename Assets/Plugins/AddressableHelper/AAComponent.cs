@@ -12,17 +12,33 @@ namespace AddressableAsyncInstances
         private Queue<Action<T>> actionQueue;
         private AssetReference reference;
 
-        public AAComponent(string address, Transform parent = null)
+        /// <summary>
+        /// Loads GameObject with component at address
+        /// </summary>
+        /// <param name="address">The addressable path</param>
+        public AAComponent(string address)
+        {
+            Setup(address).Completed += EmptyQueue;
+        }
+        
+        /// <summary>
+        /// Loads GameObject with component at address and instantiate it
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="parent"></param>
+        public AAComponent(string address, Transform parent)
+        {
+            Setup(address).Completed += _ => Addressables.InstantiateAsync(reference, parent).Completed += EmptyQueue;
+        }
+
+        private AsyncOperationHandle<GameObject> Setup(string address)
         {
             component = null;
             actionQueue = new();
             reference = new(address);
-            Addressables.InstantiateAsync(reference, parent).Completed += EmptyQueue;
-        }
-
-        public AAComponent(GameObject instance)
-        {
-            component = instance.GetComponent<T>();
+            var operation = Addressables.LoadAssetAsync<GameObject>(address);
+            operation.ReleaseHandleOnCompletion();
+            return operation;
         }
 
         private void EmptyQueue(AsyncOperationHandle<GameObject> handle)
@@ -58,7 +74,10 @@ namespace AddressableAsyncInstances
             actionQueue.Clear();
         }
 
-        public static void LoadComponent(string address, Action<T> onLoaded, Transform parent = null) =>
+        public static void LoadComponent(string address, Action<T> onLoaded) =>
+            new AAComponent<T>(address).QueueAction(onLoaded);
+
+        public static void InstantiateComponent(string address, Action<T> onLoaded, Transform parent = null) =>
             new AAComponent<T>(address, parent).QueueAction(onLoaded);
     }
 }
