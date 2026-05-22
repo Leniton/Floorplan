@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 public static class Helpers
@@ -19,7 +20,7 @@ public static class Helpers
             int diff = requiredInstances - list.Count;
             for (int i = 0; i < diff; i++)
             {
-                T instance = GameObject.Instantiate(prefab, parent);
+                T instance = Object.Instantiate(prefab, parent);
                 setupAction?.Invoke(instance);
                 list.Add(instance);
             }
