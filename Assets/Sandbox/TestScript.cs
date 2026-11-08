@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UI.Utils;
+using UI.Utils.Builder;
 using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,6 +11,9 @@ using Scene = Unity.VectorGraphics.Scene;
 
 public class TestScript : MonoBehaviour
 {
+    private VisualElement root;
+    private VectorImage vImg;
+    
     private void Start()
     {
         var shape = new Shape
@@ -19,18 +24,14 @@ public class TestScript : MonoBehaviour
                 {
                     Segments = new[]
                     {
-                        new BezierPathSegment { P0 = new Vector2(0,0),   P1 = new Vector2(50,0),  P2 = new Vector2(100,0)  },
-                        new BezierPathSegment { P0 = new Vector2(100,0), P1 = new Vector2(100,50),P2 = new Vector2(100,100)},
+                        new BezierPathSegment { P0 = new Vector2(0,0),   P1 = new Vector2(0,0),  P2 = new Vector2(80,0)  },
+                        new BezierPathSegment { P0 = new Vector2(80,0), P1 = new Vector2(80,0),P2 = new Vector2(100,100)},
                         new BezierPathSegment { P0 = new Vector2(100,100) }
                     },
                     Closed = true
                 }
             },
             Fill = new SolidFill { Color = Color.white },
-            PathProps = new PathProperties
-            {
-                Stroke = new Stroke { Color = Color.black, HalfThickness = 2f }
-            }
         };
         var scene = new Scene
         {
@@ -49,12 +50,55 @@ public class TestScript : MonoBehaviour
             SamplingStepSize = 1
         });
         //destroy after usage to avoid leaks
-        var vImg = VectorUtils.BuildVectorImage(geoms,2u);
+        vImg = VectorUtils.BuildVectorImage(geoms);
+        root = FindFirstObjectByType<UIDocument>().rootVisualElement;
+        root = new VisualElement()
+            .AbsPos()
+            .LayoutOffset(50, unit: LengthUnit.Percent)
+            .Position(-50)
+            .AlignItems(Align.Center)
+            .JustifyContent(Justify.Center)
+            .Size(200)
+            .BgColor(Color.black)
+            .AddTo(root);
         Image el = new();
-        el.vectorImage = vImg;
-        el.tintColor = Color.green;
-        FindFirstObjectByType<UIDocument>().rootVisualElement.Add(el);
+        el
+            .Image(vImg)
+            .Tint(Color.green)
+            .Position(-50, unit: LengthUnit.Percent)
+            .AbsPos()
+            .AddTo(root);
+        el = new();
+        el
+            .Image(vImg)
+            .Tint(Color.green)
+            .Position(50,-50, unit: LengthUnit.Percent)
+            .AbsPos()
+            .Scale(new(-1,1,1))
+            .AddTo(root);
+        el = new();
+        el
+            .Image(vImg)
+            .Tint(Color.red)
+            .Rotation(90)
+            .Position(50,-50, unit: LengthUnit.Percent)
+            .AbsPos()
+            .AddTo(root);
+        el = new();
+        el
+            .Image(vImg)
+            .Tint(Color.blue)
+            .Rotation(180)
+            .Position(50, unit: LengthUnit.Percent)
+            .AbsPos()
+            .AddTo(root);
+        root.Add(new VisualElement().AbsPos().BgColor(Color.grey).Size(150));
         // var sprite = VectorUtils.BuildSprite(geoms, 100f, VectorUtils.Alignment.Center, Vector2.zero, 16, false);
+    }
+
+    private void OnDestroy()
+    {
+        Destroy(vImg);
     }
 
     private void Update()

@@ -33,7 +33,7 @@ public static class ColorExtension
     
     public static Color ContrastGray(Color color)
     {
-        float anchor = Mathf.Round((1 - color.g) * 2 - (color.b + color.r));
+        float anchor = (1 - color.g) * 2 - (color.b + color.r);
         return GrayShade(anchor);
     }
 }
