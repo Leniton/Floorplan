@@ -61,6 +61,16 @@ public class TestScript : MonoBehaviour
             .Size(200)
             .BgColor(Color.black)
             .AddTo(root);
+        root.Add(new VisualElement()
+            .Size(50,100)
+            .BgColor(Color.green)
+            .Position(-50,-50)
+            .AbsPos());
+        root.Add(new VisualElement()
+            .Size(50,100)
+            .BgColor(Color.green)
+            .Position(50,-50)
+            .AbsPos());
         Image el = new();
         el
             .Image(vImg)
@@ -72,7 +82,7 @@ public class TestScript : MonoBehaviour
         el
             .Image(vImg)
             .Tint(Color.green)
-            .Position(50,-50, unit: LengthUnit.Percent)
+            .Position(49,-50, unit: LengthUnit.Percent)
             .AbsPos()
             .Scale(new(-1,1,1))
             .AddTo(root);
@@ -81,7 +91,16 @@ public class TestScript : MonoBehaviour
             .Image(vImg)
             .Tint(Color.red)
             .Rotation(90)
-            .Position(50,-50, unit: LengthUnit.Percent)
+            .Position(50,-49, unit: LengthUnit.Percent)
+            .AbsPos()
+            .AddTo(root);
+        el = new();
+        el
+            .Image(vImg)
+            .Tint(Color.red)
+            .Rotation(90)
+            .Position(50,50, unit: LengthUnit.Percent)
+            .Scale(new(-1,1,1))
             .AbsPos()
             .AddTo(root);
         el = new();
@@ -92,7 +111,33 @@ public class TestScript : MonoBehaviour
             .Position(50, unit: LengthUnit.Percent)
             .AbsPos()
             .AddTo(root);
-        root.Add(new VisualElement().AbsPos().BgColor(Color.grey).Size(150));
+        el = new();
+        el
+            .Image(vImg)
+            .Tint(Color.blue)
+            .Rotation(180)
+            .Position(-50,50, unit: LengthUnit.Percent)
+            .Scale(new(-1,1,1))
+            .AbsPos()
+            .AddTo(root);
+        el = new();
+        el
+            .Image(vImg)
+            .Tint(Color.gray3)
+            .Rotation(270)
+            .Position(-50,50, unit: LengthUnit.Percent)
+            .AbsPos()
+            .AddTo(root);
+        el = new();
+        el
+            .Image(vImg)
+            .Tint(Color.gray3)
+            .Rotation(270)
+            .Position(-50, unit: LengthUnit.Percent)
+            .Scale(new(-1,1,1))
+            .AbsPos()
+            .AddTo(root);
+        root.Add(new VisualElement().AbsPos().BgColor(Color.grey).Size(150).BorderColor(Color.black).BorderSize(1));
         // var sprite = VectorUtils.BuildSprite(geoms, 100f, VectorUtils.Alignment.Center, Vector2.zero, 16, false);
     }
 
