@@ -229,8 +229,6 @@ public class RoomUI : VisualElement
     {
         if (ReferenceEquals(newRoom, null)) return;
         room = newRoom;
-        room.Rotate();
-        room.Rotate();
         name.text = room.Name;
         for (int i = 0; i < room.connections.Length; i++)
         {
