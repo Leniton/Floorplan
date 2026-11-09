@@ -218,10 +218,10 @@ public class RoomUI : VisualElement
         Add(new VisualElement().AbsPos().BgColor(Color.gray7).Size(75,unit:LengthUnit.Percent).BorderColor(Color.black).BorderSize(1));
         Add(name = new Label("Room Name")
             .AbsPos()
-            .Size(75, unit: LengthUnit.Percent)
+            .Size(70, unit: LengthUnit.Percent)
             .TextAlign(TextAnchor.MiddleCenter)
             .WrapText(WhiteSpace.Normal)
-            .AutoSize(30, 50));
+            .AutoSize(20, 50));
         if (room != null) Setup(room);
     }
 
@@ -229,7 +229,7 @@ public class RoomUI : VisualElement
     {
         if (ReferenceEquals(newRoom, null)) return;
         room = newRoom;
-        name.text = room.Name;
+        name.text = $"<b>{room.Name}";
         for (int i = 0; i < room.connections.Length; i++)
         {
             bool open = room.connections[i];
@@ -237,7 +237,6 @@ public class RoomUI : VisualElement
             doorBlockers[i * 2].Display(display);
             doorBlockers[(i * 2) + 1].Display(display);
         }
-        
         SetColors();
     }
 
