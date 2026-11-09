@@ -764,6 +764,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9299fa93b470364b9539d2ee16739cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestScript
+  colors: {fileID: 11400000, guid: 94febe1f5c5fbc741a1a0159fc0a03ae, type: 2}
 --- !u!224 &1476069619 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4078778009517443914, guid: a33d064e8e0ba3c479c0cd540706038a,

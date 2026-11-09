@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Lenix.NumberUtilities;
 using SerializableMethods;
 using UI.Utils;
 using UI.Utils.Builder;
@@ -12,6 +13,7 @@ using Scene = Unity.VectorGraphics.Scene;
 
 public class TestScript : MonoBehaviour
 {
+    [SerializeField] private FloorplanColors colors;
     private VisualElement root;
     private VectorImage vImg;
 
@@ -19,6 +21,8 @@ public class TestScript : MonoBehaviour
     
     private void Start()
     {
+        GameSettings.current = new();
+        GameSettings.current.roomColors = colors;
         var shape = new Shape
         {
             Contours = new[]
@@ -225,6 +229,8 @@ public class RoomUI : VisualElement
     {
         if (ReferenceEquals(newRoom, null)) return;
         room = newRoom;
+        room.Rotate();
+        room.Rotate();
         name.text = room.Name;
         for (int i = 0; i < room.connections.Length; i++)
         {
@@ -239,6 +245,15 @@ public class RoomUI : VisualElement
 
     private void SetColors()
     {
-        
+        int[] categories = NumberUtil.SeparateBits((int)room.Category);
+        int step = colorSections.Length / categories.Length;
+        for (int id = 0; id < colorSections.Length; id++)
+        {
+            var colorId = Math.Min(id / step, categories.Length - 1);
+            var color = GameSettings.current.roomColors.GetColor((RoomCategory)categories[colorId]);
+            int i = (id + 2) % colorSections.Length;
+            colorSections[i].Tint(color);
+            doorBlockers[i].BgColor(color);
+        }
     }
 }
