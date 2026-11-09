@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SerializableMethods;
 using UI.Utils;
 using UI.Utils.Builder;
 using Unity.VectorGraphics;
@@ -13,6 +14,8 @@ public class TestScript : MonoBehaviour
 {
     private VisualElement root;
     private VectorImage vImg;
+
+    private RoomUI roomUi;
     
     private void Start()
     {
@@ -51,93 +54,9 @@ public class TestScript : MonoBehaviour
         });
         //destroy after usage to avoid leaks
         vImg = VectorUtils.BuildVectorImage(geoms);
+        RoomUI.vImg = vImg;
         root = FindFirstObjectByType<UIDocument>().rootVisualElement;
-        root = new VisualElement()
-            .AbsPos()
-            .LayoutOffset(50, unit: LengthUnit.Percent)
-            .Position(-50)
-            .AlignItems(Align.Center)
-            .JustifyContent(Justify.Center)
-            .Size(200)
-            .BgColor(Color.black)
-            .AddTo(root);
-        root.Add(new VisualElement()
-            .Size(50,100)
-            .BgColor(Color.green)
-            .Position(-50,-50)
-            .AbsPos());
-        root.Add(new VisualElement()
-            .Size(50,100)
-            .BgColor(Color.green)
-            .Position(50,-50)
-            .AbsPos());
-        Image el = new();
-        el
-            .Image(vImg)
-            .Tint(Color.green)
-            .Position(-50, unit: LengthUnit.Percent)
-            .AbsPos()
-            .AddTo(root);
-        el = new();
-        el
-            .Image(vImg)
-            .Tint(Color.green)
-            .Position(49,-50, unit: LengthUnit.Percent)
-            .AbsPos()
-            .Scale(new(-1,1,1))
-            .AddTo(root);
-        el = new();
-        el
-            .Image(vImg)
-            .Tint(Color.red)
-            .Rotation(90)
-            .Position(50,-49, unit: LengthUnit.Percent)
-            .AbsPos()
-            .AddTo(root);
-        el = new();
-        el
-            .Image(vImg)
-            .Tint(Color.red)
-            .Rotation(90)
-            .Position(50,50, unit: LengthUnit.Percent)
-            .Scale(new(-1,1,1))
-            .AbsPos()
-            .AddTo(root);
-        el = new();
-        el
-            .Image(vImg)
-            .Tint(Color.blue)
-            .Rotation(180)
-            .Position(50, unit: LengthUnit.Percent)
-            .AbsPos()
-            .AddTo(root);
-        el = new();
-        el
-            .Image(vImg)
-            .Tint(Color.blue)
-            .Rotation(180)
-            .Position(-50,50, unit: LengthUnit.Percent)
-            .Scale(new(-1,1,1))
-            .AbsPos()
-            .AddTo(root);
-        el = new();
-        el
-            .Image(vImg)
-            .Tint(Color.gray3)
-            .Rotation(270)
-            .Position(-50,50, unit: LengthUnit.Percent)
-            .AbsPos()
-            .AddTo(root);
-        el = new();
-        el
-            .Image(vImg)
-            .Tint(Color.gray3)
-            .Rotation(270)
-            .Position(-50, unit: LengthUnit.Percent)
-            .Scale(new(-1,1,1))
-            .AbsPos()
-            .AddTo(root);
-        root.Add(new VisualElement().AbsPos().BgColor(Color.grey).Size(150).BorderColor(Color.black).BorderSize(1));
+        root.Add(roomUi = new RoomUI().Size(200).Position(-50).LayoutOffset(50, unit: LengthUnit.Percent));
         // var sprite = VectorUtils.BuildSprite(geoms, 100f, VectorUtils.Alignment.Center, Vector2.zero, 16, false);
     }
 
@@ -146,11 +65,180 @@ public class TestScript : MonoBehaviour
         Destroy(vImg);
     }
 
+    [SerializeMethod]
+    private void SetRoom(Room room)
+    {
+        roomUi.Setup(room.CreateInstance(Vector2Int.down));
+    }
+    
     private void Update()
     {
         if (Keyboard.current.zKey.wasPressedThisFrame)
             HandMode.ChangeHandMode(HandModeType.Right);
         if (Keyboard.current.xKey.wasPressedThisFrame)
             HandMode.ChangeHandMode(HandModeType.Left);
+    }
+}
+
+public class RoomUI : VisualElement
+{
+    public static VectorImage vImg;
+    
+    private Label name;
+    private Image[] colorSections;
+    private VisualElement[] doorBlockers;
+
+    private Room room;
+
+    public RoomUI(Room room = null)
+    {
+        int offset = 50;
+        int space = 49;
+        Vector3 flip = new(-1, 1, 1);
+        this
+            .JustifyContent(Justify.Center)
+            .AlignItems(Align.Center)
+            .BgColor(Color.black);
+        doorBlockers = new[]
+        {
+            new VisualElement()
+                .Size(25, 50, LengthUnit.Percent)
+                .BgColor(Color.gray8)
+                .Position(-50)
+                .AbsPos()
+                .AddTo(this),
+            new VisualElement()
+                .Size(25, 50, LengthUnit.Percent)
+                .BgColor(Color.gray8)
+                .Position(50, -50)
+                .AbsPos()
+                .AddTo(this),
+            new VisualElement()
+                .Size(50, 25, LengthUnit.Percent)
+                .BgColor(Color.gray8)
+                .Position(50, -50)
+                .AbsPos()
+                .AddTo(this),
+            new VisualElement()
+                .Size(50, 25, LengthUnit.Percent)
+                .BgColor(Color.gray8)
+                .Position(50)
+                .AbsPos()
+                .AddTo(this),
+            new VisualElement()
+                .Size(25, 50, LengthUnit.Percent)
+                .BgColor(Color.gray8)
+                .Position(50, 50)
+                .AbsPos()
+                .AddTo(this),
+            new VisualElement()
+                .Size(25, 50, LengthUnit.Percent)
+                .BgColor(Color.gray8)
+                .Position(-50, 50)
+                .AbsPos()
+                .AddTo(this),
+            new VisualElement()
+                .Size(50, 25, LengthUnit.Percent)
+                .BgColor(Color.gray8)
+                .Position(-50, 50)
+                .AbsPos()
+                .AddTo(this),
+            new VisualElement()
+                .Size(50, 25, LengthUnit.Percent)
+                .BgColor(Color.gray8)
+                .Position(-50, -50)
+                .AbsPos()
+                .AddTo(this),
+        };
+        colorSections = new[]
+        {
+            new Image()
+                .Image(vImg)
+                .Tint(Color.gray5)
+                .Position(-space, -offset, unit: LengthUnit.Percent)
+                .AbsPos()
+                .AddTo(this),
+            new Image()
+                .Image(vImg)
+                .Tint(Color.gray5)
+                .Position(space, -offset, unit: LengthUnit.Percent)
+                .Scale(flip)
+                .AbsPos()
+                .AddTo(this),
+            new Image()
+                .Image(vImg)
+                .Tint(Color.gray5)
+                .Position(offset, -space, unit: LengthUnit.Percent)
+                .Rotation(90)
+                .AbsPos()
+                .AddTo(this),
+            new Image()
+                .Image(vImg)
+                .Tint(Color.gray5)
+                .Position(offset, space, unit: LengthUnit.Percent)
+                .Scale(flip)
+                .Rotation(90)
+                .AbsPos()
+                .AddTo(this),
+            new Image()
+                .Image(vImg)
+                .Tint(Color.gray5)
+                .Position(space, offset, unit: LengthUnit.Percent)
+                .Rotation(180)
+                .AbsPos()
+                .AddTo(this),
+            new Image()
+                .Image(vImg)
+                .Tint(Color.gray5)
+                .Position(-space, offset, unit: LengthUnit.Percent)
+                .Scale(flip)
+                .Rotation(180)
+                .AbsPos()
+                .AddTo(this),
+            new Image()
+                .Image(vImg)
+                .Tint(Color.gray5)
+                .Position(-offset, space, unit: LengthUnit.Percent)
+                .Rotation(270)
+                .AbsPos()
+                .AddTo(this),
+            new Image()
+                .Image(vImg)
+                .Tint(Color.gray5)
+                .Position(-offset, -space, unit: LengthUnit.Percent)
+                .Scale(flip)
+                .Rotation(270)
+                .AbsPos()
+                .AddTo(this),
+        };
+        Add(new VisualElement().AbsPos().BgColor(Color.gray7).Size(75,unit:LengthUnit.Percent).BorderColor(Color.black).BorderSize(1));
+        Add(name = new Label("Room Name")
+            .AbsPos()
+            .Size(75, unit: LengthUnit.Percent)
+            .TextAlign(TextAnchor.MiddleCenter)
+            .WrapText(WhiteSpace.Normal)
+            .AutoSize(30, 50));
+        if (room != null) Setup(room);
+    }
+
+    public void Setup(Room newRoom)
+    {
+        if (ReferenceEquals(newRoom, null)) return;
+        room = newRoom;
+        name.text = room.Name;
+        for (int i = 0; i < room.connections.Length; i++)
+        {
+            bool open = room.connections[i];
+            var display = open ? DisplayStyle.None : DisplayStyle.Flex;
+            doorBlockers[i * 2].Display(display);
+            doorBlockers[(i * 2) + 1].Display(display);
+        }
+        
+        SetColors();
+    }
+
+    private void SetColors()
+    {
+        
     }
 }

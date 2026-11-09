@@ -62,5 +62,13 @@ namespace UI.Utils.Builder
             element.style.whiteSpace = wrap;
             return element;
         }
+
+        public static T AutoSize<T>(this T element, float min, float max) where T : TextElement
+        {
+            element.style.unityTextGenerator = TextGeneratorType.Advanced;
+            element.style.unityTextAutoSize = new TextAutoSize(TextAutoSizeMode.BestFit, 
+                new(min),new(max));
+            return element;
+        }
     }
 }
