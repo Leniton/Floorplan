@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AddressableAsyncInstances;
 using Lenix.NumberUtilities;
 using SerializableMethods;
 using UI.Utils;
@@ -92,8 +93,8 @@ public class RoomUI : VisualElement
     public static VectorImage vImg;
     
     private Label name;
-    private Image[] colorSections;
-    private VisualElement[] doorBlockers;
+    private readonly Image[] colorSections;
+    private readonly VisualElement[] doorBlockers;
 
     public Room room { get; private set; }
 
@@ -270,29 +271,69 @@ public class RoomDetails : VisualElement
 {
     private RoomUI roomUI;
     private Label description;
+    private VisualElement keysContainer;
 
     public RoomDetails(Room room = null)
     {
+        var padding = 25f;
         this
-            .BgColor(Color.gray4)
+            .BgColor(Color.gray7)
             .AlignItems(Align.Center)
             .FlexDirection(FlexDirection.Row)
-            .Padding(25);
+            .Padding(padding);
         roomUI = new RoomUI(room)
             .Size(0,100, LengthUnit.Percent)
             .MatchWidth()
             .AddTo(this);
-        description = new Label("Description")
-            .Size(0,90, LengthUnit.Percent)
-            .Margin(25)
-            .AutoSize(20,70)
+        var sideArea = new VisualElement()
+            .Margin(padding,0,0,0)
+            .Size(0,100, LengthUnit.Percent)
             .Grow()
             .AddTo(this);
+        keysContainer = new VisualElement()
+            .FlexDirection(FlexDirection.Row)
+            .AlignItems(Align.Center)
+            .MinSize(20, unit: LengthUnit.Percent)
+            .AddTo(sideArea);
+        // keyCost = new Label("<b>+999")
+        //     .Shrink()
+        //     .FontSize(45)
+        //     .TextAlign(TextAnchor.MiddleLeft)
+        //     .TextOutline(1.5f)
+        //     .TextOutlineColor(Color.gray2)
+        //     .Margin(90,0,0,0)
+        //     .Color(Color.white)
+        //     .Display(DisplayStyle.None)
+        //     .AddTo(topArea);
+        AAAsset<VectorImage>.LoadAsset("key", 
+            img =>
+            {
+                for (int i = 0; i < 5; i++)
+                    CreateKeyElement();
+                return;
+                void CreateKeyElement() =>
+                    keysContainer.Add(new Image()
+                        .Padding(5)
+                        .Size(80)
+                        .Tint(Color.cornflowerBlue)
+                        .Image(img));
+            });
+        description = new Label("Description")
+            .Size(100,90, LengthUnit.Percent)
+            .TextAlign(TextAnchor.MiddleLeft)
+            .WrapText(WhiteSpace.Normal)
+            .AutoSize(20,70)
+            .Grow()
+            .Shrink()
+            .AddTo(sideArea);
     }
 
     public void Setup(Room room)
     {
         roomUI.Setup(room);
         if (room == null) return;
+        description.text = $"<b>{room.Description}";
+        for (int i = 0; i < keysContainer.childCount; i++)
+            keysContainer[i].Display(room.keyCost > i ? DisplayStyle.Flex : DisplayStyle.None);
     }
 }

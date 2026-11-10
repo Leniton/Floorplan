@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: Default Local Group
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
-  m_Data:
-    m_SerializedData: []
   m_GUID: e74e33c3d3f3cc84f929c3553b4c4e11
   m_SerializeEntries:
   - m_GUID: 0592fd1164e8f894c8ba4760b9093bc0
     m_Address: EntranceHall
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7507d9bb1afc34746a7341b9e7de4b72
+    m_Address: key
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

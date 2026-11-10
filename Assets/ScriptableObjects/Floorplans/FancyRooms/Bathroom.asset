@@ -26,4 +26,4 @@ MonoBehaviour:
   basePoints: 1
   entranceId: 0
   connections: 
-  connectedFloorplans: []
+  connectedRooms: []
