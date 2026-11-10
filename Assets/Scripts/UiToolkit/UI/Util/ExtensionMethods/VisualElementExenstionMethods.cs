@@ -62,7 +62,7 @@ namespace UI.Utils
             return element;
         }
         
-        public static T Position<T>(this T element, int x, int? y = null, LengthUnit unit = LengthUnit.Percent) where T : VisualElement
+        public static T Position<T>(this T element, float x, float? y = null, LengthUnit unit = LengthUnit.Percent) where T : VisualElement
         {
             element.style.translate = new StyleTranslate(new Translate(
                 new Length(x, unit), 
@@ -335,6 +335,18 @@ namespace UI.Utils
         public static T BgSize<T>(this T element, BackgroundSizeType sizeType) where T : VisualElement
         {
             element.style.backgroundSize = new BackgroundSize(sizeType);
+            return element;
+        }
+
+        public static T MatchWidth<T>(this T element) where T : VisualElement
+        {
+            element.RegisterCallback<GeometryChangedEvent>(_ => element.Width(element.resolvedStyle.height));
+            return element;
+        }
+        
+        public static T MatchHeight<T>(this T element) where T : VisualElement
+        {
+            element.RegisterCallback<GeometryChangedEvent>(_ => element.Height(element.resolvedStyle.width));
             return element;
         }
     }

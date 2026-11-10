@@ -18,6 +18,7 @@ public class TestScript : MonoBehaviour
     private VectorImage vImg;
 
     private RoomUI roomUi;
+    private RoomDetails details;
     
     private void Start()
     {
@@ -60,7 +61,8 @@ public class TestScript : MonoBehaviour
         vImg = VectorUtils.BuildVectorImage(geoms);
         RoomUI.vImg = vImg;
         root = FindFirstObjectByType<UIDocument>().rootVisualElement;
-        root.Add(roomUi = new RoomUI().Size(200).Position(-50).LayoutOffset(50, unit: LengthUnit.Percent));
+        root.Add(details = new RoomDetails().AbsPos().Size(750,320).Position(-50).LayoutOffset(50, unit: LengthUnit.Percent));
+        // root.Add(roomUi = new RoomUI().AbsPos().Size(200).Position(-50).LayoutOffset(50, unit: LengthUnit.Percent));
         // var sprite = VectorUtils.BuildSprite(geoms, 100f, VectorUtils.Alignment.Center, Vector2.zero, 16, false);
     }
 
@@ -72,7 +74,8 @@ public class TestScript : MonoBehaviour
     [SerializeMethod]
     private void SetRoom(Room room)
     {
-        roomUi.Setup(room.CreateInstance(Vector2Int.down));
+        // roomUi.Setup(room.CreateInstance(Vector2Int.down));
+        details.Setup(room.CreateInstance(Vector2Int.down));
     }
     
     private void Update()
@@ -92,7 +95,7 @@ public class RoomUI : VisualElement
     private Image[] colorSections;
     private VisualElement[] doorBlockers;
 
-    private Room room;
+    public Room room { get; private set; }
 
     public RoomUI(Room room = null)
     {
@@ -158,12 +161,14 @@ public class RoomUI : VisualElement
         {
             new Image()
                 .Image(vImg)
+                .Size(50, unit: LengthUnit.Percent)
                 .Tint(Color.gray5)
                 .Position(-space, -offset, unit: LengthUnit.Percent)
                 .AbsPos()
                 .AddTo(this),
             new Image()
                 .Image(vImg)
+                .Size(50, unit: LengthUnit.Percent)
                 .Tint(Color.gray5)
                 .Position(space, -offset, unit: LengthUnit.Percent)
                 .Scale(flip)
@@ -171,6 +176,7 @@ public class RoomUI : VisualElement
                 .AddTo(this),
             new Image()
                 .Image(vImg)
+                .Size(50, unit: LengthUnit.Percent)
                 .Tint(Color.gray5)
                 .Position(offset, -space, unit: LengthUnit.Percent)
                 .Rotation(90)
@@ -178,6 +184,7 @@ public class RoomUI : VisualElement
                 .AddTo(this),
             new Image()
                 .Image(vImg)
+                .Size(50, unit: LengthUnit.Percent)
                 .Tint(Color.gray5)
                 .Position(offset, space, unit: LengthUnit.Percent)
                 .Scale(flip)
@@ -186,6 +193,7 @@ public class RoomUI : VisualElement
                 .AddTo(this),
             new Image()
                 .Image(vImg)
+                .Size(50, unit: LengthUnit.Percent)
                 .Tint(Color.gray5)
                 .Position(space, offset, unit: LengthUnit.Percent)
                 .Rotation(180)
@@ -193,6 +201,7 @@ public class RoomUI : VisualElement
                 .AddTo(this),
             new Image()
                 .Image(vImg)
+                .Size(50, unit: LengthUnit.Percent)
                 .Tint(Color.gray5)
                 .Position(-space, offset, unit: LengthUnit.Percent)
                 .Scale(flip)
@@ -201,6 +210,7 @@ public class RoomUI : VisualElement
                 .AddTo(this),
             new Image()
                 .Image(vImg)
+                .Size(50, unit: LengthUnit.Percent)
                 .Tint(Color.gray5)
                 .Position(-offset, space, unit: LengthUnit.Percent)
                 .Rotation(270)
@@ -208,6 +218,7 @@ public class RoomUI : VisualElement
                 .AddTo(this),
             new Image()
                 .Image(vImg)
+                .Size(50, unit: LengthUnit.Percent)
                 .Tint(Color.gray5)
                 .Position(-offset, -space, unit: LengthUnit.Percent)
                 .Scale(flip)
@@ -252,5 +263,36 @@ public class RoomUI : VisualElement
             colorSections[i].Tint(color);
             doorBlockers[i].BgColor(color);
         }
+    }
+}
+
+public class RoomDetails : VisualElement
+{
+    private RoomUI roomUI;
+    private Label description;
+
+    public RoomDetails(Room room = null)
+    {
+        this
+            .BgColor(Color.gray4)
+            .AlignItems(Align.Center)
+            .FlexDirection(FlexDirection.Row)
+            .Padding(25);
+        roomUI = new RoomUI(room)
+            .Size(0,100, LengthUnit.Percent)
+            .MatchWidth()
+            .AddTo(this);
+        description = new Label("Description")
+            .Size(0,90, LengthUnit.Percent)
+            .Margin(25)
+            .AutoSize(20,70)
+            .Grow()
+            .AddTo(this);
+    }
+
+    public void Setup(Room room)
+    {
+        roomUI.Setup(room);
+        if (room == null) return;
     }
 }
