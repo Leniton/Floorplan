@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.lenix.numberutils": "https://github.com/LenixSO/NumberUtilities.git",
+    "com.lenix.sequences": "https://github.com/LenixSO/Sequences.git#upm",
     "com.lenix.serialized-method": "https://github.com/LenixSO/SerializedMethod.git#upm",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",

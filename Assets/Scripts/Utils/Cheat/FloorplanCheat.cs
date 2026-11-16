@@ -3,8 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AddressableAsyncInstances;
+using LenixSO.Sequences.Composite;
 using UnityEngine;
-using Util;
 
 namespace Floorplan.Cheat
 {
@@ -196,11 +196,11 @@ namespace Floorplan.Cheat
             }
             return;
 
-            void PointBonus(SequenceManager sequence) =>
-                sequence.Add(new SequenceManager().Add(HouseStatsWindow.PointBonusSequence("Cheat", value))
+            void PointBonus(QueuedSequences sequence) =>
+                sequence.Add(new QueuedSequences().Add(HouseStatsWindow.PointBonusSequence("Cheat", value))
                     .Add(HouseStatsWindow.delaySequence));
-            void CoinBonus(SequenceManager sequence) =>
-                sequence.Add(new SequenceManager().Add(HouseStatsWindow.CoinBonusSequence("Cheat", value))
+            void CoinBonus(QueuedSequences sequence) =>
+                sequence.Add(new QueuedSequences().Add(HouseStatsWindow.CoinBonusSequence("Cheat", value))
                     .Add(HouseStatsWindow.delaySequence));
         }
 

@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
+using LenixSO.Sequences;
+using LenixSO.Sequences.Composite;
+using LenixSO.Sequences.Coroutines;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Util;
-using Util.Extensions;
 
 public class HouseStatsWindow : MonoBehaviour
 {
@@ -17,11 +18,11 @@ public class HouseStatsWindow : MonoBehaviour
     private int finalPoints;
     
     private WaitForSeconds delay = new(.5f);
-    private SequenceManager queue;
+    private QueuedSequences queue;
 
     private static HouseStatsWindow house;
-    public static ISequence delaySequence => new CoroutineSequence(new(house.Delay()));
-    public static event Action<SequenceManager> OnCheckBonus;
+    public static ISequence delaySequence => new CoroutineSequence(house.Delay());
+    public static event Action<QueuedSequences> OnCheckBonus;
 
     private void Awake() => house = this;
 
@@ -63,7 +64,7 @@ public class HouseStatsWindow : MonoBehaviour
         int bonusValue = Mathf.FloorToInt(PointsManager.currentRequirement / 2f);
         ISequence sequence = valueSlider.ChangeValueSequence(bonusValue);
         sequence.OnFinished += () => finalPoints += bonusValue;
-        SequenceManager manager = new();
+        QueuedSequences manager = new();
         manager.Add(new ParallelSequences(sequence, BonusTextSequence("Full House! (+50% points)")));
         manager.Add(delaySequence);
         queue.Add(manager);
@@ -74,7 +75,7 @@ public class HouseStatsWindow : MonoBehaviour
         int stepsLeft = Player.steps;
         var sequence = coinsGained.ChangeValueSequence(stepsLeft);
         sequence.OnFinished += () => Player.ChangeCoins(stepsLeft);
-        SequenceManager manager = new();
+        QueuedSequences manager = new();
         manager.Add(new ParallelSequences(sequence, BonusTextSequence($"Steps left ({stepsLeft.SignedValue()})")));
         manager.Add(delaySequence);
         queue.Add(manager);
@@ -90,7 +91,7 @@ public class HouseStatsWindow : MonoBehaviour
             int bonus = currentBonus;
             var sequence = coinsGained.ChangeValueSequence(bonus);
             sequence.OnFinished += () => Player.ChangeCoins(bonus);
-            SequenceManager manager = new();
+            QueuedSequences manager = new();
             manager.Add(new ParallelSequences(sequence,
                 BonusTextSequence($"x{currentCheck} bonus ({bonus.SignedValue()})")));
             manager.Add(delaySequence);

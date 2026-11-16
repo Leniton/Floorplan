@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Util;
+﻿using LenixSO.Sequences.Composite;
+using UnityEngine;
 
 namespace Gameplay
 {
@@ -8,6 +8,7 @@ namespace Gameplay
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initialize()
         {
+            return;
             Debug.Log("initialize");
             GameEvent.onGameStart += TestHazard;
             GameEvent.onGameStart += RelicTest;
@@ -78,8 +79,8 @@ namespace Gameplay
                 Debug.Log("Relic Test");
                 value++;
             });
-            void PointBonus(SequenceManager sequence) =>
-                sequence.Add(new SequenceManager().Add(HouseStatsWindow.PointBonusSequence("relic", value))
+            void PointBonus(QueuedSequences sequence) =>
+                sequence.Add(new QueuedSequences().Add(HouseStatsWindow.PointBonusSequence("relic", value))
                     .Add(HouseStatsWindow.delaySequence));
         }
     }

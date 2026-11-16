@@ -1,9 +1,10 @@
 using System.Collections;
+using LenixSO.Sequences;
+using LenixSO.Sequences.Coroutines;
 using SerializableMethods;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Util.Extensions;
 
 public class ValueSlider : MonoBehaviour
 {
