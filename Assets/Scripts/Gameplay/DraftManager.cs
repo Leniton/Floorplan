@@ -210,6 +210,7 @@ public class DraftManager : MonoBehaviour
             FloorplanDetails instance = draftList[i];
             instance.Setup(floorplan);
             instance.FloorplanUI.HighlightDirection(choseDirection ? -direction : Vector2Int.zero);
+            evt.drawnRooms[i] = floorplan;
         }
 
         background?.SetActive(true);

@@ -17,7 +17,7 @@ public class FloorplanUI : MonoBehaviour
     [Header("External References")]
     [SerializeField] private FloorplanColorMask colorMaskPrefab;
 
-    private Room currentRoom;
+    public Room currentRoom { get; private set; }
 
     private List<FloorplanColorMask> colors = new();
 

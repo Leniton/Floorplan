@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using LenixSO.Sequences.Coroutines;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ public class MinimapManager : MonoBehaviour
     [SerializeField] private GameObject minimapContainer;
     [SerializeField] private GridManager minimapGrid;
     [SerializeField] private FloorplanUI floorplanPrefab;
+    [SerializeField] private FloorplanUI previewPrefab;
     [SerializeField] private RectTransform playerPosition;
     [Header("points")]
     [SerializeField] private TMP_Text totalPoints;
@@ -20,11 +22,15 @@ public class MinimapManager : MonoBehaviour
     [SerializeField] private HoverMenu peekButtons;
     [SerializeField] private Sprite arrowIcon;
     [SerializeField] private Color buttonColor = Color.white;
-    
+
+    private FloorplanUI previewUi;
+    private Room[] previewRooms;
 
     private void Awake()
     {
         minimapGrid.onDoneLoading += SetupGridMirror;
+        previewUi = Instantiate(previewPrefab, transform);
+        previewUi.gameObject.SetActive(false);
     }
 
     private void SetupGridMirror()
@@ -34,6 +40,7 @@ public class MinimapManager : MonoBehaviour
         foreach (var floorplan in GameManager.roomDict.Values)
             SetupRoom(floorplan);
         GameEvent.onDraftedRoom += PlaceRoom;
+        GameEvent.onModifyDraw += SetupPreview;
     }
 
     private void Start()
@@ -88,6 +95,7 @@ public class MinimapManager : MonoBehaviour
 
     private void SetupRoom(Room room)
     {
+        HidePreview();
         Button slotButton = minimapGrid.GetSlot(room.coordinate);
         FloorplanUI instance = Instantiate(floorplanPrefab, slotButton.transform);
         instance.Setup(room);
@@ -98,6 +106,47 @@ public class MinimapManager : MonoBehaviour
         roomRect.sizeDelta = Vector2.zero;
 
         slotButton.onClick.AddListener(() => UIManager.ShowDetails(room));
+    }
+
+    private void PositionRoom(FloorplanUI room, Vector2Int coordinate)
+    {
+        RectTransform roomRect = (RectTransform)room.transform;
+        Button slotButton = minimapGrid.GetSlot(coordinate);
+        roomRect.SetParent(slotButton.transform);
+        roomRect.anchoredPosition = Vector2.zero;
+        roomRect.anchorMin = Vector2.zero;
+        roomRect.anchorMax = Vector2.one;
+        roomRect.sizeDelta = Vector2.zero;
+    }
+
+    private void SetupPreview(DrawRoomEvent evt)
+    {
+        previewRooms = evt.drawnRooms;
+        PositionRoom(previewUi, evt.targetCoordinate);
+        CoroutineExtensions.WaitAFrame(BeginPreview);
+    }
+
+    private void BeginPreview()
+    {
+        previewUi.gameObject.SetActive(true);
+        CoroutineExtensions.StartCoroutine(PreviewBlink());
+    }
+
+    private IEnumerator PreviewBlink()
+    {
+        int current = 0;
+        while (previewUi.gameObject.activeSelf)
+        {
+            previewUi.Setup(previewRooms[current]);
+            yield return CoroutineExtensions.DelayCoroutine(1.2f);
+            current = (current + 1) % previewRooms.Length;
+        }
+    }
+
+    private void HidePreview()
+    {
+        previewUi.gameObject.SetActive(false);
+        previewUi.transform.SetParent(transform);
     }
 
     public void OpenMinimap()
