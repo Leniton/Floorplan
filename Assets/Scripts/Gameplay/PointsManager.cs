@@ -24,6 +24,8 @@ public static class PointsManager
     public static void AddDay() => day++;
     public static void Progress()
     {
+        day %= deadline;
+        basePoints = 0;
         currentRequirement += requirementGrowth;
     }
 

@@ -243,6 +243,7 @@ public class GameManager : MonoBehaviour
 
     private void FinishRun()
     {
+        Player.steps++;//to accurately count steps at the end of the run
         TriggerRoomExitEvent(gridManager.currentPosition, gridManager.currentPosition);
         houseStats.ShowStatsAndEnd();
     }

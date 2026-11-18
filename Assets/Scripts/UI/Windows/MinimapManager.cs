@@ -18,6 +18,7 @@ public class MinimapManager : MonoBehaviour
     [SerializeField] private TMP_Text totalPoints;
     [SerializeField] private Slider totalPointsSlider;
     [SerializeField] private ValueSlider totalPointsValue;
+    [SerializeField] private TMP_Text day;
     [Header("PeekFloorplan")]
     [SerializeField] private HoverMenu peekButtons;
     [SerializeField] private Sprite arrowIcon;
@@ -170,6 +171,7 @@ public class MinimapManager : MonoBehaviour
     {
         yield return null;
         playerPosition.anchoredPosition = minimapGrid.GetSlotRect(gameGrid.currentPosition).anchoredPosition;
+        day.text = $"Day {PointsManager.day}/{PointsManager.deadline}";
     }
 
     public void CloseMinimap()
