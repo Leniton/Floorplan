@@ -8,12 +8,14 @@ public static class PointsManager
     private const int baseRequirement = 40;
     private const int requirementGrowth = 20;
     public static int currentRequirement { get; private set; }
+    public static int day;
 
     public static void ChangeRequirement(int newRequirement)
     {
         currentRequirement = newRequirement;
     }
 
+    private static int basePoints;
     private static int pointBonus;
 
     public static void Progress()
@@ -24,6 +26,7 @@ public static class PointsManager
     public static void Reset()
     {
         currentRequirement = baseRequirement;
+        basePoints = 0;
         pointBonus = 0;
     }
     public static void ResetBonus()
@@ -33,6 +36,12 @@ public static class PointsManager
     
     public static int GetTotalPoints()
     {
+        int finalValue = GetHousePoints();
+        return finalValue + basePoints + pointBonus;
+    }
+
+    private static int GetHousePoints()
+    {
         int finalValue = 0;
         foreach (var pair in GameManager.roomDict)
         {
@@ -40,14 +49,18 @@ public static class PointsManager
             if (!GridManager.instance.ValidCoordinate(pair.Key)) continue;
             finalValue += floorplan.CalculatePoints();
         }
-
-        return finalValue + pointBonus;
+        return finalValue;
     }
 
     public static void AddPoints(int points)
     {
         Debug.Log($"Adding {points} points");
         pointBonus += points;
+    }
+
+    public static void SavePoints(int? points = null)
+    {
+        basePoints = points ?? GetHousePoints();
     }
 }
 

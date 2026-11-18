@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        PointsManager.day++;
         movement.OnDirectionChanged += UpdateMovementDirection;
         Player.ResetPlayer();
         UIRooms = new();

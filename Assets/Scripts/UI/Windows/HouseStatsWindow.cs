@@ -105,18 +105,23 @@ public class HouseStatsWindow : MonoBehaviour
     {
         OnCheckBonus = null;
         int targetScene = 2;
-        if (finalPoints >= PointsManager.currentRequirement)
+        if (PointsManager.day % 3 == 0)
         {
-            //win, progress
-            PointsManager.Progress();
+            if (finalPoints >= PointsManager.currentRequirement)
+            {
+                //win, progress
+                PointsManager.Progress();
+            }
+            else
+            {
+                //lose, reset
+                Player.Reset();
+                PointsManager.Reset();
+                targetScene = 0;
+            }
         }
-        else
-        {
-            //lose, reset
-            Player.Reset();
-            PointsManager.Reset();
-            targetScene = 0;
-        }
+        else PointsManager.SavePoints(finalPoints);
+
         PointsManager.ResetBonus();
         GameManager.roomDict.Clear();
         GameEvent.ResetListeners();
