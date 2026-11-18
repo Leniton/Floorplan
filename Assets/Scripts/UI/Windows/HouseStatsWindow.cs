@@ -105,7 +105,7 @@ public class HouseStatsWindow : MonoBehaviour
     {
         OnCheckBonus = null;
         int targetScene = 2;
-        if (PointsManager.day % 3 == 0)
+        if (PointsManager.day % PointsManager.deadline == 0)
         {
             if (finalPoints >= PointsManager.currentRequirement)
             {

@@ -7,8 +7,11 @@ public static class PointsManager
     //average: 25/35
     private const int baseRequirement = 40;
     private const int requirementGrowth = 20;
+
+    public const int deadline = 3;
+    
     public static int currentRequirement { get; private set; }
-    public static int day;
+    public static int day { get; private set; }
 
     public static void ChangeRequirement(int newRequirement)
     {
@@ -18,6 +21,7 @@ public static class PointsManager
     private static int basePoints;
     private static int pointBonus;
 
+    public static void AddDay() => day++;
     public static void Progress()
     {
         currentRequirement += requirementGrowth;
@@ -25,6 +29,7 @@ public static class PointsManager
 
     public static void Reset()
     {
+        day = 0;
         currentRequirement = baseRequirement;
         basePoints = 0;
         pointBonus = 0;

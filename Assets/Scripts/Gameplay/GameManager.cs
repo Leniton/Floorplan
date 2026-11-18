@@ -1,3 +1,4 @@
+using System.Collections;
 using AddressableAsyncInstances;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,16 +26,21 @@ public class GameManager : MonoBehaviour
     private static FloorplanUI roomPrefab;
     private Vector2Int currentDraftPosition;
 
+    private RectTransform gridRect;
+    private Coroutine moveCoroutine;
+    private Vector2Int currentPosition;
+
     private void Start()
     {
-        PointsManager.day++;
-        movement.OnDirectionChanged += UpdateMovementDirection;
+        gridRect = gridManager.transform as RectTransform;
+        PointsManager.AddDay();
         Player.ResetPlayer();
         UIRooms = new();
         roomDict = new();
+        movement.OnDirectionChanged += UpdateMovementDirection;
         movement.OnMove += OnMoveSlot;
         draftManager.OnDraftRoom += OnChooseRoom;
-        gridManager.OnStartMove += TriggerRoomExitEvent;
+        gridManager.OnStartMove += LeaveRoom;
         gridManager.OnMove += TriggerRoomEnterEvent;
         finishButton.onClick.AddListener(FinishRun);
         hoverMenu.SetupOptions(new()
@@ -96,7 +102,7 @@ public class GameManager : MonoBehaviour
         MessageWindow.ShowMessage($"Current objective:\n\n <b>{PointsManager.currentRequirement} points", 
             () => GameEvent.onGameStart?.Invoke(new()));
     }
-
+    
     private void InspectCurrentFloorplan(Vector2Int coordinate)
     {
         UIManager.ShowCurrentFloorplan();
@@ -114,7 +120,6 @@ public class GameManager : MonoBehaviour
         Room current = Helpers.CurrentRoom();
         Vector2Int targetedSlot = gridManager.currentPosition + direction;
         if (!gridManager.ValidCoordinate(targetedSlot)) return;
-
         if (!current.connections[Room.DirectionToID(direction)] && !forceEntrance) return;
         if (!current.connections[Room.DirectionToID(direction)] && forceEntrance)
         {
@@ -129,7 +134,6 @@ public class GameManager : MonoBehaviour
             //check if floorplan is connected to this one
             if (!targetFloorplan.connections[Room.DirectionToID(-direction)])
             {
-
                 if (!Player.activeSledgeHammer && !forceEntrance) return;
                 //Add connection to other floorplans
                 targetFloorplan.OpenConnection(Room.DirectionToID(-direction));
@@ -196,6 +200,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void LeaveRoom(Vector2Int origin, Vector2Int goal)
+    {
+        currentPosition = origin;
+        moveCoroutine ??= StartCoroutine(MoveToPosition());
+    }
+
+    private IEnumerator MoveToPosition()
+    {
+        const float moveDuration = .1f;
+        Vector2Int targetCoordinate = Vector2Int.one * -1;
+        while (targetCoordinate != gridManager.currentPosition)
+        {
+            targetCoordinate = gridManager.currentPosition;
+            TriggerRoomExitEvent(currentPosition, targetCoordinate);
+            Vector2 startPosition = gridRect.anchoredPosition;
+            Vector2 targetPosition = gridManager.GetCoordinatePosition(targetCoordinate);
+            yield return ScriptAnimations.Animate(f =>
+                    gridRect.anchoredPosition = Vector2.Lerp(startPosition, targetPosition, f), customDuration: moveDuration);
+        }
+        moveCoroutine = null;
+    }
+    
     private void TriggerRoomExitEvent(Vector2Int origin, Vector2Int goal)
     {
         //Debug.Log($"exit {floorplanDict[origin]}");
