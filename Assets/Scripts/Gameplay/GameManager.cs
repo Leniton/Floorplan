@@ -41,7 +41,6 @@ public class GameManager : MonoBehaviour
         movement.OnMove += OnMoveSlot;
         draftManager.OnDraftRoom += OnChooseRoom;
         gridManager.OnStartMove += LeaveRoom;
-        gridManager.OnMove += TriggerRoomEnterEvent;
         finishButton.onClick.AddListener(FinishRun);
         hoverMenu.SetupOptions(new()
         {
@@ -218,6 +217,7 @@ public class GameManager : MonoBehaviour
             Vector2 targetPosition = gridManager.GetCoordinatePosition(targetCoordinate);
             yield return ScriptAnimations.Animate(f =>
                     gridRect.anchoredPosition = Vector2.Lerp(startPosition, targetPosition, f), customDuration: moveDuration);
+            TriggerRoomEnterEvent(targetCoordinate);
         }
         moveCoroutine = null;
     }

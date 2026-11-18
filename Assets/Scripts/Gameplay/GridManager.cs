@@ -24,7 +24,6 @@ public class GridManager : SetupComponent
 
     public event Action<Vector2Int> onClick; 
     public event Action<Vector2Int, Vector2Int> OnStartMove;
-    public event Action<Vector2Int> OnMove;
 
     public static GridManager instance;
 
