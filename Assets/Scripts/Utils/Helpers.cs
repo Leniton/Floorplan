@@ -71,6 +71,7 @@ public static class Helpers
     
     public static Room CurrentRoom()
     {
+        if (GameManager.roomDict == null || ReferenceEquals(GridManager.instance, null)) return null;
         GameManager.roomDict.TryGetValue(GridManager.instance.currentPosition, out var current);
         return current;
     }

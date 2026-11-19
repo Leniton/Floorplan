@@ -18,6 +18,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private FloorplanColors colors;
     [SerializeField] private ScrollPicker deckPicker;
     [SerializeField] private PlayerDeck[] possibleDecks;
+    [SerializeField] private PlayerDeck outerRooms;
 
     private void Awake()
     {
@@ -56,7 +57,8 @@ public class MainMenu : MonoBehaviour
         RunData.playerDeck.deck = playedDeck;
         RunData.playerDeck.preferredCategory = currentDeck?.preferredCategory ?? 0;
         RunData.allRooms.deck = draftPool;
+        RunData.outerRooms = outerRooms;
         PointsManager.Reset();
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 }

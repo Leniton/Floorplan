@@ -32,7 +32,7 @@ public class Showroom : MonoBehaviour
         pickFloorplan.Setup(5, RunData.playerDeck, _ => pickFloorplan.CloseWindow());
 
         GameEvent.onDrawRooms += DeckBias;
-        addFloorplan.Setup(3, RunData.allRooms, _ => addFloorplan.DraftRoom());
+        addFloorplan.Setup(3, RunData.outerRooms, _ => addFloorplan.DraftRoom());
         addFloorplan.OnDraftRoom += OnPickFloorplanToAdd;
         
         renovationPackButton.onClick.AddListener(OpenRenovationShop);
@@ -48,10 +48,11 @@ public class Showroom : MonoBehaviour
             .2f);
     }
 
-    private void OnPickFloorplanToAdd(Room floorplan)
+    private void OnPickFloorplanToAdd(Room room)
     {
         addFloorplan.CloseWindow();
-        RunData.playerDeck.deck.Add(floorplan);
+        GameManager.SetupRoom(room, Vector2Int.one * 100);
+        // RunData.playerDeck.deck.Add(floorplan);
     }
 
     private void SetupRenovationsShop()

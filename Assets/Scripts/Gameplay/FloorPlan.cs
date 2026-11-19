@@ -248,6 +248,7 @@ public class Room : InfoReference
 
 public enum RoomType
 {
+    Blocked = 0,
     DeadEnd = 1,
     Straw = 2,
     Ankle = -2,

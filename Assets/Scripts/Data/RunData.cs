@@ -6,4 +6,5 @@ public static class RunData
 {
     public static PlayerDeck playerDeck = ScriptableObject.CreateInstance<PlayerDeck>();
     public static PlayerDeck allRooms = ScriptableObject.CreateInstance<PlayerDeck>();
+    public static PlayerDeck outerRooms = ScriptableObject.CreateInstance<PlayerDeck>();
 }

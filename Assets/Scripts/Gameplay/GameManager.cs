@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private HouseStatsWindow houseStats;
 
     private static Dictionary<Room, FloorplanUI> UIRooms;
-    public static Dictionary<Vector2Int, Room> roomDict;
+    public static Dictionary<Vector2Int, Room> roomDict = new();
     public static List<Room> DraftPool;
     public static Room EntranceHall;
 
@@ -174,14 +174,7 @@ public class GameManager : MonoBehaviour
         roomRect.anchorMax = Vector2.one;
         roomRect.sizeDelta = Vector2.zero;
 
-        //Apply floorplan effect
-        EffectsManager.AddRoomEffect(room);
-        //Apply renovation effect
-        room.renovation?.activationEffect?.Invoke(room);
-        roomDict[coordinate] = room;
-        room.coordinate = coordinate;
-        room.onDrafted?.Invoke(new(coordinate));
-        GameEvent.onDraftedRoom?.Invoke(new(coordinate, room));
+        SetupRoom(room, coordinate);
 
         //connect floorplan
         for (int i = 0; i < room.connections.Length; i++)
@@ -197,6 +190,18 @@ public class GameManager : MonoBehaviour
 
             Helpers.ConnectRooms(targetRoom, room);
         }
+    }
+
+    public static void SetupRoom(Room room, Vector2Int coordinate)
+    {
+        //Apply floorplan effect
+        EffectsManager.AddRoomEffect(room);
+        //Apply renovation effect
+        room.renovation?.activationEffect?.Invoke(room);
+        roomDict[coordinate] = room;
+        room.coordinate = coordinate;
+        room.onDrafted?.Invoke(new(coordinate));
+        GameEvent.onDraftedRoom?.Invoke(new(coordinate, room));
     }
 
     private void LeaveRoom(Vector2Int origin, Vector2Int goal)
